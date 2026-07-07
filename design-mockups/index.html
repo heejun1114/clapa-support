@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CLAPA 고객지원센터 — 홈 시안 8종 갤러리</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+  :root{
+    --paper:#FAF8F4; --sand:#EFE9E1; --ink:#23201B; --muted:#6F675C;
+    --teal:#0E6F66; --teal-deep:#0A5750; --teal-wash:#E4F0ED; --line:#E3DCD1;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{
+    font-family:'Pretendard Variable',Pretendard,-apple-system,'Apple SD Gothic Neo',sans-serif;
+    background:var(--paper); color:var(--ink); letter-spacing:-0.01em;
+  }
+  header.site{
+    padding:56px 40px 8px; max-width:1280px; margin:0 auto;
+  }
+  .eyebrow{color:var(--teal); font-size:13px; font-weight:600; letter-spacing:0.08em; text-transform:uppercase}
+  h1{font-size:34px; font-weight:700; letter-spacing:-0.03em; margin-top:10px}
+  .lede{color:var(--muted); margin-top:10px; font-size:15px; line-height:1.6}
+  .lede b{color:var(--ink); font-weight:600}
+  nav.jump{max-width:1280px; margin:20px auto 0; padding:0 40px; display:flex; gap:8px; flex-wrap:wrap}
+  nav.jump a{
+    text-decoration:none; color:var(--teal-deep); background:var(--teal-wash);
+    border:1px solid transparent; padding:6px 14px; border-radius:999px; font-size:13px; font-weight:600;
+  }
+  nav.jump a:hover{border-color:var(--teal)}
+  section.mood{max-width:1280px; margin:0 auto; padding:48px 40px 8px}
+  .mood-head{display:flex; align-items:baseline; gap:14px; border-bottom:1px solid var(--line); padding-bottom:14px}
+  .mood-head .tag{font-size:12px; font-weight:700; color:#fff; background:var(--teal); padding:4px 10px; border-radius:4px}
+  .mood-head h2{font-size:21px; font-weight:700; letter-spacing:-0.02em}
+  .mood-head p{color:var(--muted); font-size:13.5px}
+  .grid{display:grid; grid-template-columns:1fr 1fr; gap:32px; margin-top:28px}
+  .card{background:#fff; border:1px solid var(--line); border-radius:10px; overflow:hidden; display:flex; flex-direction:column}
+  .card-top{display:flex; justify-content:space-between; align-items:center; padding:14px 18px; border-bottom:1px solid var(--line)}
+  .card-top .id{font-weight:700; font-size:15px}
+  .card-top .id small{color:var(--muted); font-weight:500; margin-left:8px}
+  .card-top a{font-size:13px; font-weight:600; color:var(--teal-deep); text-decoration:none; white-space:nowrap}
+  .card-top a:hover{text-decoration:underline}
+  .axes{display:flex; gap:6px; flex-wrap:wrap; padding:10px 18px; border-bottom:1px solid var(--line); background:var(--paper)}
+  .axes span{font-size:12px; color:var(--muted); background:var(--sand); padding:3px 9px; border-radius:4px}
+  .axes span.sig{color:var(--teal-deep); background:var(--teal-wash); font-weight:600}
+  .frame-wrap{position:relative; width:100%; overflow:hidden; background:#fff}
+  .frame-wrap iframe{width:1280px; height:1900px; border:0; transform-origin:top left; display:block}
+  footer.site{max-width:1280px; margin:0 auto; padding:48px 40px 64px; color:var(--muted); font-size:13px; border-top:1px solid var(--line); margin-top:56px}
+  a:focus-visible,iframe:focus-visible{outline:2px solid var(--teal); outline-offset:2px}
+  @media (max-width:960px){
+    .grid{grid-template-columns:1fr}
+    header.site,nav.jump,section.mood,footer.site{padding-left:20px; padding-right:20px}
+  }
+</style>
+</head>
+<body>
+<header class="site">
+  <p class="eyebrow">CLAPA Support · Design Mockups</p>
+  <h1>고객지원센터 홈 시안 8종</h1>
+  <p class="lede">
+    무드 <b>A — 커머스 warm neutral</b>(Muji·Aesop 계열) 4종과 무드 <b>B — Apple 지원센터 구조</b>(기능성 강조) 4종.
+    카드마다 히어로·제품그리드 축이 다릅니다. 미리보기는 축소 렌더링이므로 <b>새 탭에서 열기</b>로 원본 확인을 권장합니다.
+  </p>
+</header>
+<nav class="jump" aria-label="시안 바로가기">
+  <a href="#a1">a1</a><a href="#a2">a2</a><a href="#a3">a3</a><a href="#a4">a4</a>
+  <a href="#b1">b1</a><a href="#b2">b2</a><a href="#b3">b3</a><a href="#b4">b4</a>
+</nav>
+
+<section class="mood" id="mood-a">
+  <div class="mood-head">
+    <span class="tag">무드 A</span>
+    <h2>커머스 warm neutral</h2>
+    <p>넉넉한 여백 · 따뜻한 뉴트럴 · 브랜드 스토어의 연장</p>
+  </div>
+  <div class="grid">
+    <article class="card" id="a1">
+      <div class="card-top"><span class="id">a1 <small>풀블리드 히어로 × 큰누끼 2열</small></span><a href="a1.html" target="_blank" rel="noopener">새 탭에서 열기 ↗</a></div>
+      <div class="axes"><span>히어로: 풀블리드</span><span>그리드: 큰누끼 2열</span><span class="sig">시그니처: 오버랩 검색바</span></div>
+      <div class="frame-wrap"><iframe src="a1.html" title="시안 a1 미리보기" loading="lazy"></iframe></div>
+    </article>
+    <article class="card" id="a2">
+      <div class="card-top"><span class="id">a2 <small>넓은여백 히어로 × 정렬 3열</small></span><a href="a2.html" target="_blank" rel="noopener">새 탭에서 열기 ↗</a></div>
+      <div class="axes"><span>히어로: 넓은여백</span><span>그리드: 정렬 3열</span><span class="sig">시그니처: 밑줄 검색바</span></div>
+      <div class="frame-wrap"><iframe src="a2.html" title="시안 a2 미리보기" loading="lazy"></iframe></div>
+    </article>
+    <article class="card" id="a3">
+      <div class="card-top"><span class="id">a3 <small>검색중심 히어로 × 썸네일 리스트</small></span><a href="a3.html" target="_blank" rel="noopener">새 탭에서 열기 ↗</a></div>
+      <div class="axes"><span>히어로: 검색중심</span><span>그리드: 썸네일+리스트</span><span class="sig">시그니처: 인기 검색어 롤링</span></div>
+      <div class="frame-wrap"><iframe src="a3.html" title="시안 a3 미리보기" loading="lazy"></iframe></div>
+    </article>
+    <article class="card" id="a4">
+      <div class="card-top"><span class="id">a4 <small>카테고리 히어로 × 매거진형</small></span><a href="a4.html" target="_blank" rel="noopener">새 탭에서 열기 ↗</a></div>
+      <div class="axes"><span>히어로: 카테고리 모자이크</span><span>그리드: 매거진형</span><span class="sig">시그니처: 비대칭 리듬</span></div>
+      <div class="frame-wrap"><iframe src="a4.html" title="시안 a4 미리보기" loading="lazy"></iframe></div>
+    </article>
+  </div>
+</section>
+
+<section class="mood" id="mood-b">
+  <div class="mood-head">
+    <span class="tag">무드 B</span>
+    <h2>Apple 지원센터 구조</h2>
+    <p>흰 베이스 · 명확한 위계 · SaaS 독스의 기능성</p>
+  </div>
+  <div class="grid">
+    <article class="card" id="b1">
+      <div class="card-top"><span class="id">b1 <small>검색중심 히어로 × 정렬 3열</small></span><a href="b1.html" target="_blank" rel="noopener">새 탭에서 열기 ↗</a></div>
+      <div class="axes"><span>히어로: 검색중심</span><span>그리드: 정렬 3열</span><span class="sig">시그니처: teal 퀵링크 행</span></div>
+      <div class="frame-wrap"><iframe src="b1.html" title="시안 b1 미리보기" loading="lazy"></iframe></div>
+    </article>
+    <article class="card" id="b2">
+      <div class="card-top"><span class="id">b2 <small>카테고리 히어로 × 썸네일 리스트</small></span><a href="b2.html" target="_blank" rel="noopener">새 탭에서 열기 ↗</a></div>
+      <div class="axes"><span>히어로: 토픽 카드</span><span>그리드: 썸네일+리스트</span><span class="sig">시그니처: hover 빠른 링크</span></div>
+      <div class="frame-wrap"><iframe src="b2.html" title="시안 b2 미리보기" loading="lazy"></iframe></div>
+    </article>
+    <article class="card" id="b3">
+      <div class="card-top"><span class="id">b3 <small>넓은여백 히어로 × 큰누끼 2열</small></span><a href="b3.html" target="_blank" rel="noopener">새 탭에서 열기 ↗</a></div>
+      <div class="axes"><span>히어로: 넓은여백</span><span>그리드: 큰누끼 2열</span><span class="sig">시그니처: 모델넘버 뱃지</span></div>
+      <div class="frame-wrap"><iframe src="b3.html" title="시안 b3 미리보기" loading="lazy"></iframe></div>
+    </article>
+    <article class="card" id="b4">
+      <div class="card-top"><span class="id">b4 <small>풀블리드 teal 히어로 × 매거진형</small></span><a href="b4.html" target="_blank" rel="noopener">새 탭에서 열기 ↗</a></div>
+      <div class="axes"><span>히어로: 풀블리드 teal</span><span>그리드: 매거진형</span><span class="sig">시그니처: 라이브 상태 스트립</span></div>
+      <div class="frame-wrap"><iframe src="b4.html" title="시안 b4 미리보기" loading="lazy"></iframe></div>
+    </article>
+  </div>
+</section>
+
+<footer class="site">
+  CLAPA·신일 고객지원센터 — 디자인 시안 단계. 누끼 썸네일은 확정 후 실제 컷으로 교체됩니다.
+</footer>
+
+<script>
+  // 컨테이너 폭에 맞춰 1280px 시안을 축소 렌더링
+  function fit(){
+    document.querySelectorAll('.frame-wrap').forEach(function(w){
+      var f = w.querySelector('iframe');
+      var s = w.clientWidth / 1280;
+      f.style.transform = 'scale(' + s + ')';
+      w.style.height = (1900 * s) + 'px';
+    });
+  }
+  window.addEventListener('resize', fit);
+  window.addEventListener('load', fit);
+  fit();
+</script>
+</body>
+</html>
