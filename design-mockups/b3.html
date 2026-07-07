@@ -241,6 +241,10 @@
     border-bottom:1px solid var(--line);
   }
   .pf-media svg{width:min(58%,230px);height:auto}
+  .pf-media svg .sa{fill:var(--sil-a)}
+  .pf-media svg .sb{fill:var(--sil-b)}
+  .pf-media svg .sc{fill:var(--sil-c)}
+  .pf-media svg .sk{fill:none;stroke:var(--sil-a)}
   /* signature badge */
   .pf-badge{
     position:absolute;top:14px;left:14px;
@@ -350,7 +354,7 @@
   }
   .dot{width:7px;height:7px;border-radius:50%;background:var(--teal);flex:none}
   .help-card__cta{
-    margin-top:22px;align-self:flex-start;
+    margin-top:22px;align-self:flex-start;white-space:nowrap;
     display:inline-flex;align-items:center;gap:8px;
     font-weight:600;letter-spacing:-0.01em;
   }
@@ -546,12 +550,12 @@
           <div class="pf-media">
             <span class="pf-badge"><span class="k">모델</span><span class="v">CF-2601</span></span>
             <svg viewBox="0 0 200 160" aria-hidden="true">
-              <ellipse cx="100" cy="149" rx="34" ry="7" fill="var(--sil-b)"/>
-              <rect x="94" y="112" width="12" height="34" rx="5" fill="var(--sil-b)"/>
-              <circle cx="100" cy="74" r="58" fill="var(--sil-a)"/>
-              <circle cx="100" cy="74" r="47" fill="var(--sil-b)"/>
-              <circle cx="100" cy="74" r="30" fill="var(--sil-a)"/>
-              <circle cx="100" cy="74" r="11" fill="var(--sil-c)"/>
+              <ellipse cx="100" cy="149" rx="34" ry="7" class="sb"/>
+              <rect x="94" y="112" width="12" height="34" rx="5" class="sb"/>
+              <circle cx="100" cy="74" r="58" class="sa"/>
+              <circle cx="100" cy="74" r="47" class="sb"/>
+              <circle cx="100" cy="74" r="30" class="sa"/>
+              <circle cx="100" cy="74" r="11" class="sc"/>
             </svg>
           </div>
           <div class="pf-body">
@@ -567,12 +571,12 @@
           <div class="pf-media">
             <span class="pf-badge"><span class="k">모델</span><span class="v">CV-2504</span></span>
             <svg viewBox="0 0 200 160" aria-hidden="true">
-              <rect x="83" y="10" width="34" height="18" rx="9" fill="var(--sil-a)"/>
-              <rect x="92" y="24" width="16" height="104" fill="var(--sil-a)"/>
-              <rect x="79" y="40" width="42" height="38" rx="12" fill="var(--sil-b)"/>
-              <circle cx="100" cy="59" r="9" fill="var(--sil-c)"/>
-              <rect x="62" y="126" width="76" height="16" rx="6" fill="var(--sil-a)"/>
-              <rect x="56" y="142" width="88" height="7" rx="3.5" fill="var(--sil-b)"/>
+              <rect x="83" y="10" width="34" height="18" rx="9" class="sa"/>
+              <rect x="92" y="24" width="16" height="104" class="sa"/>
+              <rect x="79" y="40" width="42" height="38" rx="12" class="sb"/>
+              <circle cx="100" cy="59" r="9" class="sc"/>
+              <rect x="62" y="126" width="76" height="16" rx="6" class="sa"/>
+              <rect x="56" y="142" width="88" height="7" rx="3.5" class="sb"/>
             </svg>
           </div>
           <div class="pf-body">
@@ -588,11 +592,11 @@
           <div class="pf-media">
             <span class="pf-badge"><span class="k">모델</span><span class="v">CE-2601</span></span>
             <svg viewBox="0 0 200 160" aria-hidden="true">
-              <ellipse cx="100" cy="140" rx="46" ry="8" fill="var(--sil-b)"/>
-              <rect x="60" y="92" width="80" height="46" rx="16" fill="var(--sil-a)"/>
-              <path d="M60 94 a40 40 0 0 1 80 0 Z" fill="var(--sil-b)"/>
-              <ellipse cx="100" cy="52" rx="9" ry="7" fill="var(--sil-c)"/>
-              <rect x="118" y="106" width="14" height="9" rx="3" fill="var(--sil-c)"/>
+              <ellipse cx="100" cy="140" rx="46" ry="8" class="sb"/>
+              <rect x="60" y="92" width="80" height="46" rx="16" class="sa"/>
+              <path d="M60 94 a40 40 0 0 1 80 0 Z" class="sb"/>
+              <ellipse cx="100" cy="52" rx="9" ry="7" class="sc"/>
+              <rect x="118" y="106" width="14" height="9" rx="3" class="sc"/>
             </svg>
           </div>
           <div class="pf-body">
@@ -608,12 +612,12 @@
           <div class="pf-media">
             <span class="pf-badge"><span class="k">모델</span><span class="v">CD-3502</span></span>
             <svg viewBox="0 0 200 160" aria-hidden="true">
-              <rect x="66" y="16" width="68" height="132" rx="22" fill="var(--sil-a)"/>
-              <rect x="80" y="34" width="40" height="6" rx="3" fill="var(--sil-b)"/>
-              <rect x="80" y="46" width="40" height="6" rx="3" fill="var(--sil-b)"/>
-              <rect x="80" y="58" width="40" height="6" rx="3" fill="var(--sil-b)"/>
-              <circle cx="100" cy="98" r="8" fill="var(--sil-c)"/>
-              <rect x="66" y="132" width="68" height="16" rx="8" fill="var(--sil-c)"/>
+              <rect x="66" y="16" width="68" height="132" rx="22" class="sa"/>
+              <rect x="80" y="34" width="40" height="6" rx="3" class="sb"/>
+              <rect x="80" y="46" width="40" height="6" rx="3" class="sb"/>
+              <rect x="80" y="58" width="40" height="6" rx="3" class="sb"/>
+              <circle cx="100" cy="98" r="8" class="sc"/>
+              <rect x="66" y="132" width="68" height="16" rx="8" class="sc"/>
             </svg>
           </div>
           <div class="pf-body">
@@ -629,12 +633,12 @@
           <div class="pf-media">
             <span class="pf-badge"><span class="k">모델</span><span class="v">CK-1801</span></span>
             <svg viewBox="0 0 200 160" aria-hidden="true">
-              <ellipse cx="102" cy="132" rx="40" ry="7" fill="var(--sil-b)"/>
-              <path d="M72 76 L50 66 L60 88 Z" fill="var(--sil-a)"/>
-              <path d="M138 82 C166 84 168 118 146 126" fill="none" stroke="var(--sil-a)" stroke-width="10" stroke-linecap="round"/>
-              <rect x="70" y="72" width="70" height="58" rx="16" fill="var(--sil-a)"/>
-              <rect x="84" y="58" width="44" height="16" rx="8" fill="var(--sil-b)"/>
-              <circle cx="106" cy="52" r="6" fill="var(--sil-c)"/>
+              <ellipse cx="102" cy="132" rx="40" ry="7" class="sb"/>
+              <path d="M72 76 L50 66 L60 88 Z" class="sa"/>
+              <path d="M138 82 C166 84 168 118 146 126" fill="none" class="sk" stroke-width="10" stroke-linecap="round"/>
+              <rect x="70" y="72" width="70" height="58" rx="16" class="sa"/>
+              <rect x="84" y="58" width="44" height="16" rx="8" class="sb"/>
+              <circle cx="106" cy="52" r="6" class="sc"/>
             </svg>
           </div>
           <div class="pf-body">
@@ -650,11 +654,11 @@
           <div class="pf-media">
             <span class="pf-badge"><span class="k">모델</span><span class="v">CH-2402</span></span>
             <svg viewBox="0 0 200 160" aria-hidden="true">
-              <rect x="89" y="82" width="22" height="66" rx="11" fill="var(--sil-a)"/>
-              <circle cx="100" cy="54" r="36" fill="var(--sil-a)"/>
-              <circle cx="100" cy="54" r="27" fill="var(--sil-b)"/>
-              <circle cx="100" cy="54" r="8" fill="var(--sil-c)"/>
-              <rect x="86" y="120" width="28" height="7" rx="3.5" fill="var(--sil-c)"/>
+              <rect x="89" y="82" width="22" height="66" rx="11" class="sa"/>
+              <circle cx="100" cy="54" r="36" class="sa"/>
+              <circle cx="100" cy="54" r="27" class="sb"/>
+              <circle cx="100" cy="54" r="8" class="sc"/>
+              <rect x="86" y="120" width="28" height="7" rx="3.5" class="sc"/>
             </svg>
           </div>
           <div class="pf-body">
@@ -670,12 +674,12 @@
           <div class="pf-media">
             <span class="pf-badge"><span class="k">모델</span><span class="v">SIF-14SR</span></span>
             <svg viewBox="0 0 200 160" aria-hidden="true">
-              <ellipse cx="100" cy="150" rx="40" ry="7" fill="var(--sil-b)"/>
-              <rect x="96" y="66" width="8" height="84" fill="var(--sil-b)"/>
-              <circle cx="100" cy="56" r="46" fill="var(--sil-a)"/>
-              <circle cx="100" cy="56" r="36" fill="var(--sil-b)"/>
-              <path d="M100 56 L100 24 M100 56 L128 74 M100 56 L72 74" stroke="var(--sil-a)" stroke-width="7" stroke-linecap="round"/>
-              <circle cx="100" cy="56" r="10" fill="var(--sil-c)"/>
+              <ellipse cx="100" cy="150" rx="40" ry="7" class="sb"/>
+              <rect x="96" y="66" width="8" height="84" class="sb"/>
+              <circle cx="100" cy="56" r="46" class="sa"/>
+              <circle cx="100" cy="56" r="36" class="sb"/>
+              <path d="M100 56 L100 24 M100 56 L128 74 M100 56 L72 74" class="sk" stroke-width="7" stroke-linecap="round"/>
+              <circle cx="100" cy="56" r="10" class="sc"/>
             </svg>
           </div>
           <div class="pf-body">
@@ -691,13 +695,13 @@
           <div class="pf-media">
             <span class="pf-badge"><span class="k">모델</span><span class="v">SAF-5502</span></span>
             <svg viewBox="0 0 200 160" aria-hidden="true">
-              <rect x="44" y="42" width="112" height="84" rx="16" fill="var(--sil-a)"/>
-              <rect x="58" y="58" width="58" height="52" rx="10" fill="var(--sil-b)"/>
-              <rect x="66" y="66" width="42" height="36" rx="6" fill="var(--sil-c)" opacity="0.55"/>
-              <circle cx="136" cy="64" r="7" fill="var(--sil-b)"/>
-              <circle cx="136" cy="90" r="7" fill="var(--sil-b)"/>
-              <rect x="56" y="126" width="16" height="9" rx="3" fill="var(--sil-c)"/>
-              <rect x="128" y="126" width="16" height="9" rx="3" fill="var(--sil-c)"/>
+              <rect x="44" y="42" width="112" height="84" rx="16" class="sa"/>
+              <rect x="58" y="58" width="58" height="52" rx="10" class="sb"/>
+              <rect x="66" y="66" width="42" height="36" rx="6" class="sc" opacity="0.55"/>
+              <circle cx="136" cy="64" r="7" class="sb"/>
+              <circle cx="136" cy="90" r="7" class="sb"/>
+              <rect x="56" y="126" width="16" height="9" rx="3" class="sc"/>
+              <rect x="128" y="126" width="16" height="9" rx="3" class="sc"/>
             </svg>
           </div>
           <div class="pf-body">
