@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>클래파 분리형 프리볼트 멀티포트 — CLAPA 고객지원센터</title>
+<meta name="description" content="클래파 분리형 프리볼트 멀티포트 설명서·부품·자주 묻는 질문 안내 — CLAPA 고객지원센터">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+  :root{
+    --paper:#FFFFFF;
+    --surface:#F5F4F1;
+    --sand:#EFE9E1;
+    --line:#E6E1D8;
+    --line-soft:#EDE9E1;
+    --ink:#23201B;
+    --muted:#6F675C;
+    --teal:#0E6F66;
+    --teal-deep:#0A5750;
+    --teal-wash:#E4F0ED;
+    --sil:#CBC4B8;
+    --sil-d:#AAA294;
+    --glass:#E3DED4;
+    --radius:12px;
+    --radius-sm:9px;
+    --maxw:1080px;
+    --ease:cubic-bezier(.22,.61,.36,1);
+  }
+
+  *{box-sizing:border-box;}
+  html{-webkit-text-size-adjust:100%;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Pretendard Variable',Pretendard,-apple-system,'Apple SD Gothic Neo',sans-serif;
+    font-size:15px;
+    line-height:1.6;
+    letter-spacing:-0.011em;
+    -webkit-font-smoothing:antialiased;
+    text-rendering:optimizeLegibility;
+    word-break:keep-all;
+  }
+  a{color:inherit;text-decoration:none;}
+  button{font:inherit;color:inherit;cursor:pointer;}
+  img,svg{display:block;max-width:100%;}
+
+  .wrap{max-width:var(--maxw);margin:0 auto;padding-inline:clamp(18px,4vw,40px);}
+
+  .skip{
+    position:absolute;left:14px;top:-60px;z-index:80;
+    background:var(--ink);color:#fff;padding:9px 15px;border-radius:8px;
+    font-size:13px;font-weight:600;transition:top .16s var(--ease);
+  }
+  .skip:focus{top:12px;}
+
+  :focus-visible{outline:2px solid var(--teal);outline-offset:2px;border-radius:3px;}
+
+  /* ---------- Header (inherited from home) ---------- */
+  .site-header{
+    position:sticky;top:0;z-index:40;
+    background:rgba(255,255,255,.86);
+    backdrop-filter:saturate(180%) blur(10px);
+    border-bottom:1px solid var(--line);
+  }
+  .header-inner{
+    display:flex;align-items:center;justify-content:space-between;gap:18px;
+    height:60px;
+  }
+  .wordmark{
+    display:inline-flex;align-items:baseline;gap:8px;
+    font-weight:700;font-size:16.5px;letter-spacing:-0.02em;
+  }
+  .wordmark .mark-a{color:var(--ink);}
+  .wordmark .mark-b{
+    color:var(--teal);font-weight:600;font-size:13px;letter-spacing:0.06em;
+    padding:2px 7px;border:1px solid var(--teal-wash);border-radius:6px;
+    background:var(--teal-wash);transform:translateY(-1px);
+  }
+  .header-nav{display:flex;align-items:center;gap:6px;}
+  .nav-link{
+    font-size:13.5px;font-weight:500;color:var(--muted);white-space:nowrap;
+    padding:8px 12px;border-radius:8px;
+    transition:color .15s var(--ease),background .15s var(--ease);
+  }
+  .nav-link:hover{color:var(--ink);background:var(--surface);}
+  .nav-link.is-store{color:var(--teal-deep);font-weight:600;}
+  .nav-link.is-store .ext{font-size:12px;margin-left:3px;color:var(--teal);}
+
+  /* ---------- Back link ---------- */
+  .backlink{
+    display:inline-flex;align-items:center;gap:6px;
+    margin-top:20px;
+    color:var(--muted);font-size:13.5px;font-weight:500;letter-spacing:-0.01em;
+    transition:color .15s var(--ease);
+  }
+  .backlink:hover{color:var(--teal-deep);}
+
+  /* ---------- Product hero ---------- */
+  .phero{padding-block:clamp(22px,3.5vw,34px) clamp(30px,4.5vw,48px);}
+  .phero-grid{
+    display:grid;
+    grid-template-columns:minmax(0,.86fr) minmax(0,1fr);
+    gap:clamp(24px,4vw,48px);
+    align-items:center;
+  }
+  .phero-media{
+    position:relative;
+    aspect-ratio:1/1;
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    overflow:hidden;
+  }
+  .phero-img{
+    position:absolute;inset:0;
+    width:100%;height:100%;
+    object-fit:cover;
+  }
+  .phero-info{min-width:0;}
+  .phero-cat{
+    display:inline-block;
+    background:var(--teal-wash);color:var(--teal-deep);
+    font-size:12px;font-weight:600;letter-spacing:0.03em;
+    padding:4px 11px;border-radius:100px;
+  }
+  .phero-title{
+    margin:13px 0 0;
+    font-size:clamp(23px,3.4vw,32px);
+    line-height:1.18;font-weight:700;letter-spacing:-0.03em;
+    max-width:20ch;
+  }
+  .phero-meta{margin:14px 0 0;display:flex;flex-direction:column;gap:5px;}
+  .phero-row{
+    display:flex;align-items:baseline;gap:8px;
+    color:var(--muted);font-size:13.5px;letter-spacing:-0.008em;
+  }
+  .phero-row .lbl{flex:none;font-weight:500;color:var(--muted);}
+  .phero-row .val{color:var(--ink);font-weight:600;font-variant-numeric:tabular-nums;letter-spacing:0.005em;}
+
+  /* ---------- Action buttons ---------- */
+  .phero-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:24px;}
+  .btn{
+    display:inline-flex;align-items:center;justify-content:center;gap:8px;
+    padding:12px 20px;border-radius:10px;
+    font-size:14.5px;font-weight:600;letter-spacing:-0.01em;
+    border:1.5px solid transparent;
+    transition:background .16s var(--ease),border-color .16s var(--ease),color .16s var(--ease),transform .16s var(--ease);
+  }
+  .btn svg{width:16px;height:16px;flex:none;}
+  .btn .ext{font-size:12.5px;}
+  .btn-primary{background:var(--teal);color:#fff;border-color:var(--teal);}
+  .btn-primary:hover{background:var(--teal-deep);border-color:var(--teal-deep);transform:translateY(-1px);}
+  .btn-ghost{background:var(--paper);color:var(--ink);border-color:var(--line);}
+  .btn-ghost:hover{border-color:var(--teal);color:var(--teal-deep);background:var(--teal-wash);}
+  .btn-ghost svg{color:var(--sil-d);}
+  .btn-ghost:hover svg{color:var(--teal);}
+
+  /* ---------- Section shell (inherited from home) ---------- */
+  .section{padding-block:clamp(42px,6vw,72px);}
+  .section.band{background:var(--surface);border-block:1px solid var(--line);}
+  .section-head{
+    display:flex;align-items:flex-end;justify-content:space-between;gap:16px;
+    margin-bottom:22px;
+  }
+  .section-eyebrow{color:var(--teal-deep);font-size:12px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;display:block;margin-bottom:8px;}
+  .section-title{margin:0;font-size:clamp(20px,2.6vw,25px);font-weight:700;letter-spacing:-0.026em;line-height:1.2;}
+  .section-desc{margin:8px 0 0;color:var(--muted);font-size:14px;max-width:46ch;}
+
+  /* ---------- Spec list (B2 restrained line list) ---------- */
+  .spec-grid{
+    margin:0;
+    display:grid;grid-template-columns:1fr 1fr;
+    gap:0 clamp(24px,4vw,48px);
+    border-top:1px solid var(--line);
+  }
+  .spec-row{
+    margin:0;
+    display:flex;align-items:baseline;justify-content:space-between;gap:18px;
+    padding:13px 2px;
+    border-bottom:1px solid var(--line-soft);
+  }
+  .spec-label{margin:0;flex:none;color:var(--muted);font-size:13.5px;font-weight:500;}
+  .spec-value{
+    margin:0;flex:1;min-width:0;text-align:right;
+    color:var(--ink);font-size:14px;font-weight:550;letter-spacing:-0.008em;
+    font-variant-numeric:tabular-nums;
+  }
+  .spec-note{
+    display:flex;align-items:flex-start;gap:9px;
+    margin:18px 0 0;
+    padding:12px 15px;
+    background:var(--teal-wash);
+    border-radius:var(--radius-sm);
+    color:var(--teal-deep);font-size:13px;line-height:1.55;font-weight:500;
+  }
+  .spec-note svg{width:16px;height:16px;flex:none;margin-top:2px;}
+
+  /* ---------- FAQ (inherited from home) ---------- */
+  .faq-list{
+    max-width:840px;
+    border:1px solid var(--line);border-radius:var(--radius);
+    background:var(--paper);overflow:hidden;
+  }
+  .faq-item{border-top:1px solid var(--line-soft);}
+  .faq-item:first-child{border-top:0;}
+  .faq-item>summary{
+    list-style:none;cursor:pointer;
+    display:flex;align-items:flex-start;gap:14px;
+    padding:17px 18px;
+    transition:background .14s var(--ease);
+  }
+  .faq-item>summary::-webkit-details-marker{display:none;}
+  .faq-item>summary:hover{background:#FBFAF7;}
+  .faq-q{flex:1;min-width:0;display:flex;flex-direction:column;gap:5px;}
+  .faq-cat{
+    font-size:11px;font-weight:600;letter-spacing:0.04em;color:var(--teal-deep);
+    text-transform:uppercase;
+  }
+  .faq-qt{font-size:15px;font-weight:550;letter-spacing:-0.016em;line-height:1.45;}
+  .faq-chev{
+    flex:none;width:22px;height:22px;margin-top:2px;color:var(--muted);
+    transition:transform .2s var(--ease),color .14s var(--ease);
+  }
+  .faq-item[open] .faq-chev{transform:rotate(180deg);color:var(--teal);}
+  .faq-a{
+    padding:0 18px 19px 46px;
+    color:var(--muted);font-size:14px;line-height:1.65;letter-spacing:-0.008em;
+  }
+  .faq-a a{color:var(--teal-deep);font-weight:600;border-bottom:1px solid var(--teal-wash);}
+  .faq-a a:hover{border-bottom-color:var(--teal);}
+
+  /* ---------- Contact band ---------- */
+  .contact-card{
+    display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:22px 40px;
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:clamp(24px,4vw,36px);
+  }
+  .contact-lead{min-width:0;}
+  .contact-desc{margin:8px 0 0;color:var(--muted);font-size:14px;max-width:40ch;}
+  .contact-side{display:flex;flex-direction:column;gap:12px;flex:none;}
+  .contact-tel{display:flex;flex-direction:column;gap:3px;}
+  .ct-num{font-size:24px;font-weight:700;letter-spacing:-0.02em;font-variant-numeric:tabular-nums;color:var(--ink);transition:color .14s var(--ease);}
+  .contact-tel:hover .ct-num{color:var(--teal-deep);}
+  .ct-hours{font-size:12.5px;color:var(--muted);}
+  .contact-chat{margin:0;font-size:12.5px;color:var(--muted);display:inline-flex;align-items:center;gap:7px;}
+  .cc-dot{width:6px;height:6px;border-radius:50%;background:var(--teal);flex:none;}
+
+  /* ---------- Chat FAB (inherited from home) ---------- */
+  .chat-fab{
+    position:fixed;right:clamp(16px,3vw,28px);bottom:clamp(16px,3vw,28px);z-index:50;
+    display:inline-flex;align-items:center;gap:10px;
+    background:var(--paper);
+    border:1px solid var(--line);
+    border-radius:100px;
+    padding:11px 17px 11px 14px;
+    box-shadow:0 6px 22px -8px rgba(35,32,27,.22),0 2px 6px -3px rgba(35,32,27,.12);
+    transition:border-color .16s var(--ease),transform .16s var(--ease);
+  }
+  .chat-fab:hover{border-color:var(--teal);transform:translateY(-1px);}
+  .chat-ic{
+    width:32px;height:32px;flex:none;border-radius:50%;
+    background:var(--teal-wash);color:var(--teal-deep);
+    display:flex;align-items:center;justify-content:center;
+  }
+  .chat-ic svg{width:17px;height:17px;}
+  .chat-tx{display:flex;flex-direction:column;line-height:1.25;text-align:left;}
+  .chat-tt{font-size:14px;font-weight:600;letter-spacing:-0.015em;color:var(--ink);}
+  .chat-st{font-size:11.5px;color:var(--muted);display:inline-flex;align-items:center;gap:5px;}
+  .chat-live{width:6px;height:6px;border-radius:50%;background:var(--teal);flex:none;}
+  @media(max-width:480px){ .chat-tx{display:none;} .chat-fab{padding:11px;} }
+
+  /* ---------- Footer (inherited from home) ---------- */
+  .site-footer{
+    background:#F1EEE8;border-top:1px solid var(--line);
+    padding-block:clamp(34px,5vw,52px);margin-top:8px;
+  }
+  .footer-top{
+    display:flex;flex-wrap:wrap;justify-content:space-between;gap:28px 40px;
+    padding-bottom:26px;border-bottom:1px solid var(--line);
+  }
+  .foot-contact .foot-h{font-size:12px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;}
+  .foot-tel{font-size:22px;font-weight:700;letter-spacing:-0.02em;font-variant-numeric:tabular-nums;color:var(--ink);}
+  .foot-hours{font-size:13px;color:var(--muted);margin-top:5px;}
+  .foot-hours .off{color:var(--sil-d);}
+  .foot-brands{display:flex;flex-direction:column;gap:9px;}
+  .foot-brands .foot-h{font-size:12px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);margin-bottom:2px;}
+  .foot-brandrow{display:flex;flex-wrap:wrap;gap:8px 10px;}
+  .foot-brand{
+    display:inline-flex;align-items:baseline;gap:6px;
+    font-size:13.5px;font-weight:500;color:var(--ink);
+    padding:5px 0;transition:color .14s var(--ease);
+  }
+  .foot-brand .lat{font-size:11px;color:var(--muted);letter-spacing:0.04em;}
+  .foot-brand:hover{color:var(--teal-deep);}
+  .foot-brand:hover .lat{color:var(--teal);}
+  .footer-legal{
+    display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;
+    padding-top:22px;color:var(--muted);font-size:12.5px;
+  }
+  .footer-legal .slogan{color:var(--teal-deep);font-weight:600;letter-spacing:-0.01em;}
+
+  /* ---------- Responsive ---------- */
+  @media(max-width:820px){
+    .phero-grid{grid-template-columns:1fr;gap:22px;}
+    .phero-media{max-width:420px;}
+    .phero-title{max-width:none;}
+  }
+  @media(max-width:640px){
+    .phero{padding-block:16px 30px;}
+    .phero-media{aspect-ratio:4/3;}
+    .section{padding-block:42px;}
+    .section-head{flex-direction:column;align-items:flex-start;margin-bottom:18px;}
+    /* specs: 2 columns collapse to 1 */
+    .spec-grid{grid-template-columns:1fr;}
+    /* contact band stacks */
+    .contact-card{flex-direction:column;align-items:flex-start;}
+    .footer-top{gap:24px 32px;}
+  }
+  @media(max-width:520px){
+    /* full-width, comfortable touch targets */
+    .phero-actions{flex-direction:column;gap:9px;}
+    .btn{width:100%;min-height:48px;}
+  }
+
+  @media(prefers-reduced-motion:reduce){
+    *{transition:none !important;animation:none !important;scroll-behavior:auto !important;}
+  }
+</style>
+</head>
+<body>
+<a class="skip" href="#main">본문으로 건너뛰기</a>
+
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a class="wordmark" href="../index.html" aria-label="CLAPA SUPPORT 고객지원센터 홈">
+      <span class="mark-a">CLAPA</span><span class="mark-b">SUPPORT</span>
+    </a>
+    <nav class="header-nav" aria-label="주요 메뉴">
+      <a class="nav-link" href="../index.html#finder-title">전체 제품</a>
+      <a class="nav-link is-store" href="https://clapa.kr" rel="noopener">clapa.kr 스토어<span class="ext" aria-hidden="true">↗</span></a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+
+  <div class="wrap">
+    <a class="backlink" href="../index.html">
+      <span aria-hidden="true">←</span> 고객지원센터 홈
+    </a>
+  </div>
+
+  <!-- PRODUCT HERO -->
+  <section class="phero" aria-labelledby="product-title">
+    <div class="wrap phero-grid">
+      <div class="phero-media">
+        <img class="phero-img" src="https://shop-phinf.pstatic.net/20250203_31/1738557907884KTwkH_JPEG/51937889724296347_1399309729.jpg?type=f400" alt="클래파 분리형 프리볼트 멀티포트" loading="eager" decoding="async" onerror="this.remove()">
+      </div>
+      <div class="phero-info">
+        <span class="phero-cat">주방·생활</span>
+        <h1 class="phero-title" id="product-title">클래파 분리형 프리볼트 멀티포트</h1>
+        <div class="phero-meta">
+          <p class="phero-row"><span class="lbl">모델명</span><span class="val">BEK-120P · CEK-S220</span></p>
+          
+          <p class="phero-row"><span class="lbl">색상</span><span class="val">화이트 · 아이보리</span></p>
+          
+        </div>
+
+        <div class="phero-actions">
+          
+          <a class="btn btn-ghost" href="../manuals/CEK-S220_BEK-120P.pdf" target="_blank" rel="noopener" aria-label="클래파 분리형 프리볼트 멀티포트 설명서 PDF 열기 (새 창)">
+            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round" aria-hidden="true"><path d="M4 2h5l3 3v9H4z"/><path d="M9 2v3h3"/></svg>
+            설명서 PDF
+          </a>
+          
+          
+          <a class="btn btn-primary" href="https://smartstore.naver.com/skillfulbrother/products/11325093921" target="_blank" rel="noopener" aria-label="클래파 분리형 프리볼트 멀티포트 스토어에서 보기 (새 창)">
+            스토어에서 보기 <span class="ext" aria-hidden="true">↗</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SPECIFICATIONS -->
+  <section class="section" aria-labelledby="spec-title">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <span class="section-eyebrow">Specifications</span>
+          <h2 class="section-title" id="spec-title">주요 사양</h2>
+        </div>
+      </div>
+
+      <dl class="spec-grid">
+        
+        <div class="spec-row">
+          <dt class="spec-label">용량</dt>
+          <dd class="spec-value">최대 1.2L / 최소 300ml</dd>
+        </div>
+        
+        <div class="spec-row">
+          <dt class="spec-label">소비전력</dt>
+          <dd class="spec-value">600~1100W</dd>
+        </div>
+        
+        <div class="spec-row">
+          <dt class="spec-label">정격전압</dt>
+          <dd class="spec-value">100~230V~, 50/60Hz (프리볼트)</dd>
+        </div>
+        
+        <div class="spec-row">
+          <dt class="spec-label">무게</dt>
+          <dd class="spec-value">약 1,080g</dd>
+        </div>
+        
+        <div class="spec-row">
+          <dt class="spec-label">크기</dt>
+          <dd class="spec-value">수납 시 161 x 190 x 125mm / 사용 시 161 x 190 x 173mm</dd>
+        </div>
+        
+        <div class="spec-row">
+          <dt class="spec-label">코드 길이</dt>
+          <dd class="spec-value">약 103cm</dd>
+        </div>
+        
+        <div class="spec-row">
+          <dt class="spec-label">재질</dt>
+          <dd class="spec-value">내부 SUS304 스테인리스 / 외부 내열 PP</dd>
+        </div>
+        
+        <div class="spec-row">
+          <dt class="spec-label">조작부</dt>
+          <dd class="spec-value">터치식 LCD 디스플레이</dd>
+        </div>
+        
+        <div class="spec-row">
+          <dt class="spec-label">색상</dt>
+          <dd class="spec-value">아이보리 (모델명 CEK-S220)</dd>
+        </div>
+        
+        <div class="spec-row">
+          <dt class="spec-label">구성품</dt>
+          <dd class="spec-value">본체, 상단 용기(1.2L), 뚜껑, 찜 트레이, 전원 코드선, 보관 파우치, 바닥 커버 (사은품: 변환 어댑터)</dd>
+        </div>
+        
+      </dl>
+
+      
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="section band" id="faq" aria-labelledby="faq-title">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <span class="section-eyebrow">Frequently asked</span>
+          <h2 class="section-title" id="faq-title">자주 묻는 질문</h2>
+          <p class="section-desc">이 제품에 대해 가장 많이 문의하신 내용을 모았습니다.</p>
+        </div>
+      </div>
+
+      <div class="faq-list">
+        
+        <details class="faq-item">
+          <summary>
+            <span class="faq-q">
+              <span class="faq-cat">사용법</span>
+              <span class="faq-qt">상단과 하단의 화살표(삼각형)를 맞추기가 너무 뻑뻑한데 불량인가요?</span>
+            </span>
+            <svg class="faq-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+          </summary>
+          <div class="faq-a">물샘 방지를 위한 리뉴얼된 체결 방식으로 초기에는 뻑뻑할 수 있습니다. 상단 용기와 본체의 삼각형(▲, ▼) 표시가 일직선이 되도록 최대한 밀어 돌려 '딸깍' 잠가 주시면 사용하면서 점차 부드러워집니다. 제대로 결합되지 않으면 전원이 켜지지 않거나 물이 샐 수 있으니 끝까지 돌려 주세요.</div>
+        </details>
+        
+        <details class="faq-item">
+          <summary>
+            <span class="faq-q">
+              <span class="faq-cat">사용법</span>
+              <span class="faq-qt">굽기, 볶기, 튀김 등 다용도로 사용할 수 있나요?</span>
+            </span>
+            <svg class="faq-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+          </summary>
+          <div class="faq-a">최대 온도가 물이 끓는 100도까지로, 삶기와 데우기 등 물을 이용한 조리에 적합합니다. 굽기, 볶기, 튀김 용도로는 사용이 어렵습니다.</div>
+        </details>
+        
+        <details class="faq-item">
+          <summary>
+            <span class="faq-q">
+              <span class="faq-cat">사용법</span>
+              <span class="faq-qt">라면을 끓일 수 있나요?</span>
+            </span>
+            <svg class="faq-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+          </summary>
+          <div class="faq-a">100도까지 가열되어 라면 조리가 가능합니다. 라면 모드(약 97도, 15분)로 설정해 사용하시면 되고, 끓어 넘침을 방지하기 위해 물은 1L 이내로 넣는 것을 권장합니다.</div>
+        </details>
+        
+        <details class="faq-item">
+          <summary>
+            <span class="faq-q">
+              <span class="faq-cat">소음</span>
+              <span class="faq-qt">물이 끓은 뒤 '딸각' 소리가 나는데 정상인가요?</span>
+            </span>
+            <svg class="faq-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+          </summary>
+          <div class="faq-a">최고 온도에 도달한 뒤 그 온도를 유지하는 과정에서 나는 소리로 정상입니다. 계속 팔팔 끓는 방식이 아니라 설정한 온도를 유지하는 방식이며, 넘침을 막기 위한 안전 설계입니다.</div>
+        </details>
+        
+        <details class="faq-item">
+          <summary>
+            <span class="faq-q">
+              <span class="faq-cat">사용법</span>
+              <span class="faq-qt">가열 모드에서 즉석밥 모드로 바꾸면 기기가 꺼지는데 정상인가요?</span>
+            </span>
+            <svg class="faq-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+          </summary>
+          <div class="faq-a">모드를 변경하면 재설정을 위해 기기가 잠시 꺼지는 것이 정상입니다.</div>
+        </details>
+        
+        <details class="faq-item">
+          <summary>
+            <span class="faq-q">
+              <span class="faq-cat">스펙</span>
+              <span class="faq-qt">캠핑장에서 600W로만 사용할 수 있나요?</span>
+            </span>
+            <svg class="faq-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+          </summary>
+          <div class="faq-a">본 제품은 최대 1100W 제품으로, 600W로만 제한하여 사용할 수는 없습니다.</div>
+        </details>
+        
+        <details class="faq-item">
+          <summary>
+            <span class="faq-q">
+              <span class="faq-cat">구성품</span>
+              <span class="faq-qt">계란과 햇반 조리용 찜 트레이가 구성품에 포함되나요?</span>
+            </span>
+            <svg class="faq-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+          </summary>
+          <div class="faq-a">네, 찜 트레이는 기본 구성품에 포함되어 있습니다.</div>
+        </details>
+        
+        <details class="faq-item">
+          <summary>
+            <span class="faq-q">
+              <span class="faq-cat">사용법</span>
+              <span class="faq-qt">분유 모드는 100도까지 끓인 뒤 설정 온도로 내려가나요?</span>
+            </span>
+            <svg class="faq-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+          </summary>
+          <div class="faq-a">네, 100도까지 가열해 살균한 뒤 설정하신 온도(40~60도)로 식혀서 유지합니다. 분유 모드는 최대 24시간까지 보온됩니다.</div>
+        </details>
+        
+        <details class="faq-item">
+          <summary>
+            <span class="faq-q">
+              <span class="faq-cat">안전</span>
+              <span class="faq-qt">가열 중 손잡이가 잡을 수 없을 만큼 뜨겁나요?</span>
+            </span>
+            <svg class="faq-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+          </summary>
+          <div class="faq-a">손잡이는 내열 플라스틱(PP) 소재로 조리 후에도 잡을 수 있습니다. 다만 증기 배출구에서는 뜨거운 김이 나오므로 손을 대지 마세요.</div>
+        </details>
+        
+        <details class="faq-item">
+          <summary>
+            <span class="faq-q">
+              <span class="faq-cat">안전</span>
+              <span class="faq-qt">E3 에러가 뜨는데 어떻게 하나요?</span>
+            </span>
+            <svg class="faq-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+          </summary>
+          <div class="faq-a">E3는 물 부족 또는 과열이 감지되거나 본체에 습기가 찼을 때 표시되는 에러입니다. 전원을 끄고 물을 보충하거나, 본체를 충분히 건조하고 식힌 뒤 다시 작동해 주세요.</div>
+        </details>
+        
+        <details class="faq-item">
+          <summary>
+            <span class="faq-q">
+              <span class="faq-cat">사용법</span>
+              <span class="faq-qt">해외에서 변압 스위치 조작 없이 코드만 꽂으면 되나요?</span>
+            </span>
+            <svg class="faq-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+          </summary>
+          <div class="faq-a">네, 100~230V 프리볼트 제품이라 별도의 변압 조작이 필요 없습니다. 해당 국가의 플러그 모양에 맞는 변환 어댑터만 꽂으면 되며(어댑터는 전압이 아닌 플러그 모양만 바꿔 줍니다), 호주 등 240V 환경에서도 사용 가능합니다. 전압이 다른 곳으로 이동했을 때는 코드를 뽑고 제품을 식힌 뒤 다시 연결해야 전압이 자동으로 재인식됩니다.</div>
+        </details>
+        
+        <details class="faq-item">
+          <summary>
+            <span class="faq-q">
+              <span class="faq-cat">세척·관리</span>
+              <span class="faq-qt">내부는 어떻게 세척하나요?</span>
+            </span>
+            <svg class="faq-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+          </summary>
+          <div class="faq-a">상단 용기와 찜 트레이는 분리하여 세척할 수 있습니다. 단, 본체(가열 베이스)는 물에 담그거나 흐르는 물에 씻지 마시고 젖은 수건으로 닦아 관리해 주세요. 세척 시 상단 용기 하단의 전원 연결구 고무마개를 반드시 닫고, 부드러운 스펀지와 중성세제를 사용하세요(철 수세미 사용 금지).</div>
+        </details>
+        
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT BAND -->
+  <section class="section" aria-labelledby="contact-title">
+    <div class="wrap">
+      <div class="contact-card">
+        <div class="contact-lead">
+          <h2 class="section-title" id="contact-title">더 궁금한 점이 있으신가요?</h2>
+          <p class="contact-desc">원하는 답을 찾지 못하셨다면 전화나 채팅 상담으로 편하게 문의해 주세요.</p>
+        </div>
+        <div class="contact-side">
+          <a class="contact-tel" href="tel:1522-8508" aria-label="고객센터 전화 1522-8508, 평일 09시부터 15시">
+            <span class="ct-num">1522-8508</span>
+            <span class="ct-hours">평일 09:00–15:00 · 주말·공휴일 휴무</span>
+          </a>
+          <p class="contact-chat"><span class="cc-dot" aria-hidden="true"></span>오른쪽 아래 채팅 상담을 누르면 AI가 먼저 답해드려요.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- Chat entry point: quiet floating pill (inherited from home) -->
+<button class="chat-fab" type="button" aria-label="채팅 상담 열기">
+  <span class="chat-ic" aria-hidden="true">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6.5v8a2.5 2.5 0 0 1-2.5 2.5H9l-4 3.2V17H6.5A2.5 2.5 0 0 1 4 14.5v-8A2.5 2.5 0 0 1 6.5 4h11A2.5 2.5 0 0 1 20 6.5z"/><path d="M8.5 10h7M8.5 13h4.5"/></svg>
+  </span>
+  <span class="chat-tx">
+    <span class="chat-tt">채팅 상담</span>
+    <span class="chat-st"><span class="chat-live" aria-hidden="true"></span>AI가 먼저 답해드려요</span>
+  </span>
+</button>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-top">
+      <div class="foot-contact">
+        <p class="foot-h">고객센터</p>
+        <a class="foot-tel" href="tel:1522-8508">1522-8508</a>
+        <p class="foot-hours">평일 09:00–15:00 <span class="off">· 주말·공휴일 휴무</span></p>
+      </div>
+      <nav class="foot-brands" aria-label="바로가기">
+        <p class="foot-h">바로가기</p>
+        <div class="foot-brandrow">
+          <a class="foot-brand" href="https://clapa.kr" rel="noopener">클래파 스토어 <span class="lat" aria-hidden="true">↗</span></a>
+          <a class="foot-brand" href="../index.html">A/S 신청</a>
+          <a class="foot-brand" href="../index.html#finder-title">설명서 다운로드</a>
+        </div>
+      </nav>
+    </div>
+    <div class="footer-legal">
+      <span>© 2026 CLAPA. <a href="https://clapa.kr" rel="noopener" style="border-bottom:1px solid var(--line);">clapa.kr</a></span>
+      <span class="slogan">조용함이 만드는 박수 칠 일상</span>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

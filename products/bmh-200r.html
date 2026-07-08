@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>클래파 마이카 컨벡션 히터 — CLAPA 고객지원센터</title>
+<meta name="description" content="클래파 마이카 컨벡션 히터 설명서·부품·자주 묻는 질문 안내 — CLAPA 고객지원센터">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+  :root{
+    --paper:#FFFFFF;
+    --surface:#F5F4F1;
+    --sand:#EFE9E1;
+    --line:#E6E1D8;
+    --line-soft:#EDE9E1;
+    --ink:#23201B;
+    --muted:#6F675C;
+    --teal:#0E6F66;
+    --teal-deep:#0A5750;
+    --teal-wash:#E4F0ED;
+    --sil:#CBC4B8;
+    --sil-d:#AAA294;
+    --glass:#E3DED4;
+    --radius:12px;
+    --radius-sm:9px;
+    --maxw:1080px;
+    --ease:cubic-bezier(.22,.61,.36,1);
+  }
+
+  *{box-sizing:border-box;}
+  html{-webkit-text-size-adjust:100%;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Pretendard Variable',Pretendard,-apple-system,'Apple SD Gothic Neo',sans-serif;
+    font-size:15px;
+    line-height:1.6;
+    letter-spacing:-0.011em;
+    -webkit-font-smoothing:antialiased;
+    text-rendering:optimizeLegibility;
+    word-break:keep-all;
+  }
+  a{color:inherit;text-decoration:none;}
+  button{font:inherit;color:inherit;cursor:pointer;}
+  img,svg{display:block;max-width:100%;}
+
+  .wrap{max-width:var(--maxw);margin:0 auto;padding-inline:clamp(18px,4vw,40px);}
+
+  .skip{
+    position:absolute;left:14px;top:-60px;z-index:80;
+    background:var(--ink);color:#fff;padding:9px 15px;border-radius:8px;
+    font-size:13px;font-weight:600;transition:top .16s var(--ease);
+  }
+  .skip:focus{top:12px;}
+
+  :focus-visible{outline:2px solid var(--teal);outline-offset:2px;border-radius:3px;}
+
+  /* ---------- Header (inherited from home) ---------- */
+  .site-header{
+    position:sticky;top:0;z-index:40;
+    background:rgba(255,255,255,.86);
+    backdrop-filter:saturate(180%) blur(10px);
+    border-bottom:1px solid var(--line);
+  }
+  .header-inner{
+    display:flex;align-items:center;justify-content:space-between;gap:18px;
+    height:60px;
+  }
+  .wordmark{
+    display:inline-flex;align-items:baseline;gap:8px;
+    font-weight:700;font-size:16.5px;letter-spacing:-0.02em;
+  }
+  .wordmark .mark-a{color:var(--ink);}
+  .wordmark .mark-b{
+    color:var(--teal);font-weight:600;font-size:13px;letter-spacing:0.06em;
+    padding:2px 7px;border:1px solid var(--teal-wash);border-radius:6px;
+    background:var(--teal-wash);transform:translateY(-1px);
+  }
+  .header-nav{display:flex;align-items:center;gap:6px;}
+  .nav-link{
+    font-size:13.5px;font-weight:500;color:var(--muted);white-space:nowrap;
+    padding:8px 12px;border-radius:8px;
+    transition:color .15s var(--ease),background .15s var(--ease);
+  }
+  .nav-link:hover{color:var(--ink);background:var(--surface);}
+  .nav-link.is-store{color:var(--teal-deep);font-weight:600;}
+  .nav-link.is-store .ext{font-size:12px;margin-left:3px;color:var(--teal);}
+
+  /* ---------- Back link ---------- */
+  .backlink{
+    display:inline-flex;align-items:center;gap:6px;
+    margin-top:20px;
+    color:var(--muted);font-size:13.5px;font-weight:500;letter-spacing:-0.01em;
+    transition:color .15s var(--ease);
+  }
+  .backlink:hover{color:var(--teal-deep);}
+
+  /* ---------- Product hero ---------- */
+  .phero{padding-block:clamp(22px,3.5vw,34px) clamp(30px,4.5vw,48px);}
+  .phero-grid{
+    display:grid;
+    grid-template-columns:minmax(0,.86fr) minmax(0,1fr);
+    gap:clamp(24px,4vw,48px);
+    align-items:center;
+  }
+  .phero-media{
+    position:relative;
+    aspect-ratio:1/1;
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    overflow:hidden;
+  }
+  .phero-img{
+    position:absolute;inset:0;
+    width:100%;height:100%;
+    object-fit:cover;
+  }
+  .phero-info{min-width:0;}
+  .phero-cat{
+    display:inline-block;
+    background:var(--teal-wash);color:var(--teal-deep);
+    font-size:12px;font-weight:600;letter-spacing:0.03em;
+    padding:4px 11px;border-radius:100px;
+  }
+  .phero-title{
+    margin:13px 0 0;
+    font-size:clamp(23px,3.4vw,32px);
+    line-height:1.18;font-weight:700;letter-spacing:-0.03em;
+    max-width:20ch;
+  }
+  .phero-meta{margin:14px 0 0;display:flex;flex-direction:column;gap:5px;}
+  .phero-row{
+    display:flex;align-items:baseline;gap:8px;
+    color:var(--muted);font-size:13.5px;letter-spacing:-0.008em;
+  }
+  .phero-row .lbl{flex:none;font-weight:500;color:var(--muted);}
+  .phero-row .val{color:var(--ink);font-weight:600;font-variant-numeric:tabular-nums;letter-spacing:0.005em;}
+
+  /* ---------- Action buttons ---------- */
+  .phero-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:24px;}
+  .btn{
+    display:inline-flex;align-items:center;justify-content:center;gap:8px;
+    padding:12px 20px;border-radius:10px;
+    font-size:14.5px;font-weight:600;letter-spacing:-0.01em;
+    border:1.5px solid transparent;
+    transition:background .16s var(--ease),border-color .16s var(--ease),color .16s var(--ease),transform .16s var(--ease);
+  }
+  .btn svg{width:16px;height:16px;flex:none;}
+  .btn .ext{font-size:12.5px;}
+  .btn-primary{background:var(--teal);color:#fff;border-color:var(--teal);}
+  .btn-primary:hover{background:var(--teal-deep);border-color:var(--teal-deep);transform:translateY(-1px);}
+  .btn-ghost{background:var(--paper);color:var(--ink);border-color:var(--line);}
+  .btn-ghost:hover{border-color:var(--teal);color:var(--teal-deep);background:var(--teal-wash);}
+  .btn-ghost svg{color:var(--sil-d);}
+  .btn-ghost:hover svg{color:var(--teal);}
+
+  /* ---------- Section shell (inherited from home) ---------- */
+  .section{padding-block:clamp(42px,6vw,72px);}
+  .section.band{background:var(--surface);border-block:1px solid var(--line);}
+  .section-head{
+    display:flex;align-items:flex-end;justify-content:space-between;gap:16px;
+    margin-bottom:22px;
+  }
+  .section-eyebrow{color:var(--teal-deep);font-size:12px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;display:block;margin-bottom:8px;}
+  .section-title{margin:0;font-size:clamp(20px,2.6vw,25px);font-weight:700;letter-spacing:-0.026em;line-height:1.2;}
+  .section-desc{margin:8px 0 0;color:var(--muted);font-size:14px;max-width:46ch;}
+
+  /* ---------- Spec list (B2 restrained line list) ---------- */
+  .spec-grid{
+    margin:0;
+    display:grid;grid-template-columns:1fr 1fr;
+    gap:0 clamp(24px,4vw,48px);
+    border-top:1px solid var(--line);
+  }
+  .spec-row{
+    margin:0;
+    display:flex;align-items:baseline;justify-content:space-between;gap:18px;
+    padding:13px 2px;
+    border-bottom:1px solid var(--line-soft);
+  }
+  .spec-label{margin:0;flex:none;color:var(--muted);font-size:13.5px;font-weight:500;}
+  .spec-value{
+    margin:0;flex:1;min-width:0;text-align:right;
+    color:var(--ink);font-size:14px;font-weight:550;letter-spacing:-0.008em;
+    font-variant-numeric:tabular-nums;
+  }
+  .spec-note{
+    display:flex;align-items:flex-start;gap:9px;
+    margin:18px 0 0;
+    padding:12px 15px;
+    background:var(--teal-wash);
+    border-radius:var(--radius-sm);
+    color:var(--teal-deep);font-size:13px;line-height:1.55;font-weight:500;
+  }
+  .spec-note svg{width:16px;height:16px;flex:none;margin-top:2px;}
+
+  /* ---------- FAQ (inherited from home) ---------- */
+  .faq-list{
+    max-width:840px;
+    border:1px solid var(--line);border-radius:var(--radius);
+    background:var(--paper);overflow:hidden;
+  }
+  .faq-item{border-top:1px solid var(--line-soft);}
+  .faq-item:first-child{border-top:0;}
+  .faq-item>summary{
+    list-style:none;cursor:pointer;
+    display:flex;align-items:flex-start;gap:14px;
+    padding:17px 18px;
+    transition:background .14s var(--ease);
+  }
+  .faq-item>summary::-webkit-details-marker{display:none;}
+  .faq-item>summary:hover{background:#FBFAF7;}
+  .faq-q{flex:1;min-width:0;display:flex;flex-direction:column;gap:5px;}
+  .faq-cat{
+    font-size:11px;font-weight:600;letter-spacing:0.04em;color:var(--teal-deep);
+    text-transform:uppercase;
+  }
+  .faq-qt{font-size:15px;font-weight:550;letter-spacing:-0.016em;line-height:1.45;}
+  .faq-chev{
+    flex:none;width:22px;height:22px;margin-top:2px;color:var(--muted);
+    transition:transform .2s var(--ease),color .14s var(--ease);
+  }
+  .faq-item[open] .faq-chev{transform:rotate(180deg);color:var(--teal);}
+  .faq-a{
+    padding:0 18px 19px 46px;
+    color:var(--muted);font-size:14px;line-height:1.65;letter-spacing:-0.008em;
+  }
+  .faq-a a{color:var(--teal-deep);font-weight:600;border-bottom:1px solid var(--teal-wash);}
+  .faq-a a:hover{border-bottom-color:var(--teal);}
+
+  /* ---------- Contact band ---------- */
+  .contact-card{
+    display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:22px 40px;
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:clamp(24px,4vw,36px);
+  }
+  .contact-lead{min-width:0;}
+  .contact-desc{margin:8px 0 0;color:var(--muted);font-size:14px;max-width:40ch;}
+  .contact-side{display:flex;flex-direction:column;gap:12px;flex:none;}
+  .contact-tel{display:flex;flex-direction:column;gap:3px;}
+  .ct-num{font-size:24px;font-weight:700;letter-spacing:-0.02em;font-variant-numeric:tabular-nums;color:var(--ink);transition:color .14s var(--ease);}
+  .contact-tel:hover .ct-num{color:var(--teal-deep);}
+  .ct-hours{font-size:12.5px;color:var(--muted);}
+  .contact-chat{margin:0;font-size:12.5px;color:var(--muted);display:inline-flex;align-items:center;gap:7px;}
+  .cc-dot{width:6px;height:6px;border-radius:50%;background:var(--teal);flex:none;}
+
+  /* ---------- Chat FAB (inherited from home) ---------- */
+  .chat-fab{
+    position:fixed;right:clamp(16px,3vw,28px);bottom:clamp(16px,3vw,28px);z-index:50;
+    display:inline-flex;align-items:center;gap:10px;
+    background:var(--paper);
+    border:1px solid var(--line);
+    border-radius:100px;
+    padding:11px 17px 11px 14px;
+    box-shadow:0 6px 22px -8px rgba(35,32,27,.22),0 2px 6px -3px rgba(35,32,27,.12);
+    transition:border-color .16s var(--ease),transform .16s var(--ease);
+  }
+  .chat-fab:hover{border-color:var(--teal);transform:translateY(-1px);}
+  .chat-ic{
+    width:32px;height:32px;flex:none;border-radius:50%;
+    background:var(--teal-wash);color:var(--teal-deep);
+    display:flex;align-items:center;justify-content:center;
+  }
+  .chat-ic svg{width:17px;height:17px;}
+  .chat-tx{display:flex;flex-direction:column;line-height:1.25;text-align:left;}
+  .chat-tt{font-size:14px;font-weight:600;letter-spacing:-0.015em;color:var(--ink);}
+  .chat-st{font-size:11.5px;color:var(--muted);display:inline-flex;align-items:center;gap:5px;}
+  .chat-live{width:6px;height:6px;border-radius:50%;background:var(--teal);flex:none;}
+  @media(max-width:480px){ .chat-tx{display:none;} .chat-fab{padding:11px;} }
+
+  /* ---------- Footer (inherited from home) ---------- */
+  .site-footer{
+    background:#F1EEE8;border-top:1px solid var(--line);
+    padding-block:clamp(34px,5vw,52px);margin-top:8px;
+  }
+  .footer-top{
+    display:flex;flex-wrap:wrap;justify-content:space-between;gap:28px 40px;
+    padding-bottom:26px;border-bottom:1px solid var(--line);
+  }
+  .foot-contact .foot-h{font-size:12px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;}
+  .foot-tel{font-size:22px;font-weight:700;letter-spacing:-0.02em;font-variant-numeric:tabular-nums;color:var(--ink);}
+  .foot-hours{font-size:13px;color:var(--muted);margin-top:5px;}
+  .foot-hours .off{color:var(--sil-d);}
+  .foot-brands{display:flex;flex-direction:column;gap:9px;}
+  .foot-brands .foot-h{font-size:12px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);margin-bottom:2px;}
+  .foot-brandrow{display:flex;flex-wrap:wrap;gap:8px 10px;}
+  .foot-brand{
+    display:inline-flex;align-items:baseline;gap:6px;
+    font-size:13.5px;font-weight:500;color:var(--ink);
+    padding:5px 0;transition:color .14s var(--ease);
+  }
+  .foot-brand .lat{font-size:11px;color:var(--muted);letter-spacing:0.04em;}
+  .foot-brand:hover{color:var(--teal-deep);}
+  .foot-brand:hover .lat{color:var(--teal);}
+  .footer-legal{
+    display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;
+    padding-top:22px;color:var(--muted);font-size:12.5px;
+  }
+  .footer-legal .slogan{color:var(--teal-deep);font-weight:600;letter-spacing:-0.01em;}
+
+  /* ---------- Responsive ---------- */
+  @media(max-width:820px){
+    .phero-grid{grid-template-columns:1fr;gap:22px;}
+    .phero-media{max-width:420px;}
+    .phero-title{max-width:none;}
+  }
+  @media(max-width:640px){
+    .phero{padding-block:16px 30px;}
+    .phero-media{aspect-ratio:4/3;}
+    .section{padding-block:42px;}
+    .section-head{flex-direction:column;align-items:flex-start;margin-bottom:18px;}
+    /* specs: 2 columns collapse to 1 */
+    .spec-grid{grid-template-columns:1fr;}
+    /* contact band stacks */
+    .contact-card{flex-direction:column;align-items:flex-start;}
+    .footer-top{gap:24px 32px;}
+  }
+  @media(max-width:520px){
+    /* full-width, comfortable touch targets */
+    .phero-actions{flex-direction:column;gap:9px;}
+    .btn{width:100%;min-height:48px;}
+  }
+
+  @media(prefers-reduced-motion:reduce){
+    *{transition:none !important;animation:none !important;scroll-behavior:auto !important;}
+  }
+</style>
+</head>
+<body>
+<a class="skip" href="#main">본문으로 건너뛰기</a>
+
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a class="wordmark" href="../index.html" aria-label="CLAPA SUPPORT 고객지원센터 홈">
+      <span class="mark-a">CLAPA</span><span class="mark-b">SUPPORT</span>
+    </a>
+    <nav class="header-nav" aria-label="주요 메뉴">
+      <a class="nav-link" href="../index.html#finder-title">전체 제품</a>
+      <a class="nav-link is-store" href="https://clapa.kr" rel="noopener">clapa.kr 스토어<span class="ext" aria-hidden="true">↗</span></a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+
+  <div class="wrap">
+    <a class="backlink" href="../index.html">
+      <span aria-hidden="true">←</span> 고객지원센터 홈
+    </a>
+  </div>
+
+  <!-- PRODUCT HERO -->
+  <section class="phero" aria-labelledby="product-title">
+    <div class="wrap phero-grid">
+      <div class="phero-media">
+        <img class="phero-img" src="https://shop-phinf.pstatic.net/20231004_130/1696404820265nCEFU_JPEG/9872319739978075_1026213838.jpg?type=f400" alt="클래파 마이카 컨벡션 히터" loading="eager" decoding="async" onerror="this.remove()">
+      </div>
+      <div class="phero-info">
+        <span class="phero-cat">계절가전</span>
+        <h1 class="phero-title" id="product-title">클래파 마이카 컨벡션 히터</h1>
+        <div class="phero-meta">
+          <p class="phero-row"><span class="lbl">모델명</span><span class="val">BMH-200R</span></p>
+          
+          <p class="phero-row"><span class="lbl">색상</span><span class="val">화이트</span></p>
+          
+        </div>
+
+        <div class="phero-actions">
+          
+          
+          <a class="btn btn-primary" href="https://smartstore.naver.com/skillfulbrother/products/9317489531" target="_blank" rel="noopener" aria-label="클래파 마이카 컨벡션 히터 스토어에서 보기 (새 창)">
+            스토어에서 보기 <span class="ext" aria-hidden="true">↗</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SPECIFICATIONS -->
+  <section class="section" aria-labelledby="spec-title">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <span class="section-eyebrow">Specifications</span>
+          <h2 class="section-title" id="spec-title">주요 사양</h2>
+        </div>
+      </div>
+
+      <dl class="spec-grid">
+        
+        <div class="spec-row">
+          <dt class="spec-label">제품명/모델명</dt>
+          <dd class="spec-value">마이카 프리미엄 컨벡션 히터 (BMH-200R)</dd>
+        </div>
+        
+        <div class="spec-row">
+          <dt class="spec-label">소비전력</dt>
+          <dd class="spec-value">2000W</dd>
+        </div>
+        
+        <div class="spec-row">
+          <dt class="spec-label">난방 면적</dt>
+          <dd class="spec-value">약 19㎡ (약 5~6평)</dd>
+        </div>
+        
+        <div class="spec-row">
+          <dt class="spec-label">크기</dt>
+          <dd class="spec-value">900 x 250 x 530 mm (발받침대 포함)</dd>
+        </div>
+        
+        <div class="spec-row">
+          <dt class="spec-label">무게</dt>
+          <dd class="spec-value">10.5kg</dd>
+        </div>
+        
+        <div class="spec-row">
+          <dt class="spec-label">소음</dt>
+          <dd class="spec-value">15dB (모터·팬 없음)</dd>
+        </div>
+        
+        <div class="spec-row">
+          <dt class="spec-label">방수 등급</dt>
+          <dd class="spec-value">IPX4 생활 방수</dd>
+        </div>
+        
+        <div class="spec-row">
+          <dt class="spec-label">발열 방식</dt>
+          <dd class="spec-value">마이카(운모) 신소재 발열체, 대류식 난방</dd>
+        </div>
+        
+        <div class="spec-row">
+          <dt class="spec-label">온도 설정 범위</dt>
+          <dd class="spec-value">5도 ~ 35도 (가열 모드)</dd>
+        </div>
+        
+        <div class="spec-row">
+          <dt class="spec-label">구성품</dt>
+          <dd class="spec-value">본체, 발 받침대·바퀴, 건조대, 리모컨(배터리 포함), 사용설명서</dd>
+        </div>
+        
+      </dl>
+
+      
+      <p class="spec-note">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 1.5 13 3.5v4c0 3.4-2.2 5.7-5 7-2.8-1.3-5-3.6-5-7v-4z"/><path d="M6 8l1.5 1.5L10.5 6.5"/></svg>
+        <span>무상보증 2년</span>
+      </p>
+      
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="section band" id="faq" aria-labelledby="faq-title">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <span class="section-eyebrow">Frequently asked</span>
+          <h2 class="section-title" id="faq-title">자주 묻는 질문</h2>
+          <p class="section-desc">이 제품에 대해 가장 많이 문의하신 내용을 모았습니다.</p>
+        </div>
+      </div>
+
+      <div class="faq-list">
+        
+        <details class="faq-item">
+          <summary>
+            <span class="faq-q">
+              <span class="faq-cat">배터리·충전</span>
+              <span class="faq-qt">전기세가 많이 나오나요?</span>
+            </span>
+            <svg class="faq-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+          </summary>
+          <div class="faq-a">강(2000W)으로 하루 8시간 사용 시 월 약 11만원(누진세 제외) 정도로 예상됩니다. 설정 온도에 도달하면 가열을 멈추고 온도를 유지해 전력 소모를 줄이므로 실제 사용량은 그보다 낮을 수 있으며, 사용 환경과 누진세에 따라 차이가 있습니다.</div>
+        </details>
+        
+        <details class="faq-item">
+          <summary>
+            <span class="faq-q">
+              <span class="faq-cat">소음</span>
+              <span class="faq-qt">사용 중 '딱딱' 또는 '탁탁'거리는 소리가 나는데 정상인가요?</span>
+            </span>
+            <svg class="faq-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+          </summary>
+          <div class="faq-a">발열체가 온도 변화에 따라 팽창·수축하면서 나는 정상적인 소리입니다. 내부에 쌓인 먼지를 에어건 등으로 불어내면 소리가 줄어들 수 있습니다.</div>
+        </details>
+        
+        <details class="faq-item">
+          <summary>
+            <span class="faq-q">
+              <span class="faq-cat">스펙</span>
+              <span class="faq-qt">몇 평에 사용하기 적당한가요?</span>
+            </span>
+            <svg class="faq-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+          </summary>
+          <div class="faq-a">단독 사용 시 적정 난방 면적은 약 5~6평(약 19㎡)입니다. 보조 난방이나 바닥 난방과 함께 사용하면 그 이상 평수에서도 사용할 수 있습니다.</div>
+        </details>
+        
+        <details class="faq-item">
+          <summary>
+            <span class="faq-q">
+              <span class="faq-cat">사용법</span>
+              <span class="faq-qt">꺼짐 예약(타이머) 기능이 있나요?</span>
+            </span>
+            <svg class="faq-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+          </summary>
+          <div class="faq-a">네, 꺼짐 예약 기능이 있습니다. 작동 중 [MENU] 버튼을 눌러 시계 아이콘이 깜빡일 때 화살표 버튼으로 1시간 단위, 최대 12시간까지 설정할 수 있습니다.</div>
+        </details>
+        
+        <details class="faq-item">
+          <summary>
+            <span class="faq-q">
+              <span class="faq-cat">기능</span>
+              <span class="faq-qt">원하는 시각에 자동으로 켜지는 켜짐 예약 기능도 있나요?</span>
+            </span>
+            <svg class="faq-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+          </summary>
+          <div class="faq-a">켜짐 예약 기능은 탑재되어 있지 않습니다. 꺼짐 예약(타이머) 기능만 제공됩니다.</div>
+        </details>
+        
+        <details class="faq-item">
+          <summary>
+            <span class="faq-q">
+              <span class="faq-cat">안전</span>
+              <span class="faq-qt">겨울 내내 계속 켜둬도 되나요?</span>
+            </span>
+            <svg class="faq-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+          </summary>
+          <div class="faq-a">별도 설정이 없어도 작동 후 24시간이 지나면 화재 방지를 위해 자동으로 전원이 꺼집니다. 계속 사용하시려면 다시 켜주시면 되며, 이 자동 꺼짐은 안전을 위한 기능으로 해제할 수 없습니다.</div>
+        </details>
+        
+        <details class="faq-item">
+          <summary>
+            <span class="faq-q">
+              <span class="faq-cat">안전</span>
+              <span class="faq-qt">아이가 있는데 만지면 화상 위험이 있나요?</span>
+            </span>
+            <svg class="faq-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+          </summary>
+          <div class="faq-a">온열 제품이라 사용 중이나 직후에는 표면이 매우 뜨거워 가까이 대거나 만지면 화상 위험이 있습니다. 어린이 보호 잠금(차일드락) 기능이 있으나, 아이가 있는 가정에서는 인화성 물체와 최소 1m 이상 거리를 두고 주의하여 사용해 주세요.</div>
+        </details>
+        
+        <details class="faq-item">
+          <summary>
+            <span class="faq-q">
+              <span class="faq-cat">부품·소모품</span>
+              <span class="faq-qt">리모컨만 따로 구매할 수 있나요?</span>
+            </span>
+            <svg class="faq-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+          </summary>
+          <div class="faq-a">네, 리모컨은 추가 구매가 가능하며 가격은 택배비 포함 1만원입니다.</div>
+        </details>
+        
+        <details class="faq-item">
+          <summary>
+            <span class="faq-q">
+              <span class="faq-cat">스펙</span>
+              <span class="faq-qt">발열체 소재는 무엇인가요?</span>
+            </span>
+            <svg class="faq-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+          </summary>
+          <div class="faq-a">천연 광물인 마이카(운모) 신소재 발열체를 사용합니다. 운모는 열 분산 효과가 좋고 고온 안정성과 전기 절연성이 뛰어나 발열체로 적합하며, 열효율이 우수합니다.</div>
+        </details>
+        
+        <details class="faq-item">
+          <summary>
+            <span class="faq-q">
+              <span class="faq-cat">세척·관리</span>
+              <span class="faq-qt">청소는 어떻게 하나요?</span>
+            </span>
+            <svg class="faq-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+          </summary>
+          <div class="faq-a">청소 전 반드시 플러그를 뽑고 30분 이상 완전히 식혀 주세요. 부드러운 마른 천으로 먼지를 닦고, 벤젠·신나·알코올 등 휘발성 물질은 사용하지 마세요. 송풍구에 쌓인 먼지는 과열의 원인이 되므로 에어건 등으로 정기적으로 청소하는 것을 권장합니다.</div>
+        </details>
+        
+        <details class="faq-item">
+          <summary>
+            <span class="faq-q">
+              <span class="faq-cat">사용법</span>
+              <span class="faq-qt">처음 사용할 때 냄새가 나는데 괜찮은가요?</span>
+            </span>
+            <svg class="faq-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+          </summary>
+          <div class="faq-a">처음 사용 시 냄새가 날 수 있으나 정상적인 현상입니다. 환기가 잘 되는 곳에서 가열 모드(최대 전력)로 12시간 이상 시운전하시면 냄새가 사라집니다.</div>
+        </details>
+        
+        <details class="faq-item">
+          <summary>
+            <span class="faq-q">
+              <span class="faq-cat">스펙</span>
+              <span class="faq-qt">에너지 소비효율 등급은 몇 등급인가요?</span>
+            </span>
+            <svg class="faq-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+          </summary>
+          <div class="faq-a">소형가전으로 에너지 소비효율 등급 대상에 해당하지 않는 제품입니다. 소비전력은 2000W입니다.</div>
+        </details>
+        
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT BAND -->
+  <section class="section" aria-labelledby="contact-title">
+    <div class="wrap">
+      <div class="contact-card">
+        <div class="contact-lead">
+          <h2 class="section-title" id="contact-title">더 궁금한 점이 있으신가요?</h2>
+          <p class="contact-desc">원하는 답을 찾지 못하셨다면 전화나 채팅 상담으로 편하게 문의해 주세요.</p>
+        </div>
+        <div class="contact-side">
+          <a class="contact-tel" href="tel:1522-8508" aria-label="고객센터 전화 1522-8508, 평일 09시부터 15시">
+            <span class="ct-num">1522-8508</span>
+            <span class="ct-hours">평일 09:00–15:00 · 주말·공휴일 휴무</span>
+          </a>
+          <p class="contact-chat"><span class="cc-dot" aria-hidden="true"></span>오른쪽 아래 채팅 상담을 누르면 AI가 먼저 답해드려요.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- Chat entry point: quiet floating pill (inherited from home) -->
+<button class="chat-fab" type="button" aria-label="채팅 상담 열기">
+  <span class="chat-ic" aria-hidden="true">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6.5v8a2.5 2.5 0 0 1-2.5 2.5H9l-4 3.2V17H6.5A2.5 2.5 0 0 1 4 14.5v-8A2.5 2.5 0 0 1 6.5 4h11A2.5 2.5 0 0 1 20 6.5z"/><path d="M8.5 10h7M8.5 13h4.5"/></svg>
+  </span>
+  <span class="chat-tx">
+    <span class="chat-tt">채팅 상담</span>
+    <span class="chat-st"><span class="chat-live" aria-hidden="true"></span>AI가 먼저 답해드려요</span>
+  </span>
+</button>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-top">
+      <div class="foot-contact">
+        <p class="foot-h">고객센터</p>
+        <a class="foot-tel" href="tel:1522-8508">1522-8508</a>
+        <p class="foot-hours">평일 09:00–15:00 <span class="off">· 주말·공휴일 휴무</span></p>
+      </div>
+      <nav class="foot-brands" aria-label="바로가기">
+        <p class="foot-h">바로가기</p>
+        <div class="foot-brandrow">
+          <a class="foot-brand" href="https://clapa.kr" rel="noopener">클래파 스토어 <span class="lat" aria-hidden="true">↗</span></a>
+          <a class="foot-brand" href="../index.html">A/S 신청</a>
+          <a class="foot-brand" href="../index.html#finder-title">설명서 다운로드</a>
+        </div>
+      </nav>
+    </div>
+    <div class="footer-legal">
+      <span>© 2026 CLAPA. <a href="https://clapa.kr" rel="noopener" style="border-bottom:1px solid var(--line);">clapa.kr</a></span>
+      <span class="slogan">조용함이 만드는 박수 칠 일상</span>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

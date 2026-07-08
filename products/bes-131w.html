@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>클래파 스테인리스 2단 계란찜기 — CLAPA 고객지원센터</title>
+<meta name="description" content="클래파 스테인리스 2단 계란찜기 설명서·부품·자주 묻는 질문 안내 — CLAPA 고객지원센터">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+  :root{
+    --paper:#FFFFFF;
+    --surface:#F5F4F1;
+    --sand:#EFE9E1;
+    --line:#E6E1D8;
+    --line-soft:#EDE9E1;
+    --ink:#23201B;
+    --muted:#6F675C;
+    --teal:#0E6F66;
+    --teal-deep:#0A5750;
+    --teal-wash:#E4F0ED;
+    --sil:#CBC4B8;
+    --sil-d:#AAA294;
+    --glass:#E3DED4;
+    --radius:12px;
+    --radius-sm:9px;
+    --maxw:1080px;
+    --ease:cubic-bezier(.22,.61,.36,1);
+  }
+
+  *{box-sizing:border-box;}
+  html{-webkit-text-size-adjust:100%;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Pretendard Variable',Pretendard,-apple-system,'Apple SD Gothic Neo',sans-serif;
+    font-size:15px;
+    line-height:1.6;
+    letter-spacing:-0.011em;
+    -webkit-font-smoothing:antialiased;
+    text-rendering:optimizeLegibility;
+    word-break:keep-all;
+  }
+  a{color:inherit;text-decoration:none;}
+  button{font:inherit;color:inherit;cursor:pointer;}
+  img,svg{display:block;max-width:100%;}
+
+  .wrap{max-width:var(--maxw);margin:0 auto;padding-inline:clamp(18px,4vw,40px);}
+
+  .skip{
+    position:absolute;left:14px;top:-60px;z-index:80;
+    background:var(--ink);color:#fff;padding:9px 15px;border-radius:8px;
+    font-size:13px;font-weight:600;transition:top .16s var(--ease);
+  }
+  .skip:focus{top:12px;}
+
+  :focus-visible{outline:2px solid var(--teal);outline-offset:2px;border-radius:3px;}
+
+  /* ---------- Header (inherited from home) ---------- */
+  .site-header{
+    position:sticky;top:0;z-index:40;
+    background:rgba(255,255,255,.86);
+    backdrop-filter:saturate(180%) blur(10px);
+    border-bottom:1px solid var(--line);
+  }
+  .header-inner{
+    display:flex;align-items:center;justify-content:space-between;gap:18px;
+    height:60px;
+  }
+  .wordmark{
+    display:inline-flex;align-items:baseline;gap:8px;
+    font-weight:700;font-size:16.5px;letter-spacing:-0.02em;
+  }
+  .wordmark .mark-a{color:var(--ink);}
+  .wordmark .mark-b{
+    color:var(--teal);font-weight:600;font-size:13px;letter-spacing:0.06em;
+    padding:2px 7px;border:1px solid var(--teal-wash);border-radius:6px;
+    background:var(--teal-wash);transform:translateY(-1px);
+  }
+  .header-nav{display:flex;align-items:center;gap:6px;}
+  .nav-link{
+    font-size:13.5px;font-weight:500;color:var(--muted);white-space:nowrap;
+    padding:8px 12px;border-radius:8px;
+    transition:color .15s var(--ease),background .15s var(--ease);
+  }
+  .nav-link:hover{color:var(--ink);background:var(--surface);}
+  .nav-link.is-store{color:var(--teal-deep);font-weight:600;}
+  .nav-link.is-store .ext{font-size:12px;margin-left:3px;color:var(--teal);}
+
+  /* ---------- Back link ---------- */
+  .backlink{
+    display:inline-flex;align-items:center;gap:6px;
+    margin-top:20px;
+    color:var(--muted);font-size:13.5px;font-weight:500;letter-spacing:-0.01em;
+    transition:color .15s var(--ease);
+  }
+  .backlink:hover{color:var(--teal-deep);}
+
+  /* ---------- Product hero ---------- */
+  .phero{padding-block:clamp(22px,3.5vw,34px) clamp(30px,4.5vw,48px);}
+  .phero-grid{
+    display:grid;
+    grid-template-columns:minmax(0,.86fr) minmax(0,1fr);
+    gap:clamp(24px,4vw,48px);
+    align-items:center;
+  }
+  .phero-media{
+    position:relative;
+    aspect-ratio:1/1;
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    overflow:hidden;
+  }
+  .phero-img{
+    position:absolute;inset:0;
+    width:100%;height:100%;
+    object-fit:cover;
+  }
+  .phero-info{min-width:0;}
+  .phero-cat{
+    display:inline-block;
+    background:var(--teal-wash);color:var(--teal-deep);
+    font-size:12px;font-weight:600;letter-spacing:0.03em;
+    padding:4px 11px;border-radius:100px;
+  }
+  .phero-title{
+    margin:13px 0 0;
+    font-size:clamp(23px,3.4vw,32px);
+    line-height:1.18;font-weight:700;letter-spacing:-0.03em;
+    max-width:20ch;
+  }
+  .phero-meta{margin:14px 0 0;display:flex;flex-direction:column;gap:5px;}
+  .phero-row{
+    display:flex;align-items:baseline;gap:8px;
+    color:var(--muted);font-size:13.5px;letter-spacing:-0.008em;
+  }
+  .phero-row .lbl{flex:none;font-weight:500;color:var(--muted);}
+  .phero-row .val{color:var(--ink);font-weight:600;font-variant-numeric:tabular-nums;letter-spacing:0.005em;}
+
+  /* ---------- Action buttons ---------- */
+  .phero-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:24px;}
+  .btn{
+    display:inline-flex;align-items:center;justify-content:center;gap:8px;
+    padding:12px 20px;border-radius:10px;
+    font-size:14.5px;font-weight:600;letter-spacing:-0.01em;
+    border:1.5px solid transparent;
+    transition:background .16s var(--ease),border-color .16s var(--ease),color .16s var(--ease),transform .16s var(--ease);
+  }
+  .btn svg{width:16px;height:16px;flex:none;}
+  .btn .ext{font-size:12.5px;}
+  .btn-primary{background:var(--teal);color:#fff;border-color:var(--teal);}
+  .btn-primary:hover{background:var(--teal-deep);border-color:var(--teal-deep);transform:translateY(-1px);}
+  .btn-ghost{background:var(--paper);color:var(--ink);border-color:var(--line);}
+  .btn-ghost:hover{border-color:var(--teal);color:var(--teal-deep);background:var(--teal-wash);}
+  .btn-ghost svg{color:var(--sil-d);}
+  .btn-ghost:hover svg{color:var(--teal);}
+
+  /* ---------- Section shell (inherited from home) ---------- */
+  .section{padding-block:clamp(42px,6vw,72px);}
+  .section.band{background:var(--surface);border-block:1px solid var(--line);}
+  .section-head{
+    display:flex;align-items:flex-end;justify-content:space-between;gap:16px;
+    margin-bottom:22px;
+  }
+  .section-eyebrow{color:var(--teal-deep);font-size:12px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;display:block;margin-bottom:8px;}
+  .section-title{margin:0;font-size:clamp(20px,2.6vw,25px);font-weight:700;letter-spacing:-0.026em;line-height:1.2;}
+  .section-desc{margin:8px 0 0;color:var(--muted);font-size:14px;max-width:46ch;}
+
+  /* ---------- Spec list (B2 restrained line list) ---------- */
+  .spec-grid{
+    margin:0;
+    display:grid;grid-template-columns:1fr 1fr;
+    gap:0 clamp(24px,4vw,48px);
+    border-top:1px solid var(--line);
+  }
+  .spec-row{
+    margin:0;
+    display:flex;align-items:baseline;justify-content:space-between;gap:18px;
+    padding:13px 2px;
+    border-bottom:1px solid var(--line-soft);
+  }
+  .spec-label{margin:0;flex:none;color:var(--muted);font-size:13.5px;font-weight:500;}
+  .spec-value{
+    margin:0;flex:1;min-width:0;text-align:right;
+    color:var(--ink);font-size:14px;font-weight:550;letter-spacing:-0.008em;
+    font-variant-numeric:tabular-nums;
+  }
+  .spec-note{
+    display:flex;align-items:flex-start;gap:9px;
+    margin:18px 0 0;
+    padding:12px 15px;
+    background:var(--teal-wash);
+    border-radius:var(--radius-sm);
+    color:var(--teal-deep);font-size:13px;line-height:1.55;font-weight:500;
+  }
+  .spec-note svg{width:16px;height:16px;flex:none;margin-top:2px;}
+
+  /* ---------- FAQ (inherited from home) ---------- */
+  .faq-list{
+    max-width:840px;
+    border:1px solid var(--line);border-radius:var(--radius);
+    background:var(--paper);overflow:hidden;
+  }
+  .faq-item{border-top:1px solid var(--line-soft);}
+  .faq-item:first-child{border-top:0;}
+  .faq-item>summary{
+    list-style:none;cursor:pointer;
+    display:flex;align-items:flex-start;gap:14px;
+    padding:17px 18px;
+    transition:background .14s var(--ease);
+  }
+  .faq-item>summary::-webkit-details-marker{display:none;}
+  .faq-item>summary:hover{background:#FBFAF7;}
+  .faq-q{flex:1;min-width:0;display:flex;flex-direction:column;gap:5px;}
+  .faq-cat{
+    font-size:11px;font-weight:600;letter-spacing:0.04em;color:var(--teal-deep);
+    text-transform:uppercase;
+  }
+  .faq-qt{font-size:15px;font-weight:550;letter-spacing:-0.016em;line-height:1.45;}
+  .faq-chev{
+    flex:none;width:22px;height:22px;margin-top:2px;color:var(--muted);
+    transition:transform .2s var(--ease),color .14s var(--ease);
+  }
+  .faq-item[open] .faq-chev{transform:rotate(180deg);color:var(--teal);}
+  .faq-a{
+    padding:0 18px 19px 46px;
+    color:var(--muted);font-size:14px;line-height:1.65;letter-spacing:-0.008em;
+  }
+  .faq-a a{color:var(--teal-deep);font-weight:600;border-bottom:1px solid var(--teal-wash);}
+  .faq-a a:hover{border-bottom-color:var(--teal);}
+
+  /* ---------- Contact band ---------- */
+  .contact-card{
+    display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:22px 40px;
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:clamp(24px,4vw,36px);
+  }
+  .contact-lead{min-width:0;}
+  .contact-desc{margin:8px 0 0;color:var(--muted);font-size:14px;max-width:40ch;}
+  .contact-side{display:flex;flex-direction:column;gap:12px;flex:none;}
+  .contact-tel{display:flex;flex-direction:column;gap:3px;}
+  .ct-num{font-size:24px;font-weight:700;letter-spacing:-0.02em;font-variant-numeric:tabular-nums;color:var(--ink);transition:color .14s var(--ease);}
+  .contact-tel:hover .ct-num{color:var(--teal-deep);}
+  .ct-hours{font-size:12.5px;color:var(--muted);}
+  .contact-chat{margin:0;font-size:12.5px;color:var(--muted);display:inline-flex;align-items:center;gap:7px;}
+  .cc-dot{width:6px;height:6px;border-radius:50%;background:var(--teal);flex:none;}
+
+  /* ---------- Chat FAB (inherited from home) ---------- */
+  .chat-fab{
+    position:fixed;right:clamp(16px,3vw,28px);bottom:clamp(16px,3vw,28px);z-index:50;
+    display:inline-flex;align-items:center;gap:10px;
+    background:var(--paper);
+    border:1px solid var(--line);
+    border-radius:100px;
+    padding:11px 17px 11px 14px;
+    box-shadow:0 6px 22px -8px rgba(35,32,27,.22),0 2px 6px -3px rgba(35,32,27,.12);
+    transition:border-color .16s var(--ease),transform .16s var(--ease);
+  }
+  .chat-fab:hover{border-color:var(--teal);transform:translateY(-1px);}
+  .chat-ic{
+    width:32px;height:32px;flex:none;border-radius:50%;
+    background:var(--teal-wash);color:var(--teal-deep);
+    display:flex;align-items:center;justify-content:center;
+  }
+  .chat-ic svg{width:17px;height:17px;}
+  .chat-tx{display:flex;flex-direction:column;line-height:1.25;text-align:left;}
+  .chat-tt{font-size:14px;font-weight:600;letter-spacing:-0.015em;color:var(--ink);}
+  .chat-st{font-size:11.5px;color:var(--muted);display:inline-flex;align-items:center;gap:5px;}
+  .chat-live{width:6px;height:6px;border-radius:50%;background:var(--teal);flex:none;}
+  @media(max-width:480px){ .chat-tx{display:none;} .chat-fab{padding:11px;} }
+
+  /* ---------- Footer (inherited from home) ---------- */
+  .site-footer{
+    background:#F1EEE8;border-top:1px solid var(--line);
+    padding-block:clamp(34px,5vw,52px);margin-top:8px;
+  }
+  .footer-top{
+    display:flex;flex-wrap:wrap;justify-content:space-between;gap:28px 40px;
+    padding-bottom:26px;border-bottom:1px solid var(--line);
+  }
+  .foot-contact .foot-h{font-size:12px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;}
+  .foot-tel{font-size:22px;font-weight:700;letter-spacing:-0.02em;font-variant-numeric:tabular-nums;color:var(--ink);}
+  .foot-hours{font-size:13px;color:var(--muted);margin-top:5px;}
+  .foot-hours .off{color:var(--sil-d);}
+  .foot-brands{display:flex;flex-direction:column;gap:9px;}
+  .foot-brands .foot-h{font-size:12px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);margin-bottom:2px;}
+  .foot-brandrow{display:flex;flex-wrap:wrap;gap:8px 10px;}
+  .foot-brand{
+    display:inline-flex;align-items:baseline;gap:6px;
+    font-size:13.5px;font-weight:500;color:var(--ink);
+    padding:5px 0;transition:color .14s var(--ease);
+  }
+  .foot-brand .lat{font-size:11px;color:var(--muted);letter-spacing:0.04em;}
+  .foot-brand:hover{color:var(--teal-deep);}
+  .foot-brand:hover .lat{color:var(--teal);}
+  .footer-legal{
+    display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;
+    padding-top:22px;color:var(--muted);font-size:12.5px;
+  }
+  .footer-legal .slogan{color:var(--teal-deep);font-weight:600;letter-spacing:-0.01em;}
+
+  /* ---------- Responsive ---------- */
+  @media(max-width:820px){
+    .phero-grid{grid-template-columns:1fr;gap:22px;}
+    .phero-media{max-width:420px;}
+    .phero-title{max-width:none;}
+  }
+  @media(max-width:640px){
+    .phero{padding-block:16px 30px;}
+    .phero-media{aspect-ratio:4/3;}
+    .section{padding-block:42px;}
+    .section-head{flex-direction:column;align-items:flex-start;margin-bottom:18px;}
+    /* specs: 2 columns collapse to 1 */
+    .spec-grid{grid-template-columns:1fr;}
+    /* contact band stacks */
+    .contact-card{flex-direction:column;align-items:flex-start;}
+    .footer-top{gap:24px 32px;}
+  }
+  @media(max-width:520px){
+    /* full-width, comfortable touch targets */
+    .phero-actions{flex-direction:column;gap:9px;}
+    .btn{width:100%;min-height:48px;}
+  }
+
+  @media(prefers-reduced-motion:reduce){
+    *{transition:none !important;animation:none !important;scroll-behavior:auto !important;}
+  }
+</style>
+</head>
+<body>
+<a class="skip" href="#main">본문으로 건너뛰기</a>
+
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a class="wordmark" href="../index.html" aria-label="CLAPA SUPPORT 고객지원센터 홈">
+      <span class="mark-a">CLAPA</span><span class="mark-b">SUPPORT</span>
+    </a>
+    <nav class="header-nav" aria-label="주요 메뉴">
+      <a class="nav-link" href="../index.html#finder-title">전체 제품</a>
+      <a class="nav-link is-store" href="https://clapa.kr" rel="noopener">clapa.kr 스토어<span class="ext" aria-hidden="true">↗</span></a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+
+  <div class="wrap">
+    <a class="backlink" href="../index.html">
+      <span aria-hidden="true">←</span> 고객지원센터 홈
+    </a>
+  </div>
+
+  <!-- PRODUCT HERO -->
+  <section class="phero" aria-labelledby="product-title">
+    <div class="wrap phero-grid">
+      <div class="phero-media">
+        <img class="phero-img" src="https://shop-phinf.pstatic.net/20250401_203/1743483581250FAB5g_PNG/71071015169634780_52351296.png?type=f400" alt="클래파 스테인리스 2단 계란찜기" loading="eager" decoding="async" onerror="this.remove()">
+      </div>
+      <div class="phero-info">
+        <span class="phero-cat">주방·생활</span>
+        <h1 class="phero-title" id="product-title">클래파 스테인리스 2단 계란찜기</h1>
+        <div class="phero-meta">
+          <p class="phero-row"><span class="lbl">모델명</span><span class="val">BES-131W · CES-232W</span></p>
+          
+          <p class="phero-row"><span class="lbl">색상</span><span class="val">화이트 · 아이보리</span></p>
+          
+        </div>
+
+        <div class="phero-actions">
+          
+          <a class="btn btn-ghost" href="../manuals/BES-131W_CES-232W.pdf" target="_blank" rel="noopener" aria-label="클래파 스테인리스 2단 계란찜기 설명서 PDF 열기 (새 창)">
+            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round" aria-hidden="true"><path d="M4 2h5l3 3v9H4z"/><path d="M9 2v3h3"/></svg>
+            설명서 PDF
+          </a>
+          
+          
+          <a class="btn btn-primary" href="https://smartstore.naver.com/skillfulbrother/products/11255720719" target="_blank" rel="noopener" aria-label="클래파 스테인리스 2단 계란찜기 스토어에서 보기 (새 창)">
+            스토어에서 보기 <span class="ext" aria-hidden="true">↗</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SPECIFICATIONS -->
+  <section class="section" aria-labelledby="spec-title">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <span class="section-eyebrow">Specifications</span>
+          <h2 class="section-title" id="spec-title">주요 사양</h2>
+        </div>
+      </div>
+
+      <dl class="spec-grid">
+        
+        <div class="spec-row">
+          <dt class="spec-label">정격 전압</dt>
+          <dd class="spec-value">220-240V~, 50-60Hz (110V 미지원)</dd>
+        </div>
+        
+        <div class="spec-row">
+          <dt class="spec-label">소비전력</dt>
+          <dd class="spec-value">350W</dd>
+        </div>
+        
+        <div class="spec-row">
+          <dt class="spec-label">제품 크기</dt>
+          <dd class="spec-value">210 x 185 x 265 (mm)</dd>
+        </div>
+        
+        <div class="spec-row">
+          <dt class="spec-label">제품 무게</dt>
+          <dd class="spec-value">약 900g (코드선 제외, 코드선 약 130g)</dd>
+        </div>
+        
+        <div class="spec-row">
+          <dt class="spec-label">코드 길이</dt>
+          <dd class="spec-value">약 95cm (분리형)</dd>
+        </div>
+        
+        <div class="spec-row">
+          <dt class="spec-label">재질</dt>
+          <dd class="spec-value">물·식재료 접촉부 전체 SUS304 스테인리스</dd>
+        </div>
+        
+        <div class="spec-row">
+          <dt class="spec-label">최대 물 용량</dt>
+          <dd class="spec-value">300ml (가열판 깊이 2cm)</dd>
+        </div>
+        
+        <div class="spec-row">
+          <dt class="spec-label">가열판 지름</dt>
+          <dd class="spec-value">15.6cm</dd>
+        </div>
+        
+        <div class="spec-row">
+          <dt class="spec-label">타이머</dt>
+          <dd class="spec-value">아날로그 다이얼 방식, 최대 30분</dd>
+        </div>
+        
+        <div class="spec-row">
+          <dt class="spec-label">제조국</dt>
+          <dd class="spec-value">중국 (Made in China)</dd>
+        </div>
+        
+      </dl>
+
+      
+      <p class="spec-note">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 1.5 13 3.5v4c0 3.4-2.2 5.7-5 7-2.8-1.3-5-3.6-5-7v-4z"/><path d="M6 8l1.5 1.5L10.5 6.5"/></svg>
+        <span>본체 관련 무상 보증기간은 1년입니다.</span>
+      </p>
+      
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="section band" id="faq" aria-labelledby="faq-title">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <span class="section-eyebrow">Frequently asked</span>
+          <h2 class="section-title" id="faq-title">자주 묻는 질문</h2>
+          <p class="section-desc">이 제품에 대해 가장 많이 문의하신 내용을 모았습니다.</p>
+        </div>
+      </div>
+
+      <div class="faq-list">
+        
+        <details class="faq-item">
+          <summary>
+            <span class="faq-q">
+              <span class="faq-cat">세척·관리</span>
+              <span class="faq-qt">처음 사용하기 전에 연마제를 꼭 제거해야 하나요?</span>
+            </span>
+            <svg class="faq-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+          </summary>
+          <div class="faq-a">네, 첫 사용 전 연마제 제거 세척을 권장합니다. ①키친타월에 식용유를 묻혀 스테인리스 부분(가열판, 찜통, 트레이, 뚜껑)에서 검은 연마제가 묻어나오지 않을 때까지 닦고 ②가열판에 물과 식초(또는 베이킹소다)를 넣어 약 10분 끓인 뒤 ③중성세제와 부드러운 수세미로 헹궈 건조하시면 됩니다.</div>
+        </details>
+        
+        <details class="faq-item">
+          <summary>
+            <span class="faq-q">
+              <span class="faq-cat">세척·관리</span>
+              <span class="faq-qt">식기세척기를 사용해도 되나요?</span>
+            </span>
+            <svg class="faq-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+          </summary>
+          <div class="faq-a">본체(전원부)를 제외한 뚜껑, 찜통, 찜트레이, 실리콘 등은 분리 후 식기세척기 사용이 가능합니다. 다만 플라스틱 손잡이 변형을 막기 위해 고온 살균 기능은 피해 주세요.</div>
+        </details>
+        
+        <details class="faq-item">
+          <summary>
+            <span class="faq-q">
+              <span class="faq-cat">세척·관리</span>
+              <span class="faq-qt">본체(가열판)를 물에 담가 씻어도 되나요?</span>
+            </span>
+            <svg class="faq-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+          </summary>
+          <div class="faq-a">안 됩니다. 전원 코드를 분리한 뒤 부드러운 수세미와 세제로 닦고 물로 헹구되, 전원 연결부에 물이 들어가지 않도록 주의하세요. 본체를 물에 통째로 담그면 고장의 원인이 됩니다.</div>
+        </details>
+        
+        <details class="faq-item">
+          <summary>
+            <span class="faq-q">
+              <span class="faq-cat">세척·관리</span>
+              <span class="faq-qt">가열판에 무지개빛·하얀 물때 얼룩이 생겼는데 어떻게 없애나요?</span>
+            </span>
+            <svg class="faq-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+          </summary>
+          <div class="faq-a">석회질(물때)이나 미네랄 얼룩으로 인체에 무해합니다. 물과 식초를 2:1 비율로 넣고 20~30분간 가열한 뒤 닦아내면 깨끗해집니다. 구연산을 넣어 끓여도 됩니다.</div>
+        </details>
+        
+        <details class="faq-item">
+          <summary>
+            <span class="faq-q">
+              <span class="faq-cat">스펙</span>
+              <span class="faq-qt">BES-131W와 CES-232W는 무엇이 다른가요?</span>
+            </span>
+            <svg class="faq-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+          </summary>
+          <div class="faq-a">색상 차이입니다. BES-131W는 화이트, CES-232W는 아이보리이며 제품 사양은 동일합니다.</div>
+        </details>
+        
+        <details class="faq-item">
+          <summary>
+            <span class="faq-q">
+              <span class="faq-cat">사용법</span>
+              <span class="faq-qt">반숙과 완숙 조리 시간은 얼마나 되나요?</span>
+            </span>
+            <svg class="faq-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+          </summary>
+          <div class="faq-a">촉촉한 반숙은 약 10분, 부드러운 반숙은 약 15분, 단단한 완숙은 약 20분이 기준입니다. 물 40ml당 약 5분 가열되며, 계란 크기와 물 양에 따라 시간은 가감될 수 있습니다.</div>
+        </details>
+        
+        <details class="faq-item">
+          <summary>
+            <span class="faq-q">
+              <span class="faq-cat">안전</span>
+              <span class="faq-qt">물 없이 작동하거나 물이 다 증발하면 어떻게 되나요?</span>
+            </span>
+            <svg class="faq-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+          </summary>
+          <div class="faq-a">과열 방지 안전장치가 있어 물이 모두 증발해 히터 온도가 약 125도에 도달하면 화재 예방을 위해 자동으로 전원이 차단됩니다. 다만 반드시 물을 넣고 사용하셔야 하며, 물 없이 공회전시키지 마세요.</div>
+        </details>
+        
+        <details class="faq-item">
+          <summary>
+            <span class="faq-q">
+              <span class="faq-cat">스펙</span>
+              <span class="faq-qt">해외(110V)에서 사용할 수 있나요?</span>
+            </span>
+            <svg class="faq-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+          </summary>
+          <div class="faq-a">220-240V 전용 제품으로 프리볼트가 아닙니다. 110V 환경(미국 등)이나 해외에서는 변압기 없이는 사용할 수 없습니다.</div>
+        </details>
+        
+        <details class="faq-item">
+          <summary>
+            <span class="faq-q">
+              <span class="faq-cat">소음</span>
+              <span class="faq-qt">작동할 때 째깍째깍 소리가 나는데 불량인가요?</span>
+            </span>
+            <svg class="faq-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+          </summary>
+          <div class="faq-a">불량이 아니라 아날로그 타이머의 태엽이 풀리며 나는 정상적인 소리입니다. 설정 시간이 끝나면 딸깍(또는 땡) 하는 소리와 함께 작동이 멈춥니다.</div>
+        </details>
+        
+        <details class="faq-item">
+          <summary>
+            <span class="faq-q">
+              <span class="faq-cat">사용법</span>
+              <span class="faq-qt">계란은 최대 몇 개까지 조리할 수 있고 왕란도 되나요?</span>
+            </span>
+            <svg class="faq-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+          </summary>
+          <div class="faq-a">왕란도 조리 가능하며, 1단과 2단을 합쳐 최대 14개까지 조리할 수 있습니다.</div>
+        </details>
+        
+        <details class="faq-item">
+          <summary>
+            <span class="faq-q">
+              <span class="faq-cat">사용법</span>
+              <span class="faq-qt">계란에 구멍을 뚫어야 하나요? 냉장 계란을 바로 넣어도 되나요?</span>
+            </span>
+            <svg class="faq-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+          </summary>
+          <div class="faq-a">구멍을 뚫지 않아도 터지지 않습니다. 냉장고에서 꺼낸 계란도 바로 넣어 대체로 괜찮지만, 실온에 잠시 두거나 조리 시간을 2~3분 늘리면 더 좋습니다.</div>
+        </details>
+        
+        <details class="faq-item">
+          <summary>
+            <span class="faq-q">
+              <span class="faq-cat">기능</span>
+              <span class="faq-qt">조리가 끝나면 완료 알림음이 울리나요?</span>
+            </span>
+            <svg class="faq-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+          </summary>
+          <div class="faq-a">최신 제조 상품에는 30분 작동 후 완료 알림음 기능이 추가되어 있으며, 다이얼이 다 돌아가면 땡 소리와 함께 작동이 정지됩니다.</div>
+        </details>
+        
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT BAND -->
+  <section class="section" aria-labelledby="contact-title">
+    <div class="wrap">
+      <div class="contact-card">
+        <div class="contact-lead">
+          <h2 class="section-title" id="contact-title">더 궁금한 점이 있으신가요?</h2>
+          <p class="contact-desc">원하는 답을 찾지 못하셨다면 전화나 채팅 상담으로 편하게 문의해 주세요.</p>
+        </div>
+        <div class="contact-side">
+          <a class="contact-tel" href="tel:1522-8508" aria-label="고객센터 전화 1522-8508, 평일 09시부터 15시">
+            <span class="ct-num">1522-8508</span>
+            <span class="ct-hours">평일 09:00–15:00 · 주말·공휴일 휴무</span>
+          </a>
+          <p class="contact-chat"><span class="cc-dot" aria-hidden="true"></span>오른쪽 아래 채팅 상담을 누르면 AI가 먼저 답해드려요.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- Chat entry point: quiet floating pill (inherited from home) -->
+<button class="chat-fab" type="button" aria-label="채팅 상담 열기">
+  <span class="chat-ic" aria-hidden="true">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6.5v8a2.5 2.5 0 0 1-2.5 2.5H9l-4 3.2V17H6.5A2.5 2.5 0 0 1 4 14.5v-8A2.5 2.5 0 0 1 6.5 4h11A2.5 2.5 0 0 1 20 6.5z"/><path d="M8.5 10h7M8.5 13h4.5"/></svg>
+  </span>
+  <span class="chat-tx">
+    <span class="chat-tt">채팅 상담</span>
+    <span class="chat-st"><span class="chat-live" aria-hidden="true"></span>AI가 먼저 답해드려요</span>
+  </span>
+</button>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-top">
+      <div class="foot-contact">
+        <p class="foot-h">고객센터</p>
+        <a class="foot-tel" href="tel:1522-8508">1522-8508</a>
+        <p class="foot-hours">평일 09:00–15:00 <span class="off">· 주말·공휴일 휴무</span></p>
+      </div>
+      <nav class="foot-brands" aria-label="바로가기">
+        <p class="foot-h">바로가기</p>
+        <div class="foot-brandrow">
+          <a class="foot-brand" href="https://clapa.kr" rel="noopener">클래파 스토어 <span class="lat" aria-hidden="true">↗</span></a>
+          <a class="foot-brand" href="../index.html">A/S 신청</a>
+          <a class="foot-brand" href="../index.html#finder-title">설명서 다운로드</a>
+        </div>
+      </nav>
+    </div>
+    <div class="footer-legal">
+      <span>© 2026 CLAPA. <a href="https://clapa.kr" rel="noopener" style="border-bottom:1px solid var(--line);">clapa.kr</a></span>
+      <span class="slogan">조용함이 만드는 박수 칠 일상</span>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
