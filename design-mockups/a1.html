@@ -393,121 +393,11 @@
   .chat-fab .ic{flex:none;}
   .chat-fab .sub{display:none;}
 
-  /* ===================== NOTICE STRIP ===================== */
-  .notice{
-    background:var(--wash);
-    border-bottom:1px solid var(--line);
-  }
-  .notice-inner{
-    display:flex;align-items:center;gap:14px;
-    min-height:46px;padding-block:9px;
-  }
-  .notice-text{
-    flex:1;min-width:0;margin:0;
-    display:flex;align-items:center;gap:10px;flex-wrap:wrap;
-    font-size:0.88rem;line-height:1.5;color:var(--ink);font-weight:460;
-  }
-  .notice-tag{
-    flex:none;
-    background:var(--teal);color:#fff;
-    font-size:0.7rem;font-weight:650;letter-spacing:0.08em;
-    padding:3px 9px;border-radius:999px;
-  }
-  .notice-link{color:var(--teal-deep);font-weight:600;border-bottom:1px solid var(--wash);}
-  .notice-link:hover{border-bottom-color:var(--teal);}
-  .notice-close{
-    flex:none;
-    width:30px;height:30px;border-radius:8px;
-    border:0;background:transparent;color:var(--muted);
-    font-size:0.95rem;line-height:1;
-    display:inline-flex;align-items:center;justify-content:center;
-    transition:color .16s ease, background .16s ease;
-  }
-  .notice-close:hover{color:var(--ink);background:var(--sand);}
-
-  /* ===================== FILTER FACETS ===================== */
-  .filter-block{
-    display:flex;flex-direction:column;gap:14px;
-    margin-bottom:clamp(28px,3.5vw,40px);
-  }
-  .filter-row{
-    display:flex;align-items:flex-start;gap:8px 16px;flex-wrap:wrap;
-  }
-  .filter-label{
-    flex:none;width:60px;padding-top:11px;
-    font-size:0.8rem;font-weight:600;color:var(--muted);
-    letter-spacing:0.04em;
-  }
-  .filter-row .tabs{margin-bottom:0;flex:1;min-width:220px;}
-
-  /* ===================== AI CONSULT BAND ===================== */
-  .ai-band{padding-block:clamp(40px,6vw,64px);}
-  .ai-card{
-    display:grid;grid-template-columns:1.32fr 0.68fr;align-items:center;
-    gap:clamp(24px,4vw,52px);
-    background:var(--wash);
-    border:1px solid var(--line);
-    border-radius:24px;
-    padding:clamp(30px,5vw,56px);
-  }
-  .ai-eyebrow{
-    font-size:0.76rem;font-weight:650;letter-spacing:0.16em;
-    color:var(--teal);margin:0 0 15px;
-  }
-  .ai-card h2{
-    margin:0;
-    font-size:clamp(1.5rem,2.6vw,2.1rem);
-    font-weight:700;line-height:1.18;letter-spacing:-0.025em;color:var(--ink);
-  }
-  .ai-lead{
-    margin:15px 0 0;max-width:48ch;
-    font-size:1.02rem;line-height:1.66;color:var(--muted);font-weight:420;
-  }
-  .ai-steps{
-    display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;
-    margin:20px 0 0;padding:0;list-style:none;
-  }
-  .ai-steps li{
-    display:inline-flex;align-items:center;gap:8px;
-    font-size:0.86rem;font-weight:500;color:var(--muted);
-  }
-  .ai-steps .num{
-    display:inline-flex;align-items:center;justify-content:center;
-    width:20px;height:20px;border-radius:50%;
-    background:var(--teal);color:#fff;font-size:0.72rem;font-weight:650;
-  }
-  .ai-steps .sep{color:var(--sil);}
-  .ai-actions{
-    display:flex;flex-wrap:wrap;align-items:center;gap:14px 20px;margin-top:28px;
-  }
-  .ai-cta{
-    display:inline-flex;align-items:center;gap:9px;
-    border:0;background:var(--teal);color:#fff;
-    font-size:0.98rem;font-weight:600;letter-spacing:0.01em;
-    padding:14px 26px;border-radius:999px;
-    transition:background .18s ease, transform .12s ease;
-  }
-  .ai-cta:hover{background:var(--teal-deep);}
-  .ai-cta:active{transform:translateY(1px);}
-  .ai-cta .arw{transition:transform .2s ease;}
-  .ai-cta:hover .arw{transform:translateX(3px);}
-  .ai-note{
-    display:inline-flex;align-items:center;gap:8px;
-    font-size:0.86rem;color:var(--muted);font-weight:500;
-  }
-  .ai-art{justify-self:end;width:min(30vw,196px);color:var(--teal);}
-  .ai-art svg{width:100%;height:auto;}
-
-  /* ===================== FOOTER POLICY LINKS ===================== */
-  .foot-policy{display:inline-flex;flex-wrap:wrap;gap:8px 18px;}
-
   /* ===================== RESPONSIVE ===================== */
   @media (max-width:860px){
     .hero-grid{grid-template-columns:1fr;}
     .hero-art{display:none;}
     .nav .nav-link{display:none;}
-    .ai-card{grid-template-columns:1fr;}
-    .ai-art{display:none;}
   }
   @media (max-width:760px){
     .foot-top{grid-template-columns:1fr 1fr;}
@@ -530,18 +420,6 @@
 <body>
 <a class="skip" href="#products">본문으로 건너뛰기</a>
 
-<!-- ===== 공지 배너 ===== -->
-<div class="notice" id="notice" role="region" aria-label="고객센터 공지">
-  <div class="wrap notice-inner">
-    <p class="notice-text">
-      <span class="notice-tag">공지</span>
-      여름맞이 선풍기 무상 점검 캠페인 — 7월 한 달간 A/S 왕복 배송비 무료로 접수해 드립니다.
-      <a class="notice-link" href="#ai">자세히 보기</a>
-    </p>
-    <button class="notice-close" id="notice-close" type="button" aria-label="공지 배너 닫기">✕</button>
-  </div>
-</div>
-
 <header>
   <div class="wrap bar">
     <a class="wordmark" href="#" aria-label="CLAPA SUPPORT 고객지원센터 홈">
@@ -550,7 +428,6 @@
     </a>
     <nav class="nav" aria-label="주요 메뉴">
       <a class="nav-link" href="#products">제품 찾기</a>
-      <a class="nav-link" href="#ai">AI 상담</a>
       <a class="nav-link" href="#faq">자주 묻는 질문</a>
       <a class="store-link" href="https://clapa.kr" target="_blank" rel="noopener">
         clapa.kr 스토어 <span class="arw" aria-hidden="true">↗</span>
@@ -611,72 +488,26 @@
     </div>
   </div>
 
-  <!-- ===== AI CONSULT ===== -->
-  <section class="ai-band" id="ai" aria-labelledby="ai-title">
-    <div class="wrap">
-      <div class="ai-card">
-        <div class="ai-copy">
-          <p class="ai-eyebrow">AI 상담</p>
-          <h2 id="ai-title">먼저 AI가 답하고,<br>어려운 건 상담원이 이어받아요</h2>
-          <p class="ai-lead">24시간 대기하는 AI 상담사가 모델명과 증상에 맞춰 먼저 답을 찾아드립니다. 그래도 해결되지 않으면 지금까지의 대화를 그대로 상담원에게 넘겨, 처음부터 다시 설명하지 않으셔도 됩니다.</p>
-          <ol class="ai-steps" aria-label="상담 진행 흐름">
-            <li><span class="num" aria-hidden="true">1</span> AI가 즉시 답변</li>
-            <li class="sep" aria-hidden="true">→</li>
-            <li><span class="num" aria-hidden="true">2</span> 미해결 시 상담원 연결</li>
-          </ol>
-          <div class="ai-actions">
-            <button class="ai-cta" type="button">AI 상담 시작하기 <span class="arw" aria-hidden="true">→</span></button>
-            <span class="ai-note"><span class="chat-dot" aria-hidden="true"></span> 평균 응답 3초 · 24시간 접수</span>
-          </div>
-        </div>
-        <div class="ai-art" aria-hidden="true">
-          <svg viewBox="0 0 200 200" role="img">
-            <rect x="22" y="34" width="126" height="84" rx="22" fill="var(--teal)"/>
-            <path d="M46 118 h26 l-6 24 z" fill="var(--teal)"/>
-            <g fill="#fff"><circle cx="62" cy="76" r="7.5"/><circle cx="85" cy="76" r="7.5"/><circle cx="108" cy="76" r="7.5"/></g>
-            <rect x="86" y="120" width="92" height="54" rx="18" fill="#fff" stroke="var(--teal)" stroke-width="5"/>
-            <g fill="none" stroke="var(--teal)" stroke-width="5" stroke-linecap="round"><path d="M104 140 h56"/><path d="M104 154 h34"/></g>
-          </svg>
-        </div>
-      </div>
-    </div>
-  </section>
-
   <!-- ===== PRODUCTS ===== -->
   <section class="section" id="products" aria-labelledby="products-title">
     <div class="wrap">
       <div class="sec-head">
-        <p class="sec-eyebrow">유형·브랜드로 찾기</p>
+        <p class="sec-eyebrow">브랜드·상품 찾기</p>
         <h2 class="sec-title" id="products-title">내 제품을 눈으로 먼저 찾으세요</h2>
-        <p class="sec-desc">모델명을 모르셔도 괜찮아요. 제품 유형으로 먼저 좁힌 뒤 브랜드를 더하면, 그 제품에 딱 맞는 사용법과 A/S 안내로 바로 이어집니다.</p>
+        <p class="sec-desc">이미지로 모델을 고르면, 그 제품에 딱 맞는 사용법과 A/S 안내로 바로 이어집니다.</p>
       </div>
 
-      <div class="filter-block">
-        <div class="filter-row">
-          <span class="filter-label" id="cat-facet-label">제품 유형</span>
-          <div class="tabs" id="category-tabs" role="tablist" aria-labelledby="cat-facet-label">
-            <button class="tab" role="tab" aria-selected="true" data-category="all">전체 <span class="cnt">8</span></button>
-            <button class="tab" role="tab" aria-selected="false" data-category="fan">선풍기 <span class="cnt">3</span></button>
-            <button class="tab" role="tab" aria-selected="false" data-category="cleaner">청소기 <span class="cnt">1</span></button>
-            <button class="tab" role="tab" aria-selected="false" data-category="kitchen">주방가전 <span class="cnt">3</span></button>
-            <button class="tab" role="tab" aria-selected="false" data-category="env">환경가전 <span class="cnt">1</span></button>
-          </div>
-        </div>
-        <div class="filter-row">
-          <span class="filter-label" id="brand-facet-label">브랜드</span>
-          <div class="tabs" id="brand-tabs" role="tablist" aria-labelledby="brand-facet-label">
-            <button class="tab" role="tab" aria-selected="true" data-brand="all">전체 <span class="cnt">8</span></button>
-            <button class="tab" role="tab" aria-selected="false" data-brand="clapa">클래파 <span class="cnt">6</span></button>
-            <button class="tab" role="tab" aria-selected="false" data-brand="shinil">신일 <span class="cnt">2</span></button>
-            <button class="tab" role="tab" aria-selected="false" data-brand="livon">리브온 <span class="cnt">0</span></button>
-            <button class="tab" role="tab" aria-selected="false" data-brand="modernhome">모던홈 <span class="cnt">0</span></button>
-          </div>
-        </div>
+      <div class="tabs" role="tablist" aria-label="브랜드 필터">
+        <button class="tab" role="tab" aria-selected="true" data-brand="all">전체 <span class="cnt">8</span></button>
+        <button class="tab" role="tab" aria-selected="false" data-brand="clapa">클래파 <span class="cnt">6</span></button>
+        <button class="tab" role="tab" aria-selected="false" data-brand="shinil">신일 <span class="cnt">2</span></button>
+        <button class="tab" role="tab" aria-selected="false" data-brand="livon">리브온 <span class="cnt">0</span></button>
+        <button class="tab" role="tab" aria-selected="false" data-brand="modernhome">모던홈 <span class="cnt">0</span></button>
       </div>
 
       <div class="product-grid" id="grid">
         <!-- 1 서큘레이터 -->
-        <a class="tile" data-brand="clapa" data-category="fan" href="#" aria-label="클래파 에어제로 무선 서큘레이터 CF-2601 안내 보기">
+        <a class="tile" data-brand="clapa" href="#" aria-label="클래파 에어제로 무선 서큘레이터 CF-2601 안내 보기">
           <div class="tile-media">
             <svg viewBox="0 0 240 200" aria-hidden="true">
               <g fill="var(--sil)"><path d="M112 150 h16 v14 h-16 z"/><path d="M92 186 H148 L156 176 Q158 168 148 168 H92 Q82 168 84 176 Z"/><circle cx="120" cy="86" r="64"/></g>
@@ -692,7 +523,7 @@
         </a>
 
         <!-- 2 무선 청소기 -->
-        <a class="tile" data-brand="clapa" data-category="cleaner" href="#" aria-label="클래파 더스트제로 무선 청소기 CV-2504 안내 보기">
+        <a class="tile" data-brand="clapa" href="#" aria-label="클래파 더스트제로 무선 청소기 CV-2504 안내 보기">
           <div class="tile-media">
             <svg viewBox="0 0 240 200" aria-hidden="true">
               <g fill="var(--sil)" transform="rotate(11 120 100)">
@@ -711,7 +542,7 @@
         </a>
 
         <!-- 3 계란찜기 -->
-        <a class="tile" data-brand="clapa" data-category="kitchen" href="#" aria-label="클래파 스팀미 계란찜기 CE-2601 안내 보기">
+        <a class="tile" data-brand="clapa" href="#" aria-label="클래파 스팀미 계란찜기 CE-2601 안내 보기">
           <div class="tile-media">
             <svg viewBox="0 0 240 200" aria-hidden="true">
               <g fill="var(--sil)">
@@ -730,7 +561,7 @@
         </a>
 
         <!-- 4 제습기 -->
-        <a class="tile" data-brand="clapa" data-category="env" href="#" aria-label="클래파 THE 고요 제습기 CD-3502 안내 보기">
+        <a class="tile" data-brand="clapa" href="#" aria-label="클래파 THE 고요 제습기 CD-3502 안내 보기">
           <div class="tile-media">
             <svg viewBox="0 0 240 200" aria-hidden="true">
               <rect x="76" y="26" width="88" height="152" rx="24" fill="var(--sil)"/>
@@ -751,7 +582,7 @@
         </a>
 
         <!-- 5 전기포트 -->
-        <a class="tile" data-brand="clapa" data-category="kitchen" href="#" aria-label="클래파 웜미 전기포트 CK-1801 안내 보기">
+        <a class="tile" data-brand="clapa" href="#" aria-label="클래파 웜미 전기포트 CK-1801 안내 보기">
           <div class="tile-media">
             <svg viewBox="0 0 240 200" aria-hidden="true">
               <g fill="var(--sil)">
@@ -772,7 +603,7 @@
         </a>
 
         <!-- 6 핸디 선풍기 -->
-        <a class="tile" data-brand="clapa" data-category="fan" href="#" aria-label="클래파 브리즈 핸디 선풍기 CH-2402 안내 보기">
+        <a class="tile" data-brand="clapa" href="#" aria-label="클래파 브리즈 핸디 선풍기 CH-2402 안내 보기">
           <div class="tile-media">
             <svg viewBox="0 0 240 200" aria-hidden="true">
               <g fill="var(--sil)">
@@ -792,7 +623,7 @@
         </a>
 
         <!-- 7 스탠드 선풍기 -->
-        <a class="tile" data-brand="shinil" data-category="fan" href="#" aria-label="신일 클래식 스탠드 선풍기 SIF-14SR 안내 보기">
+        <a class="tile" data-brand="shinil" href="#" aria-label="신일 클래식 스탠드 선풍기 SIF-14SR 안내 보기">
           <div class="tile-media">
             <svg viewBox="0 0 240 200" aria-hidden="true">
               <g fill="var(--sil)">
@@ -813,7 +644,7 @@
         </a>
 
         <!-- 8 에어프라이어 오븐 -->
-        <a class="tile" data-brand="shinil" data-category="kitchen" href="#" aria-label="신일 에어프라이어 오븐 SAF-5502 안내 보기">
+        <a class="tile" data-brand="shinil" href="#" aria-label="신일 에어프라이어 오븐 SAF-5502 안내 보기">
           <div class="tile-media">
             <svg viewBox="0 0 240 200" aria-hidden="true">
               <g fill="var(--sil)">
@@ -835,7 +666,7 @@
       </div>
 
       <div class="empty" id="empty" role="status">
-        <p><strong id="empty-label">선택하신 조건</strong>에 맞는 모델은 지원센터에 순차 등록하고 있어요.<br>지금은 <a href="https://clapa.kr" target="_blank" rel="noopener">clapa.kr 스토어</a>에서 제품을 확인하거나, 위 검색으로 증상을 찾아보세요.</p>
+        <p><strong id="empty-brand">리브온</strong> 모델은 지원센터에 순차 등록하고 있어요.<br>지금은 <a href="https://clapa.kr" target="_blank" rel="noopener">clapa.kr 스토어</a>에서 제품을 확인하거나, 위 검색으로 증상을 찾아보세요.</p>
       </div>
 
       <div class="more">
@@ -853,76 +684,30 @@
         <p class="sec-desc">가장 자주 들어온 질문을 모았습니다. 원하는 답이 없다면 아래 채팅 상담으로 이어서 물어보세요.</p>
       </div>
 
-      <div class="tabs" id="faq-tabs" role="tablist" aria-label="자주 묻는 질문 분류">
-        <button class="tab" role="tab" aria-selected="true" data-faq="usage">사용법 <span class="cnt">4</span></button>
-        <button class="tab" role="tab" aria-selected="false" data-faq="as">A/S·보증 <span class="cnt">4</span></button>
-        <button class="tab" role="tab" aria-selected="false" data-faq="ship">배송·교환 <span class="cnt">3</span></button>
-        <button class="tab" role="tab" aria-selected="false" data-faq="parts">소모품·부품 <span class="cnt">3</span></button>
-      </div>
-
       <div class="faq-list">
-        <!-- 사용법 -->
-        <details class="faq-item" data-faqcat="usage">
+        <details class="faq-item">
           <summary><span class="faq-q">무선 선풍기 배터리가 충전되지 않아요</span><span class="faq-icon" aria-hidden="true"></span></summary>
           <div class="faq-a">먼저 동봉된 정품 어댑터와 케이블이 끝까지 연결됐는지 확인해 주세요. 충전 표시등이 켜지지 않으면 다른 콘센트에서 30분 이상 충전해 봅니다. 그래도 표시등에 변화가 없다면 배터리 점검이 필요합니다. 지원센터의 'A/S 신청'으로 모델명과 함께 접수해 주세요.</div>
         </details>
-        <details class="faq-item" data-faqcat="usage">
+        <details class="faq-item">
           <summary><span class="faq-q">제습기 '만수' 표시가 계속 켜져 있어요</span><span class="faq-icon" aria-hidden="true"></span></summary>
           <div class="faq-a">물통을 비운 뒤 제자리에 끝까지 밀어 넣으면 만수 감지 센서가 초기화됩니다. 그래도 표시가 남아 있다면, 물통과 본체 사이의 플로트(부표)가 이물질에 걸려 있지 않은지 확인해 주세요. 플로트가 위로 올라간 상태로 굳어 있으면 만수로 인식됩니다.</div>
         </details>
-        <details class="faq-item" data-faqcat="usage">
+        <details class="faq-item">
+          <summary><span class="faq-q">A/S 신청은 어떻게 하나요? 택배 수거가 되나요?</span><span class="faq-icon" aria-hidden="true"></span></summary>
+          <div class="faq-a">지원센터의 'A/S 신청'에서 모델과 증상을 남기면 접수됩니다. 방문이 어려운 제품은 택배 수거를 지원하며, 접수 후 영업일 기준 1~2일 안에 담당 기사가 수거 일정을 안내드립니다. 정품 등록 제품은 접수 시 보증 정보가 자동으로 연결됩니다.</div>
+        </details>
+        <details class="faq-item">
           <summary><span class="faq-q">계란찜기 물 양은 어떻게 맞추나요?</span><span class="faq-icon" aria-hidden="true"></span></summary>
           <div class="faq-a">함께 제공되는 계량컵의 눈금을 기준으로, 부드러운 반숙은 1줄, 완숙은 2줄까지 물을 부어 주세요. 물이 최소선보다 적으면 과열 방지를 위해 전원이 자동으로 꺼지므로, 적어도 1줄은 채워 주세요.</div>
         </details>
-        <details class="faq-item" data-faqcat="usage">
-          <summary><span class="faq-q">서큘레이터에서 '드르륵' 소음이 나요</span><span class="faq-icon" aria-hidden="true"></span></summary>
-          <div class="faq-a">먼저 전원을 끄고, 앞커버와 날개가 헐겁게 끼워져 있지 않은지 확인해 주세요. 대부분은 날개 고정 캡을 '잠금' 방향으로 끝까지 돌리면 사라집니다. 오래 사용해 날개 축에 먼지가 쌓인 경우, 마른 붓으로 축 주변을 청소하면 소음이 줄어듭니다. 그래도 지속되면 A/S 점검을 신청해 주세요.</div>
-        </details>
-
-        <!-- A/S·보증 -->
-        <details class="faq-item" data-faqcat="as">
-          <summary><span class="faq-q">A/S 신청은 어떻게 하나요? 택배 수거가 되나요?</span><span class="faq-icon" aria-hidden="true"></span></summary>
-          <div class="faq-a">지원센터의 'A/S 신청'에서 모델과 증상을 남기면 접수됩니다. 방문이 어려운 제품은 택배 수거를 지원하며, 접수 후 영업일 기준 1~2일 안에 담당 기사가 수거 일정을 안내드립니다. 정품 등록 제품은 접수 시 보증 정보가 자동으로 연결됩니다. 자세한 절차는 'A/S 정책'을 참고해 주세요.</div>
-        </details>
-        <details class="faq-item" data-faqcat="as">
+        <details class="faq-item">
           <summary><span class="faq-q">정품 등록하면 보증기간이 연장되나요?</span><span class="faq-icon" aria-hidden="true"></span></summary>
           <div class="faq-a">네. clapa.kr에서 정품 등록을 마치면 기본 1년 보증이 6개월 연장됩니다. 등록은 구매일로부터 30일 이내에 해주시면 되고, 등록 후에는 A/S 접수 시 구매 증빙을 따로 준비하지 않아도 됩니다.</div>
         </details>
-        <details class="faq-item" data-faqcat="as">
-          <summary><span class="faq-q">보증기간이 지난 제품, 유상 수리 비용은 어떻게 확인하나요?</span><span class="faq-icon" aria-hidden="true"></span></summary>
-          <div class="faq-a">보증기간이 지난 뒤에도 유상 수리가 가능합니다. 접수하시면 담당 기사가 제품을 확인한 뒤 부품비와 공임을 안내드리며, 수리 진행 여부는 견적을 확인하신 후 결정하시면 됩니다. 신일 제품은 부품 보유 기준(제조 후 최대 6~8년)에 따라 수리 가능 여부가 달라질 수 있어, 접수 시 모델명을 함께 남겨 주세요.</div>
-        </details>
-        <details class="faq-item" data-faqcat="as">
-          <summary><span class="faq-q">구매 영수증을 잃어버렸는데 A/S가 되나요?</span><span class="faq-icon" aria-hidden="true"></span></summary>
-          <div class="faq-a">정품 등록을 해두셨다면 구매 정보가 자동으로 연결되어 영수증 없이도 보증 접수가 가능합니다. 등록 이력이 없는 경우에는 clapa.kr 주문 내역이나 카드 결제 내역으로 구매일을 확인해 드립니다. 확인이 어려우면 제품 하단의 제조일자를 기준으로 보증 여부를 판단합니다.</div>
-        </details>
-
-        <!-- 배송·교환 -->
-        <details class="faq-item" data-faqcat="ship">
-          <summary><span class="faq-q">소모품·부품 주문 후 배송은 얼마나 걸리나요?</span><span class="faq-icon" aria-hidden="true"></span></summary>
-          <div class="faq-a">재고가 있는 정품 필터·배터리는 영업일 기준 1~2일 안에 출고되어 보통 2~3일 내 도착합니다. 일부 인기 부품이나 신일 정식 부품은 입고 일정에 따라 조금 더 걸릴 수 있으며, 이 경우 주문 확인 단계에서 예상 배송일을 안내드립니다.</div>
-        </details>
-        <details class="faq-item" data-faqcat="ship">
-          <summary><span class="faq-q">단순 변심으로 교환·반품하고 싶어요</span><span class="faq-icon" aria-hidden="true"></span></summary>
-          <div class="faq-a">단순 변심에 의한 교환·반품은 제품 수령 후 7일 이내, 미개봉·미사용 상태에서 가능합니다. 이 경우 왕복 배송비는 고객 부담입니다. 개봉했더라도 제품 하자가 확인되면 무상으로 처리되니, 자세한 기준은 '교환·반품 규정'을 확인해 주세요.</div>
-        </details>
-        <details class="faq-item" data-faqcat="ship">
-          <summary><span class="faq-q">제품이 배송 중 파손되어 도착했어요</span><span class="faq-icon" aria-hidden="true"></span></summary>
-          <div class="faq-a">배송 중 파손은 무상 교환 대상입니다. 개봉 당시의 제품과 파손 부위, 택배 박스 상태가 함께 보이는 사진을 남겨 지원센터로 접수해 주세요. 확인되는 대로 새 제품을 보내드리고 파손품은 함께 회수합니다. 가능하면 수령 후 24시간 이내에 접수해 주시면 처리가 빠릅니다.</div>
-        </details>
-
-        <!-- 소모품·부품 -->
-        <details class="faq-item" data-faqcat="parts">
+        <details class="faq-item">
           <summary><span class="faq-q">필터·배터리 같은 소모품만 따로 구매할 수 있나요?</span><span class="faq-icon" aria-hidden="true"></span></summary>
           <div class="faq-a">네, '소모품·부품' 페이지에서 모델별 정품 필터와 배터리를 따로 구매할 수 있습니다. 위 검색창에 모델명을 입력하면 그 제품에 호환되는 부품만 모아서 보여드립니다.</div>
-        </details>
-        <details class="faq-item" data-faqcat="parts">
-          <summary><span class="faq-q">무선 청소기 헤파 필터는 얼마나 자주 교체하나요?</span><span class="faq-icon" aria-hidden="true"></span></summary>
-          <div class="faq-a">더스트제로 무선 청소기(CV-2504)의 헤파 필터는 흡입력 유지를 위해 2~3개월에 한 번 교체를 권장합니다. 물세척이 가능한 프리 필터는 흐르는 물에 헹궈 완전히 말린 뒤 재사용하시고, 헤파 필터가 눌리거나 변색되면 교체 시점입니다. 정품 필터는 '소모품·부품'에서 모델명으로 찾으실 수 있습니다.</div>
-        </details>
-        <details class="faq-item" data-faqcat="parts">
-          <summary><span class="faq-q">단종된 모델인데 부품을 구매할 수 있나요?</span><span class="faq-icon" aria-hidden="true"></span></summary>
-          <div class="faq-a">단종 모델도 부품 보유 기간 내라면 구매가 가능합니다. 재고가 소진된 부품은 호환 가능한 대체 부품을 안내해 드리며, 확인이 필요하면 모델명을 남겨 채팅 상담으로 문의해 주세요. 신일 정식 부품은 보유 기준에 따라 공급 여부가 달라질 수 있습니다.</div>
         </details>
       </div>
     </div>
@@ -952,8 +737,6 @@
           <li><a href="#">소모품·부품 구매</a></li>
           <li><a href="#">배송·교환 안내</a></li>
           <li><a href="#">보증·정품 등록</a></li>
-          <li><a href="#">A/S 정책</a></li>
-          <li><a href="#">교환·반품 규정</a></li>
         </ul>
       </div>
       <div class="foot-col">
@@ -968,10 +751,6 @@
     </div>
     <div class="foot-bottom">
       <span>© 2026 CLAPA·신일 소형가전 고객지원센터</span>
-      <span class="foot-policy">
-        <a href="#">A/S 정책</a>
-        <a href="#">교환·반품 규정</a>
-      </span>
       <span>자사몰 <a href="https://clapa.kr" target="_blank" rel="noopener">clapa.kr</a>의 조용한 품질을 그대로.</span>
     </div>
   </div>
@@ -989,94 +768,48 @@
 
 <script>
   (function(){
-    var qsa = function(sel, ctx){ return Array.prototype.slice.call((ctx || document).querySelectorAll(sel)); };
-    var setSelected = function(group, chosen){
-      group.forEach(function(t){ t.setAttribute('aria-selected', t === chosen ? 'true' : 'false'); });
-    };
-
-    /* ===== 제품: 브랜드 × 유형 교차 필터 ===== */
+    // 브랜드 필터
+    var tabs = Array.prototype.slice.call(document.querySelectorAll('.tab'));
+    var tiles = Array.prototype.slice.call(document.querySelectorAll('#grid .tile'));
     var grid = document.getElementById('grid');
     var empty = document.getElementById('empty');
-    var emptyLabel = document.getElementById('empty-label');
-    var tiles = qsa('#grid .tile');
-    var brandTabs = qsa('#brand-tabs .tab');
-    var catTabs = qsa('#category-tabs .tab');
-    var brandLabels = {all:'전체', clapa:'클래파', shinil:'신일', livon:'리브온', modernhome:'모던홈'};
-    var catLabels = {all:'전체', fan:'선풍기', cleaner:'청소기', kitchen:'주방가전', env:'환경가전'};
-    var curBrand = 'all', curCat = 'all';
+    var emptyBrand = document.getElementById('empty-brand');
+    var labels = {clapa:'클래파', shinil:'신일', livon:'리브온', modernhome:'모던홈'};
 
-    function applyProductFilter(){
+    function filter(brand, label){
       var shown = 0;
       tiles.forEach(function(t){
-        var mb = (curBrand === 'all' || t.getAttribute('data-brand') === curBrand);
-        var mc = (curCat === 'all' || t.getAttribute('data-category') === curCat);
-        var ok = mb && mc;
-        t.style.display = ok ? '' : 'none';
-        if (ok) shown++;
+        var match = (brand === 'all' || t.getAttribute('data-brand') === brand);
+        t.style.display = match ? '' : 'none';
+        if (match) shown++;
       });
       if (shown === 0){
         grid.style.display = 'none';
         empty.style.display = 'block';
-        var parts = [];
-        if (curBrand !== 'all') parts.push(brandLabels[curBrand]);
-        if (curCat !== 'all') parts.push(catLabels[curCat]);
-        emptyLabel.textContent = parts.join(' · ') || '선택하신 조건';
+        emptyBrand.textContent = label || '';
       } else {
         grid.style.display = '';
         empty.style.display = 'none';
       }
     }
 
-    brandTabs.forEach(function(tab){
+    tabs.forEach(function(tab){
       tab.addEventListener('click', function(){
-        setSelected(brandTabs, tab);
-        curBrand = tab.getAttribute('data-brand');
-        applyProductFilter();
-      });
-    });
-    catTabs.forEach(function(tab){
-      tab.addEventListener('click', function(){
-        setSelected(catTabs, tab);
-        curCat = tab.getAttribute('data-category');
-        applyProductFilter();
+        tabs.forEach(function(t){ t.setAttribute('aria-selected', 'false'); });
+        tab.setAttribute('aria-selected', 'true');
+        var b = tab.getAttribute('data-brand');
+        filter(b, labels[b]);
       });
     });
 
-    /* ===== FAQ 분류 탭 ===== */
-    var faqTabs = qsa('#faq-tabs .tab');
-    var faqItems = qsa('.faq-item');
-    function faqFilter(cat){
-      faqItems.forEach(function(it){
-        var ok = (it.getAttribute('data-faqcat') === cat);
-        it.style.display = ok ? '' : 'none';
-        if (!ok) it.removeAttribute('open');
-      });
-    }
-    faqTabs.forEach(function(tab){
-      tab.addEventListener('click', function(){
-        setSelected(faqTabs, tab);
-        faqFilter(tab.getAttribute('data-faq'));
-      });
-    });
-    if (faqTabs.length) faqFilter(faqTabs[0].getAttribute('data-faq'));
-
-    /* ===== 추천 검색어 → 검색창 채우기 ===== */
+    // 추천 검색어 → 검색창 채우기
     var input = document.getElementById('q');
-    qsa('.tags .tag').forEach(function(tag){
+    document.querySelectorAll('.tag').forEach(function(tag){
       tag.addEventListener('click', function(){
         input.value = tag.textContent.trim();
         input.focus();
       });
     });
-
-    /* ===== 공지 배너 닫기 ===== */
-    var notice = document.getElementById('notice');
-    var noticeClose = document.getElementById('notice-close');
-    if (noticeClose && notice){
-      noticeClose.addEventListener('click', function(){
-        notice.style.display = 'none';
-      });
-    }
   })();
 </script>
 </body>
