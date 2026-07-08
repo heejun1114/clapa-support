@@ -4,7 +4,7 @@
    "model": "BVC-H10",
    "cat": "clean",
    "displayName": "클래파 미니 핸디형 무선청소기",
-   "modelDisplay": "BVC-H10",
+   "modelDisplay": "BVC-H10 · CVC-H15",
    "qaCount": 117,
    "colors": [
     "그레이",
@@ -107,7 +107,7 @@
    "model": "BED-611L",
    "cat": "season",
    "displayName": "클래파 저소음 제습기 11L",
-   "modelDisplay": "BED-611L",
+   "modelDisplay": "BED-611L · CED-L611",
    "qaCount": 13,
    "colors": []
   },
@@ -121,6 +121,102 @@
     "화이트",
     "아이보리"
    ]
+  },
+  {
+   "model": "BVC-H38",
+   "cat": "clean",
+   "displayName": "클래파 AI 흡입 무선 청소기 400W",
+   "modelDisplay": "BVC-H38",
+   "qaCount": 0,
+   "colors": []
+  },
+  {
+   "model": "BVC-T500W",
+   "cat": "clean",
+   "displayName": "클래파 엘리트 타워 무선청소기",
+   "modelDisplay": "BVC-T500W",
+   "qaCount": 0,
+   "colors": []
+  },
+  {
+   "model": "BVC-L125",
+   "cat": "clean",
+   "displayName": "클래파 대용량 25L 건습식 청소기",
+   "modelDisplay": "BVC-L125",
+   "qaCount": 0,
+   "colors": []
+  },
+  {
+   "model": "BVC-C13K",
+   "cat": "clean",
+   "displayName": "클래파 차량용 무선 청소기",
+   "modelDisplay": "BVC-C13K",
+   "qaCount": 0,
+   "colors": []
+  },
+  {
+   "model": "BFB-VC120",
+   "cat": "clean",
+   "displayName": "클래파 싸이클론 무선 청소기",
+   "modelDisplay": "BFB-VC120",
+   "qaCount": 0,
+   "colors": []
+  },
+  {
+   "model": "IB-VC0601",
+   "cat": "clean",
+   "displayName": "클래파 유선 진공청소기",
+   "modelDisplay": "IB-VC0601",
+   "qaCount": 0,
+   "colors": []
+  },
+  {
+   "model": "BHF-360W",
+   "cat": "season",
+   "displayName": "클래파 냉각 휴대용 선풍기",
+   "modelDisplay": "BHF-360W",
+   "qaCount": 0,
+   "colors": []
+  },
+  {
+   "model": "BHH-2000S",
+   "cat": "season",
+   "displayName": "클래파 하이라이트 전기 히터",
+   "modelDisplay": "BHH-2000S",
+   "qaCount": 0,
+   "colors": []
+  },
+  {
+   "model": "BPH-W181",
+   "cat": "season",
+   "displayName": "클래파 욕실 난방기",
+   "modelDisplay": "BPH-W181 · CPH-W181G",
+   "qaCount": 0,
+   "colors": []
+  },
+  {
+   "model": "BOH-235",
+   "cat": "season",
+   "displayName": "클래파 카본 오방난로",
+   "modelDisplay": "BOH-235",
+   "qaCount": 0,
+   "colors": []
+  },
+  {
+   "model": "BFB-PH180W",
+   "cat": "season",
+   "displayName": "클래파 프리미엄 ECO PTC 온풍기",
+   "modelDisplay": "BFB-PH180W",
+   "qaCount": 0,
+   "colors": []
+  },
+  {
+   "model": "BRC-30W",
+   "cat": "living",
+   "displayName": "클래파 미니밥솥",
+   "modelDisplay": "BRC-30W",
+   "qaCount": 0,
+   "colors": []
   }
  ],
  "faq": [

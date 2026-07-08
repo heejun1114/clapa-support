@@ -26,11 +26,11 @@
   },
   "BVC-S185": {
    "main": {
-    "name": "클래파 BVC-S185, CVC-S230 전용 본체, 스테이션",
-    "url": "https://smartstore.naver.com/skillfulbrother/products/12142699458",
-    "image": "https://shop-phinf.pstatic.net/20250820_257/1755650147367tkfJI_JPEG/69030129223624772_1074052102.jpg",
-    "price": 100000,
-    "category": "디지털/가전>청소기>무선청소기>진공청소기"
+    "name": "클래파 초경량 자동먼지비움 청소기 무선 BLDC 차이슨 원룸 가벼운 핸디 + 물걸레키트",
+    "url": "https://smartstore.naver.com/skillfulbrother/products/11901197610",
+    "image": "https://shop-phinf.pstatic.net/20250912_85/1757642121575jVkFJ_JPEG/91775064701409514_690877959.jpg",
+    "price": 278000,
+    "category": "디지털/가전>청소기>무선청소기>핸디청소기"
    },
    "parts": [
     {
@@ -192,6 +192,205 @@
      "image": "https://shop-phinf.pstatic.net/20240510_249/1715322909470GE1DE_JPEG/116458808175035570_1446307045.jpg"
     }
    ]
+  },
+  "BVC-H38": {
+   "main": {
+    "name": "클래파 400W 강력 AI 흡입 BLDC 무선 청소기 진공 가벼운 원룸 + 자동충전거치대",
+    "url": "https://smartstore.naver.com/skillfulbrother/products/12733553580",
+    "image": "https://shop-phinf.pstatic.net/20251125_160/1764062144930WLV3M_JPEG/98195101180211813_490687712.jpg",
+    "price": 228000,
+    "category": "디지털/가전>청소기>무선청소기>진공청소기"
+   },
+   "parts": [
+    {
+     "name": "클래파 BVC-H38 전용 배터리, 모터 헤드",
+     "url": "https://smartstore.naver.com/skillfulbrother/products/13648701308",
+     "image": "https://shop-phinf.pstatic.net/20260702_207/1782959769732DXCrw_JPEG/117092604870813584_1534247803.jpg",
+     "price": 59000,
+     "category": "디지털/가전>청소기>무선청소기>핸디스틱청소기"
+    },
+    {
+     "name": "클래파 BVC-H38 전용 구성품",
+     "url": "https://smartstore.naver.com/skillfulbrother/products/13513768685",
+     "image": "https://shop-phinf.pstatic.net/20260511_59/1778480040235nyrNI_JPEG/27236311360616920_1241133379.jpg",
+     "price": 20000,
+     "category": "디지털/가전>청소기>무선청소기>핸디스틱청소기"
+    }
+   ]
+  },
+  "BVC-T500W": {
+   "main": {
+    "name": "클래파 520W 엘리트 타워 BVC-T500W",
+    "url": "https://smartstore.naver.com/skillfulbrother/products/10738911598",
+    "image": "https://shop-phinf.pstatic.net/20241206_14/1733475057527oQilm_JPEG/46719549352790734_1657445480.jpg",
+    "price": 399000,
+    "category": "디지털/가전>청소기>무선청소기>핸디청소기"
+   },
+   "parts": [
+    {
+     "name": "클래파 BVC-T500W 전용 구성품",
+     "url": "https://smartstore.naver.com/skillfulbrother/products/11174828658",
+     "image": "https://shop-phinf.pstatic.net/20241216_155/1734326940831JIt0a_JPEG/17094534698673389_1752328966.jpg",
+     "price": 15000,
+     "category": "디지털/가전>청소기>무선청소기>진공청소기"
+    },
+    {
+     "name": "클래파 BVC-T500W 전용 배터리, 모터 헤드",
+     "url": "https://smartstore.naver.com/skillfulbrother/products/11150145784",
+     "image": "https://shop-phinf.pstatic.net/20241120_200/1732065383439jgho8_JPEG/46976675255876645_380371183.jpg",
+     "price": 69000,
+     "category": "디지털/가전>청소기>무선청소기>진공청소기"
+    }
+   ]
+  },
+  "BVC-L125": {
+   "main": null,
+   "parts": [
+    {
+     "name": "클래파 BVC-L125 25L 전용 본체, 모터",
+     "url": "https://smartstore.naver.com/skillfulbrother/products/10223276363",
+     "image": "https://shop-phinf.pstatic.net/20240418_74/1713424239629D2wKi_JPEG/114560082339734247_943450705.jpg",
+     "price": 45000,
+     "category": "디지털/가전>청소기>업소용청소기"
+    },
+    {
+     "name": "클래파 BVC-L125 25L 전용 구성품",
+     "url": "https://smartstore.naver.com/skillfulbrother/products/10223301151",
+     "image": "https://shop-phinf.pstatic.net/20240418_38/1713424618521FNCG2_JPEG/114560461217980609_1815641555.jpg",
+     "price": 7500,
+     "category": "디지털/가전>청소기>업소용청소기"
+    }
+   ]
+  },
+  "BVC-C13K": {
+   "main": {
+    "name": "클래파 차량용 청소기 에어건 자동차 무선 휴대용 강력 진공 핸디 차 미니",
+    "url": "https://smartstore.naver.com/skillfulbrother/products/9250938742",
+    "image": "https://shop-phinf.pstatic.net/20250403_130/1743668425353miVMX_JPEG/6656656487534632_1967190543.jpg",
+    "price": 139000,
+    "category": "생활/건강>자동차용품>편의용품>차량용청소기"
+   },
+   "parts": [
+    {
+     "name": "클래파 BVC-C13K 전용 배터리, 본체",
+     "url": "https://smartstore.naver.com/skillfulbrother/products/10087861218",
+     "image": "https://shop-phinf.pstatic.net/20240618_167/1718669686875TSWcB_JPEG/42930911286821010_71743472.jpg",
+     "price": 40000,
+     "category": "디지털/가전>청소기>유선청소기>진공청소기"
+    },
+    {
+     "name": "클래파 BVC-C13K 전용 구성품",
+     "url": "https://smartstore.naver.com/skillfulbrother/products/10078638395",
+     "image": "https://shop-phinf.pstatic.net/20240418_102/1713402175440juwGo_JPEG/114538018151323256_363824938.jpg",
+     "price": 5000,
+     "category": "디지털/가전>청소기>유선청소기>진공청소기"
+    }
+   ]
+  },
+  "BFB-VC120": {
+   "main": null,
+   "parts": [
+    {
+     "name": "클래파 BFB-VC120 전용 구성품",
+     "url": "https://smartstore.naver.com/skillfulbrother/products/10227959757",
+     "image": "https://shop-phinf.pstatic.net/20240517_268/17159108704223QvSs_JPEG/43213554281967744_721966342.jpg",
+     "price": 15000,
+     "category": "디지털/가전>청소기>업소용청소기"
+    },
+    {
+     "name": "클래파 BFB-VC120, BFB-VC160, BFB-VC170 물걸레 키트",
+     "url": "https://smartstore.naver.com/skillfulbrother/products/10227817216",
+     "image": "https://shop-phinf.pstatic.net/20240419_227/1713508375871xr76u_JPEG/114644271583231126_1329641418.jpg",
+     "price": 55000,
+     "category": "디지털/가전>청소기>유선청소기>진공청소기"
+    },
+    {
+     "name": "클래파 BFB-VC120, BFB-VC160, BFB-VC170 배터리",
+     "url": "https://smartstore.naver.com/skillfulbrother/products/10226993687",
+     "image": "https://shop-phinf.pstatic.net/20240419_287/1713493002791YVJJG_JPEG/114628898523495154_1896378069.jpg",
+     "price": 55000,
+     "category": "디지털/가전>청소기>청소기부속품"
+    }
+   ]
+  },
+  "IB-VC0601": {
+   "main": null,
+   "parts": [
+    {
+     "name": "클래파 IB-VC0601, BFB-VC0601, IB-VC0700G/B 전용 먼지통",
+     "url": "https://smartstore.naver.com/skillfulbrother/products/8555887193",
+     "image": "https://shop-phinf.pstatic.net/20230516_247/16842313918543VTC2_PNG/2317879715567700_1278080849.png",
+     "price": 5000,
+     "category": "디지털/가전>청소기>유선청소기>진공청소기"
+    },
+    {
+     "name": "클래파 IB-VC0601, BFB-VC0601, IB-VC0700G/B 전용 필터",
+     "url": "https://smartstore.naver.com/skillfulbrother/products/8555835752",
+     "image": "https://shop-phinf.pstatic.net/20240319_189/1710808486747LQe7Q_JPEG/111944382484427101_1296183797.jpg",
+     "price": 5000,
+     "category": "디지털/가전>청소기>유선청소기>진공청소기"
+    }
+   ]
+  },
+  "BHF-360W": {
+   "main": {
+    "name": "클래파 냉각 휴대용 선풍기 미니 손풍기 핸디 손선풍기",
+    "url": "https://smartstore.naver.com/skillfulbrother/products/11601702825",
+    "image": "https://shop-phinf.pstatic.net/20250317_51/17422025410039zEwd_JPEG/51677669007278373_365663213.jpg",
+    "price": 39900,
+    "category": "디지털/가전>계절가전>선풍기>휴대용선풍기"
+   },
+   "parts": []
+  },
+  "BHH-2000S": {
+   "main": {
+    "name": "클래파 하이라이트 전기 히터 난로 가정용 사무실 난방기 발난로 BHH-2000S",
+    "url": "https://smartstore.naver.com/skillfulbrother/products/9353650568",
+    "image": "https://shop-phinf.pstatic.net/20231011_60/1697001966354AXJXp_JPEG/47248394293661601_40699613.jpg",
+    "price": 188000,
+    "category": "디지털/가전>계절가전>히터>전기히터"
+   },
+   "parts": []
+  },
+  "BPH-W181": {
+   "main": {
+    "name": "클래파 욕실난방기 욕실 히터 화장실 벽걸이 난방기 온열기 가정용",
+    "url": "https://smartstore.naver.com/skillfulbrother/products/7115825768",
+    "image": "https://shop-phinf.pstatic.net/20231117_291/1700209394897qofdR_JPEG/2815875709075548_323225516.jpg",
+    "price": 159000,
+    "category": "디지털/가전>계절가전>히터>전기히터"
+   },
+   "parts": []
+  },
+  "BOH-235": {
+   "main": {
+    "name": "클래파 카본 오방난로 발터치 가정용 난방 온풍기",
+    "url": "https://smartstore.naver.com/skillfulbrother/products/11043260778",
+    "image": "https://shop-phinf.pstatic.net/20241024_177/1729747650050lOS4Y_JPEG/63880603248754071_812691755.jpg",
+    "price": 99000,
+    "category": "디지털/가전>계절가전>히터>전기히터"
+   },
+   "parts": []
+  },
+  "BFB-PH180W": {
+   "main": {
+    "name": "클래파 프리미엄 ECO PTC 가정용 온풍기 화장실 사무실 난방기",
+    "url": "https://smartstore.naver.com/skillfulbrother/products/9574170549",
+    "image": "https://shop-phinf.pstatic.net/20231123_112/1700703182978zekH7_JPEG/5102460807443923_1899809636.jpg",
+    "price": 221000,
+    "category": "디지털/가전>계절가전>온풍기>전기온풍기"
+   },
+   "parts": []
+  },
+  "BRC-30W": {
+   "main": {
+    "name": "클래파 미니밥솥 1인용 2인용 3인용 밥통 보온 캠핑",
+    "url": "https://smartstore.naver.com/skillfulbrother/products/9810723609",
+    "image": "https://shop-phinf.pstatic.net/20240115_98/1705297379536I7Rp3_JPEG/106433159251355969_187046719.jpg",
+    "price": 64900,
+    "category": "디지털/가전>주방가전>전기밥솥>일반밥솥"
+   },
+   "parts": []
   }
  }
 }
