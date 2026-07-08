@@ -2,10 +2,906 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<meta http-equiv="refresh" content="0; url=design-mockups/">
-<title>CLAPA 고객지원센터 — 시안 갤러리로 이동</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CLAPA 고객지원센터</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+  :root{
+    --paper:#FFFFFF;
+    --surface:#F5F4F1;
+    --sand:#EFE9E1;
+    --line:#E6E1D8;
+    --line-soft:#EDE9E1;
+    --ink:#23201B;
+    --muted:#6F675C;
+    --teal:#0E6F66;
+    --teal-deep:#0A5750;
+    --teal-wash:#E4F0ED;
+    --sil:#CBC4B8;
+    --sil-d:#AAA294;
+    --glass:#E3DED4;
+    --radius:12px;
+    --radius-sm:9px;
+    --maxw:1080px;
+    --ease:cubic-bezier(.22,.61,.36,1);
+  }
+
+  *{box-sizing:border-box;}
+  html{-webkit-text-size-adjust:100%;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Pretendard Variable',Pretendard,-apple-system,'Apple SD Gothic Neo',sans-serif;
+    font-size:15px;
+    line-height:1.6;
+    letter-spacing:-0.011em;
+    -webkit-font-smoothing:antialiased;
+    text-rendering:optimizeLegibility;
+  }
+  a{color:inherit;text-decoration:none;}
+  button{font:inherit;color:inherit;cursor:pointer;}
+  img,svg{display:block;max-width:100%;}
+
+  .wrap{max-width:var(--maxw);margin:0 auto;padding-inline:clamp(18px,4vw,40px);}
+
+  .skip{
+    position:absolute;left:14px;top:-60px;z-index:80;
+    background:var(--ink);color:#fff;padding:9px 15px;border-radius:8px;
+    font-size:13px;font-weight:600;transition:top .16s var(--ease);
+  }
+  .skip:focus{top:12px;}
+
+  :focus-visible{outline:2px solid var(--teal);outline-offset:2px;border-radius:3px;}
+
+  /* ---------- Header ---------- */
+  .site-header{
+    position:sticky;top:0;z-index:40;
+    background:rgba(255,255,255,.86);
+    backdrop-filter:saturate(180%) blur(10px);
+    border-bottom:1px solid var(--line);
+  }
+  .header-inner{
+    display:flex;align-items:center;justify-content:space-between;gap:18px;
+    height:60px;
+  }
+  .wordmark{
+    display:inline-flex;align-items:baseline;gap:8px;
+    font-weight:700;font-size:16.5px;letter-spacing:-0.02em;
+  }
+  .wordmark .mark-a{color:var(--ink);}
+  .wordmark .mark-b{
+    color:var(--teal);font-weight:600;font-size:13px;letter-spacing:0.06em;
+    padding:2px 7px;border:1px solid var(--teal-wash);border-radius:6px;
+    background:var(--teal-wash);transform:translateY(-1px);
+  }
+  .header-nav{display:flex;align-items:center;gap:6px;}
+  .nav-link{
+    font-size:13.5px;font-weight:500;color:var(--muted);
+    padding:8px 12px;border-radius:8px;
+    transition:color .15s var(--ease),background .15s var(--ease);
+  }
+  .nav-link:hover{color:var(--ink);background:var(--surface);}
+  .nav-link.is-store{color:var(--teal-deep);font-weight:600;}
+  .nav-link.is-store .ext{font-size:12px;margin-left:3px;color:var(--teal);}
+  @media(max-width:520px){ .nav-link.is-inquiry{display:none;} }
+
+  /* ---------- Hero ---------- */
+  .hero{padding-block:clamp(38px,6vw,66px) clamp(30px,4vw,44px);}
+  .eyebrow{
+    display:inline-block;
+    color:var(--teal-deep);font-size:12.5px;font-weight:600;
+    letter-spacing:0.12em;text-transform:uppercase;
+    margin-bottom:14px;
+  }
+  .hero-title{
+    margin:0;
+    font-size:clamp(27px,4.6vw,40px);
+    line-height:1.14;font-weight:700;letter-spacing:-0.032em;
+    max-width:16ch;
+  }
+  .hero-sub{
+    margin:15px 0 0;max-width:52ch;
+    color:var(--muted);font-size:clamp(14.5px,1.6vw,16px);
+    letter-spacing:-0.012em;
+  }
+
+  .searchbar{margin-top:26px;max-width:640px;}
+  .search-field{
+    display:flex;align-items:center;gap:10px;
+    background:var(--paper);
+    border:1.5px solid var(--line);
+    border-radius:12px;
+    padding:5px 6px 5px 15px;
+    transition:border-color .16s var(--ease),box-shadow .16s var(--ease);
+  }
+  .search-field:focus-within{border-color:var(--teal);}
+  .search-field .s-icon{color:var(--muted);flex:none;}
+  .search-input{
+    flex:1;min-width:0;border:0;outline:0;background:transparent;
+    font:inherit;font-size:15.5px;color:var(--ink);
+    padding:11px 0;letter-spacing:-0.012em;
+  }
+  .search-input::placeholder{color:#9C948A;}
+  .search-btn{
+    flex:none;
+    background:var(--teal);color:#fff;
+    border:0;border-radius:9px;
+    padding:11px 20px;font-size:14.5px;font-weight:600;letter-spacing:-0.01em;
+    transition:background .16s var(--ease);
+  }
+  .search-btn:hover{background:var(--teal-deep);}
+
+  .suggest{
+    display:flex;flex-wrap:wrap;align-items:center;gap:8px;
+    margin-top:16px;
+  }
+  .suggest-label{color:var(--muted);font-size:13px;font-weight:500;margin-right:2px;}
+  .tag{
+    background:var(--paper);
+    border:1px solid var(--line);
+    border-radius:100px;
+    padding:6px 13px;font-size:13px;font-weight:500;color:var(--ink);
+    transition:border-color .15s var(--ease),background .15s var(--ease),color .15s var(--ease);
+  }
+  .tag:hover{border-color:var(--teal);background:var(--teal-wash);color:var(--teal-deep);}
+
+  /* ---------- Topic cards (hero role) ---------- */
+  .topics{padding-bottom:clamp(30px,5vw,52px);}
+  .topic-grid{
+    display:grid;grid-template-columns:repeat(3,1fr);gap:14px;
+  }
+  .topic-card{
+    display:flex;flex-direction:column;gap:10px;
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:20px 20px 18px;
+    transition:border-color .16s var(--ease),background .16s var(--ease),transform .16s var(--ease);
+  }
+  .topic-card:hover{border-color:var(--teal);background:#fff;transform:translateY(-2px);}
+  .topic-icon{
+    width:38px;height:38px;flex:none;
+    display:flex;align-items:center;justify-content:center;
+    background:var(--teal-wash);border-radius:10px;color:var(--teal-deep);
+  }
+  .topic-card:hover .topic-icon{background:var(--teal);color:#fff;}
+  .topic-icon svg{width:21px;height:21px;}
+  .topic-title{font-size:15.5px;font-weight:650;letter-spacing:-0.02em;}
+  .topic-title .arw{color:var(--muted);font-size:13px;margin-left:5px;transition:color .15s var(--ease),transform .16s var(--ease);display:inline-block;}
+  .topic-card:hover .topic-title .arw{color:var(--teal);transform:translateX(3px);}
+  .topic-desc{font-size:13px;color:var(--muted);line-height:1.5;letter-spacing:-0.008em;}
+
+  /* ---------- Section shell ---------- */
+  .section{padding-block:clamp(46px,6.5vw,78px);}
+  .section.band{background:var(--surface);border-block:1px solid var(--line);}
+  .section-head{
+    display:flex;align-items:flex-end;justify-content:space-between;gap:16px;
+    margin-bottom:22px;
+  }
+  .section-eyebrow{color:var(--teal-deep);font-size:12px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;display:block;margin-bottom:8px;}
+  .section-title{margin:0;font-size:clamp(20px,2.6vw,25px);font-weight:700;letter-spacing:-0.026em;line-height:1.2;}
+  .section-desc{margin:8px 0 0;color:var(--muted);font-size:14px;max-width:46ch;}
+  .section-link{
+    flex:none;display:inline-flex;align-items:center;gap:5px;
+    color:var(--teal-deep);font-size:13.5px;font-weight:600;
+    padding:7px 12px;border:1px solid var(--line);border-radius:8px;background:var(--paper);
+    transition:border-color .15s var(--ease),background .15s var(--ease);white-space:nowrap;
+  }
+  .section-link:hover{border-color:var(--teal);background:var(--teal-wash);}
+  .section-link .ext{font-size:12px;}
+
+  /* ---------- Brand tabs ---------- */
+  .brand-tabs{
+    display:flex;flex-wrap:wrap;gap:8px;
+    margin-bottom:8px;
+  }
+  .brand-tab{
+    display:inline-flex;align-items:baseline;gap:7px;
+    background:var(--paper);
+    border:1px solid var(--line);
+    border-radius:100px;
+    padding:8px 15px;font-size:13.5px;font-weight:600;letter-spacing:-0.01em;color:var(--ink);
+    transition:border-color .15s var(--ease),background .15s var(--ease),color .15s var(--ease);
+  }
+  .brand-tab .lat{font-size:11px;font-weight:500;letter-spacing:0.05em;color:var(--muted);}
+  .brand-tab:hover{border-color:var(--teal);color:var(--teal-deep);}
+  .brand-tab.is-active{background:var(--teal);border-color:var(--teal);color:#fff;}
+  .brand-tab.is-active .lat{color:rgba(255,255,255,.72);}
+
+  /* ---------- Product list (signature) ---------- */
+  .product-list{
+    margin-top:16px;
+    border:1px solid var(--line);border-radius:var(--radius);
+    background:var(--paper);overflow:hidden;
+  }
+  .product-row{
+    display:flex;align-items:center;gap:16px;
+    padding:15px 18px;
+    border-top:1px solid var(--line-soft);
+    transition:background .15s var(--ease);
+  }
+  .product-row:first-child{border-top:0;}
+  .product-row:hover{background:#FBFAF7;}
+  .thumb{
+    width:52px;height:52px;flex:none;
+    display:flex;align-items:center;justify-content:center;
+    background:var(--surface);
+    border:1px solid var(--line-soft);
+    border-radius:10px;
+  }
+  .thumb svg{width:40px;height:40px;}
+  .p-main{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px;}
+  .p-brand{
+    font-size:11.5px;font-weight:600;letter-spacing:0.03em;color:var(--teal-deep);
+    text-transform:uppercase;
+  }
+  .p-name{
+    font-size:15px;font-weight:550;letter-spacing:-0.016em;color:var(--ink);
+    transition:color .14s var(--ease);
+  }
+  .p-name:hover{color:var(--teal-deep);}
+  .p-model{
+    font-size:12.5px;color:var(--muted);font-variant-numeric:tabular-nums;letter-spacing:0.01em;
+  }
+
+  .quicklinks{
+    flex:none;display:flex;align-items:center;gap:2px;
+  }
+  .qlink{
+    display:inline-flex;align-items:center;gap:6px;
+    padding:7px 11px;border-radius:8px;
+    font-size:12.5px;font-weight:550;color:var(--muted);letter-spacing:-0.006em;
+    transition:color .14s var(--ease),background .14s var(--ease);
+  }
+  .qlink svg{width:14px;height:14px;color:var(--sil-d);transition:color .14s var(--ease);}
+  .qlink:hover{color:var(--teal-deep);background:var(--teal-wash);}
+  .qlink:hover svg{color:var(--teal);}
+
+  @media(hover:hover){
+    .quicklinks{
+      opacity:0;transform:translateX(8px);pointer-events:none;
+      transition:opacity .2s var(--ease),transform .2s var(--ease);
+    }
+    .product-row:hover .quicklinks,
+    .product-row:focus-within .quicklinks{
+      opacity:1;transform:none;pointer-events:auto;
+    }
+  }
+
+  .products-empty{
+    padding:34px 18px;text-align:center;color:var(--muted);font-size:14px;
+  }
+  .products-foot{
+    display:flex;align-items:center;gap:8px;
+    margin-top:16px;color:var(--muted);font-size:13px;
+  }
+  .products-foot .dot{width:4px;height:4px;border-radius:50%;background:var(--sil);flex:none;}
+
+  /* ---------- FAQ ---------- */
+  .faq-list{
+    max-width:840px;
+    border:1px solid var(--line);border-radius:var(--radius);
+    background:var(--paper);overflow:hidden;
+  }
+  .faq-item{border-top:1px solid var(--line-soft);}
+  .faq-item:first-child{border-top:0;}
+  .faq-item>summary{
+    list-style:none;cursor:pointer;
+    display:flex;align-items:flex-start;gap:14px;
+    padding:17px 18px;
+    transition:background .14s var(--ease);
+  }
+  .faq-item>summary::-webkit-details-marker{display:none;}
+  .faq-item>summary:hover{background:#FBFAF7;}
+  .faq-q{flex:1;min-width:0;display:flex;flex-direction:column;gap:5px;}
+  .faq-cat{
+    font-size:11px;font-weight:600;letter-spacing:0.04em;color:var(--teal-deep);
+    text-transform:uppercase;
+  }
+  .faq-qt{font-size:15px;font-weight:550;letter-spacing:-0.016em;line-height:1.45;}
+  .faq-chev{
+    flex:none;width:22px;height:22px;margin-top:2px;color:var(--muted);
+    transition:transform .2s var(--ease),color .14s var(--ease);
+  }
+  .faq-item[open] .faq-chev{transform:rotate(180deg);color:var(--teal);}
+  .faq-a{
+    padding:0 18px 19px 46px;
+    color:var(--muted);font-size:14px;line-height:1.65;letter-spacing:-0.008em;
+  }
+  .faq-a a{color:var(--teal-deep);font-weight:600;border-bottom:1px solid var(--teal-wash);}
+  .faq-a a:hover{border-bottom-color:var(--teal);}
+
+  /* ---------- Chat FAB (quiet) ---------- */
+  .chat-fab{
+    position:fixed;right:clamp(16px,3vw,28px);bottom:clamp(16px,3vw,28px);z-index:50;
+    display:inline-flex;align-items:center;gap:10px;
+    background:var(--paper);
+    border:1px solid var(--line);
+    border-radius:100px;
+    padding:11px 17px 11px 14px;
+    box-shadow:0 6px 22px -8px rgba(35,32,27,.22),0 2px 6px -3px rgba(35,32,27,.12);
+    transition:border-color .16s var(--ease),transform .16s var(--ease);
+  }
+  .chat-fab:hover{border-color:var(--teal);transform:translateY(-1px);}
+  .chat-ic{
+    width:32px;height:32px;flex:none;border-radius:50%;
+    background:var(--teal-wash);color:var(--teal-deep);
+    display:flex;align-items:center;justify-content:center;
+  }
+  .chat-ic svg{width:17px;height:17px;}
+  .chat-tx{display:flex;flex-direction:column;line-height:1.25;text-align:left;}
+  .chat-tt{font-size:14px;font-weight:600;letter-spacing:-0.015em;color:var(--ink);}
+  .chat-st{font-size:11.5px;color:var(--muted);display:inline-flex;align-items:center;gap:5px;}
+  .chat-live{width:6px;height:6px;border-radius:50%;background:var(--teal);flex:none;}
+  @media(max-width:480px){ .chat-tx{display:none;} .chat-fab{padding:11px;} }
+
+  /* ---------- Footer ---------- */
+  .site-footer{
+    background:#F1EEE8;border-top:1px solid var(--line);
+    padding-block:clamp(34px,5vw,52px);margin-top:8px;
+  }
+  .footer-top{
+    display:flex;flex-wrap:wrap;justify-content:space-between;gap:28px 40px;
+    padding-bottom:26px;border-bottom:1px solid var(--line);
+  }
+  .foot-contact .foot-h{font-size:12px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;}
+  .foot-tel{font-size:22px;font-weight:700;letter-spacing:-0.02em;font-variant-numeric:tabular-nums;color:var(--ink);}
+  .foot-hours{font-size:13px;color:var(--muted);margin-top:5px;}
+  .foot-hours .off{color:var(--sil-d);}
+  .foot-brands{display:flex;flex-direction:column;gap:9px;}
+  .foot-brands .foot-h{font-size:12px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);margin-bottom:2px;}
+  .foot-brandrow{display:flex;flex-wrap:wrap;gap:8px 10px;}
+  .foot-brand{
+    display:inline-flex;align-items:baseline;gap:6px;
+    font-size:13.5px;font-weight:500;color:var(--ink);
+    padding:5px 0;transition:color .14s var(--ease);
+  }
+  .foot-brand .lat{font-size:11px;color:var(--muted);letter-spacing:0.04em;}
+  .foot-brand:hover{color:var(--teal-deep);}
+  .foot-brand:hover .lat{color:var(--teal);}
+  .footer-legal{
+    display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;
+    padding-top:22px;color:var(--muted);font-size:12.5px;
+  }
+  .footer-legal .slogan{color:var(--teal-deep);font-weight:600;letter-spacing:-0.01em;}
+
+  /* ---------- Responsive ---------- */
+  @media(max-width:860px){
+    .topic-grid{grid-template-columns:repeat(2,1fr);}
+  }
+  @media(max-width:640px){
+    .section-head{flex-direction:column;align-items:flex-start;}
+    .product-row{flex-wrap:wrap;gap:12px 14px;}
+    .thumb{width:46px;height:46px;}
+    .thumb svg{width:34px;height:34px;}
+    .quicklinks{
+      opacity:1 !important;transform:none !important;pointer-events:auto !important;
+      width:100%;padding-left:62px;gap:4px;flex-wrap:wrap;
+    }
+    .qlink{padding:6px 10px;background:var(--surface);}
+    .p-main{flex:1 1 60%;}
+  }
+  @media(max-width:420px){
+    .topic-grid{grid-template-columns:1fr;}
+    .search-btn{padding:11px 15px;}
+  }
+
+  @media(prefers-reduced-motion:reduce){
+    *{transition:none !important;animation:none !important;scroll-behavior:auto !important;}
+    .quicklinks{opacity:1 !important;transform:none !important;pointer-events:auto !important;}
+  }
+</style>
 </head>
 <body>
-<p><a href="design-mockups/">시안 갤러리로 이동합니다 →</a></p>
+<a class="skip" href="#main">본문으로 건너뛰기</a>
+
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a class="wordmark" href="#" aria-label="CLAPA SUPPORT 고객지원센터 홈">
+      <span class="mark-a">CLAPA</span><span class="mark-b">SUPPORT</span>
+    </a>
+    <nav class="header-nav" aria-label="주요 메뉴">
+      <a class="nav-link is-inquiry" href="#">문의내역</a>
+      <a class="nav-link is-store" href="https://clapa.kr" rel="noopener">clapa.kr 스토어<span class="ext" aria-hidden="true">↗</span></a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+
+  <!-- HERO: category-centric -->
+  <section class="hero" aria-labelledby="hero-title">
+    <div class="wrap">
+      <span class="eyebrow">CLAPA 고객지원센터</span>
+      <h1 class="hero-title" id="hero-title">찾으시는 것부터 조용히 안내해 드립니다</h1>
+      <p class="hero-sub">모델명이나 증상을 검색하면 관련 설명서, 부품, 자주 묻는 질문을 한곳에서 확인하실 수 있어요.</p>
+
+      <form class="searchbar" role="search" action="#" onsubmit="return false;">
+        <div class="search-field">
+          <span class="s-icon" aria-hidden="true">
+            <svg width="19" height="19" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="9" cy="9" r="6"/><path d="M14 14 L17.5 17.5"/></svg>
+          </span>
+          <label class="skip" for="support-search">검색어 입력</label>
+          <input class="search-input" id="support-search" type="search" name="q"
+                 placeholder="모델명, 증상, 궁금한 점을 검색하세요"
+                 aria-label="모델명, 증상, 궁금한 점을 검색하세요" autocomplete="off">
+          <button class="search-btn" type="submit">검색</button>
+        </div>
+      </form>
+
+      <div class="suggest" aria-label="추천 검색어">
+        <span class="suggest-label">추천 검색어</span>
+        <button class="tag" type="button">충전</button>
+        <button class="tag" type="button">필터</button>
+        <button class="tag" type="button">세척</button>
+        <button class="tag" type="button">전기세</button>
+        <button class="tag" type="button">유청 분리</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- TOPIC CARDS -->
+  <section class="topics" aria-label="주제별 바로가기">
+    <div class="wrap">
+      <div class="topic-grid">
+
+        <a class="topic-card" href="#">
+          <span class="topic-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="7" width="12.5" height="9.5" rx="1.4"/><path d="M15 10.5h3.4l2.1 2.6v3.4H15z"/><circle cx="6.5" cy="18" r="1.7"/><circle cx="17.5" cy="18" r="1.7"/></svg>
+          </span>
+          <span class="topic-title">배송·교환<span class="arw" aria-hidden="true">→</span></span>
+          <span class="topic-desc">주문 배송 현황을 확인하고 교환·반품을 신청합니다.</span>
+        </a>
+
+        <a class="topic-card" href="#">
+          <span class="topic-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15.5 6.2a3.7 3.7 0 0 0-5 4.9L4 17.6 6.4 20l6.5-6.5a3.7 3.7 0 0 0 4.9-5l-2.6 2.6-2.3-2.3z"/></svg>
+          </span>
+          <span class="topic-title">A/S 신청<span class="arw" aria-hidden="true">→</span></span>
+          <span class="topic-desc">고장을 접수하고 택배 수거로 수리를 맡깁니다.</span>
+        </a>
+
+        <a class="topic-card" href="#">
+          <span class="topic-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6.5C10.5 5.3 8.6 5 4.5 5v13c4.1 0 6 .3 7.5 1.5"/><path d="M12 6.5C13.5 5.3 15.4 5 19.5 5v13c-4.1 0-6 .3-7.5 1.5"/><path d="M12 6.5v13"/></svg>
+          </span>
+          <span class="topic-title">사용법<span class="arw" aria-hidden="true">→</span></span>
+          <span class="topic-desc">설치와 사용, 세척·관리 방법을 알아봅니다.</span>
+        </a>
+
+        <a class="topic-card" href="#">
+          <span class="topic-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5.5h16l-6 6.8v5.4l-4 2v-7.4z"/></svg>
+          </span>
+          <span class="topic-title">소모품·부품<span class="arw" aria-hidden="true">→</span></span>
+          <span class="topic-desc">필터, 배터리 등 정품 소모품을 주문합니다.</span>
+        </a>
+
+        <a class="topic-card" href="#">
+          <span class="topic-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.2l7 2.6v5c0 4.8-2.9 7.7-7 9.4-4.1-1.7-7-4.6-7-9.4v-5z"/><path d="M8.7 12l2.2 2.2 4.2-4.4"/></svg>
+          </span>
+          <span class="topic-title">보증 안내<span class="arw" aria-hidden="true">→</span></span>
+          <span class="topic-desc">모델별 무상보증 기간과 A/S 정책을 확인합니다.</span>
+        </a>
+
+        <a class="topic-card" href="#">
+          <span class="topic-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3.5h7l4 4v13H7z"/><path d="M14 3.5v4h4"/><path d="M12.5 11v5"/><path d="M10 13.6l2.5 2.6 2.5-2.6"/></svg>
+          </span>
+          <span class="topic-title">설명서 다운로드<span class="arw" aria-hidden="true">→</span></span>
+          <span class="topic-desc">모델별 사용설명서를 PDF로 내려받습니다.</span>
+        </a>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- PRODUCT FINDER: list form (signature) -->
+  <section class="section" aria-labelledby="finder-title">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <span class="section-eyebrow">Find your product</span>
+          <h2 class="section-title" id="finder-title">상품 찾기</h2>
+          <p class="section-desc">쓰고 계신 제품을 고르면 설명서·부품·FAQ로 바로 이동합니다.</p>
+        </div>
+      </div>
+
+      <div class="brand-tabs" role="group" aria-label="카테고리 필터">
+        <button class="brand-tab is-active" type="button" data-cat="all" aria-pressed="true">전체</button>
+        <button class="brand-tab" type="button" data-cat="clean" data-label="청소기" aria-pressed="false">청소기 <span class="lat">CLEANER</span></button>
+        <button class="brand-tab" type="button" data-cat="season" data-label="계절가전" aria-pressed="false">계절가전 <span class="lat">SEASONAL</span></button>
+        <button class="brand-tab" type="button" data-cat="living" data-label="주방·생활" aria-pressed="false">주방·생활 <span class="lat">LIVING</span></button>
+      </div>
+
+      <div class="product-list" id="product-list">
+
+        <div class="product-row" data-cat="clean">
+          <span class="thumb" data-thumb="BVC-H10" aria-hidden="true" style="position:relative;overflow:hidden">
+            <svg viewBox="0 0 40 40"><path d="M6 18.6 L1.5 16.8 L1.5 21 Z" fill="#CBC4B8"/><rect x="5.5" y="15.5" width="16" height="8.5" rx="3" fill="#CBC4B8"/><circle cx="11" cy="19.7" r="2.4" fill="#AAA294"/><path d="M20 20 l7.5 3.4 -2.2 8.4 -5.3 -2.4 z" fill="#CBC4B8"/></svg>
+            <img src="https://shop-phinf.pstatic.net/20220804_20/1659593373393NR2Nm_JPEG/60729269121296021_228981064.jpg?type=f200" alt="" loading="lazy" decoding="async" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:9px" onerror="this.remove()">
+          </span>
+          <span class="p-main">
+            <span class="p-brand">청소기</span>
+            <a class="p-name" href="https://smartstore.naver.com/skillfulbrother/products/6999673131" target="_blank" rel="noopener">클래파 미니 핸디형 무선청소기</a>
+            <span class="p-model">BVC-H10</span>
+          </span>
+          <span class="quicklinks">
+            <a class="qlink" href="manuals/BVC-H10.pdf" target="_blank" rel="noopener"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><path d="M4 2h5l3 3v9H4z"/><path d="M9 2v3h3"/></svg>설명서</a>
+            <a class="qlink" href="https://smartstore.naver.com/skillfulbrother/search?q=BVC-H10" target="_blank" rel="noopener"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><rect x="3" y="4.5" width="10" height="8" rx="1.2"/><path d="M3 7.3h10"/></svg>부품</a>
+            <a class="qlink" href="#"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><path d="M3 3h10v7H7l-3 2.5V10H3z"/></svg>FAQ</a>
+          </span>
+        </div>
+
+        <div class="product-row" data-cat="living">
+          <span class="thumb" data-thumb="BES-131W/CES-232W" aria-hidden="true" style="position:relative;overflow:hidden">
+            <svg viewBox="0 0 40 40"><path d="M9 18a11 11 0 0 1 22 0z" fill="#CBC4B8"/><circle cx="20" cy="7.5" r="1.7" fill="#AAA294"/><rect x="8.5" y="18" width="23" height="6" rx="2" fill="#E3DED4"/><rect x="8" y="24" width="24" height="7" rx="2.4" fill="#CBC4B8"/><path d="M13 31 h14" stroke="#AAA294" stroke-width="1.1"/></svg>
+            <img src="https://shop-phinf.pstatic.net/20250401_203/1743483581250FAB5g_PNG/71071015169634780_52351296.png?type=f200" alt="" loading="lazy" decoding="async" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:9px" onerror="this.remove()">
+          </span>
+          <span class="p-main">
+            <span class="p-brand">주방·생활</span>
+            <a class="p-name" href="https://smartstore.naver.com/skillfulbrother/products/11255720719" target="_blank" rel="noopener">클래파 스테인리스 2단 계란찜기</a>
+            <span class="p-model">BES-131W · CES-232W</span>
+          </span>
+          <span class="quicklinks">
+            <a class="qlink" href="manuals/BES-131W_CES-232W.pdf" target="_blank" rel="noopener"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><path d="M4 2h5l3 3v9H4z"/><path d="M9 2v3h3"/></svg>설명서</a>
+            <a class="qlink" href="#"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><rect x="3" y="4.5" width="10" height="8" rx="1.2"/><path d="M3 7.3h10"/></svg>부품</a>
+            <a class="qlink" href="#"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><path d="M3 3h10v7H7l-3 2.5V10H3z"/></svg>FAQ</a>
+          </span>
+        </div>
+
+        <div class="product-row" data-cat="season">
+          <span class="thumb" data-thumb="BMH-200R" aria-hidden="true" style="position:relative;overflow:hidden">
+            <svg viewBox="0 0 40 40"><rect x="8" y="8" width="24" height="24" rx="3" fill="#CBC4B8"/><rect x="11" y="11" width="18" height="14" rx="1.5" fill="#E3DED4"/><path d="M14 11.5v13M17 11.5v13M20 11.5v13M23 11.5v13M26 11.5v13" stroke="#AAA294" stroke-width="1.1"/><circle cx="13" cy="29" r="1.4" fill="#AAA294"/><rect x="17" y="28" width="10" height="2" rx="1" fill="#AAA294"/></svg>
+            <img src="https://shop-phinf.pstatic.net/20231004_130/1696404820265nCEFU_JPEG/9872319739978075_1026213838.jpg?type=f200" alt="" loading="lazy" decoding="async" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:9px" onerror="this.remove()">
+          </span>
+          <span class="p-main">
+            <span class="p-brand">계절가전</span>
+            <a class="p-name" href="https://smartstore.naver.com/skillfulbrother/products/9317489531" target="_blank" rel="noopener">클래파 마이카 컨벡션 히터</a>
+            <span class="p-model">BMH-200R</span>
+          </span>
+          <span class="quicklinks">
+            <a class="qlink" href="#"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><path d="M4 2h5l3 3v9H4z"/><path d="M9 2v3h3"/></svg>설명서</a>
+            <a class="qlink" href="#"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><rect x="3" y="4.5" width="10" height="8" rx="1.2"/><path d="M3 7.3h10"/></svg>부품</a>
+            <a class="qlink" href="#"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><path d="M3 3h10v7H7l-3 2.5V10H3z"/></svg>FAQ</a>
+          </span>
+        </div>
+
+        <div class="product-row" data-cat="clean">
+          <span class="thumb" data-thumb="BVC-L138" aria-hidden="true" style="position:relative;overflow:hidden">
+            <svg viewBox="0 0 40 40"><rect x="11" y="16" width="18" height="16" rx="3" fill="#CBC4B8"/><ellipse cx="20" cy="16" rx="9" ry="4" fill="#AAA294"/><path d="M11 24 h18" stroke="#AAA294" stroke-width="1.1"/><circle cx="13" cy="33" r="2" fill="#CBC4B8"/><circle cx="27" cy="33" r="2" fill="#CBC4B8"/><path d="M28 18 q6 -2 4 -8" fill="none" stroke="#CBC4B8" stroke-width="2.2" stroke-linecap="round"/></svg>
+            <img src="https://shop-phinf.pstatic.net/20260520_187/1779256803783BlJ2W_JPEG/10271422372873445_542465911.jpg?type=f200" alt="" loading="lazy" decoding="async" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:9px" onerror="this.remove()">
+          </span>
+          <span class="p-main">
+            <span class="p-brand">청소기</span>
+            <a class="p-name" href="https://smartstore.naver.com/skillfulbrother/products/7972371336" target="_blank" rel="noopener">클래파 대용량 30L 건습식 청소기</a>
+            <span class="p-model">BVC-L138</span>
+          </span>
+          <span class="quicklinks">
+            <a class="qlink" href="manuals/BVC-L138.pdf" target="_blank" rel="noopener"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><path d="M4 2h5l3 3v9H4z"/><path d="M9 2v3h3"/></svg>설명서</a>
+            <a class="qlink" href="https://smartstore.naver.com/skillfulbrother/search?q=BVC-L138" target="_blank" rel="noopener"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><rect x="3" y="4.5" width="10" height="8" rx="1.2"/><path d="M3 7.3h10"/></svg>부품</a>
+            <a class="qlink" href="#"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><path d="M3 3h10v7H7l-3 2.5V10H3z"/></svg>FAQ</a>
+          </span>
+        </div>
+
+        <div class="product-row" data-cat="season">
+          <span class="thumb" data-thumb="BEF-C156W" aria-hidden="true" style="position:relative;overflow:hidden">
+            <svg viewBox="0 0 40 40"><circle cx="20" cy="12" r="10" fill="#CBC4B8"/><circle cx="20" cy="12" r="6.4" fill="none" stroke="#AAA294" stroke-width="1.2"/><circle cx="20" cy="12" r="2.3" fill="#AAA294"/><rect x="18.7" y="21" width="2.6" height="12" fill="#CBC4B8"/><ellipse cx="20" cy="34.5" rx="8" ry="2.4" fill="#CBC4B8"/></svg>
+            <img src="https://shop-phinf.pstatic.net/20260528_254/1779951508276h96Ip_JPEG/46741056423117938_1360287550.jpg?type=f200" alt="" loading="lazy" decoding="async" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:9px" onerror="this.remove()">
+          </span>
+          <span class="p-main">
+            <span class="p-brand">계절가전</span>
+            <a class="p-name" href="https://smartstore.naver.com/skillfulbrother/products/11956269278" target="_blank" rel="noopener">클래파 멀티 무선 선풍기</a>
+            <span class="p-model">BEF-C156W</span>
+          </span>
+          <span class="quicklinks">
+            <a class="qlink" href="#"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><path d="M4 2h5l3 3v9H4z"/><path d="M9 2v3h3"/></svg>설명서</a>
+            <a class="qlink" href="https://smartstore.naver.com/skillfulbrother/products/12166003860" target="_blank" rel="noopener"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><rect x="3" y="4.5" width="10" height="8" rx="1.2"/><path d="M3 7.3h10"/></svg>부품</a>
+            <a class="qlink" href="#"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><path d="M3 3h10v7H7l-3 2.5V10H3z"/></svg>FAQ</a>
+          </span>
+        </div>
+
+        <div class="product-row" data-cat="clean">
+          <span class="thumb" data-thumb="BVC-S185" aria-hidden="true" style="position:relative;overflow:hidden">
+            <svg viewBox="0 0 40 40"><rect x="17" y="5" width="6" height="24" rx="3" fill="#CBC4B8"/><circle cx="20" cy="7" r="3.3" fill="#CBC4B8"/><rect x="9.5" y="29" width="21" height="5.5" rx="2.2" fill="#CBC4B8"/><rect x="19" y="12" width="2" height="10" rx="1" fill="#AAA294"/></svg>
+            <img src="https://shop-phinf.pstatic.net/20250820_257/1755650147367tkfJI_JPEG/69030129223624772_1074052102.jpg?type=f200" alt="" loading="lazy" decoding="async" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:9px" onerror="this.remove()">
+          </span>
+          <span class="p-main">
+            <span class="p-brand">청소기</span>
+            <a class="p-name" href="https://smartstore.naver.com/skillfulbrother/products/12142699458" target="_blank" rel="noopener">클래파 스탠딩 슬림 무선 청소기</a>
+            <span class="p-model">BVC-S185 · CVC-S230</span>
+          </span>
+          <span class="quicklinks">
+            <a class="qlink" href="manuals/BVC-S185.pdf" target="_blank" rel="noopener"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><path d="M4 2h5l3 3v9H4z"/><path d="M9 2v3h3"/></svg>설명서</a>
+            <a class="qlink" href="https://smartstore.naver.com/skillfulbrother/search?q=BVC-S185" target="_blank" rel="noopener"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><rect x="3" y="4.5" width="10" height="8" rx="1.2"/><path d="M3 7.3h10"/></svg>부품</a>
+            <a class="qlink" href="#"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><path d="M3 3h10v7H7l-3 2.5V10H3z"/></svg>FAQ</a>
+          </span>
+        </div>
+
+        <div class="product-row" data-cat="season">
+          <span class="thumb" data-thumb="BEF-D400" aria-hidden="true" style="position:relative;overflow:hidden">
+            <svg viewBox="0 0 40 40"><circle cx="20" cy="14" r="9" fill="#CBC4B8"/><circle cx="20" cy="14" r="5.8" fill="none" stroke="#AAA294" stroke-width="1.2"/><circle cx="20" cy="14" r="2.1" fill="#AAA294"/><rect x="18" y="22" width="4" height="7" rx="1.5" fill="#CBC4B8"/><rect x="12" y="29" width="16" height="4" rx="2" fill="#CBC4B8"/></svg>
+            <img src="https://shop-phinf.pstatic.net/20250324_114/1742779935340zjrB5_JPEG/15076821026576921_1740055558.jpg?type=f200" alt="" loading="lazy" decoding="async" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:9px" onerror="this.remove()">
+          </span>
+          <span class="p-main">
+            <span class="p-brand">계절가전</span>
+            <a class="p-name" href="https://smartstore.naver.com/skillfulbrother/products/11574521856" target="_blank" rel="noopener">클래파 탁상용 무선 선풍기</a>
+            <span class="p-model">BEF-D400W · BEF-D400M · BEF-D400B</span>
+          </span>
+          <span class="quicklinks">
+            <a class="qlink" href="#"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><path d="M4 2h5l3 3v9H4z"/><path d="M9 2v3h3"/></svg>설명서</a>
+            <a class="qlink" href="#"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><rect x="3" y="4.5" width="10" height="8" rx="1.2"/><path d="M3 7.3h10"/></svg>부품</a>
+            <a class="qlink" href="#"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><path d="M3 3h10v7H7l-3 2.5V10H3z"/></svg>FAQ</a>
+          </span>
+        </div>
+
+        <div class="product-row" data-cat="living">
+          <span class="thumb" data-thumb="CEK-S220" aria-hidden="true" style="position:relative;overflow:hidden">
+            <svg viewBox="0 0 40 40"><rect x="13" y="17" width="14" height="15.5" rx="3.4" fill="#CBC4B8"/><rect x="13.5" y="13.5" width="13" height="4.6" rx="2" fill="#CBC4B8"/><circle cx="20" cy="11" r="1.7" fill="#AAA294"/><path d="M13 21 L7.4 18.4 L13 24.4Z" fill="#CBC4B8"/><path d="M27 20q6 .4 6 6" fill="none" stroke="#CBC4B8" stroke-width="2.6" stroke-linecap="round"/></svg>
+            <img src="https://shop-phinf.pstatic.net/20250203_31/1738557907884KTwkH_JPEG/51937889724296347_1399309729.jpg?type=f200" alt="" loading="lazy" decoding="async" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:9px" onerror="this.remove()">
+          </span>
+          <span class="p-main">
+            <span class="p-brand">주방·생활</span>
+            <a class="p-name" href="https://smartstore.naver.com/skillfulbrother/products/11325093921" target="_blank" rel="noopener">클래파 분리형 프리볼트 멀티포트</a>
+            <span class="p-model">BEK-120P · CEK-S220</span>
+          </span>
+          <span class="quicklinks">
+            <a class="qlink" href="manuals/CEK-S220_BEK-120P.pdf" target="_blank" rel="noopener"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><path d="M4 2h5l3 3v9H4z"/><path d="M9 2v3h3"/></svg>설명서</a>
+            <a class="qlink" href="#"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><rect x="3" y="4.5" width="10" height="8" rx="1.2"/><path d="M3 7.3h10"/></svg>부품</a>
+            <a class="qlink" href="#"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><path d="M3 3h10v7H7l-3 2.5V10H3z"/></svg>FAQ</a>
+          </span>
+        </div>
+
+        <div class="product-row" data-cat="living">
+          <span class="thumb" data-thumb="BYF-G18" aria-hidden="true" style="position:relative;overflow:hidden">
+            <svg viewBox="0 0 40 40"><rect x="11" y="14" width="18" height="19" rx="3" fill="#CBC4B8"/><rect x="10" y="10" width="20" height="5" rx="2.2" fill="#CBC4B8"/><rect x="17" y="6.5" width="6" height="4" rx="1.5" fill="#AAA294"/><rect x="14" y="19" width="12" height="10" rx="2" fill="#E3DED4"/><path d="M14 24 h12" stroke="#AAA294" stroke-width="1.1"/></svg>
+            <img src="https://shop-phinf.pstatic.net/20230816_199/16921709910693YukK_JPEG/19001222603202836_96037042.jpg?type=f200" alt="" loading="lazy" decoding="async" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:9px" onerror="this.remove()">
+          </span>
+          <span class="p-main">
+            <span class="p-brand">주방·생활</span>
+            <a class="p-name" href="https://smartstore.naver.com/skillfulbrother/products/7982599204" target="_blank" rel="noopener">클래파 대용량 그릭요거트 메이커</a>
+            <span class="p-model">BYF-G18</span>
+          </span>
+          <span class="quicklinks">
+            <a class="qlink" href="manuals/BYF-G18.pdf" target="_blank" rel="noopener"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><path d="M4 2h5l3 3v9H4z"/><path d="M9 2v3h3"/></svg>설명서</a>
+            <a class="qlink" href="https://smartstore.naver.com/skillfulbrother/search?q=BYF-G18" target="_blank" rel="noopener"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><rect x="3" y="4.5" width="10" height="8" rx="1.2"/><path d="M3 7.3h10"/></svg>부품</a>
+            <a class="qlink" href="#"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><path d="M3 3h10v7H7l-3 2.5V10H3z"/></svg>FAQ</a>
+          </span>
+        </div>
+
+        <div class="product-row" data-cat="living">
+          <span class="thumb" data-thumb="BWF-200T" aria-hidden="true" style="position:relative;overflow:hidden">
+            <svg viewBox="0 0 40 40"><rect x="15" y="13" width="10" height="21" rx="4" fill="#CBC4B8"/><path d="M20 13 v-4 q0 -3 3 -4" fill="none" stroke="#AAA294" stroke-width="2.2" stroke-linecap="round"/><circle cx="24" cy="4.5" r="1.4" fill="#AAA294"/><rect x="17.5" y="18" width="5" height="7" rx="1.4" fill="#E3DED4"/><circle cx="20" cy="30" r="2" fill="#AAA294"/></svg>
+            <img src="https://shop-phinf.pstatic.net/20250203_4/17385685862379nntj_JPEG/85533841023782884_972098572.jpg?type=f200" alt="" loading="lazy" decoding="async" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:9px" onerror="this.remove()">
+          </span>
+          <span class="p-main">
+            <span class="p-brand">주방·생활</span>
+            <a class="p-name" href="https://smartstore.naver.com/skillfulbrother/products/10704009364" target="_blank" rel="noopener">클래파 휴대용 구강세정기</a>
+            <span class="p-model">BWF-200T</span>
+          </span>
+          <span class="quicklinks">
+            <a class="qlink" href="manuals/BWF-200T.pdf" target="_blank" rel="noopener"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><path d="M4 2h5l3 3v9H4z"/><path d="M9 2v3h3"/></svg>설명서</a>
+            <a class="qlink" href="#"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><rect x="3" y="4.5" width="10" height="8" rx="1.2"/><path d="M3 7.3h10"/></svg>부품</a>
+            <a class="qlink" href="#"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><path d="M3 3h10v7H7l-3 2.5V10H3z"/></svg>FAQ</a>
+          </span>
+        </div>
+
+        <div class="product-row" data-cat="season">
+          <span class="thumb" data-thumb="BED-611L" aria-hidden="true" style="position:relative;overflow:hidden">
+            <svg viewBox="0 0 40 40"><rect x="12" y="5" width="16" height="30" rx="4" fill="#CBC4B8"/><rect x="15.5" y="9" width="9" height="8" rx="1.6" fill="#AAA294"/><rect x="15" y="22" width="10" height="1.4" rx="0.7" fill="#AAA294"/><rect x="15" y="25" width="10" height="1.4" rx="0.7" fill="#AAA294"/><rect x="15" y="28" width="10" height="1.4" rx="0.7" fill="#AAA294"/></svg>
+            <img src="https://shop-phinf.pstatic.net/20260605_53/1780636944453VKOMT_JPEG/5604761086757990_494073466.jpg?type=f200" alt="" loading="lazy" decoding="async" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:9px" onerror="this.remove()">
+          </span>
+          <span class="p-main">
+            <span class="p-brand">계절가전</span>
+            <a class="p-name" href="https://smartstore.naver.com/skillfulbrother/products/11904464766" target="_blank" rel="noopener">클래파 저소음 제습기 11L</a>
+            <span class="p-model">BED-611L</span>
+          </span>
+          <span class="quicklinks">
+            <a class="qlink" href="#"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><path d="M4 2h5l3 3v9H4z"/><path d="M9 2v3h3"/></svg>설명서</a>
+            <a class="qlink" href="#"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><rect x="3" y="4.5" width="10" height="8" rx="1.2"/><path d="M3 7.3h10"/></svg>부품</a>
+            <a class="qlink" href="#"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><path d="M3 3h10v7H7l-3 2.5V10H3z"/></svg>FAQ</a>
+          </span>
+        </div>
+
+        <div class="product-row" data-cat="living">
+          <span class="thumb" data-thumb="BHF-8000W" aria-hidden="true" style="position:relative;overflow:hidden">
+            <svg viewBox="0 0 40 40"><rect x="6" y="14" width="22" height="8" rx="4" fill="#CBC4B8"/><circle cx="27" cy="18" r="4" fill="#AAA294"/><circle cx="27" cy="18" r="1.6" fill="#CBC4B8"/><path d="M13 21 l7 3 -2 9 -7 -3 z" fill="#CBC4B8"/><rect x="8" y="16.5" width="3" height="3" rx="1" fill="#E3DED4"/></svg>
+            <img src="https://shop-phinf.pstatic.net/20240423_136/1713841054850MbBC4_JPEG/41143738733822634_538878553.jpg?type=f200" alt="" loading="lazy" decoding="async" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:9px" onerror="this.remove()">
+          </span>
+          <span class="p-main">
+            <span class="p-brand">주방·생활</span>
+            <a class="p-name" href="https://smartstore.naver.com/skillfulbrother/products/10248748515" target="_blank" rel="noopener">클래파 보조배터리 겸용 핸디 에어건</a>
+            <span class="p-model">BHF-8000W · BHF-8000KK</span>
+          </span>
+          <span class="quicklinks">
+            <a class="qlink" href="#"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><path d="M4 2h5l3 3v9H4z"/><path d="M9 2v3h3"/></svg>설명서</a>
+            <a class="qlink" href="https://smartstore.naver.com/skillfulbrother/products/10311125246" target="_blank" rel="noopener"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><rect x="3" y="4.5" width="10" height="8" rx="1.2"/><path d="M3 7.3h10"/></svg>부품</a>
+            <a class="qlink" href="#"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><path d="M3 3h10v7H7l-3 2.5V10H3z"/></svg>FAQ</a>
+          </span>
+        </div>
+
+        <p class="products-empty" id="products-empty" hidden></p>
+      </div>
+
+      <p class="products-foot">
+        <span id="finder-count">전체 12개 제품을 보고 있어요.</span>
+        <span class="dot" aria-hidden="true"></span>
+        <span>찾는 제품이 없다면 채팅 상담으로 문의해 주세요.</span>
+      </p>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="section band" aria-labelledby="faq-title">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <span class="section-eyebrow">Frequently asked</span>
+          <h2 class="section-title" id="faq-title">자주 묻는 질문</h2>
+          <p class="section-desc">가장 많이 찾으시는 여섯 가지를 정리했습니다.</p>
+        </div>
+      </div>
+
+      <div class="faq-list">
+
+        <details class="faq-item">
+          <summary>
+            <span class="faq-q">
+              <span class="faq-cat">배터리·충전</span>
+              <span class="faq-qt">미니 핸디형 무선청소기는 충전할 때 어떤 어댑터를 써야 하나요? 고속 충전기를 사용해도 되나요?</span>
+            </span>
+            <svg class="faq-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+          </summary>
+          <div class="faq-a">5V 1A~2A 저속 어댑터와 함께 제공된 전용 C타입 케이블을 사용해 충전해 주세요. 고속 충전기를 사용하면 충전이 차단되거나 고장의 원인이 될 수 있습니다. 전용 어댑터는 별도로 제공되지 않으니 규격에 맞는 어댑터를 준비해 주시기 바랍니다.</div>
+        </details>
+
+        <details class="faq-item">
+          <summary>
+            <span class="faq-q">
+              <span class="faq-cat">사용법</span>
+              <span class="faq-qt">스테인리스 2단 계란찜기로 반숙과 완숙은 각각 몇 분 조리하고 물은 얼마나 넣어야 하나요?</span>
+            </span>
+            <svg class="faq-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+          </summary>
+          <div class="faq-a">물 40ml당 약 5분 가열되며, 반숙은 12~13분, 완숙은 15~20분을 추천드립니다. 조리 시간은 물 양으로 조절하시면 더 정확하게 맞추실 수 있습니다.</div>
+        </details>
+
+        <details class="faq-item">
+          <summary>
+            <span class="faq-q">
+              <span class="faq-cat">배터리·충전</span>
+              <span class="faq-qt">멀티 무선 선풍기는 완충하면 얼마나 오래 사용할 수 있나요?</span>
+            </span>
+            <svg class="faq-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+          </summary>
+          <div class="faq-a">무선 사용 시 회전 없이 최저단(1단) 기준으로는 약 30시간, 5단 기준으로는 약 2.5~3시간 사용하실 수 있습니다. 사용 환경에 따라 차이가 있을 수 있습니다.</div>
+        </details>
+
+        <details class="faq-item">
+          <summary>
+            <span class="faq-q">
+              <span class="faq-cat">사용법</span>
+              <span class="faq-qt">대용량 30L 건습식 청소기로 건식과 습식 청소를 모두 할 수 있나요?</span>
+            </span>
+            <svg class="faq-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+          </summary>
+          <div class="faq-a">네, 건식과 습식 청소를 모두 사용하실 수 있습니다. 다만 다량의 물을 흡입하는 용도로는 권장하지 않으며, 사용 후에는 먼지통을 비우고 필터를 건조하는 등 관리해 주시는 것이 중요합니다.</div>
+        </details>
+
+        <details class="faq-item">
+          <summary>
+            <span class="faq-q">
+              <span class="faq-cat">전기요금</span>
+              <span class="faq-qt">마이카 컨벡션 히터를 하루 8시간 사용하면 한 달 전기요금이 얼마나 나오나요?</span>
+            </span>
+            <svg class="faq-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+          </summary>
+          <div class="faq-a">강(최대, 2000W)으로 하루 8시간 사용하실 경우 월 약 11만 원(누진세 제외) 정도로 예상됩니다. 실제 사용 환경과 누진세 적용 여부에 따라 달라질 수 있습니다.</div>
+        </details>
+
+        <details class="faq-item">
+          <summary>
+            <span class="faq-q">
+              <span class="faq-cat">사용법</span>
+              <span class="faq-qt">그릭요거트 메이커로 요거트가 꾸덕하게 만들어지지 않아요. 유청 분리를 어떻게 해야 하나요?</span>
+            </span>
+            <svg class="faq-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+          </summary>
+          <div class="faq-a">개인차는 있지만 누름판과 스프링을 함께 사용하시면 요거트가 더 꾸덕하게 완성됩니다. 1차 분리는 뚜껑을 살짝 열어둔 채 약 12시간, 2차 분리는 누름판과 스프링을 장착해 약 12시간 진행해 주세요.</div>
+        </details>
+
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- Chat entry point: quiet floating pill -->
+<button class="chat-fab" type="button" aria-label="채팅 상담 열기">
+  <span class="chat-ic" aria-hidden="true">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6.5v8a2.5 2.5 0 0 1-2.5 2.5H9l-4 3.2V17H6.5A2.5 2.5 0 0 1 4 14.5v-8A2.5 2.5 0 0 1 6.5 4h11A2.5 2.5 0 0 1 20 6.5z"/><path d="M8.5 10h7M8.5 13h4.5"/></svg>
+  </span>
+  <span class="chat-tx">
+    <span class="chat-tt">채팅 상담</span>
+    <span class="chat-st"><span class="chat-live" aria-hidden="true"></span>AI가 먼저 답해드려요</span>
+  </span>
+</button>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-top">
+      <div class="foot-contact">
+        <p class="foot-h">고객센터</p>
+        <a class="foot-tel" href="tel:1522-8508">1522-8508</a>
+        <p class="foot-hours">평일 09:00–15:00 <span class="off">· 주말·공휴일 휴무</span></p>
+      </div>
+      <nav class="foot-brands" aria-label="바로가기">
+        <p class="foot-h">바로가기</p>
+        <div class="foot-brandrow">
+          <a class="foot-brand" href="https://clapa.kr" rel="noopener">클래파 스토어 <span class="lat" aria-hidden="true">↗</span></a>
+          <a class="foot-brand" href="#">A/S 신청</a>
+          <a class="foot-brand" href="#finder-title">설명서 다운로드</a>
+        </div>
+      </nav>
+    </div>
+    <div class="footer-legal">
+      <span>© 2026 CLAPA. <a href="https://clapa.kr" rel="noopener" style="border-bottom:1px solid var(--line);">clapa.kr</a></span>
+      <span class="slogan">조용함이 만드는 박수 칠 일상</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  // Recommended tags → fill search input
+  var input = document.getElementById('support-search');
+  document.querySelectorAll('.tag').forEach(function(t){
+    t.addEventListener('click', function(){
+      if(!input) return;
+      input.value = t.textContent.trim();
+      input.focus();
+    });
+  });
+
+  // Category filter
+  var tabs = Array.prototype.slice.call(document.querySelectorAll('.brand-tab'));
+  var rows = Array.prototype.slice.call(document.querySelectorAll('.product-row'));
+  var empty = document.getElementById('products-empty');
+  var count = document.getElementById('finder-count');
+
+  function apply(cat, label){
+    var shown = 0;
+    rows.forEach(function(r){
+      var match = (cat === 'all') || (r.getAttribute('data-cat') === cat);
+      r.style.display = match ? '' : 'none';
+      if(match) shown++;
+    });
+    if(shown === 0){
+      empty.hidden = false;
+      empty.textContent = label + ' 카테고리 제품은 순차적으로 등록하고 있어요. 곧 만나보실 수 있습니다.';
+    } else {
+      empty.hidden = true;
+    }
+    if(count){
+      count.textContent = (cat === 'all')
+        ? '전체 ' + rows.length + '개 제품을 보고 있어요.'
+        : label + ' ' + shown + '개를 보고 있어요.';
+    }
+  }
+
+  tabs.forEach(function(tab){
+    tab.addEventListener('click', function(){
+      tabs.forEach(function(t){
+        var on = (t === tab);
+        t.classList.toggle('is-active', on);
+        t.setAttribute('aria-pressed', on ? 'true' : 'false');
+      });
+      apply(tab.getAttribute('data-cat'), tab.getAttribute('data-label') || '해당');
+    });
+  });
+})();
+</script>
 </body>
 </html>
