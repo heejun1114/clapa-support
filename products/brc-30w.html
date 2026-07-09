@@ -325,6 +325,12 @@
     .phero-actions{flex-direction:column;gap:9px;}
     .btn{width:100%;min-height:48px;}
   }
+  @media(max-width:480px){
+    /* header must never widen the page on narrow phones */
+    .header-inner{gap:10px;min-width:0;}
+    .header-nav .nav-link:not(.is-store){display:none;}
+    .nav-link.is-store{font-size:12.5px;padding:8px 9px;}
+  }
 
   @media(prefers-reduced-motion:reduce){
     *{transition:none !important;animation:none !important;scroll-behavior:auto !important;}
