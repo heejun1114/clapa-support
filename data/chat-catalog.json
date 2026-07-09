@@ -110,7 +110,8 @@
    "aliases": [
     "BEF-D400W",
     "BEF-D400M",
-    "BEF-D400B"
+    "BEF-D400B",
+    "BDF-C400"
    ],
    "name": "클래파 탁상용 무선 선풍기",
    "cat": "season",
@@ -368,6 +369,54 @@
    "keywords": [
     "미니"
    ]
+  },
+  {
+   "code": "BMD-656",
+   "aliases": [],
+   "name": "클래파 미니 제습기",
+   "cat": "season",
+   "page": null,
+   "manual": null,
+   "parts": null,
+   "store": "https://smartstore.naver.com/skillfulbrother/products/10302008839",
+   "keywords": [
+    "미니 제습기",
+    "제습기",
+    "습기",
+    "제습"
+   ]
+  },
+  {
+   "code": "CHD-D16G",
+   "aliases": [],
+   "name": "클래파 BLDC 드라이기",
+   "cat": "living",
+   "page": null,
+   "manual": null,
+   "parts": null,
+   "store": "https://smartstore.naver.com/skillfulbrother/products/10833395664",
+   "keywords": [
+    "드라이기",
+    "헤어드라이어",
+    "드라이어",
+    "BLDC"
+   ]
+  },
+  {
+   "code": "BFB-VC170",
+   "aliases": [
+    "BFB-VC160"
+   ],
+   "name": "클래파 무선청소기 전용 구성품 (BFB-VC170)",
+   "cat": "clean",
+   "page": null,
+   "manual": null,
+   "parts": "https://smartstore.naver.com/skillfulbrother/products/10228033078",
+   "store": "https://smartstore.naver.com/skillfulbrother/products/10228033078",
+   "keywords": [
+    "구성품",
+    "부품"
+   ]
   }
  ],
  "shinil": [
@@ -597,6 +646,17 @@
     "리모컨",
     "무선",
     "유선"
+   ]
+  },
+  {
+   "code": "SVC-MIN660",
+   "name": "신일 미니 무선청소기 (SVC-MIN660)",
+   "file": null,
+   "spec": null,
+   "keywords": [
+    "무선청소기",
+    "미니 청소기",
+    "청소기"
    ]
   }
  ]
