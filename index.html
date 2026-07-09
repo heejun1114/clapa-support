@@ -482,6 +482,7 @@
     .sr-type{width:40px;}
   }
 </style>
+<link rel="stylesheet" href="assets/chat.css">
 </head>
 <body>
 <a class="skip" href="#main">본문으로 건너뛰기</a>
@@ -1069,7 +1070,7 @@
 </main>
 
 <!-- Chat entry point: quiet floating pill -->
-<button class="chat-fab" type="button" aria-label="채팅 상담 열기">
+<button class="chat-fab" type="button" data-clapa-chat-trigger aria-label="채팅 상담 열기">
   <span class="chat-ic" aria-hidden="true">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6.5v8a2.5 2.5 0 0 1-2.5 2.5H9l-4 3.2V17H6.5A2.5 2.5 0 0 1 4 14.5v-8A2.5 2.5 0 0 1 6.5 4h11A2.5 2.5 0 0 1 20 6.5z"/><path d="M8.5 10h7M8.5 13h4.5"/></svg>
   </span>
@@ -1386,5 +1387,6 @@
   });
 })();
 </script>
+<script src="assets/chat.js" defer></script>
 </body>
 </html>

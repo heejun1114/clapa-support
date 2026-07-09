@@ -1,0 +1,422 @@
+/* =========================================================================
+   CLAPA 고객지원 채팅 위젯 스타일 (chat.css)
+   - 모든 클래스는 .cchat- 프리픽스로 네임스페이스 격리
+   - 사이트 CSS 변수에 의존하지 않고 자체 --cchat-* 팔레트만 사용
+   - 라이트 톤 warm-neutral + teal 포인트, Pretendard(페이지에서 이미 로드)
+   ========================================================================= */
+
+:root{
+  /* 팔레트 (사이트 디자인 토큰과 동일한 값을 자체 변수로 복제) */
+  --cchat-teal:#0E6F66;
+  --cchat-teal-deep:#0A5750;
+  --cchat-teal-wash:#E4F0ED;
+  --cchat-paper:#FFFFFF;
+  --cchat-bg:#FAF9F7;
+  --cchat-surface:#F5F4F1;
+  --cchat-line:#E7E4DE;
+  --cchat-muted:#6B675F;
+  --cchat-ink:#23211D;
+  --cchat-on-teal:#FFFFFF;
+  --cchat-radius:16px;
+  --cchat-radius-sm:11px;
+  --cchat-radius-chip:999px;
+  --cchat-z:60;
+  --cchat-ease:cubic-bezier(.22,.61,.36,1);
+  --cchat-font:'Pretendard Variable',Pretendard,-apple-system,'Apple SD Gothic Neo',sans-serif;
+  --cchat-shadow:0 18px 48px -16px rgba(35,33,29,.34),0 4px 14px -8px rgba(35,33,29,.18);
+}
+
+/* 위젯 내부 요소 공통 리셋 (사이트 스타일이 새어들어오는 것 방지) */
+.cchat-fab,
+.cchat-panel,
+.cchat-scrim,
+.cchat-panel *{
+  box-sizing:border-box;
+}
+.cchat-panel *{
+  margin:0;
+  font-family:var(--cchat-font);
+}
+
+/* ---------- 플로팅 버튼(FAB) ---------- */
+.cchat-fab{
+  position:fixed;
+  right:clamp(16px,3vw,28px);
+  bottom:clamp(16px,3vw,28px);
+  z-index:var(--cchat-z);
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:9px;
+  width:56px;
+  height:56px;
+  padding:0;
+  border:none;
+  border-radius:50%;
+  background:var(--cchat-teal);
+  color:var(--cchat-on-teal);
+  font-family:var(--cchat-font);
+  cursor:pointer;
+  box-shadow:0 10px 26px -8px rgba(14,111,102,.5),0 3px 8px -4px rgba(35,33,29,.28);
+  transition:transform .18s var(--cchat-ease),background .18s var(--cchat-ease),box-shadow .18s var(--cchat-ease);
+}
+.cchat-fab:hover{
+  background:var(--cchat-teal-deep);
+  transform:translateY(-2px);
+}
+.cchat-fab:active{ transform:translateY(0); }
+.cchat-fab:focus-visible{
+  outline:3px solid var(--cchat-teal-wash);
+  outline-offset:2px;
+}
+.cchat-fab-ic{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  flex:none;
+}
+.cchat-fab-ic svg{ width:26px; height:26px; }
+.cchat-fab-label{
+  display:none;                 /* 모바일에서는 숨김 (아이콘만) */
+  font-size:15px;
+  font-weight:600;
+  letter-spacing:-0.01em;
+  padding-right:4px;
+}
+/* PC(>640px): 라벨 표시 → 알약형 확장 */
+@media (min-width:641px){
+  .cchat-fab{
+    width:auto;
+    height:56px;
+    border-radius:var(--cchat-radius-chip);
+    padding:0 22px 0 18px;
+  }
+  .cchat-fab-label{ display:inline-block; }
+}
+/* 패널이 열려 있으면 FAB 숨김 */
+.cchat-fab.cchat-hidden{
+  opacity:0;
+  visibility:hidden;
+  transform:scale(.9);
+  pointer-events:none;
+}
+
+/* ---------- 배경 스크림(모바일 시트 전용) ---------- */
+.cchat-scrim{
+  position:fixed;
+  inset:0;
+  z-index:calc(var(--cchat-z) - 1);
+  background:rgba(35,33,29,.34);
+  opacity:0;
+  transition:opacity .2s var(--cchat-ease);
+}
+.cchat-scrim.is-open{ opacity:1; }
+@media (min-width:641px){
+  .cchat-scrim{ display:none; }  /* PC에서는 코너 카드 → 스크림 없음 */
+}
+
+/* ---------- 패널 ---------- */
+.cchat-panel{
+  position:fixed;
+  right:clamp(16px,3vw,28px);
+  bottom:clamp(16px,3vw,28px);
+  z-index:var(--cchat-z);
+  display:flex;
+  flex-direction:column;
+  width:380px;
+  max-width:calc(100vw - 24px);
+  height:min(620px,80vh);
+  background:var(--cchat-bg);
+  border:1px solid var(--cchat-line);
+  border-radius:var(--cchat-radius);
+  box-shadow:var(--cchat-shadow);
+  overflow:hidden;
+  color:var(--cchat-ink);
+  font-size:14.5px;
+  line-height:1.62;
+  letter-spacing:-0.011em;
+  word-break:keep-all;
+  transform-origin:bottom right;
+  opacity:0;
+  transform:translateY(10px) scale(.98);
+  transition:opacity .2s var(--cchat-ease),transform .2s var(--cchat-ease);
+}
+.cchat-panel.is-open{
+  opacity:1;
+  transform:translateY(0) scale(1);
+}
+/* 모바일(≤640px): 하단 시트 */
+@media (max-width:640px){
+  .cchat-panel{
+    right:0;
+    left:0;
+    bottom:0;
+    width:100%;
+    max-width:100%;
+    height:88vh;
+    border-radius:18px 18px 0 0;
+    border-left:none;
+    border-right:none;
+    border-bottom:none;
+    transform-origin:bottom center;
+    transform:translateY(16px);
+  }
+  .cchat-panel.is-open{ transform:translateY(0); }
+}
+
+.cchat-panel:focus-visible,
+.cchat-panel [tabindex]:focus-visible,
+.cchat-chip:focus-visible,
+.cchat-iconbtn:focus-visible,
+.cchat-input:focus-visible,
+.cchat-send:focus-visible{
+  outline:2px solid var(--cchat-teal);
+  outline-offset:2px;
+}
+
+/* ---------- 헤더 ---------- */
+.cchat-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  padding:13px 12px 13px 16px;
+  background:var(--cchat-paper);
+  border-bottom:1px solid var(--cchat-line);
+  flex:none;
+}
+.cchat-title{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  min-width:0;
+}
+.cchat-title-tx{
+  font-size:15px;
+  font-weight:700;
+  letter-spacing:-0.02em;
+  color:var(--cchat-ink);
+}
+.cchat-badge{
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:0.04em;
+  color:var(--cchat-teal-deep);
+  background:var(--cchat-teal-wash);
+  border-radius:6px;
+  padding:2px 7px;
+  line-height:1.5;
+}
+.cchat-head-actions{
+  display:inline-flex;
+  align-items:center;
+  gap:2px;
+  flex:none;
+}
+.cchat-iconbtn{
+  width:34px;
+  height:34px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  border:none;
+  background:transparent;
+  color:var(--cchat-muted);
+  border-radius:9px;
+  font-size:20px;
+  line-height:1;
+  cursor:pointer;
+  transition:background .15s var(--cchat-ease),color .15s var(--cchat-ease);
+}
+.cchat-iconbtn:hover{
+  background:var(--cchat-surface);
+  color:var(--cchat-ink);
+}
+
+/* ---------- 메시지 영역 ---------- */
+.cchat-msgs{
+  flex:1 1 auto;
+  overflow-y:auto;
+  overflow-x:hidden;
+  padding:16px 14px 6px;
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  overscroll-behavior:contain;
+  -webkit-overflow-scrolling:touch;
+}
+.cchat-msgs::-webkit-scrollbar{ width:9px; }
+.cchat-msgs::-webkit-scrollbar-thumb{
+  background:#DED9D0;
+  border-radius:8px;
+  border:2px solid var(--cchat-bg);
+}
+.cchat-msgs::-webkit-scrollbar-track{ background:transparent; }
+
+.cchat-msg{
+  display:flex;
+  flex-direction:column;
+  max-width:88%;
+}
+.cchat-msg.cchat-bot{ align-self:flex-start; align-items:flex-start; }
+.cchat-msg.cchat-user{ align-self:flex-end; align-items:flex-end; }
+
+.cchat-bubble{
+  padding:10px 13px;
+  border-radius:14px;
+  font-size:14.5px;
+  line-height:1.6;
+  white-space:normal;
+  word-break:keep-all;
+  overflow-wrap:anywhere;
+}
+.cchat-bot .cchat-bubble{
+  background:var(--cchat-paper);
+  border:1px solid var(--cchat-line);
+  color:var(--cchat-ink);
+  border-top-left-radius:5px;
+}
+.cchat-user .cchat-bubble{
+  background:var(--cchat-teal);
+  color:var(--cchat-on-teal);
+  border-top-right-radius:5px;
+}
+
+/* ---------- 로딩(입력 중) 점 3개 ---------- */
+.cchat-typing{
+  display:inline-flex;
+  align-items:center;
+  gap:5px;
+  padding:13px 15px;
+}
+.cchat-dot{
+  width:7px;
+  height:7px;
+  border-radius:50%;
+  background:var(--cchat-muted);
+  opacity:.4;
+  animation:cchat-blink 1.2s infinite ease-in-out both;
+}
+.cchat-dot:nth-child(2){ animation-delay:.18s; }
+.cchat-dot:nth-child(3){ animation-delay:.36s; }
+@keyframes cchat-blink{
+  0%,80%,100%{ opacity:.28; transform:translateY(0); }
+  40%{ opacity:.9; transform:translateY(-3px); }
+}
+
+/* ---------- 칩(버블 내부 인라인 + 하단 바 공용) ---------- */
+.cchat-chips-inline{
+  display:flex;
+  flex-wrap:wrap;
+  gap:7px;
+  margin-top:8px;
+}
+.cchat-chip{
+  display:inline-flex;
+  align-items:center;
+  gap:5px;
+  max-width:100%;
+  padding:7px 13px;
+  font-size:13px;
+  font-weight:600;
+  line-height:1.35;
+  letter-spacing:-0.01em;
+  color:var(--cchat-teal-deep);
+  background:var(--cchat-paper);
+  border:1px solid var(--cchat-line);
+  border-radius:var(--cchat-radius-chip);
+  cursor:pointer;
+  text-align:left;
+  text-decoration:none;
+  transition:border-color .15s var(--cchat-ease),background .15s var(--cchat-ease),color .15s var(--cchat-ease);
+}
+.cchat-chip:hover{
+  border-color:var(--cchat-teal);
+  background:var(--cchat-teal-wash);
+  color:var(--cchat-teal-deep);
+}
+.cchat-chip-link .cchat-chip-ext{
+  font-size:11px;
+  opacity:.75;
+}
+
+/* ---------- 하단 칩 바(루트 빠른 메뉴) ---------- */
+.cchat-chips{
+  flex:none;
+  display:flex;
+  flex-wrap:wrap;
+  gap:7px;
+  padding:10px 14px 4px;
+  border-top:1px solid var(--cchat-line);
+  background:var(--cchat-bg);
+}
+.cchat-chips:empty{ display:none; }
+
+/* ---------- 입력(컴포저) ---------- */
+.cchat-composer{
+  flex:none;
+  display:flex;
+  align-items:flex-end;
+  gap:8px;
+  padding:10px 12px 12px;
+  background:var(--cchat-bg);
+}
+.cchat-input{
+  flex:1 1 auto;
+  resize:none;
+  min-height:42px;
+  max-height:120px;
+  padding:10px 14px;
+  font-size:14.5px;
+  line-height:1.5;
+  color:var(--cchat-ink);
+  background:var(--cchat-paper);
+  border:1.5px solid var(--cchat-line);
+  border-radius:13px;
+  outline:none;
+  overflow-y:hidden;            /* 내용이 max-height를 넘을 때만 JS가 auto로 전환 */
+  transition:border-color .15s var(--cchat-ease);
+  font-family:var(--cchat-font);
+}
+.cchat-input::placeholder{ color:#A7A198; }
+.cchat-input:focus{ border-color:var(--cchat-teal); }
+
+.cchat-send{
+  flex:none;
+  width:42px;
+  height:42px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  border:none;
+  border-radius:12px;
+  background:var(--cchat-teal);
+  color:var(--cchat-on-teal);
+  cursor:pointer;
+  transition:background .15s var(--cchat-ease),opacity .15s var(--cchat-ease);
+}
+.cchat-send svg{ width:20px; height:20px; }
+.cchat-send:hover{ background:var(--cchat-teal-deep); }
+.cchat-send:disabled{
+  opacity:.5;
+  cursor:default;
+}
+
+/* ---------- 모션 최소화 대응 ---------- */
+@media (prefers-reduced-motion:reduce){
+  .cchat-fab,
+  .cchat-panel,
+  .cchat-scrim,
+  .cchat-chip,
+  .cchat-iconbtn,
+  .cchat-send,
+  .cchat-input{
+    transition:none !important;
+  }
+  .cchat-dot{ animation:none !important; opacity:.6; }
+  .cchat-panel{ transform:none; }
+}
+
+/* 페이지 자체 트리거([data-clapa-chat-trigger]) 사용 시 위젯 FAB 대체 */
+.cchat-replaced{ display:none !important; }
+.cchat-trigger-hidden{ opacity:0; visibility:hidden; pointer-events:none; }

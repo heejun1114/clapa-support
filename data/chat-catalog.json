@@ -1,0 +1,603 @@
+{
+ "updated": "2026-07-09",
+ "store": "https://smartstore.naver.com/skillfulbrother",
+ "cats": {
+  "clean": "청소기",
+  "season": "계절가전",
+  "living": "주방·생활"
+ },
+ "models": [
+  {
+   "code": "BVC-H10",
+   "aliases": [
+    "CVC-H15"
+   ],
+   "name": "클래파 미니 핸디형 무선청소기",
+   "cat": "clean",
+   "page": "products/bvc-h10.html",
+   "manual": "manuals/BVC-H10.pdf",
+   "parts": "https://smartstore.naver.com/skillfulbrother/search?q=BVC-H10",
+   "store": "https://smartstore.naver.com/skillfulbrother/products/6999673131",
+   "keywords": [
+    "무선청소기",
+    "청소기",
+    "핸디형",
+    "미니",
+    "무선"
+   ]
+  },
+  {
+   "code": "BES-131W/CES-232W",
+   "aliases": [
+    "BES-131W",
+    "CES-232W"
+   ],
+   "name": "클래파 스테인리스 2단 계란찜기",
+   "cat": "living",
+   "page": "products/bes-131w.html",
+   "manual": "manuals/BES-131W_CES-232W.pdf",
+   "parts": null,
+   "store": "https://smartstore.naver.com/skillfulbrother/products/11255720719",
+   "keywords": [
+    "계란찜기"
+   ]
+  },
+  {
+   "code": "BMH-200R",
+   "aliases": [],
+   "name": "클래파 마이카 컨벡션 히터",
+   "cat": "season",
+   "page": "products/bmh-200r.html",
+   "manual": null,
+   "parts": null,
+   "store": "https://smartstore.naver.com/skillfulbrother/products/9317489531",
+   "keywords": [
+    "컨벡션 히터",
+    "마이카",
+    "히터"
+   ]
+  },
+  {
+   "code": "BVC-L138",
+   "aliases": [],
+   "name": "클래파 대용량 30L 건습식 청소기",
+   "cat": "clean",
+   "page": "products/bvc-l138.html",
+   "manual": "manuals/BVC-L138.pdf",
+   "parts": "https://smartstore.naver.com/skillfulbrother/search?q=BVC-L138",
+   "store": "https://smartstore.naver.com/skillfulbrother/products/7972371336",
+   "keywords": [
+    "건습식 청소기",
+    "건습식",
+    "청소기",
+    "대용량"
+   ]
+  },
+  {
+   "code": "BEF-C156W",
+   "aliases": [],
+   "name": "클래파 멀티 무선 선풍기",
+   "cat": "season",
+   "page": "products/bef-c156w.html",
+   "manual": "manuals/BEF-C156W.pdf",
+   "parts": "https://smartstore.naver.com/skillfulbrother/products/12166003860",
+   "store": "https://smartstore.naver.com/skillfulbrother/products/11956269278",
+   "keywords": [
+    "무선 선풍기",
+    "선풍기",
+    "무선"
+   ]
+  },
+  {
+   "code": "BVC-S185",
+   "aliases": [
+    "CVC-S230"
+   ],
+   "name": "클래파 스탠딩 슬림 무선 청소기",
+   "cat": "clean",
+   "page": "products/bvc-s185.html",
+   "manual": "manuals/BVC-S185.pdf",
+   "parts": "https://smartstore.naver.com/skillfulbrother/search?q=BVC-S185",
+   "store": "https://smartstore.naver.com/skillfulbrother/products/11901197610",
+   "keywords": [
+    "청소기",
+    "슬림",
+    "무선"
+   ]
+  },
+  {
+   "code": "BEF-D400",
+   "aliases": [
+    "BEF-D400W",
+    "BEF-D400M",
+    "BEF-D400B"
+   ],
+   "name": "클래파 탁상용 무선 선풍기",
+   "cat": "season",
+   "page": "products/bef-d400.html",
+   "manual": "manuals/BEF-D400.pdf",
+   "parts": null,
+   "store": "https://smartstore.naver.com/skillfulbrother/products/11574521856",
+   "keywords": [
+    "무선 선풍기",
+    "선풍기",
+    "무선"
+   ]
+  },
+  {
+   "code": "CEK-S220",
+   "aliases": [
+    "BEK-120P"
+   ],
+   "name": "클래파 분리형 프리볼트 멀티포트",
+   "cat": "living",
+   "page": "products/cek-s220.html",
+   "manual": "manuals/CEK-S220_BEK-120P.pdf",
+   "parts": null,
+   "store": "https://smartstore.naver.com/skillfulbrother/products/11325093921",
+   "keywords": [
+    "멀티포트"
+   ]
+  },
+  {
+   "code": "BYF-G18",
+   "aliases": [],
+   "name": "클래파 대용량 그릭요거트 메이커",
+   "cat": "living",
+   "page": "products/byf-g18.html",
+   "manual": "manuals/BYF-G18.pdf",
+   "parts": "https://smartstore.naver.com/skillfulbrother/search?q=BYF-G18",
+   "store": "https://smartstore.naver.com/skillfulbrother/products/7982599204",
+   "keywords": [
+    "그릭요거트",
+    "요거트",
+    "대용량"
+   ]
+  },
+  {
+   "code": "BWF-200T",
+   "aliases": [],
+   "name": "클래파 휴대용 구강세정기",
+   "cat": "living",
+   "page": "products/bwf-200t.html",
+   "manual": "manuals/BWF-200T.pdf",
+   "parts": null,
+   "store": "https://smartstore.naver.com/skillfulbrother/products/10704009364",
+   "keywords": [
+    "구강세정기"
+   ]
+  },
+  {
+   "code": "BED-611L",
+   "aliases": [
+    "CED-L611"
+   ],
+   "name": "클래파 저소음 제습기 11L",
+   "cat": "season",
+   "page": "products/bed-611l.html",
+   "manual": null,
+   "parts": null,
+   "store": "https://smartstore.naver.com/skillfulbrother/products/11904464766",
+   "keywords": [
+    "제습기",
+    "저소음"
+   ]
+  },
+  {
+   "code": "BHF-8000W",
+   "aliases": [
+    "BHF-8000KK"
+   ],
+   "name": "클래파 보조배터리 겸용 핸디 에어건",
+   "cat": "living",
+   "page": "products/bhf-8000w.html",
+   "manual": "manuals/BHF-8000W.pdf",
+   "parts": "https://smartstore.naver.com/skillfulbrother/products/10311125246",
+   "store": "https://smartstore.naver.com/skillfulbrother/products/10248748515",
+   "keywords": [
+    "에어건"
+   ]
+  },
+  {
+   "code": "BVC-H38",
+   "aliases": [],
+   "name": "클래파 AI 흡입 무선 청소기 400W",
+   "cat": "clean",
+   "page": "products/bvc-h38.html",
+   "manual": "manuals/BVC-H38.pdf",
+   "parts": "https://smartstore.naver.com/skillfulbrother/search?q=BVC-H38",
+   "store": "https://smartstore.naver.com/skillfulbrother/products/12733553580",
+   "keywords": [
+    "청소기",
+    "무선"
+   ]
+  },
+  {
+   "code": "BVC-T500W",
+   "aliases": [],
+   "name": "클래파 엘리트 타워 무선청소기",
+   "cat": "clean",
+   "page": "products/bvc-t500w.html",
+   "manual": "manuals/BVC-T500W.pdf",
+   "parts": "https://smartstore.naver.com/skillfulbrother/search?q=BVC-T500W",
+   "store": "https://smartstore.naver.com/skillfulbrother/products/10738911598",
+   "keywords": [
+    "무선청소기",
+    "청소기",
+    "타워",
+    "무선"
+   ]
+  },
+  {
+   "code": "BVC-L125",
+   "aliases": [],
+   "name": "클래파 대용량 25L 건습식 청소기",
+   "cat": "clean",
+   "page": "products/bvc-l125.html",
+   "manual": "manuals/BVC-L125.pdf",
+   "parts": "https://smartstore.naver.com/skillfulbrother/search?q=BVC-L125",
+   "store": null,
+   "keywords": [
+    "건습식 청소기",
+    "건습식",
+    "청소기",
+    "대용량"
+   ]
+  },
+  {
+   "code": "BVC-C13K",
+   "aliases": [],
+   "name": "클래파 차량용 무선 청소기",
+   "cat": "clean",
+   "page": "products/bvc-c13k.html",
+   "manual": "manuals/BVC-C13K.pdf",
+   "parts": "https://smartstore.naver.com/skillfulbrother/search?q=BVC-C13K",
+   "store": "https://smartstore.naver.com/skillfulbrother/products/9250938742",
+   "keywords": [
+    "차량용",
+    "청소기",
+    "무선"
+   ]
+  },
+  {
+   "code": "BFB-VC120",
+   "aliases": [],
+   "name": "클래파 싸이클론 무선 청소기",
+   "cat": "clean",
+   "page": "products/bfb-vc120.html",
+   "manual": "manuals/BFB-VC120.pdf",
+   "parts": "https://smartstore.naver.com/skillfulbrother/search?q=BFB-VC120",
+   "store": null,
+   "keywords": [
+    "청소기",
+    "무선"
+   ]
+  },
+  {
+   "code": "IB-VC0601",
+   "aliases": [],
+   "name": "클래파 유선 진공청소기",
+   "cat": "clean",
+   "page": "products/ib-vc0601.html",
+   "manual": "manuals/IB-VC0601.pdf",
+   "parts": "https://smartstore.naver.com/skillfulbrother/search?q=IB-VC0601",
+   "store": null,
+   "keywords": [
+    "진공청소기",
+    "청소기"
+   ]
+  },
+  {
+   "code": "BHF-360W",
+   "aliases": [],
+   "name": "클래파 냉각 휴대용 선풍기",
+   "cat": "season",
+   "page": "products/bhf-360w.html",
+   "manual": "manuals/BHF-360W.pdf",
+   "parts": null,
+   "store": "https://smartstore.naver.com/skillfulbrother/products/11601702825",
+   "keywords": [
+    "선풍기",
+    "냉각"
+   ]
+  },
+  {
+   "code": "BHH-2000S",
+   "aliases": [],
+   "name": "클래파 하이라이트 전기 히터",
+   "cat": "season",
+   "page": "products/bhh-2000s.html",
+   "manual": "manuals/BHH-2000S.pdf",
+   "parts": null,
+   "store": "https://smartstore.naver.com/skillfulbrother/products/9353650568",
+   "keywords": [
+    "히터"
+   ]
+  },
+  {
+   "code": "BPH-W181",
+   "aliases": [
+    "CPH-W181G"
+   ],
+   "name": "클래파 욕실 난방기",
+   "cat": "season",
+   "page": "products/bph-w181.html",
+   "manual": "manuals/BPH-W181.pdf",
+   "parts": null,
+   "store": "https://smartstore.naver.com/skillfulbrother/products/7115825768",
+   "keywords": [
+    "욕실",
+    "난방기"
+   ]
+  },
+  {
+   "code": "BOH-235",
+   "aliases": [],
+   "name": "클래파 카본 오방난로",
+   "cat": "season",
+   "page": "products/boh-235.html",
+   "manual": "manuals/BOH-235.pdf",
+   "parts": null,
+   "store": "https://smartstore.naver.com/skillfulbrother/products/11043260778",
+   "keywords": [
+    "난로"
+   ]
+  },
+  {
+   "code": "BFB-PH180W",
+   "aliases": [],
+   "name": "클래파 프리미엄 ECO PTC 온풍기",
+   "cat": "season",
+   "page": "products/bfb-ph180w.html",
+   "manual": null,
+   "parts": null,
+   "store": "https://smartstore.naver.com/skillfulbrother/products/9574170549",
+   "keywords": [
+    "온풍기"
+   ]
+  },
+  {
+   "code": "BRC-30W",
+   "aliases": [],
+   "name": "클래파 미니밥솥",
+   "cat": "living",
+   "page": "products/brc-30w.html",
+   "manual": null,
+   "parts": null,
+   "store": "https://smartstore.naver.com/skillfulbrother/products/9810723609",
+   "keywords": [
+    "미니"
+   ]
+  }
+ ],
+ "shinil": [
+  {
+   "code": "SEH-BZ3000PT",
+   "name": "SEH-BZ3000PT (PTC 온풍기)",
+   "file": "검증 후/SEH-BZ3000PT_7514402877_검수완료_QnA.txt",
+   "spec": "스펙자료/SEH-BZ3000PT_7514402877.txt",
+   "keywords": [
+    "온풍기",
+    "히터",
+    "가습기",
+    "BLDC",
+    "리모컨"
+   ]
+  },
+  {
+   "code": "SEH-KR2825B",
+   "name": "SEH-KR2825B (오방난로 전기히터)",
+   "file": "검증 후/SEH-KR2825B_10968645926_검수완료_QnA.txt",
+   "spec": "스펙자료/SEH-KR2825B_10968645926.txt",
+   "keywords": [
+    "히터",
+    "난로",
+    "리모컨"
+   ]
+  },
+  {
+   "code": "SGP-G1650BZ",
+   "name": "SGP-G1650BZ",
+   "file": "검증 후/SGP-G1650BZ_7076733592_검수완료_QnA.txt",
+   "spec": null,
+   "keywords": []
+  },
+  {
+   "code": "SIF-14SCR",
+   "name": "SIF-14SCR",
+   "file": "검증 후/SIF-14SCR_5555677808_검수완료_QnA.txt",
+   "spec": null,
+   "keywords": [
+    "선풍기",
+    "리모컨",
+    "유선"
+   ]
+  },
+  {
+   "code": "SIF-BZ09R",
+   "name": "SIF-BZ09R",
+   "file": "검증 후/SIF-BZ09R_5555661174_검수완료_QnA.txt",
+   "spec": null,
+   "keywords": [
+    "선풍기",
+    "리모컨"
+   ]
+  },
+  {
+   "code": "SIF-BZ10R",
+   "name": "SIF-BZ10R",
+   "file": "검증 후/SIF-BZ10R_6457440629_검수완료_QnA.txt",
+   "spec": null,
+   "keywords": [
+    "써큘레이터",
+    "선풍기",
+    "리모컨"
+   ]
+  },
+  {
+   "code": "SIF-BZ143D",
+   "name": "SIF-BZ143D (써큘레이터형 선풍기)",
+   "file": "검증 후/SIF-BZ143D_10103464632_검수완료_QnA.txt",
+   "spec": "스펙자료/SIF-BZ143D_10103464632.txt",
+   "keywords": [
+    "써큘레이터",
+    "서큘레이터",
+    "선풍기",
+    "BLDC",
+    "스탠드",
+    "리모컨"
+   ]
+  },
+  {
+   "code": "SIF-BZ14DCS",
+   "name": "SIF-BZ14DCS",
+   "file": "검증 후/SIF-BZ14DCS_5555609393_검수완료_QnA.txt",
+   "spec": null,
+   "keywords": [
+    "선풍기",
+    "리모컨"
+   ]
+  },
+  {
+   "code": "SIF-BZ173D",
+   "name": "SIF-BZ173D (BLDC 써큘레이터 선풍기)",
+   "file": "검증 후/SIF-BZ173D_10139333699_검수완료_QnA.txt",
+   "spec": "스펙자료/SIF-BZ173D_10139333699.txt",
+   "keywords": [
+    "써큘레이터",
+    "선풍기",
+    "BLDC",
+    "스탠드",
+    "리모컨",
+    "무선"
+   ]
+  },
+  {
+   "code": "SIF-CO14ESA",
+   "name": "SIF-CO14ESA",
+   "file": "검증 후/SIF-CO14ESA_5592760611_검수완료_QnA.txt",
+   "spec": null,
+   "keywords": [
+    "BLDC",
+    "리모컨"
+   ]
+  },
+  {
+   "code": "SIF-CO14JMA",
+   "name": "SIF-CO14JMA (써큘레이터형 스탠드 선풍기)",
+   "file": "검증 후/SIF-CO14JMA_5555484538_검수완료_QnA.txt",
+   "spec": "스펙자료/SIF-CO14JMA_5555484538.txt",
+   "keywords": [
+    "써큘레이터",
+    "선풍기",
+    "스탠드"
+   ]
+  },
+  {
+   "code": "SIF-CW14B2M",
+   "name": "SIF-CW14B2M",
+   "file": "검증 후/SIF-CW14B2M_5554732207_검수완료_QnA.txt",
+   "spec": null,
+   "keywords": [
+    "벽걸이",
+    "리모컨"
+   ]
+  },
+  {
+   "code": "SIF-CW28SED",
+   "name": "SIF-CW28SED (벽걸이 리모컨 선풍기)",
+   "file": "검증 후/SIF-CW28SED_5554724630_검수완료_QnA.txt",
+   "spec": "스펙자료/SIF-CW28SED_5554724630.txt",
+   "keywords": [
+    "써큘레이터",
+    "선풍기",
+    "벽걸이",
+    "리모컨"
+   ]
+  },
+  {
+   "code": "SIF-D07AO",
+   "name": "SIF-D07AO (탁상용 무선 선풍기)",
+   "file": "검증 후/SIF-D07AO_13364442102_검수완료_QnA.txt",
+   "spec": "스펙자료/SIF-D07AO_13364442102.txt",
+   "keywords": [
+    "선풍기",
+    "BLDC",
+    "탁상용",
+    "무선"
+   ]
+  },
+  {
+   "code": "SIF-H14RWP",
+   "name": "SIF-H14RWP (BLDC 스탠드 선풍기)",
+   "file": "검증 후/SIF-H14RWP_13433654605_검수완료_QnA.txt",
+   "spec": "스펙자료/SIF-H14RWP_13433654605.txt",
+   "keywords": [
+    "써큘레이터",
+    "선풍기",
+    "BLDC",
+    "스탠드",
+    "리모컨",
+    "무선"
+   ]
+  },
+  {
+   "code": "SIF-H32CIV",
+   "name": "SIF-H32CIV (무선 폴딩팬 써큘레이터)",
+   "file": "검증 후/SIF-H32CIV_13433875573_검수완료_QnA.txt",
+   "spec": "스펙자료/SIF-H32CIV_13433875573.txt",
+   "keywords": [
+    "써큘레이터",
+    "선풍기",
+    "BLDC",
+    "리모컨",
+    "무선",
+    "유선"
+   ]
+  },
+  {
+   "code": "SIF-T14SIN",
+   "name": "SIF-T14SIN",
+   "file": "검증 후/SIF-T14SIN_6711276359_검수완료_QnA.txt",
+   "spec": null,
+   "keywords": [
+    "무선",
+    "유선"
+   ]
+  },
+  {
+   "code": "SIF-WF0120",
+   "name": "SIF-WF0120",
+   "file": "검증 후/SIF-WF0120_8590923036_검수완료_QnA.txt",
+   "spec": null,
+   "keywords": [
+    "선풍기",
+    "BLDC",
+    "리모컨",
+    "무선"
+   ]
+  },
+  {
+   "code": "SIF-WF6014",
+   "name": "SIF-WF6014",
+   "file": "검증 후/SIF-WF6014_8590934530_검수완료_QnA.txt",
+   "spec": null,
+   "keywords": [
+    "선풍기",
+    "무선"
+   ]
+  },
+  {
+   "code": "SUH-CV600ZA",
+   "name": "SUH-CV600ZA (가열식 가습기)",
+   "file": "검증 후/SUH-CV600ZA_12522300863_검수완료_QnA.txt",
+   "spec": "스펙자료/SUH-CV600ZA_12522300863.txt",
+   "keywords": [
+    "가습기",
+    "리모컨",
+    "무선",
+    "유선"
+   ]
+  }
+ ]
+}
