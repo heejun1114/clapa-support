@@ -1,5 +1,5 @@
 {
-  "endpoint": "",
+  "endpoint": "https://script.google.com/macros/s/AKfycbykSb6nIgIZOwDsXUBK8b5FoEJuwS4Gft8V_MFwswJdrL5e6XuTfVSK11LujqujGkg5/exec",
   "enabled": true,
   "model": null,
   "welcome": "안녕하세요! 클래파 고객지원 AI예요. 궁금한 제품이나 문의 내용을 선택하거나 자유롭게 입력해 주세요."
