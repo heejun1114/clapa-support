@@ -33,6 +33,15 @@
 .cchat-panel *{
   box-sizing:border-box;
 }
+
+/* hidden 속성은 항상 이겨야 한다 — 아래의 display 선언(작성자 스타일)이
+   UA 스타일시트의 [hidden]{display:none}을 덮어써 닫힌 패널이 투명한 채
+   화면을 덮고 클릭을 가로채는 것을 방지 */
+.cchat-fab[hidden],
+.cchat-panel[hidden],
+.cchat-scrim[hidden]{
+  display:none !important;
+}
 .cchat-panel *{
   margin:0;
   font-family:var(--cchat-font);
