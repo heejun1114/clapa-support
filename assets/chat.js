@@ -148,6 +148,18 @@
   function removeNode(n) { if (n && n.parentNode) n.parentNode.removeChild(n); }
   function scrollBottom() { if (msgEl) msgEl.scrollTop = msgEl.scrollHeight; }
 
+  /* 모바일(터치/시트 모드) 판정 — 자동 포커스로 화면 키보드가 튀어나오는 것 방지용.
+     chat.css 시트 브레이크포인트(640px)와 동일 기준 + 터치 포인터. 호출 시점마다 평가. */
+  function isTouchLike() {
+    try {
+      if (window.matchMedia) {
+        if (matchMedia('(max-width: 640px)').matches) return true;
+        if (matchMedia('(pointer: coarse)').matches) return true;
+      }
+    } catch (e) {}
+    return false;
+  }
+
   /* UUID v4 (crypto.randomUUID 우선, 폴백 구현) */
   function uuid() {
     try { if (window.crypto && crypto.randomUUID) return crypto.randomUUID(); } catch (e) {}
@@ -654,7 +666,7 @@
 
   function botAsk() {
     pushMenu('네, 편하게 물어봐 주세요!\n예) 필터는 어떻게 청소하나요?');
-    focusInput();
+    focusInput(true);   // '질문하기'를 직접 눌렀을 때만 모바일에서도 키보드를 올림
   }
 
   function botProductManual() {
@@ -711,6 +723,7 @@
     if (!text || sending) return;
     taEl.value = '';
     autoGrow();
+    dropKeyboard();           // 모바일: 전송하면 키보드를 내려 답변이 보이게
     pushMessage('user', text);
     lastUserMessage = text;
 
@@ -879,7 +892,20 @@
 
   function onEsc(e) { if (e.key === 'Escape') { e.stopPropagation(); close(); } }
 
-  function focusInput() { if (taEl && isOpen) { try { taEl.focus(); } catch (e) {} } }
+  /* 입력창 포커스 — 모바일에서는 화면 키보드가 저절로 올라오면 안 되므로
+     기본적으로 PC(물리 키보드)에서만 동작. force=true 는 사용자가 '직접 입력하겠다'는
+     명시적 행동(예: '질문하기' 칩)일 때만 사용. */
+  function focusInput(force) {
+    if (!taEl || !isOpen) return;
+    if (!force && isTouchLike()) return;
+    try { taEl.focus(); } catch (e) {}
+  }
+
+  /* 모바일 화면 키보드 내리기 — 메시지 전송 직후 답변을 가리지 않도록 */
+  function dropKeyboard() {
+    if (!isTouchLike()) return;
+    try { if (taEl && document.activeElement === taEl) taEl.blur(); } catch (e) {}
+  }
 
   /* 패널 내부 Tab 포커스 트랩(aria-modal) */
   function trapTab(e) {
