@@ -2,7 +2,7 @@
  "products": [
   {
    "model": "BVC-H10",
-   "cat": "clean",
+   "cat": "wireless",
    "displayName": "클래파 미니 핸디형 무선청소기",
    "modelDisplay": "BVC-H10 · CVC-H15",
    "qaCount": 117,
@@ -25,7 +25,7 @@
   },
   {
    "model": "BMH-200R",
-   "cat": "season",
+   "cat": "heat",
    "displayName": "클래파 마이카 컨벡션 히터",
    "modelDisplay": "BMH-200R",
    "qaCount": 80,
@@ -35,7 +35,7 @@
   },
   {
    "model": "BVC-L138",
-   "cat": "clean",
+   "cat": "wetdry",
    "displayName": "클래파 대용량 30L 건습식 청소기",
    "modelDisplay": "BVC-L138",
    "qaCount": 77,
@@ -47,7 +47,7 @@
   },
   {
    "model": "BEF-C156W",
-   "cat": "season",
+   "cat": "fan",
    "displayName": "클래파 멀티 무선 선풍기",
    "modelDisplay": "BEF-C156W",
    "qaCount": 69,
@@ -55,7 +55,7 @@
   },
   {
    "model": "BVC-S185",
-   "cat": "clean",
+   "cat": "wireless",
    "displayName": "클래파 스탠딩 슬림 무선 청소기",
    "modelDisplay": "BVC-S185 · CVC-S230",
    "qaCount": 36,
@@ -63,7 +63,7 @@
   },
   {
    "model": "BEF-D400",
-   "cat": "season",
+   "cat": "fan",
    "displayName": "클래파 탁상용 무선 선풍기",
    "modelDisplay": "BEF-D400W · BEF-D400M · BEF-D400B",
    "qaCount": 36,
@@ -105,7 +105,7 @@
   },
   {
    "model": "BED-611L",
-   "cat": "season",
+   "cat": "dehum",
    "displayName": "클래파 저소음 제습기 11L",
    "modelDisplay": "BED-611L · CED-L611",
    "qaCount": 13,
@@ -113,7 +113,7 @@
   },
   {
    "model": "BHF-8000W",
-   "cat": "living",
+   "cat": "fan",
    "displayName": "클래파 보조배터리 겸용 핸디 에어건",
    "modelDisplay": "BHF-8000W · BHF-8000KK",
    "qaCount": 5,
@@ -124,7 +124,7 @@
   },
   {
    "model": "BVC-H38",
-   "cat": "clean",
+   "cat": "wireless",
    "displayName": "클래파 AI 흡입 무선 청소기 400W",
    "modelDisplay": "BVC-H38",
    "qaCount": 0,
@@ -132,7 +132,7 @@
   },
   {
    "model": "BVC-T500W",
-   "cat": "clean",
+   "cat": "wireless",
    "displayName": "클래파 엘리트 타워 무선청소기",
    "modelDisplay": "BVC-T500W",
    "qaCount": 0,
@@ -140,7 +140,7 @@
   },
   {
    "model": "BVC-L125",
-   "cat": "clean",
+   "cat": "wetdry",
    "displayName": "클래파 대용량 25L 건습식 청소기",
    "modelDisplay": "BVC-L125",
    "qaCount": 0,
@@ -148,7 +148,7 @@
   },
   {
    "model": "BVC-C13K",
-   "cat": "clean",
+   "cat": "wireless",
    "displayName": "클래파 차량용 무선 청소기",
    "modelDisplay": "BVC-C13K",
    "qaCount": 0,
@@ -156,7 +156,7 @@
   },
   {
    "model": "BFB-VC120",
-   "cat": "clean",
+   "cat": "wireless",
    "displayName": "클래파 싸이클론 무선 청소기",
    "modelDisplay": "BFB-VC120",
    "qaCount": 0,
@@ -164,7 +164,7 @@
   },
   {
    "model": "IB-VC0601",
-   "cat": "clean",
+   "cat": "wetdry",
    "displayName": "클래파 유선 진공청소기",
    "modelDisplay": "IB-VC0601",
    "qaCount": 0,
@@ -172,7 +172,7 @@
   },
   {
    "model": "BHF-360W",
-   "cat": "season",
+   "cat": "fan",
    "displayName": "클래파 냉각 휴대용 선풍기",
    "modelDisplay": "BHF-360W",
    "qaCount": 0,
@@ -180,7 +180,7 @@
   },
   {
    "model": "BHH-2000S",
-   "cat": "season",
+   "cat": "heat",
    "displayName": "클래파 하이라이트 전기 히터",
    "modelDisplay": "BHH-2000S",
    "qaCount": 0,
@@ -188,7 +188,7 @@
   },
   {
    "model": "BPH-W181",
-   "cat": "season",
+   "cat": "heat",
    "displayName": "클래파 욕실 난방기",
    "modelDisplay": "BPH-W181 · CPH-W181G",
    "qaCount": 0,
@@ -196,7 +196,7 @@
   },
   {
    "model": "BOH-235",
-   "cat": "season",
+   "cat": "heat",
    "displayName": "클래파 카본 오방난로",
    "modelDisplay": "BOH-235",
    "qaCount": 0,
@@ -204,7 +204,7 @@
   },
   {
    "model": "BFB-PH180W",
-   "cat": "season",
+   "cat": "heat",
    "displayName": "클래파 프리미엄 ECO PTC 온풍기",
    "modelDisplay": "BFB-PH180W",
    "qaCount": 0,

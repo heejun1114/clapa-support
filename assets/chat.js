@@ -411,6 +411,27 @@
    *  - 저장/전송 계약 칩: { label, send } / { label, url }
    *  - 내부 메뉴 칩(직렬화 가능): { label, cmd, arg }
    * ------------------------------------------------------------------ */
+  /* 이동 안내 메시지 — 링크 칩이 어디로 가는지에 따라 토스트 문구 결정 */
+  function navMessage(href) {
+    if (/\.pdf(#|\?|$)/i.test(href)) return null;  // PDF는 새 탭이라 안내 불필요
+    if (href.indexOf('#faq') !== -1) return '자주 묻는 질문으로 이동했어요';
+    if (href.indexOf('#spec-title') !== -1) return '주요 사양으로 이동했어요';
+    if (href.indexOf('#as-title') !== -1) return 'A/S 접수로 이동했어요';
+    if (/products\//.test(href)) return '제품 페이지로 이동했어요';
+    return '페이지를 이동했어요';
+  }
+
+  /* 떴다 사라지는 이동 안내 토스트 */
+  function showToast(text) {
+    var t = el('div', { 'class': 'cchat-toast', role: 'status', text: text });
+    document.body.appendChild(t);
+    setTimeout(function () { t.classList.add('is-on'); }, 20);
+    setTimeout(function () {
+      t.classList.remove('is-on');
+      setTimeout(function () { removeNode(t); }, 300);
+    }, 2600);
+  }
+
   function buildChip(spec) {
     if (!spec || !spec.label) return null;
 
@@ -422,6 +443,20 @@
       if (ext) { a.setAttribute('target', '_blank'); a.setAttribute('rel', 'noopener'); }
       a.appendChild(document.createTextNode(spec.label));
       if (ext) a.appendChild(el('span', { 'class': 'cchat-chip-ext', 'aria-hidden': 'true', text: '↗' }));
+      if (!ext && !/^tel:/i.test(href)) {
+        a.addEventListener('click', function () {
+          var msg = navMessage(href);
+          if (!msg) return;
+          var samePage = false;
+          try { samePage = (new URL(href, location.href).pathname === location.pathname); } catch (e) {}
+          if (samePage) {
+            close();          // 패널을 닫아 이동한 위치가 보이게
+            showToast(msg);
+          } else {
+            try { sessionStorage.setItem('clapaChat.nav', msg); } catch (e) {}
+          }
+        });
+      }
       return a;
     }
 
@@ -441,13 +476,17 @@
 
   /* 루트 빠른 메뉴 칩 목록 — 상세 페이지에서는 해당 제품 메뉴를 앞에 배치 */
   function rootChips() {
-    if (productContext()) {
-      return [
+    var code = productContext();
+    if (code) {
+      var m = findModel(code);
+      var chips = [
         { label: '이 제품 설명서', cmd: 'pmanual' },
-        { label: '이 제품 FAQ', cmd: 'pfaq' },
-        { label: '부품 구매', cmd: 'cats', arg: 'parts' },
-        { label: 'A/S 신청', cmd: 'as' }
+        { label: '이 제품 FAQ', cmd: 'pfaq' }
       ];
+      if (m && m.page) chips.push({ label: '이 제품 스펙', url: m.page + '#spec-title' });
+      chips.push({ label: '부품 구매', cmd: 'cats', arg: 'parts' });
+      chips.push({ label: 'A/S 신청', cmd: 'as' });
+      return chips;
     }
     return [
       { label: '설명서 찾기', cmd: 'cats', arg: 'manual' },
@@ -884,6 +923,17 @@
     if (triggerEls.length && fabEl) fabEl.classList.add('cchat-replaced');
   }
 
+  /* 검색창 등에서 질문을 그대로 넘겨받아 AI 상담 시작 — ClapaChat.ask(text) */
+  var pendingAsk = null;
+  function ask(text) {
+    text = String(text == null ? '' : text).trim();
+    if (!text || disabled) return false;
+    open();
+    if (!initDone) { pendingAsk = text; return true; }  // 로드 완료 후 finishInit에서 전송
+    sendUserMessage(text);
+    return true;
+  }
+
   /* 페이지 요소에서 챗 플로우 바로 실행 — [data-clapa-chat-action="as|manual|parts|ask"] */
   var actionEls = [];
   var pendingAction = null;   // config/카탈로그 로드 전 클릭 → 로드 완료 후 실행
@@ -947,9 +997,18 @@
       close: close,
       toggle: toggle,
       action: runAction,
+      ask: ask,
       isOpen: function () { return isOpen; },
       __mounted: true
     };
+
+    // 챗 링크로 페이지를 이동해 왔다면 안내 토스트 표시
+    var nav = null;
+    try { nav = sessionStorage.getItem('clapaChat.nav'); } catch (e) {}
+    if (nav) {
+      try { sessionStorage.removeItem('clapaChat.nav'); } catch (e) {}
+      showToast(nav);
+    }
 
     loadConfig()
       .then(loadCatalog)
@@ -980,6 +1039,11 @@
       var act = pendingAction;
       pendingAction = null;
       doAction(act);
+    }
+    if (pendingAsk) {              // 로드 완료 전 넘겨받은 질문 지연 전송
+      var q = pendingAsk;
+      pendingAsk = null;
+      sendUserMessage(q);
     }
   }
 
