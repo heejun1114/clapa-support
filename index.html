@@ -148,31 +148,58 @@
   }
   .tag:hover{border-color:var(--teal);background:var(--teal-wash);color:var(--teal-deep);}
 
-  /* ---------- Topic cards (hero role) ---------- */
-  .topics{padding-bottom:clamp(30px,5vw,52px);}
-  .topic-grid{
-    display:grid;grid-template-columns:repeat(3,1fr);gap:14px;
-  }
-  .topic-card{
-    display:flex;flex-direction:column;gap:10px;
+  /* ---------- A/S intake band (hero role) ---------- */
+  .asband{padding-bottom:clamp(30px,5vw,52px);}
+  .as-band{
+    display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);
+    gap:clamp(22px,4vw,44px);
     background:var(--surface);
     border:1px solid var(--line);
     border-radius:var(--radius);
-    padding:20px 20px 18px;
-    transition:border-color .16s var(--ease),background .16s var(--ease),transform .16s var(--ease);
+    padding:clamp(20px,3.5vw,30px);
   }
-  .topic-card:hover{border-color:var(--teal);background:#fff;transform:translateY(-2px);}
-  .topic-icon{
-    width:38px;height:38px;flex:none;
-    display:flex;align-items:center;justify-content:center;
-    background:var(--teal-wash);border-radius:10px;color:var(--teal-deep);
+  .as-lead{min-width:0;}
+  .as-desc{margin:10px 0 0;color:var(--muted);font-size:14.5px;line-height:1.6;max-width:36ch;}
+  .as-alt{margin-top:20px;display:flex;flex-direction:column;gap:12px;}
+  .as-tel{display:flex;flex-direction:column;gap:2px;}
+  .as-tel strong{font-size:22px;font-weight:700;letter-spacing:-0.02em;font-variant-numeric:tabular-nums;color:var(--ink);transition:color .14s var(--ease);}
+  .as-tel:hover strong{color:var(--teal-deep);}
+  .as-tel span{font-size:12.5px;color:var(--muted);}
+  .as-talk{display:inline-flex;align-items:center;gap:5px;color:var(--teal-deep);font-size:13.5px;font-weight:600;border-bottom:1px solid var(--teal-wash);align-self:flex-start;padding-bottom:1px;}
+  .as-talk:hover{border-bottom-color:var(--teal);}
+
+  .as-form-wrap{min-width:0;}
+  .as-form-wrap>summary{list-style:none;display:none;}
+  .as-form-wrap>summary::-webkit-details-marker{display:none;}
+  .as-form{display:flex;flex-direction:column;gap:12px;min-width:0;}
+  .as-field{display:flex;flex-direction:column;gap:6px;}
+  .as-field label{font-size:13px;font-weight:600;color:var(--ink);}
+  .as-field .req{color:var(--teal-deep);font-size:11.5px;font-weight:600;margin-left:4px;}
+  .as-field input,.as-field textarea{
+    font:inherit;font-size:16px;color:var(--ink);
+    background:var(--paper);
+    border:1.5px solid var(--line);border-radius:10px;
+    padding:11px 13px;outline:none;width:100%;
+    transition:border-color .15s var(--ease);
   }
-  .topic-card:hover .topic-icon{background:var(--teal);color:#fff;}
-  .topic-icon svg{width:21px;height:21px;}
-  .topic-title{font-size:15.5px;font-weight:650;letter-spacing:-0.02em;}
-  .topic-title .arw{color:var(--muted);font-size:13px;margin-left:5px;transition:color .15s var(--ease),transform .16s var(--ease);display:inline-block;}
-  .topic-card:hover .topic-title .arw{color:var(--teal);transform:translateX(3px);}
-  .topic-desc{font-size:13.5px;color:var(--muted);line-height:1.55;letter-spacing:-0.008em;}
+  .as-field input::placeholder,.as-field textarea::placeholder{color:#9C948A;}
+  .as-field textarea{resize:vertical;min-height:76px;line-height:1.55;}
+  .as-field input:focus,.as-field textarea:focus{border-color:var(--teal);}
+  .as-submit{
+    margin-top:2px;min-height:48px;
+    background:var(--teal);color:#fff;border:0;border-radius:10px;
+    padding:12px 20px;font-size:15px;font-weight:600;letter-spacing:-0.01em;
+    transition:background .16s var(--ease),opacity .16s var(--ease);
+  }
+  .as-submit:hover{background:var(--teal-deep);}
+  .as-submit:disabled{opacity:.6;cursor:default;}
+  .as-note{margin:0;color:var(--muted);font-size:12px;}
+  .as-msg{margin:0;padding:11px 13px;border-radius:10px;font-size:13.5px;line-height:1.55;display:none;}
+  .as-msg.is-err{display:block;background:#FAEFE9;color:#9A4B2E;border:1px solid #EFD8CC;}
+  .as-done{display:flex;flex-direction:column;gap:9px;padding:24px 22px;background:var(--paper);border:1px solid var(--line);border-radius:12px;}
+  .as-done strong{font-size:17px;letter-spacing:-0.02em;}
+  .as-done p{margin:0;color:var(--muted);font-size:14px;line-height:1.6;}
+  .as-done .as-id{font-variant-numeric:tabular-nums;color:var(--teal-deep);font-weight:700;}
 
   /* ---------- Section shell ---------- */
   .section{padding-block:clamp(46px,6.5vw,78px);}
@@ -374,24 +401,41 @@
   @media(max-width:900px){
     .footer-top{gap:24px 32px;}
   }
+  @media(max-width:820px){
+    .as-band{grid-template-columns:1fr;}
+  }
 
   /* --- Mobile: keep the composed, tidy desktop rhythm --- */
   @media(max-width:640px){
     /* vertical rhythm */
-    .hero{padding-block:30px 22px;}
-    .searchbar{margin-top:20px;}
-    .topics{padding-bottom:26px;}
-    .section{padding-block:42px;}
+    .hero{padding-block:28px 20px;}
+    .hero-title{font-size:25px;}
+    .searchbar{margin-top:18px;}
+    .asband{padding-bottom:26px;}
+    .section{padding-block:38px;}
     .section-head{flex-direction:column;align-items:flex-start;margin-bottom:18px;}
 
-    /* topic cards: compact, icon-led, 3 across in one row */
-    .topic-grid{grid-template-columns:repeat(3,1fr);gap:8px;}
-    .topic-card{align-items:center;text-align:center;padding:15px 8px 13px;gap:9px;}
-    .topic-icon{width:34px;height:34px;border-radius:9px;}
-    .topic-icon svg{width:18px;height:18px;}
-    .topic-title{font-size:12.5px;font-weight:600;line-height:1.3;}
-    .topic-title .arw{display:none;}
-    .topic-desc{display:none;}
+    /* 추천 검색어: 한 줄 가로 스크롤 */
+    .suggest{
+      flex-wrap:nowrap;overflow-x:auto;
+      -webkit-overflow-scrolling:touch;scrollbar-width:none;
+      margin-inline:calc(-1 * clamp(18px,4vw,40px));
+      padding-inline:clamp(18px,4vw,40px);
+    }
+    .suggest::-webkit-scrollbar{display:none;}
+    .suggest .tag,.suggest-label{flex:none;}
+
+    /* A/S band: stacked. 폼은 '온라인으로 접수하기' 버튼 뒤로 접힘(JS가 open 제거) */
+    .as-band{gap:18px;padding:18px 16px;}
+    .as-form-wrap{padding-top:18px;border-top:1px solid var(--line-soft);}
+    .as-form-wrap>summary{
+      display:flex;align-items:center;justify-content:center;gap:6px;
+      min-height:48px;cursor:pointer;
+      background:var(--teal);color:#fff;border-radius:10px;
+      font-size:15px;font-weight:600;letter-spacing:-0.01em;
+    }
+    .as-form-wrap>summary:active{background:var(--teal-deep);}
+    .as-form-wrap[open]>summary{display:none;}
 
     /* category tabs: edge-to-edge horizontal scroll chips */
     .brand-tabs{
@@ -405,7 +449,7 @@
     .brand-tab{flex:none;}
 
     /* product rows: compact thumbnail + name, chip quicklinks (>=40px) */
-    .product-row{flex-wrap:wrap;gap:11px 12px;padding:14px 16px;}
+    .product-row{flex-wrap:wrap;gap:10px 12px;padding:13px 14px;}
     .thumb{width:60px;height:60px;}
     .thumb svg{width:44px;height:44px;}
     .p-main{flex:1;min-width:0;}
@@ -530,34 +574,70 @@
     </div>
   </section>
 
-  <!-- TOPIC CARDS -->
-  <section class="topics" aria-label="주제별 바로가기">
+  <!-- A/S INTAKE -->
+  <section class="asband" aria-labelledby="as-title">
     <div class="wrap">
-      <div class="topic-grid">
+      <div class="as-band">
 
-        <a class="topic-card" href="tel:1522-8508" data-clapa-chat-action="as">
-          <span class="topic-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15.5 6.2a3.7 3.7 0 0 0-5 4.9L4 17.6 6.4 20l6.5-6.5a3.7 3.7 0 0 0 4.9-5l-2.6 2.6-2.3-2.3z"/></svg>
-          </span>
-          <span class="topic-title">A/S 신청<span class="arw" aria-hidden="true">→</span></span>
-          <span class="topic-desc">접수 방법을 채팅으로 바로 안내해 드려요.</span>
-        </a>
+        <div class="as-lead">
+          <span class="section-eyebrow">Repair request</span>
+          <h2 class="section-title" id="as-title">A/S 접수</h2>
+          <p class="as-desc">모델명과 증상을 남겨 주세요. 상담 시간에 순서대로 연락드립니다.</p>
+          <div class="as-alt">
+            <a class="as-tel" href="tel:1522-8508" aria-label="고객센터 전화 1522-8508, 평일 09시부터 15시">
+              <strong>1522-8508</strong>
+              <span>전화 접수 · 평일 09:00–15:00 · 주말·공휴일 휴무</span>
+            </a>
+            <a class="as-talk" href="https://smartstore.naver.com/skillfulbrother" target="_blank" rel="noopener">스토어 톡톡으로 접수하기 <span aria-hidden="true">↗</span></a>
+          </div>
+        </div>
 
-        <a class="topic-card" href="#finder-title" data-clapa-chat-action="manual">
-          <span class="topic-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6.5C10.5 5.3 8.6 5 4.5 5v13c4.1 0 6 .3 7.5 1.5"/><path d="M12 6.5C13.5 5.3 15.4 5 19.5 5v13c-4.1 0-6 .3-7.5 1.5"/><path d="M12 6.5v13"/></svg>
-          </span>
-          <span class="topic-title">설명서·사용법<span class="arw" aria-hidden="true">→</span></span>
-          <span class="topic-desc">제품을 고르면 설명서 PDF를 바로 열어 드려요.</span>
-        </a>
-
-        <a class="topic-card" href="#finder-title" data-clapa-chat-action="parts">
-          <span class="topic-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5.5h16l-6 6.8v5.4l-4 2v-7.4z"/></svg>
-          </span>
-          <span class="topic-title">소모품·부품<span class="arw" aria-hidden="true">→</span></span>
-          <span class="topic-desc">필터·배터리 등 정품 부품 구매처로 안내해 드려요.</span>
-        </a>
+        <details class="as-form-wrap" id="as-form-wrap" open>
+          <summary class="as-form-toggle">온라인으로 접수하기</summary>
+        <form class="as-form" id="as-form" novalidate>
+          <div class="as-field">
+            <label for="as-model">제품 모델명</label>
+            <input id="as-model" name="model" list="as-models" placeholder="예) BVC-H10 — 모르시면 제품 이름도 좋아요" autocomplete="off" maxlength="80">
+            <datalist id="as-models">
+              <option value="BVC-H10">클래파 미니 핸디형 무선청소기</option>
+              <option value="BVC-L138">클래파 대용량 30L 건습식 청소기</option>
+              <option value="BVC-S185">클래파 스탠딩 슬림 무선 청소기</option>
+              <option value="BVC-H38">클래파 AI 흡입 무선 청소기 400W</option>
+              <option value="BVC-T500W">클래파 엘리트 타워 무선청소기</option>
+              <option value="BVC-L125">클래파 대용량 25L 건습식 청소기</option>
+              <option value="BVC-C13K">클래파 차량용 무선 청소기</option>
+              <option value="BFB-VC120">클래파 싸이클론 무선 청소기</option>
+              <option value="IB-VC0601">클래파 유선 진공청소기</option>
+              <option value="BMH-200R">클래파 마이카 컨벡션 히터</option>
+              <option value="BEF-C156W">클래파 멀티 무선 선풍기</option>
+              <option value="BEF-D400">클래파 탁상용 무선 선풍기</option>
+              <option value="BED-611L">클래파 저소음 제습기 11L</option>
+              <option value="BHF-360W">클래파 냉각 휴대용 선풍기</option>
+              <option value="BHH-2000S">클래파 하이라이트 전기 히터</option>
+              <option value="BPH-W181">클래파 욕실 난방기</option>
+              <option value="BOH-235">클래파 카본 오방난로</option>
+              <option value="BFB-PH180W">클래파 프리미엄 ECO PTC 온풍기</option>
+              <option value="BES-131W">클래파 스테인리스 2단 계란찜기</option>
+              <option value="CEK-S220">클래파 분리형 프리볼트 멀티포트</option>
+              <option value="BYF-G18">클래파 대용량 그릭요거트 메이커</option>
+              <option value="BWF-200T">클래파 휴대용 구강세정기</option>
+              <option value="BHF-8000W">클래파 보조배터리 겸용 핸디 에어건</option>
+              <option value="BRC-30W">클래파 미니밥솥</option>
+            </datalist>
+          </div>
+          <div class="as-field">
+            <label for="as-symptom">증상<span class="req">필수</span></label>
+            <textarea id="as-symptom" name="symptom" rows="3" placeholder="예) 충전기를 꽂아도 램프가 켜지지 않아요" maxlength="1000" required></textarea>
+          </div>
+          <div class="as-field">
+            <label for="as-phone">연락처<span class="req">필수</span></label>
+            <input id="as-phone" name="phone" type="tel" inputmode="tel" placeholder="010-0000-0000" maxlength="20" autocomplete="off" required>
+          </div>
+          <p class="as-msg" id="as-msg" role="alert"></p>
+          <button class="as-submit" type="submit">A/S 접수하기</button>
+          <p class="as-note">남겨주신 정보는 A/S 상담 용도로만 사용합니다.</p>
+        </form>
+        </details>
 
       </div>
     </div>
@@ -1165,6 +1245,88 @@
       });
       apply(tab.getAttribute('data-cat'), tab.getAttribute('data-label') || '해당');
     });
+  });
+})();
+</script>
+
+<script>
+/* A/S 접수 폼 → GAS 웹앱(action:'as'). 실패 시 전화 접수 안내 폴백 */
+(function(){
+  var form = document.getElementById('as-form');
+  if(!form) return;
+  var btn = form.querySelector('.as-submit');
+  var msg = document.getElementById('as-msg');
+  var PHONE_GUIDE = '지금은 온라인 접수가 어려워요. 전화 1522-8508(평일 09:00–15:00)로 접수 부탁드립니다.';
+  var ENDPOINT = '';
+
+  fetch('data/chat-config.json', { cache: 'no-cache' })
+    .then(function(r){ return r.ok ? r.json() : null; })
+    .then(function(j){ if(j && typeof j.endpoint === 'string') ENDPOINT = j.endpoint; })
+    .catch(function(){});
+
+  // 모바일에서는 폼을 접어두고 '온라인으로 접수하기' 버튼으로 연다
+  var wrap = document.getElementById('as-form-wrap');
+  if(wrap && window.matchMedia && window.matchMedia('(max-width:640px)').matches){
+    wrap.removeAttribute('open');
+  }
+
+  function showErr(t){ msg.textContent = t; msg.classList.add('is-err'); }
+  function clearErr(){ msg.textContent = ''; msg.classList.remove('is-err'); }
+  function setBusy(b){
+    btn.disabled = b;
+    btn.textContent = b ? '접수 중…' : 'A/S 접수하기';
+  }
+
+  function showDone(id){
+    var done = document.createElement('div');
+    done.className = 'as-done';
+    var head = document.createElement('strong');
+    head.textContent = '접수가 완료되었습니다';
+    var idLine = document.createElement('p');
+    idLine.appendChild(document.createTextNode('접수번호 '));
+    var idEl = document.createElement('span');
+    idEl.className = 'as-id';
+    idEl.textContent = id;
+    idLine.appendChild(idEl);
+    var info = document.createElement('p');
+    info.textContent = '상담 시간(평일 09:00–15:00)에 순서대로 연락드립니다. 급하시면 1522-8508로 전화해 주세요.';
+    done.appendChild(head);
+    done.appendChild(idLine);
+    done.appendChild(info);
+    form.parentNode.replaceChild(done, form);
+  }
+
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    clearErr();
+    var model = document.getElementById('as-model').value.trim();
+    var symptom = document.getElementById('as-symptom').value.trim();
+    var phone = document.getElementById('as-phone').value.trim();
+    if(symptom.length < 5){ showErr('증상을 5자 이상 적어 주세요.'); return; }
+    if(!/^[0-9+\-() ]{9,20}$/.test(phone)){ showErr('연락처를 숫자로 입력해 주세요. 예) 010-1234-5678'); return; }
+    if(!ENDPOINT){ showErr(PHONE_GUIDE); return; }
+
+    setBusy(true);
+    fetch(ENDPOINT, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=UTF-8' },
+      body: JSON.stringify({ action: 'as', model: model, symptom: symptom, phone: phone, sessionId: 'asform', page: 'index' })
+    })
+      .then(function(r){ return r.json(); })
+      .then(function(d){
+        if(d && d.ok && d.id){
+          showDone(d.id);
+          return;
+        }
+        var t = (d && d.error) ? d.error : '';
+        if(!t || t.indexOf('지원하지 않는') !== -1) t = PHONE_GUIDE;
+        showErr(t);
+        setBusy(false);
+      })
+      .catch(function(){
+        showErr('연결이 원활하지 않아요. ' + PHONE_GUIDE);
+        setBusy(false);
+      });
   });
 })();
 </script>
