@@ -28,7 +28,7 @@
     endpoint: '',
     enabled: true,
     model: null,
-    welcome: '안녕하세요, 클래파 AI 상담이에요.\n궁금한 점을 입력하시거나 아래 메뉴를 눌러 주세요.'
+    welcome: '안녕하세요! 클래파 고객지원 AI예요.\n궁금한 점을 편하게 입력하시거나, 아래 메뉴에서 골라 주세요.'
   };
 
   /* 카탈로그 기본 카테고리(카탈로그에 categories가 없을 때 폴백) */
@@ -556,7 +556,9 @@
       return;
     }
     var chips = cats.map(function (c) { return { label: c.label, cmd: 'models', arg: mode + '|' + c.id }; });
-    pushMenu(mode === 'parts' ? '어떤 제품의 부품이 필요하세요?' : '어떤 제품의 설명서가 필요하세요?', chips);
+    pushMenu(mode === 'parts'
+      ? '부품 구매를 도와드릴게요.\n어떤 종류의 제품인지 골라 주세요.'
+      : '설명서를 찾아드릴게요.\n어떤 종류의 제품인지 골라 주세요.', chips);
   }
 
   function botModels(arg) {
@@ -577,7 +579,7 @@
     if (!all && items.length > 8) { show = items.slice(0, 8); extra = true; }
     var chips = show.map(function (m) { return { label: m.model, cmd: 'pick', arg: mode + '|' + m.model }; });
     if (extra) chips.push({ label: '더보기 (+' + (items.length - 8) + ')', cmd: 'models', arg: mode + '|' + cat + '|all' });
-    pushMenu(catLabel + ' 모델을 선택해 주세요.', chips);
+    pushMenu('네, ' + catLabel + ' 제품이군요.\n쓰고 계신 모델을 선택해 주시면 바로 안내해 드릴게요.', chips);
   }
 
   function botPick(arg) {
@@ -591,9 +593,9 @@
     if (mode === 'manual') {
       var mc = [{ label: '설명서 PDF 열기', url: m.manual }];
       if (m.page) mc.push({ label: '제품 페이지', url: m.page });
-      pushMenu(m.model + (m.name ? ' ' + m.name : '') + ' 설명서예요.', mc);
+      pushMenu(m.model + (m.name ? ' ' + m.name : '') + ' 사용설명서를 찾았어요.\n아래 버튼을 누르시면 PDF로 바로 열려요.', mc);
     } else {
-      pushMenu(m.model + ' 부품·구성품 구매 페이지예요.', [
+      pushMenu(m.model + ' 부품·구성품 구매 페이지로 안내해 드릴게요.\n필요한 부품이 보이지 않으면 편하게 물어봐 주세요.', [
         { label: '부품 구매 페이지', url: m.parts },
         { label: '스토어 홈', url: STORE }
       ]);
@@ -602,13 +604,17 @@
 
   function botAS() {
     pushMenu(
-      '증상과 모델명을 알려주시면 접수가 빨라요.\n전화 ' + PHONE + ' · ' + HOURS + ' (주말·공휴일 휴무)',
-      [{ label: '전화 걸기', url: 'tel:' + PHONE }, { label: '스토어 톡톡 문의', url: STORE }]
+      'A/S 접수를 도와드릴게요.\n증상과 모델명을 함께 알려주시면 접수가 훨씬 빨라요.\n전화 ' + PHONE + ' · ' + HOURS + ' (주말·공휴일 휴무)',
+      [
+        { label: 'A/S 접수 폼 바로가기', url: 'index.html#as-title' },
+        { label: '전화 걸기', url: 'tel:' + PHONE },
+        { label: '스토어 톡톡 문의', url: STORE }
+      ]
     );
   }
 
   function botAsk() {
-    pushMenu('궁금한 점을 아래에 편하게 적어 주세요.\n예) 필터는 어떻게 청소하나요?');
+    pushMenu('네, 편하게 물어봐 주세요!\n예) 필터는 어떻게 청소하나요?');
     focusInput();
   }
 
@@ -618,11 +624,11 @@
     if (m && m.manual) {
       var mc = [{ label: '설명서 PDF 열기', url: m.manual }];
       if (m.page) mc.push({ label: '제품 페이지', url: m.page });
-      pushMenu(m.model + ' 설명서예요.', mc);
+      pushMenu(m.model + ' 사용설명서를 찾았어요.\n아래 버튼을 누르시면 PDF로 바로 열려요.', mc);
     } else if (config.endpoint) {
       sendUserMessage((code || '이 제품') + ' 설명서를 알려주세요');
     } else {
-      pushMenu('해당 제품 설명서를 찾지 못했어요. 고객센터(' + PHONE + ')로 문의해 주세요.', [{ label: '전화 걸기', url: 'tel:' + PHONE }]);
+      pushMenu('해당 제품 설명서를 찾지 못했어요.\n고객센터(' + PHONE + ')로 문의해 주시면 확인해 드릴게요.', [{ label: '전화 걸기', url: 'tel:' + PHONE }]);
     }
   }
 
@@ -631,11 +637,11 @@
     var m = findModel(code);
     if (m && m.page) {
       var url = m.page + (m.page.indexOf('#') >= 0 ? '' : '#faq');
-      pushMenu((m.model || '이 제품') + ' 자주 묻는 질문이에요.', [{ label: '제품 FAQ 보기', url: url }]);
+      pushMenu((m.model || '이 제품') + '에 대해 자주 묻는 질문을 모아뒀어요.\n아래 버튼에서 확인해 보세요.', [{ label: '제품 FAQ 보기', url: url }]);
     } else if (config.endpoint) {
       sendUserMessage((code || '이 제품') + ' 자주 묻는 질문을 알려주세요');
     } else {
-      pushMenu((code || '해당 제품') + ' 관련 궁금한 점을 아래에 입력해 주세요.');
+      pushMenu((code || '해당 제품') + ' 관련 궁금한 점을 아래에 편하게 입력해 주세요.');
       focusInput();
     }
   }

@@ -407,10 +407,15 @@
 
   /* --- Mobile: keep the composed, tidy desktop rhythm --- */
   @media(max-width:640px){
-    /* vertical rhythm */
-    .hero{padding-block:28px 20px;}
-    .hero-title{font-size:25px;}
+    /* vertical rhythm — PC 비율을 유지한 축소 */
+    .hero{padding-block:26px 20px;}
+    .eyebrow{font-size:11.5px;margin-bottom:10px;}
+    .hero-title{font-size:23px;}
+    .hero-sub{font-size:14px;margin-top:12px;}
     .searchbar{margin-top:18px;}
+    .search-input{font-size:15px;padding:10px 0;}
+    .search-btn{padding:10px 15px;font-size:14px;}
+    .section-eyebrow{font-size:11px;}
     .asband{padding-bottom:26px;}
     .section{padding-block:38px;}
     .section-head{flex-direction:column;align-items:flex-start;margin-bottom:18px;}
@@ -448,24 +453,31 @@
     .brand-tabs::-webkit-scrollbar{display:none;}
     .brand-tab{flex:none;}
 
-    /* product rows: compact thumbnail + name, chip quicklinks (>=40px) */
-    .product-row{flex-wrap:wrap;gap:10px 12px;padding:13px 14px;}
-    .thumb{width:60px;height:60px;}
-    .thumb svg{width:44px;height:44px;}
+    /* product rows: PC와 같은 얇은 리스트 비율 (>=40px 터치 타깃 유지) */
+    .product-row{flex-wrap:wrap;gap:9px 12px;padding:12px 14px;}
+    .thumb{width:52px;height:52px;}
+    .thumb svg{width:38px;height:38px;}
     .p-main{flex:1;min-width:0;}
+    .p-name{font-size:14.5px;}
+    .p-model{font-size:12px;}
     .quicklinks{
-      width:100%;gap:6px;flex-wrap:nowrap;padding-left:0;
+      width:100%;gap:6px;flex-wrap:nowrap;padding-left:64px;
     }
     .qlink{
-      flex:1 1 0;min-width:0;justify-content:center;
-      min-height:40px;padding:0 8px;
+      flex:0 0 auto;justify-content:center;
+      min-height:40px;padding:0 12px;
+      font-size:12px;border:0;
     }
-    .group-row{padding:13px 16px 8px;}
+    .group-row{padding:12px 14px 7px;}
+
+    /* FAQ: 들여쓰기 없애 폭 활용, PC와 같은 인상 */
+    .faq-item>summary{padding:15px 16px;}
+    .faq-a{padding:0 16px 18px;}
   }
 
   @media(max-width:420px){
-    .search-btn{padding:11px 14px;}
-    .topic-title{font-size:12px;}
+    .search-btn{padding:10px 13px;}
+    .quicklinks{padding-left:0;}
   }
 
   @media(prefers-reduced-motion:reduce){
