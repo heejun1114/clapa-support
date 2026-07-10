@@ -314,10 +314,12 @@
 }
 
 /* ---------- 칩(버블 내부 인라인 + 하단 바 공용) ---------- */
+/* 버블 아래 후속 버튼: 세로 한 줄씩 — 정돈된 목록형 */
 .cchat-chips-inline{
   display:flex;
-  flex-wrap:wrap;
-  gap:7px;
+  flex-direction:column;
+  align-items:flex-start;
+  gap:6px;
   margin-top:8px;
 }
 .cchat-chip{
@@ -325,7 +327,8 @@
   align-items:center;
   gap:5px;
   max-width:100%;
-  padding:7px 13px;
+  min-height:40px;              /* 터치 타깃 40px 기준 */
+  padding:8px 14px;
   font-size:13px;
   font-weight:600;
   line-height:1.35;
@@ -349,16 +352,21 @@
   opacity:.75;
 }
 
-/* ---------- 하단 칩 바(루트 빠른 메뉴) ---------- */
+/* ---------- 하단 칩 바(루트 빠른 메뉴) — 한 줄 가로 스크롤 ---------- */
 .cchat-chips{
   flex:none;
   display:flex;
-  flex-wrap:wrap;
+  flex-wrap:nowrap;
   gap:7px;
-  padding:10px 14px 4px;
+  padding:10px 12px 2px;
   border-top:1px solid var(--cchat-line);
   background:var(--cchat-bg);
+  overflow-x:auto;
+  scrollbar-width:none;
+  -webkit-overflow-scrolling:touch;
 }
+.cchat-chips::-webkit-scrollbar{ display:none; }
+.cchat-chips .cchat-chip{ flex:none; }
 .cchat-chips:empty{ display:none; }
 
 /* ---------- 입력(컴포저) ---------- */

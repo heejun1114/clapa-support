@@ -166,7 +166,7 @@
   }
   .section-eyebrow{color:var(--teal-deep);font-size:12px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;display:block;margin-bottom:8px;}
   .section-title{margin:0;font-size:clamp(20px,2.6vw,25px);font-weight:700;letter-spacing:-0.026em;line-height:1.2;}
-  .section-desc{margin:8px 0 0;color:var(--muted);font-size:14px;max-width:46ch;}
+  .section-desc{margin:8px 0 0;color:var(--muted);font-size:14.5px;max-width:46ch;}
 
   /* ---------- Spec list (B2 restrained line list) ---------- */
   .spec-grid{
@@ -226,7 +226,7 @@
   .faq-item[open] .faq-chev{transform:rotate(180deg);color:var(--teal);}
   .faq-a{
     padding:0 18px 19px 46px;
-    color:var(--muted);font-size:14px;line-height:1.65;letter-spacing:-0.008em;
+    color:#4A4437;font-size:14.5px;line-height:1.72;letter-spacing:-0.008em;
   }
   .faq-a a{color:var(--teal-deep);font-weight:600;border-bottom:1px solid var(--teal-wash);}
   .faq-a a:hover{border-bottom-color:var(--teal);}
@@ -445,7 +445,7 @@
 
       <div class="faq-list">
         
-        <details class="faq-item">
+        <details class="faq-item" open>
           <summary>
             <span class="faq-q">
               <span class="faq-cat">스펙</span>
@@ -453,7 +453,7 @@
             </span>
             <svg class="faq-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
           </summary>
-          <div class="faq-a">팬이 작동하는 온풍기가 아니라 PTC 발열체를 사용한 전기 히터입니다. 복사에너지를 활용하기 때문에 열을 받는 부분만 따뜻해지며, 공기 전체가 데워지지는 않습니다.</div>
+          <div class="faq-a">팬이 작동하는 온풍기가 아니라 PTC 발열체를 사용한 전기 히터입니다.<br>복사에너지를 활용하기 때문에 열을 받는 부분만 따뜻해지며, 공기 전체가 데워지지는 않습니다.</div>
         </details>
         
         <details class="faq-item">
@@ -497,7 +497,7 @@
             </span>
             <svg class="faq-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
           </summary>
-          <div class="faq-a">리모컨의 인체감지 모드 버튼으로 ON/OFF를 선택할 수 있습니다. 인체감지 모드가 켜져 있으면 40cm 이내로 접근했을 때 자동으로 꺼지는 안전 기능이 작동합니다.</div>
+          <div class="faq-a">리모컨의 인체감지 모드 버튼으로 ON/OFF를 선택할 수 있습니다.<br>인체감지 모드가 켜져 있으면 40cm 이내로 접근했을 때 자동으로 꺼지는 안전 기능이 작동합니다.</div>
         </details>
         
         <details class="faq-item">
@@ -530,7 +530,7 @@
             </span>
             <svg class="faq-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
           </summary>
-          <div class="faq-a">장시간 사용 시 환기가 필요합니다. 난방기 사용 시 실내가 건조해질 수 있으므로 충분한 환기를 권장합니다.</div>
+          <div class="faq-a">장시간 사용 시 환기가 필요합니다.<br>난방기 사용 시 실내가 건조해질 수 있으므로 충분한 환기를 권장합니다.</div>
         </details>
         
         <details class="faq-item">
@@ -541,7 +541,7 @@
             </span>
             <svg class="faq-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
           </summary>
-          <div class="faq-a">리모컨과 다리 모두 별도 구매가 가능합니다. 고객센터 또는 톡톡으로 문의해 주세요.</div>
+          <div class="faq-a">리모컨과 다리 모두 별도 구매가 가능합니다.<br>고객센터 또는 톡톡으로 문의해 주세요.</div>
         </details>
         
       </div>
@@ -571,7 +571,7 @@
 </main>
 
 <!-- Chat entry point: quiet floating pill (inherited from home) -->
-<button class="chat-fab" type="button" aria-label="채팅 상담 열기">
+<button class="chat-fab" type="button" data-clapa-chat-trigger aria-label="채팅 상담 열기">
   <span class="chat-ic" aria-hidden="true">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6.5v8a2.5 2.5 0 0 1-2.5 2.5H9l-4 3.2V17H6.5A2.5 2.5 0 0 1 4 14.5v-8A2.5 2.5 0 0 1 6.5 4h11A2.5 2.5 0 0 1 20 6.5z"/><path d="M8.5 10h7M8.5 13h4.5"/></svg>
   </span>
@@ -593,7 +593,7 @@
         <p class="foot-h">바로가기</p>
         <div class="foot-brandrow">
           <a class="foot-brand" href="https://clapa.kr" rel="noopener">클래파 스토어 <span class="lat" aria-hidden="true">↗</span></a>
-          <a class="foot-brand" href="../index.html">A/S 신청</a>
+          <a class="foot-brand" href="tel:1522-8508">A/S 신청 1522-8508</a>
           <a class="foot-brand" href="../index.html#finder-title">설명서 다운로드</a>
         </div>
       </nav>

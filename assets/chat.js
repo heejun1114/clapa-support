@@ -28,7 +28,7 @@
     endpoint: '',
     enabled: true,
     model: null,
-    welcome: '안녕하세요! 클래파 고객지원 AI예요. 궁금한 제품이나 문의 내용을 선택하거나 자유롭게 입력해 주세요.'
+    welcome: '안녕하세요, 클래파 AI 상담이에요.\n궁금한 점을 입력하시거나 아래 메뉴를 눌러 주세요.'
   };
 
   /* 카탈로그 기본 카테고리(카탈로그에 categories가 없을 때 폴백) */
@@ -379,7 +379,7 @@
     msgEl = el('div', { 'class': 'cchat-msgs', role: 'log', 'aria-live': 'polite', 'aria-atomic': 'false' });
 
     /* 하단 칩 바(루트 빠른 메뉴) */
-    chipsEl = el('div', { 'class': 'cchat-chips', 'aria-label': '빠른 메뉴' });
+    chipsEl = el('div', { 'class': 'cchat-chips', role: 'group', 'aria-label': '빠른 메뉴' });
 
     /* 컴포저 */
     var form = el('form', { 'class': 'cchat-composer' });
@@ -439,19 +439,21 @@
     return null;
   }
 
-  /* 루트 빠른 메뉴 칩 목록 */
+  /* 루트 빠른 메뉴 칩 목록 — 상세 페이지에서는 해당 제품 메뉴를 앞에 배치 */
   function rootChips() {
-    var chips = [
-      { label: '📖 설명서 찾기', cmd: 'cats', arg: 'manual' },
-      { label: '🧩 부품 구매', cmd: 'cats', arg: 'parts' },
-      { label: '📞 A/S 신청', cmd: 'as' },
-      { label: '💬 제품 질문하기', cmd: 'ask' }
-    ];
     if (productContext()) {
-      chips.push({ label: '📄 이 제품 설명서', cmd: 'pmanual' });
-      chips.push({ label: '❓ 이 제품 FAQ', cmd: 'pfaq' });
+      return [
+        { label: '이 제품 설명서', cmd: 'pmanual' },
+        { label: '이 제품 FAQ', cmd: 'pfaq' },
+        { label: '부품 구매', cmd: 'cats', arg: 'parts' },
+        { label: 'A/S 신청', cmd: 'as' }
+      ];
     }
-    return chips;
+    return [
+      { label: '설명서 찾기', cmd: 'cats', arg: 'manual' },
+      { label: '부품 구매', cmd: 'cats', arg: 'parts' },
+      { label: 'A/S 신청', cmd: 'as' }
+    ];
   }
 
   function renderRootBar() {
@@ -466,11 +468,18 @@
   /* ------------------------------------------------------------------ *
    * 메시지 렌더 / 로그
    * ------------------------------------------------------------------ */
+  /* 봇 답변 표시용 문장 줄바꿈 — 저장 텍스트는 그대로, 화면에서만 분리 */
+  function botDisplayText(t) {
+    t = String(t == null ? '' : t);
+    if (t.indexOf('\n') !== -1 || t.length < 90) return t;
+    return t.replace(/([다요죠])\.\s+(?=[가-힣A-Za-z0-9"'(~])/g, '$1.\n');
+  }
+
   function renderEntry(entry) {
     var isUser = entry.role === 'user';
     var wrap = el('div', { 'class': 'cchat-msg ' + (isUser ? 'cchat-user' : 'cchat-bot') });
     var bubble = el('div', { 'class': 'cchat-bubble' });
-    textToNodes(bubble, entry.text);
+    textToNodes(bubble, isUser ? entry.text : botDisplayText(entry.text));
     wrap.appendChild(bubble);
     if (entry.chips && entry.chips.length) {
       var cr = el('div', { 'class': 'cchat-chips-inline' });
@@ -501,7 +510,19 @@
   }
 
   function seedWelcome() {
-    pushMessage('model', config.welcome || DEFAULT_CONFIG.welcome, rootChips());
+    pushMessage('model', config.welcome || DEFAULT_CONFIG.welcome);
+  }
+
+  /* 메뉴 안내 메시지 — 직전 메시지와 텍스트·칩이 모두 같을 때만 스킵(카드 반복 클릭 대비).
+     칩이 다르면 새로 쌓는다('더보기' 등 같은 문구·다른 목록 케이스). */
+  function pushMenu(text, chips) {
+    var last = log[log.length - 1];
+    var sameChips = false;
+    if (last && last.role === 'model' && last.text === text) {
+      try { sameChips = JSON.stringify(last.chips || []) === JSON.stringify(chips || []); } catch (e) {}
+      if (sameChips) { scrollBottom(); return last; }
+    }
+    return pushMessage('model', text, chips);
   }
 
   /* ------------------------------------------------------------------ *
@@ -509,7 +530,7 @@
    * ------------------------------------------------------------------ */
   function dispatch(cmd, arg) {
     switch (cmd) {
-      case 'root':    pushMessage('model', '메뉴예요. 원하시는 항목을 선택해 주세요.', rootChips()); break;
+      case 'root':    pushMenu('원하시는 메뉴를 선택해 주세요.', rootChips()); break;
       case 'cats':    botCategories(arg); break;
       case 'models':  botModels(arg); break;
       case 'pick':    botPick(arg); break;
@@ -524,20 +545,18 @@
 
   function botCategories(mode) {
     if (!catalogReady()) {
-      pushMessage('model', '제품 목록을 불러오지 못했어요. 잠시 후 다시 시도하시거나 고객센터(' + PHONE + ', ' + HOURS + ')로 문의해 주세요.', [{ label: '📞 전화 걸기', url: 'tel:' + PHONE }]);
+      pushMenu('제품 목록을 불러오지 못했어요.\n잠시 후 다시 시도하시거나 고객센터(' + PHONE + ', ' + HOURS + ')로 문의해 주세요.', [{ label: '전화 걸기', url: 'tel:' + PHONE }]);
       return;
     }
-    var noun = mode === 'parts' ? '부품' : '설명서';
-    var josa = mode === 'parts' ? '을' : '를';  // 받침 유무에 따른 목적격 조사
     var cats = catalog.categories.filter(function (c) {
       return catalog.models.some(function (m) { return m.category === c.id && m[mode]; });
     });
     if (!cats.length) {
-      pushMessage('model', noun + ' 정보를 찾지 못했어요. 고객센터(' + PHONE + ')로 문의해 주세요.');
+      pushMenu((mode === 'parts' ? '부품' : '설명서') + ' 정보를 찾지 못했어요. 고객센터(' + PHONE + ')로 문의해 주세요.');
       return;
     }
     var chips = cats.map(function (c) { return { label: c.label, cmd: 'models', arg: mode + '|' + c.id }; });
-    pushMessage('model', '어떤 종류의 제품 ' + noun + josa + ' 찾으세요? 카테고리를 선택해 주세요.', chips);
+    pushMenu(mode === 'parts' ? '어떤 제품의 부품이 필요하세요?' : '어떤 제품의 설명서가 필요하세요?', chips);
   }
 
   function botModels(arg) {
@@ -551,15 +570,14 @@
       }
     }
     if (!items.length) {
-      pushMessage('model', catLabel + ' 카테고리에서 해당 자료를 찾지 못했어요.');
+      pushMenu(catLabel + ' 카테고리에서 해당 자료를 찾지 못했어요.');
       return;
     }
     var show = items, extra = false;
     if (!all && items.length > 8) { show = items.slice(0, 8); extra = true; }
     var chips = show.map(function (m) { return { label: m.model, cmd: 'pick', arg: mode + '|' + m.model }; });
     if (extra) chips.push({ label: '더보기 (+' + (items.length - 8) + ')', cmd: 'models', arg: mode + '|' + cat + '|all' });
-    var noun = mode === 'parts' ? '부품이 필요한' : '설명서를 볼';
-    pushMessage('model', catLabel + ' 제품 중 ' + noun + ' 모델을 선택해 주세요.', chips);
+    pushMenu(catLabel + ' 모델을 선택해 주세요.', chips);
   }
 
   function botPick(arg) {
@@ -567,30 +585,30 @@
     var mode = p[0], code = p[1];
     var m = findModel(code);
     if (!m || !m[mode]) {
-      pushMessage('model', '해당 자료를 찾지 못했어요. 고객센터(' + PHONE + ')로 문의해 주세요.', [{ label: '📞 전화 걸기', url: 'tel:' + PHONE }]);
+      pushMenu('해당 자료를 찾지 못했어요. 고객센터(' + PHONE + ')로 문의해 주세요.', [{ label: '전화 걸기', url: 'tel:' + PHONE }]);
       return;
     }
     if (mode === 'manual') {
-      var mc = [{ label: '📄 설명서 PDF 열기', url: m.manual }];
+      var mc = [{ label: '설명서 PDF 열기', url: m.manual }];
       if (m.page) mc.push({ label: '제품 페이지', url: m.page });
-      pushMessage('model', m.model + (m.name ? ' ' + m.name : '') + ' 사용설명서예요. 아래 버튼으로 PDF를 열 수 있어요.', mc);
+      pushMenu(m.model + (m.name ? ' ' + m.name : '') + ' 설명서예요.', mc);
     } else {
-      pushMessage('model', m.model + ' 부품·구성품 구매 페이지로 안내해 드릴게요.', [
-        { label: '🧩 부품 구매 페이지', url: m.parts },
+      pushMenu(m.model + ' 부품·구성품 구매 페이지예요.', [
+        { label: '부품 구매 페이지', url: m.parts },
         { label: '스토어 홈', url: STORE }
       ]);
     }
   }
 
   function botAS() {
-    pushMessage('model',
-      'A/S가 필요하시면 고객센터로 연락 주세요. 증상과 모델명을 함께 알려주시면 접수가 빨라요.\n☎ ' + PHONE + ' (' + HOURS + ', 주말·공휴일 휴무)',
-      [{ label: '📞 전화 걸기', url: 'tel:' + PHONE }, { label: '스토어 톡톡 문의', url: STORE }]
+    pushMenu(
+      '증상과 모델명을 알려주시면 접수가 빨라요.\n전화 ' + PHONE + ' · ' + HOURS + ' (주말·공휴일 휴무)',
+      [{ label: '전화 걸기', url: 'tel:' + PHONE }, { label: '스토어 톡톡 문의', url: STORE }]
     );
   }
 
   function botAsk() {
-    pushMessage('model', '제품에 대해 궁금한 점을 아래 입력창에 자유롭게 적어 주세요. 예) "필터는 어떻게 청소하나요?"');
+    pushMenu('궁금한 점을 아래에 편하게 적어 주세요.\n예) 필터는 어떻게 청소하나요?');
     focusInput();
   }
 
@@ -598,13 +616,13 @@
     var code = productContext();
     var m = findModel(code);
     if (m && m.manual) {
-      var mc = [{ label: '📄 설명서 PDF 열기', url: m.manual }];
+      var mc = [{ label: '설명서 PDF 열기', url: m.manual }];
       if (m.page) mc.push({ label: '제품 페이지', url: m.page });
-      pushMessage('model', m.model + ' 사용설명서예요.', mc);
+      pushMenu(m.model + ' 설명서예요.', mc);
     } else if (config.endpoint) {
       sendUserMessage((code || '이 제품') + ' 설명서를 알려주세요');
     } else {
-      pushMessage('model', '해당 제품 설명서를 찾지 못했어요. 고객센터(' + PHONE + ')로 문의해 주세요.', [{ label: '📞 전화 걸기', url: 'tel:' + PHONE }]);
+      pushMenu('해당 제품 설명서를 찾지 못했어요. 고객센터(' + PHONE + ')로 문의해 주세요.', [{ label: '전화 걸기', url: 'tel:' + PHONE }]);
     }
   }
 
@@ -613,11 +631,11 @@
     var m = findModel(code);
     if (m && m.page) {
       var url = m.page + (m.page.indexOf('#') >= 0 ? '' : '#faq');
-      pushMessage('model', m.model + ' 자주 묻는 질문은 제품 페이지에서 확인하실 수 있어요.', [{ label: '❓ 제품 FAQ 보기', url: url }]);
+      pushMenu((m.model || '이 제품') + ' 자주 묻는 질문이에요.', [{ label: '제품 FAQ 보기', url: url }]);
     } else if (config.endpoint) {
       sendUserMessage((code || '이 제품') + ' 자주 묻는 질문을 알려주세요');
     } else {
-      pushMessage('model', (code || '해당 제품') + ' 관련 궁금한 점을 아래에 입력해 주세요.');
+      pushMenu((code || '해당 제품') + ' 관련 궁금한 점을 아래에 입력해 주세요.');
       focusInput();
     }
   }
@@ -652,7 +670,7 @@
     lastUserMessage = text;
 
     if (!config.endpoint) {
-      pushMessage('model', '아직 AI 상담 연결을 준비 중이에요. 아래 메뉴로 설명서·부품·A/S를 바로 안내해 드릴게요.', rootChips());
+      pushMenu('아직 AI 상담 연결을 준비 중이에요.\n아래 메뉴로 설명서·부품·A/S를 안내해 드릴게요.', rootChips());
       return;
     }
     callApi(text);
@@ -724,7 +742,7 @@
   function sanitizeChips(chips) {
     if (!Array.isArray(chips)) return [];
     var out = [];
-    for (var i = 0; i < chips.length && out.length < 6; i++) {
+    for (var i = 0; i < chips.length && out.length < 4; i++) {
       var c = chips[i];
       if (!c || typeof c !== 'object') continue;
       var label = typeof c.label === 'string' ? c.label.slice(0, 60) : '';
@@ -860,17 +878,61 @@
     if (triggerEls.length && fabEl) fabEl.classList.add('cchat-replaced');
   }
 
+  /* 페이지 요소에서 챗 플로우 바로 실행 — [data-clapa-chat-action="as|manual|parts|ask"] */
+  var actionEls = [];
+  var pendingAction = null;   // config/카탈로그 로드 전 클릭 → 로드 완료 후 실행
+
+  function doAction(name) {
+    switch (name) {
+      case 'manual': dispatch('cats', 'manual'); return true;
+      case 'parts':  dispatch('cats', 'parts'); return true;
+      case 'as':     dispatch('as'); return true;
+      case 'ask':    dispatch('ask'); return true;
+      default: return false;
+    }
+  }
+
+  function runAction(name) {
+    if (disabled) return false;
+    open();
+    if (!initDone) { pendingAction = name; return true; }  // 로드 완료 후 finishInit에서 실행
+    return doAction(name);
+  }
+
+  function bindActions() {
+    var nodes = document.querySelectorAll('[data-clapa-chat-action]');
+    actionEls = [];
+    for (var i = 0; i < nodes.length; i++) {
+      (function (n) {
+        n.setAttribute('aria-haspopup', 'dialog');
+        n.setAttribute('aria-expanded', 'false');
+        n.addEventListener('click', function (e) {
+          var name = n.getAttribute('data-clapa-chat-action');
+          if (disabled) return; // 챗 비활성 시 원래 링크(href 폴백)로 동작
+          e.preventDefault();
+          runAction(name);
+        });
+        actionEls.push(n);
+      })(nodes[i]);
+    }
+  }
+
   function syncTriggers(openState) {
     for (var i = 0; i < triggerEls.length; i++) {
       triggerEls[i].setAttribute('aria-expanded', openState ? 'true' : 'false');
       if (openState) triggerEls[i].classList.add('cchat-trigger-hidden');
       else triggerEls[i].classList.remove('cchat-trigger-hidden');
     }
+    // 액션 요소(토픽 카드 등)는 숨기지 않고 상태만 갱신
+    for (var j = 0; j < actionEls.length; j++) {
+      actionEls[j].setAttribute('aria-expanded', openState ? 'true' : 'false');
+    }
   }
 
   function boot() {
     buildUI();
     bindTriggers();
+    bindActions();
     loadSession();
 
     // 공개 API 노출 (기존 '채팅 상담' 버튼과 연결용)
@@ -878,6 +940,7 @@
       open: open,
       close: close,
       toggle: toggle,
+      action: runAction,
       isOpen: function () { return isOpen; },
       __mounted: true
     };
@@ -894,15 +957,24 @@
     initDone = true;
     disabled = (config.enabled === false);
     if (disabled) {
-      // 비활성 시 위젯 미노출 (페이지 트리거 버튼도 함께 숨김)
+      // 비활성 시 위젯 미노출 — 페이지 자체 CSS가 [hidden]을 이길 수 있어 display도 직접 차단
       if (fabEl) fabEl.hidden = true;
-      for (var i = 0; i < triggerEls.length; i++) triggerEls[i].hidden = true;
+      for (var i = 0; i < triggerEls.length; i++) {
+        triggerEls[i].hidden = true;
+        triggerEls[i].style.display = 'none';
+      }
+      pendingAction = null;
       return;
     }
     if (fabEl) fabEl.hidden = false;
     renderRootBar();
     if (log && log.length) renderAll();
     else seedWelcome();
+    if (pendingAction) {           // 로드 완료 전 눌린 토픽 카드 액션 지연 실행
+      var act = pendingAction;
+      pendingAction = null;
+      doAction(act);
+    }
   }
 
   if (document.readyState === 'loading') {

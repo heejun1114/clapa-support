@@ -2,5 +2,5 @@
   "endpoint": "https://script.google.com/macros/s/AKfycbykSb6nIgIZOwDsXUBK8b5FoEJuwS4Gft8V_MFwswJdrL5e6XuTfVSK11LujqujGkg5/exec",
   "enabled": true,
   "model": null,
-  "welcome": "안녕하세요! 클래파 고객지원 AI예요. 궁금한 제품이나 문의 내용을 선택하거나 자유롭게 입력해 주세요."
+  "welcome": "안녕하세요, 클래파 AI 상담이에요.\n궁금한 점을 입력하시거나 아래 메뉴를 눌러 주세요."
 }
