@@ -163,6 +163,7 @@
     width:100%;
     max-width:100%;
     height:88vh;
+    height:88dvh;               /* 지원 브라우저: URL바 등 크롬 변화에도 실제 뷰포트 기준 */
     border-radius:18px 18px 0 0;
     border-left:none;
     border-right:none;
@@ -291,12 +292,35 @@
   border-top-right-radius:5px;
 }
 
-/* ---------- 로딩(입력 중) 점 3개 ---------- */
+/* ---------- 로딩(입력 중) 점 3개 + 단계 문구 ---------- */
 .cchat-typing{
   display:inline-flex;
   align-items:center;
-  gap:5px;
+  gap:8px;
   padding:13px 15px;
+}
+.cchat-dots{
+  display:inline-flex;
+  align-items:center;
+  gap:5px;
+}
+.cchat-typing-tx{
+  font-size:12.5px;
+  color:var(--cchat-muted);
+  letter-spacing:-0.01em;
+}
+.cchat-typing-tx:empty{ display:none; }
+/* 스크린리더 전용 텍스트(시각적 숨김) */
+.cchat-sr{
+  position:absolute;
+  width:1px;
+  height:1px;
+  padding:0;
+  margin:-1px;
+  overflow:hidden;
+  clip-path:inset(50%);
+  white-space:nowrap;
+  border:0;
 }
 .cchat-dot{
   width:7px;
@@ -459,6 +483,51 @@
   text-overflow:ellipsis;
 }
 .cchat-toast.is-on{ opacity:1; transform:translate(-50%,0); }
+/* FAB 위에 붙는 1회성 힌트용 변형 — 우하단 정렬 */
+.cchat-toast--fab{
+  left:auto;
+  right:clamp(16px,3vw,28px);
+  transform:translate(0,8px);
+}
+.cchat-toast--fab.is-on{ transform:translate(0,0); }
+
+/* ---------- 답변 출처 캡션 + 피드백 미니 버튼 ---------- */
+.cchat-src{
+  font-size:11.5px;
+  color:var(--cchat-muted);
+  margin-top:4px;
+  padding:0 4px;
+  letter-spacing:-0.01em;
+}
+.cchat-fb{
+  display:flex;
+  align-items:center;
+  gap:4px;
+  margin-top:4px;
+  padding:0 2px;
+}
+.cchat-fb-btn{
+  border:none;
+  background:transparent;
+  color:var(--cchat-muted);
+  font-family:var(--cchat-font);
+  font-size:12px;
+  font-weight:600;
+  letter-spacing:-0.01em;
+  padding:4px 8px;
+  border-radius:8px;
+  cursor:pointer;
+  transition:background .15s var(--cchat-ease),color .15s var(--cchat-ease);
+}
+.cchat-fb-btn:hover{
+  background:var(--cchat-surface);
+  color:var(--cchat-teal-deep);
+}
+.cchat-fb-done{
+  font-size:12px;
+  color:var(--cchat-muted);
+  padding:4px 2px;
+}
 
 /* 페이지 자체 트리거([data-clapa-chat-trigger]) 사용 시 위젯 FAB 대체 */
 .cchat-replaced{ display:none !important; }

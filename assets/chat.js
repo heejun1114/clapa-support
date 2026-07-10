@@ -68,14 +68,21 @@
    * 상태
    * ------------------------------------------------------------------ */
   var config = assign({}, DEFAULT_CONFIG);
+  var configLoaded = false;    // chat-config.json 로드 성공 여부(실패 시 전송 시점에 1회 재시도)
   var catalog = null;          // { categories:[{id,label}], models:[{model,name,category,page,manual,parts}] }
-  var log = [];                // [{ role:'user'|'model', text:string, chips?:[] }]
+  var log = [];                // [{ role:'user'|'model', text, chips?, local?, meta? }]
   var sid = '';
   var isOpen = false;
   var sending = false;
   var lastUserMessage = '';
+  var lastMatchedCode = '';    // 서버 응답 matched의 마지막 값(A/S 폼 프리필용)
   var disabled = false;        // config.enabled === false
   var lastFocus = null;
+  var asWait = false;          // A/S 접수 조회 입력 대기 상태
+  var asWaitId = '';           // 조회 대기 중 확보한 접수번호
+  var asWaitP4 = '';           // 조회 대기 중 먼저 받은 연락처 뒷 4자리
+  var savedScrollY = 0;        // 모바일 배경 스크롤 잠금 복원용
+  var scrollLocked = false;
 
   /* DOM 참조 */
   var fabEl, panelEl, scrimEl, msgEl, chipsEl, taEl, sendBtn;
@@ -245,8 +252,13 @@
   function loadConfig() {
     return fetch(ROOT + 'data/chat-config.json', { cache: 'no-cache' })
       .then(function (r) { return r.ok ? r.json() : null; })
-      .then(function (j) { if (j && typeof j === 'object') config = assign({}, DEFAULT_CONFIG, j); })
-      .catch(function () { /* 기본값 유지 */ });
+      .then(function (j) {
+        if (j && typeof j === 'object') {
+          config = assign({}, DEFAULT_CONFIG, j);
+          configLoaded = true;   // 로드 성공 — endpoint가 비어 있다면 '의도적 미설정'
+        }
+      })
+      .catch(function () { /* 기본값 유지 — configLoaded=false 로 남아 전송 시 1회 재시도 */ });
   }
 
   function loadCatalog() {
@@ -444,6 +456,52 @@
     }, 2600);
   }
 
+  /* ------------------------------------------------------------------ *
+   * 챗 → A/S 접수 폼 컨텍스트 전달 (재입력 방지)
+   *  - 저장: A/S 폼 링크 칩 클릭 시 모델·최근 증상 서술·sid 를 sessionStorage에
+   *  - 소비: index.html 도착(boot) 또는 같은 페이지 즉시(fillAsForm) — 빈 칸만 채움
+   * ------------------------------------------------------------------ */
+  function saveAsDraft() {
+    try {
+      var code = lastMatchedCode || productContext() || '';
+      var model = '';
+      if (code) {
+        var m = findModel(code);
+        model = m ? m.model : String(code);
+      }
+      var texts = [];
+      for (var i = log.length - 1; i >= 0 && texts.length < 2; i--) {
+        var e = log[i];
+        if (e.role === 'user' && e.text && String(e.text).trim()) texts.unshift(String(e.text).trim());
+      }
+      sessionStorage.setItem('clapaChat.asDraft', JSON.stringify({
+        model: model, symptom: texts.join('\n').slice(0, 900), sid: sid
+      }));
+    } catch (e) {}
+  }
+
+  function fillAsForm() {
+    var raw = null;
+    try { raw = sessionStorage.getItem('clapaChat.asDraft'); } catch (e) {}
+    if (!raw) return false;
+    var modelEl = document.getElementById('as-model');
+    var sympEl = document.getElementById('as-symptom');
+    if (!modelEl && !sympEl) return false;   // A/S 폼이 없는 페이지 — 이동 후 boot에서 소비
+    var draft = null;
+    try { draft = JSON.parse(raw); } catch (e) { draft = null; }
+    try { sessionStorage.removeItem('clapaChat.asDraft'); } catch (e) {}
+    if (!draft) return false;
+    var filled = false;
+    if (modelEl && !modelEl.value && draft.model) { modelEl.value = String(draft.model).slice(0, 80); filled = true; }
+    if (sympEl && !sympEl.value && draft.symptom) { sympEl.value = String(draft.symptom); filled = true; }
+    if (!filled) return false;
+    // 모바일에서는 폼이 접혀 있으므로 펼쳐서 채워진 값이 보이게
+    var wrap = document.getElementById('as-form-wrap');
+    if (wrap) wrap.setAttribute('open', '');
+    showToast('대화 내용을 미리 담아뒀어요. 확인 후 접수해 주세요.');
+    return true;
+  }
+
   function buildChip(spec) {
     if (!spec || !spec.label) return null;
 
@@ -452,18 +510,23 @@
       if (!href) return null;                 // 허용되지 않은 url → 버튼 자체를 만들지 않음
       var a = el('a', { 'class': 'cchat-chip cchat-chip-link', href: href });
       var ext = isExternal(href);
-      if (ext) { a.setAttribute('target', '_blank'); a.setAttribute('rel', 'noopener'); }
+      var isPdf = /\.pdf(#|\?|$)/i.test(href);
+      // PDF는 동일 오리진이라도 새 탭 — 현재 탭(챗·사이트)이 PDF 뷰어로 덮이지 않게
+      if (ext || isPdf) { a.setAttribute('target', '_blank'); a.setAttribute('rel', 'noopener'); }
       a.appendChild(document.createTextNode(spec.label));
       if (ext) a.appendChild(el('span', { 'class': 'cchat-chip-ext', 'aria-hidden': 'true', text: '↗' }));
-      if (!ext && !/^tel:/i.test(href)) {
+      if (!ext && !isPdf && !/^tel:/i.test(href)) {
         a.addEventListener('click', function () {
+          var toAsForm = href.indexOf('#as-title') !== -1;
+          if (toAsForm) saveAsDraft();   // 챗에서 파악한 모델·증상을 A/S 폼으로 전달
           var msg = navMessage(href);
           if (!msg) return;
           var samePage = false;
           try { samePage = (new URL(href, location.href).pathname === location.pathname); } catch (e) {}
           if (samePage) {
             close();          // 패널을 닫아 이동한 위치가 보이게
-            showToast(msg);
+            var filled = toAsForm ? fillAsForm() : false;  // 리로드가 없으므로 즉시 프리필
+            if (!filled) showToast(msg);
           } else {
             try { sessionStorage.setItem('clapaChat.nav', msg); } catch (e) {}
           }
@@ -540,7 +603,65 @@
       }
       if (cr.childNodes.length) wrap.appendChild(cr);
     }
+    // 답변 출처 캡션 — 학습자료가 실제 프롬프트에 실렸을 때만(약한 표현 유지)
+    if (!isUser && entry.meta && entry.meta.grounded && entry.meta.codes && entry.meta.codes.length) {
+      wrap.appendChild(el('div', {
+        'class': 'cchat-src',
+        text: entry.meta.codes.join(', ') + ' 공식 자료를 참고한 답변이에요'
+      }));
+    }
+    // 답변 피드백(AI 답변에만, 비차단 미니 버튼) — sessionStorage 복원 시에도 상태 유지
+    if (!isUser && entry.meta && entry.meta.msgId) {
+      wrap.appendChild(buildFeedback(entry));
+    }
     msgEl.appendChild(wrap);
+  }
+
+  /* '도움됐어요/아쉬워요' — 1회 투표 후 비활성, 전송은 fire-and-forget */
+  function buildFeedback(entry) {
+    var box = el('div', { 'class': 'cchat-fb' });
+    if (entry.meta.vote) {
+      box.appendChild(el('span', { 'class': 'cchat-fb-done', text: '의견 감사해요' }));
+      return box;
+    }
+    function onVote(vote) {
+      return function () {
+        if (entry.meta.vote) return;
+        entry.meta.vote = vote;
+        persistSession();
+        sendFeedback(entry, vote);
+        box.textContent = '';
+        box.appendChild(el('span', { 'class': 'cchat-fb-done', text: '의견 감사해요' }));
+        if (vote === 'down') {
+          pushMenu('아쉬운 점을 알려주셔서 감사해요.\n사람 상담으로 이어서 도와드릴게요.', [
+            { label: 'A/S 접수 폼 바로가기', url: 'index.html#as-title' },
+            { label: '전화 걸기', url: 'tel:' + PHONE },
+            { label: '스토어 톡톡 문의', url: STORE }
+          ]);
+        }
+      };
+    }
+    var up = el('button', { 'class': 'cchat-fb-btn', type: 'button', text: '도움됐어요' });
+    var down = el('button', { 'class': 'cchat-fb-btn', type: 'button', text: '아쉬워요' });
+    up.addEventListener('click', onVote('up'));
+    down.addEventListener('click', onVote('down'));
+    box.appendChild(up);
+    box.appendChild(down);
+    return box;
+  }
+
+  function sendFeedback(entry, vote) {
+    if (!config.endpoint) return;
+    try {
+      fetch(config.endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=UTF-8' },
+        body: JSON.stringify({
+          action: 'feedback', sessionId: sid, msgId: entry.meta.msgId, vote: vote,
+          page: currentPageId(), question: (entry.meta.q || '').slice(0, 300)
+        })
+      }).catch(function () {});
+    } catch (e) {}
   }
 
   function renderAll() {
@@ -549,9 +670,10 @@
     scrollBottom();
   }
 
-  function pushMessage(role, text, chips) {
+  function pushMessage(role, text, chips, extra) {
     var entry = { role: role, text: String(text == null ? '' : text) };
     if (chips && chips.length) entry.chips = chips;
+    if (extra) assign(entry, extra);   // local(히스토리 제외)·meta(msgId/출처) 등
     log.push(entry);
     if (log.length > MAX_LOG) log = log.slice(log.length - MAX_LOG);
     persistSession();
@@ -561,19 +683,28 @@
   }
 
   function seedWelcome() {
-    pushMessage('model', config.welcome || DEFAULT_CONFIG.welcome);
+    var text = config.welcome || DEFAULT_CONFIG.welcome;
+    var m = findModel(productContext());
+    if (m) {
+      // 제품 페이지 첫 인사 — 모델명이 히스토리에 남아 서버 매칭에도 도움되므로 local 아님
+      text += '\n지금 보고 계신 ' + m.name + '(' + m.model + ') 관련 질문은 모델명 없이 바로 답해드릴 수 있어요.';
+      pushMessage('model', text);
+    } else {
+      pushMessage('model', text, null, { local: 1 });
+    }
   }
 
   /* 메뉴 안내 메시지 — 직전 메시지와 텍스트·칩이 모두 같을 때만 스킵(카드 반복 클릭 대비).
-     칩이 다르면 새로 쌓는다('더보기' 등 같은 문구·다른 목록 케이스). */
-  function pushMenu(text, chips) {
+     칩이 다르면 새로 쌓는다('더보기' 등 같은 문구·다른 목록 케이스).
+     기본은 local(AI 히스토리 제외) — 모델코드가 담겨 매칭에 쓰이는 안내만 keepHistory=true. */
+  function pushMenu(text, chips, keepHistory) {
     var last = log[log.length - 1];
     var sameChips = false;
     if (last && last.role === 'model' && last.text === text) {
       try { sameChips = JSON.stringify(last.chips || []) === JSON.stringify(chips || []); } catch (e) {}
       if (sameChips) { scrollBottom(); return last; }
     }
-    return pushMessage('model', text, chips);
+    return pushMessage('model', text, chips, keepHistory ? null : { local: 1 });
   }
 
   /* ------------------------------------------------------------------ *
@@ -587,23 +718,31 @@
       case 'pick':    botPick(arg); break;
       case 'as':      botAS(); break;
       case 'ask':     botAsk(); break;
+      case 'asstatus': botAsStatus(); break;
       case 'pmanual': botProductManual(); break;
       case 'pfaq':    botProductFaq(); break;
-      case 'retry':   retry(); break;
+      case 'retry':   retry(arg); break;
       default: break;
     }
   }
 
   function botCategories(mode) {
     if (!catalogReady()) {
-      pushMenu('제품 목록을 불러오지 못했어요.\n잠시 후 다시 시도하시거나 고객센터(' + PHONE + ', ' + HOURS + ')로 문의해 주세요.', [{ label: '전화 걸기', url: 'tel:' + PHONE }]);
+      pushMenu('제품 목록을 불러오지 못했어요.\n잠시 후 다시 시도하시거나 아래에서 이어서 문의해 주세요.', [
+        { label: 'AI 상담에 물어보기', cmd: 'ask' },
+        { label: '전화 걸기', url: 'tel:' + PHONE }
+      ]);
       return;
     }
+    // 자료(설명서/부품) 없는 카테고리도 숨기지 않고 노출 — 선택 시 botModels가 대안을 안내
     var cats = catalog.categories.filter(function (c) {
-      return catalog.models.some(function (m) { return m.category === c.id && m[mode]; });
+      return catalog.models.some(function (m) { return m.category === c.id; });
     });
     if (!cats.length) {
-      pushMenu((mode === 'parts' ? '부품' : '설명서') + ' 정보를 찾지 못했어요. 고객센터(' + PHONE + ')로 문의해 주세요.');
+      pushMenu((mode === 'parts' ? '부품' : '설명서') + ' 정보를 찾지 못했어요.\n스토어 톡톡으로 문의하시거나 AI 상담에게 물어봐 주세요.', [
+        { label: '스토어 톡톡 문의', url: STORE },
+        { label: 'AI 상담에 물어보기', cmd: 'ask' }
+      ]);
       return;
     }
     var chips = cats.map(function (c) { return { label: c.label, cmd: 'models', arg: mode + '|' + c.id }; });
@@ -623,7 +762,13 @@
       }
     }
     if (!items.length) {
-      pushMenu(catLabel + ' 카테고리에서 해당 자료를 찾지 못했어요.');
+      // 막다른 길이 아니라 대안 제시 — 톡톡·AI 상담으로 잇는다
+      pushMenu('죄송해요, ' + catLabel + ' 종류는 아직 ' +
+        (mode === 'parts' ? '등록된 부품 상품이 없어요' : '등록된 설명서가 없어요') +
+        '.\n스토어 톡톡으로 문의하시거나 AI 상담에게 편하게 물어봐 주세요.', [
+        { label: '스토어 톡톡 문의', url: STORE },
+        { label: 'AI 상담에 물어보기', cmd: 'ask' }
+      ]);
       return;
     }
     var show = items, extra = false;
@@ -638,18 +783,24 @@
     var mode = p[0], code = p[1];
     var m = findModel(code);
     if (!m || !m[mode]) {
-      pushMenu('해당 자료를 찾지 못했어요. 고객센터(' + PHONE + ')로 문의해 주세요.', [{ label: '전화 걸기', url: 'tel:' + PHONE }]);
+      pushMenu('해당 자료를 찾지 못했어요.\nAI 상담에게 물어보시거나 고객센터(' + PHONE + ')로 문의해 주세요.', [
+        { label: 'AI 상담에 물어보기', cmd: 'ask' },
+        { label: '전화 걸기', url: 'tel:' + PHONE }
+      ]);
       return;
     }
     if (mode === 'manual') {
       var mc = [{ label: '설명서 PDF 열기', url: m.manual }];
       if (m.page) mc.push({ label: '제품 페이지', url: m.page });
-      pushMenu(m.model + (m.name ? ' ' + m.name : '') + ' 사용설명서를 찾았어요.\n아래 버튼을 누르시면 PDF로 바로 열려요.', mc);
+      mc.push({ label: '사용법 물어보기', send: m.model + ' 사용법이 궁금해요' });
+      // 모델코드가 담긴 확인 메시지 — 서버 매칭 근거가 되므로 히스토리에 유지
+      pushMenu(m.model + (m.name ? ' ' + m.name : '') + ' 사용설명서를 찾았어요.\n아래 버튼을 누르시면 PDF로 바로 열려요.', mc, true);
     } else {
       pushMenu(m.model + ' 부품·구성품 구매 페이지로 안내해 드릴게요.\n필요한 부품이 보이지 않으면 편하게 물어봐 주세요.', [
         { label: '부품 구매 페이지', url: m.parts },
-        { label: '스토어 홈', url: STORE }
-      ]);
+        { label: '스토어 홈', url: STORE },
+        { label: '부품 문의하기', send: m.model + ' 부품이 궁금해요' }
+      ], true);
     }
   }
 
@@ -658,10 +809,20 @@
       'A/S 접수를 도와드릴게요.\n증상과 모델명을 함께 알려주시면 접수가 훨씬 빨라요.\n전화 ' + PHONE + ' · ' + HOURS + ' (주말·공휴일 휴무)',
       [
         { label: 'A/S 접수 폼 바로가기', url: 'index.html#as-title' },
+        { label: '접수 조회', cmd: 'asstatus' },
         { label: '전화 걸기', url: 'tel:' + PHONE },
         { label: '스토어 톡톡 문의', url: STORE }
       ]
     );
+  }
+
+  /* A/S 접수 상태 조회 — 접수번호+연락처 뒷 4자리를 받아 서버 조회(AI 미경유) */
+  function botAsStatus() {
+    asWait = true;
+    asWaitId = '';
+    asWaitP4 = '';
+    pushMenu('접수 조회를 도와드릴게요.\n접수번호와 연락처 뒷 4자리를 알려주시면 바로 확인해 드릴게요.\n예) AS-260710-160225, 0000');
+    focusInput(true);   // 직접 입력 의사가 명확한 흐름
   }
 
   function botAsk() {
@@ -675,7 +836,9 @@
     if (m && m.manual) {
       var mc = [{ label: '설명서 PDF 열기', url: m.manual }];
       if (m.page) mc.push({ label: '제품 페이지', url: m.page });
-      pushMenu(m.model + ' 사용설명서를 찾았어요.\n아래 버튼을 누르시면 PDF로 바로 열려요.', mc);
+      mc.push({ label: '사용법 물어보기', send: m.model + ' 사용법이 궁금해요' });
+      // 모델코드가 담긴 확인 메시지 — 서버 매칭 근거가 되므로 히스토리에 유지
+      pushMenu(m.model + ' 사용설명서를 찾았어요.\n아래 버튼을 누르시면 PDF로 바로 열려요.', mc, true);
     } else if (config.endpoint) {
       sendUserMessage((code || '이 제품') + ' 설명서를 알려주세요');
     } else {
@@ -688,7 +851,7 @@
     var m = findModel(code);
     if (m && m.page) {
       var url = m.page + (m.page.indexOf('#') >= 0 ? '' : '#faq');
-      pushMenu((m.model || '이 제품') + '에 대해 자주 묻는 질문을 모아뒀어요.\n아래 버튼에서 확인해 보세요.', [{ label: '제품 FAQ 보기', url: url }]);
+      pushMenu((m.model || '이 제품') + '에 대해 자주 묻는 질문을 모아뒀어요.\n아래 버튼에서 확인해 보세요.', [{ label: '제품 FAQ 보기', url: url }], true);
     } else if (config.endpoint) {
       sendUserMessage((code || '이 제품') + ' 자주 묻는 질문을 알려주세요');
     } else {
@@ -724,26 +887,125 @@
     taEl.value = '';
     autoGrow();
     dropKeyboard();           // 모바일: 전송하면 키보드를 내려 답변이 보이게
-    pushMessage('user', text);
+    var entry = pushMessage('user', text);
     lastUserMessage = text;
 
+    // A/S 접수 조회 흐름은 AI를 거치지 않고 서버 조회로 처리.
+    // 가로챈 발화(접수번호·연락처 뒷 4자리)는 AI 히스토리에서 제외(개인정보 미전송).
+    if (interceptAsStatus(text)) {
+      entry.local = 1;
+      persistSession();
+      return;
+    }
+
     if (!config.endpoint) {
-      pushMenu('아직 AI 상담 연결을 준비 중이에요.\n아래 메뉴로 설명서·부품·A/S를 안내해 드릴게요.', rootChips());
+      if (configLoaded) {
+        // 정상 로드됐지만 endpoint 미설정(배포 전) — 정당한 안내
+        pushMenu('아직 AI 상담 연결을 준비 중이에요.\n아래 메뉴로 설명서·부품·A/S를 안내해 드릴게요.', rootChips());
+      } else {
+        // 설정 로드가 실패했던 경우 — 1회 재시도 후 진행/안내
+        setBusy(true);
+        loadConfig().then(function () {
+          setBusy(false);
+          if (config.endpoint) {
+            callApi(text);
+          } else {
+            pushMenu('연결이 원활하지 않아요.\n잠시 후 다시 시도하시거나 고객센터(' + PHONE + ', ' + HOURS + ')로 문의해 주세요.', [
+              { label: '전화 걸기', url: 'tel:' + PHONE },
+              { label: '스토어 톡톡 문의', url: STORE }
+            ]);
+          }
+        });
+      }
       return;
     }
     callApi(text);
   }
 
-  /* 서버로 보낼 history — 마지막(현재) 사용자 메시지는 제외, 최근 MAX_TURNS 턴 */
-  function buildHistory() {
+  /* A/S 접수번호 조회 가로채기 — 접수번호 패턴 감지 또는 조회 대기 상태의 뒷 4자리 */
+  function interceptAsStatus(text) {
+    var idM = text.match(/AS-?\s?\d{6}-?\s?\d{6}/i);
+    if (idM) {
+      var norm = 'AS-' + idM[0].replace(/\D/g, '').slice(0, 12).replace(/(\d{6})(\d{6})/, '$1-$2');
+      var rest4 = text.replace(idM[0], '').replace(/\D/g, '').slice(-4);
+      if (rest4.length !== 4 && asWaitP4) rest4 = asWaitP4;
+      if (rest4.length === 4) {
+        asWait = false; asWaitId = ''; asWaitP4 = '';
+        callAsStatus(norm, rest4);
+        return true;
+      }
+      asWait = true;
+      asWaitId = norm;
+      pushMenu('접수번호를 확인했어요.\n본인 확인을 위해 연락처 뒷 4자리를 알려주시겠어요?');
+      return true;
+    }
+    if (asWait) {
+      if (/^\D*\d{4}\D*$/.test(text)) {
+        var l4 = text.replace(/\D/g, '');
+        if (asWaitId) {
+          var savedId = asWaitId;
+          asWait = false; asWaitId = ''; asWaitP4 = '';
+          callAsStatus(savedId, l4);
+        } else {
+          asWaitP4 = l4;
+          pushMenu('확인 감사해요.\n접수번호(예: AS-260710-160225)도 알려주시면 바로 조회해 드릴게요.');
+        }
+        return true;
+      }
+      // 조회 흐름에서 벗어난 일반 질문 — 대기 해제 후 평소대로 처리
+      asWait = false; asWaitId = ''; asWaitP4 = '';
+      return false;
+    }
+    return false;
+  }
+
+  function callAsStatus(id, last4) {
+    if (!config.endpoint) {
+      pushMenu('지금은 온라인 조회가 어려워요.\n전화(' + PHONE + ', ' + HOURS + ')로 확인 부탁드려요.', [{ label: '전화 걸기', url: 'tel:' + PHONE }]);
+      return;
+    }
+    setBusy(true);
+    var typing = showTyping();
+    fetch(config.endpoint, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=UTF-8' },
+      body: JSON.stringify({ action: 'asStatus', sessionId: sid, id: id, phone4: last4 })
+    })
+      .then(function (r) { return r.json(); })
+      .then(function (data) {
+        removeNode(typing);
+        if (data && data.ok) {
+          pushMenu('접수번호 ' + id + ' 건은 지금 "' + String(data.status || '접수') + '" 상태예요.' +
+            (data.date ? '\n(접수일 ' + String(data.date) + ')' : '') +
+            '\n처리되는 대로 순서대로 연락드릴게요.');
+        } else {
+          pushMenu((data && data.error) ? String(data.error)
+            : '접수 내역을 확인하지 못했어요. 접수번호와 연락처 뒷 4자리를 다시 확인해 주세요.',
+            [{ label: '전화 걸기', url: 'tel:' + PHONE }]);
+        }
+      })
+      .catch(function () {
+        removeNode(typing);
+        pushMenu('연결이 원활하지 않아요.\n잠시 후 다시 시도하시거나 전화(' + PHONE + ', ' + HOURS + ')로 확인 부탁드려요.', [{ label: '전화 걸기', url: 'tel:' + PHONE }]);
+      })
+      .then(function () { setBusy(false); });
+  }
+
+  /* 서버로 보낼 history — 로컬 안내(메뉴·오류·환영)는 제외해 12턴 창 오염 방지.
+     current(방금 보낸 메시지)와 같은 마지막 user 항목만 제외 — 재시도 시에도 정합. */
+  function buildHistory(current) {
     var turns = [];
     for (var i = 0; i < log.length; i++) {
       var e = log[i];
+      if (e.local) continue;
       if ((e.role === 'user' || e.role === 'model') && e.text && String(e.text).trim()) {
         turns.push({ role: e.role, text: String(e.text) });
       }
     }
-    if (turns.length) turns = turns.slice(0, turns.length - 1); // 현재 사용자 발화 제외
+    if (turns.length && turns[turns.length - 1].role === 'user' &&
+        turns[turns.length - 1].text === current) {
+      turns.pop();
+    }
     return turns.slice(-MAX_TURNS);
   }
 
@@ -756,14 +1018,25 @@
       action: 'chat',
       sessionId: sid,
       message: text,
-      history: buildHistory(),
+      history: buildHistory(text),
       product: productContext(),
       page: currentPageId()
     };
 
-    // 30초 타임아웃 — GAS 콜드스타트 등 무응답 시 busy 상태 고착 방지
+    // 30초 타임아웃 — GAS 콜드스타트 등 무응답 시 busy 상태 고착 방지.
+    // abort 콜백에서 플래그를 세워 일반 네트워크 오류와 문구를 구분한다.
+    var timedOut = false;
     var controller = (typeof AbortController === 'function') ? new AbortController() : null;
-    var timer = controller ? setTimeout(function () { controller.abort(); }, 30000) : null;
+    var timer = controller ? setTimeout(function () { timedOut = true; controller.abort(); }, 30000) : null;
+
+    // 대기 단계 안내 — 점 3개 옆에 2.5초 간격으로 문구 로테이션(마지막 문구 유지)
+    var stages = ['질문을 확인하고 있어요', '제품 자료를 찾고 있어요', '답변을 정리하고 있어요'];
+    var stageIdx = 0;
+    var stageTimer = setInterval(function () {
+      if (stageIdx >= stages.length) { clearInterval(stageTimer); return; }
+      setTypingText(typing, stages[stageIdx]);
+      stageIdx++;
+    }, 2500);
 
     fetch(config.endpoint, {
       method: 'POST',
@@ -776,24 +1049,63 @@
       .then(function (data) {
         removeNode(typing);
         if (data && data.ok) {
-          pushMessage('model', data.reply || '답변을 준비했어요.', sanitizeChips(data.chips));
+          if (data.matched && data.matched.length) {
+            lastMatchedCode = String(data.matched[data.matched.length - 1]);
+          }
+          var meta = { msgId: (typeof data.msgId === 'string' ? data.msgId : ''), q: text };
+          // 출처 캡션은 되묻기(ambiguous) 답변에는 붙이지 않는다 — 확인 질문에 '자료 참고' 표기는 오인
+          if (data.grounded && data.groundedCodes && data.groundedCodes.length && !data.ambiguous) {
+            meta.grounded = true;
+            meta.codes = data.groundedCodes.slice(0, 2).map(function (c) { return String(c); });
+          }
+          pushMessage('model', data.reply || '답변을 준비했어요.', sanitizeChips(data.chips), { meta: meta });
         } else {
           var msg = (data && data.error) ? data.error : '답변을 가져오지 못했어요. 잠시 후 다시 시도해 주세요.';
-          pushMessage('model', msg, [{ label: '다시 시도', cmd: 'retry' }]);
+          pushMessage('model', msg, errorChips(data, text), { local: 1 });
         }
       })
-      .catch(function () {
+      .catch(function (err) {
         removeNode(typing);
-        pushMessage('model',
-          '연결이 원활하지 않아요. 잠시 후 다시 시도하시거나 고객센터(' + PHONE + ', ' + HOURS + ')로 문의해 주세요.',
-          [{ label: '다시 시도', cmd: 'retry' }]);
+        if (timedOut || (err && err.name === 'AbortError')) {
+          // 30초 타임아웃 — 오래 기다린 고객에게 정직한 설명 + 대안 경로
+          pushMessage('model',
+            '답변 준비가 오래 걸리고 있어요. 잠시 후 다시 시도해 주시겠어요?\n급하시면 아래에서 바로 접수·문의하실 수 있어요.',
+            [
+              { label: '다시 시도', cmd: 'retry', arg: text.slice(0, 1000) },
+              { label: 'A/S 접수 폼 바로가기', url: 'index.html#as-title' },
+              { label: '스토어 톡톡 문의', url: STORE }
+            ], { local: 1 });
+        } else if (typeof navigator !== 'undefined' && navigator.onLine === false) {
+          pushMessage('model',
+            '인터넷 연결을 확인해 주세요.\n연결된 뒤 다시 시도하시면 바로 도와드릴게요.',
+            [{ label: '다시 시도', cmd: 'retry', arg: text.slice(0, 1000) }], { local: 1 });
+        } else {
+          pushMessage('model',
+            '연결이 원활하지 않아요. 잠시 후 다시 시도하시거나 고객센터(' + PHONE + ', ' + HOURS + ')로 문의해 주세요.',
+            [
+              { label: '다시 시도', cmd: 'retry', arg: text.slice(0, 1000) },
+              { label: '전화 걸기', url: 'tel:' + PHONE }
+            ], { local: 1 });
+        }
       })
       .then(function () {
         if (timer) clearTimeout(timer);
+        clearInterval(stageTimer);
         sending = false;
         setBusy(false);
         focusInput();
       });
+  }
+
+  /* 서버 ok:false 응답의 대안 칩 — 전화·톡톡 상시, retryable일 때만 '다시 시도' */
+  function errorChips(data, text) {
+    var chips = [
+      { label: '전화 걸기', url: 'tel:' + PHONE },
+      { label: '스토어 톡톡 문의', url: STORE }
+    ];
+    var retryable = !(data && data.retryable === false);
+    if (retryable && text) chips.push({ label: '다시 시도', cmd: 'retry', arg: text.slice(0, 1000) });
+    return chips;
   }
 
   /* 서버 chips 위생 처리 — 계약 형태만 통과, url은 허용 목록 검증 */
@@ -814,26 +1126,55 @@
     return out;
   }
 
-  function retry() {
-    if (!config.endpoint || !lastUserMessage || sending) return;
-    callApi(lastUserMessage);
+  /* 재시도 — 칩에 내장된 실패 질문(arg) 우선, 없으면 메모리 변수 → 로그 역순 탐색.
+     페이지 이동 후에도 칩이 정확히 '실패했던 그 질문'을 재전송한다. */
+  function retry(arg) {
+    if (!config.endpoint || sending) return;
+    var text = (typeof arg === 'string' && arg.trim()) ? arg.trim() : '';
+    if (!text) text = lastUserMessage;
+    if (!text) {
+      for (var i = log.length - 1; i >= 0; i--) {
+        var e = log[i];
+        if (e.role === 'user' && e.text && String(e.text).trim()) { text = String(e.text).trim(); break; }
+      }
+    }
+    if (!text) {
+      pushMenu('다시 시도할 문의를 찾지 못했어요.\n궁금하신 내용을 아래에 다시 입력해 주세요.');
+      focusInput();
+      return;
+    }
+    lastUserMessage = text;
+    callApi(text);
   }
 
-  /* 로딩 점 3개 (로그에 남기지 않음) */
+  /* 로딩 점 3개 + 스크린리더용 숨김 텍스트 + 단계 문구 자리 (로그에 남기지 않음) */
   function showTyping() {
     var wrap = el('div', { 'class': 'cchat-msg cchat-bot' });
-    var bubble = el('div', { 'class': 'cchat-bubble cchat-typing', 'aria-label': '답변 작성 중' });
-    for (var i = 0; i < 3; i++) bubble.appendChild(el('span', { 'class': 'cchat-dot' }));
+    var bubble = el('div', { 'class': 'cchat-bubble cchat-typing' });
+    var dots = el('span', { 'class': 'cchat-dots', 'aria-hidden': 'true' });
+    for (var i = 0; i < 3; i++) dots.appendChild(el('span', { 'class': 'cchat-dot' }));
+    bubble.appendChild(dots);
+    // role=log(msgEl) 라이브 영역이 낭독하는 실제 텍스트 — 시각적으로만 숨김
+    bubble.appendChild(el('span', { 'class': 'cchat-sr', text: '답변을 작성하고 있어요' }));
+    bubble.appendChild(el('span', { 'class': 'cchat-typing-tx', 'aria-hidden': 'true' }));
     wrap.appendChild(bubble);
     msgEl.appendChild(wrap);
     scrollBottom();
     return wrap;
   }
 
+  /* 대기 단계 문구 갱신 — showTyping이 만든 자리에만 기록(로그 미저장) */
+  function setTypingText(wrap, text) {
+    try {
+      var tx = wrap.querySelector('.cchat-typing-tx');
+      if (tx) { tx.textContent = text; scrollBottom(); }
+    } catch (e) {}
+  }
+
   function setBusy(b) {
     sending = b;
     if (sendBtn) sendBtn.disabled = b;
-    if (msgEl) msgEl.setAttribute('aria-busy', b ? 'true' : 'false');
+    // msgEl(aria-live) 에 aria-busy를 걸면 일부 보조기술이 답변 낭독까지 보류하므로 걸지 않는다
   }
 
   /* ------------------------------------------------------------------ *
@@ -845,6 +1186,10 @@
     persistSession();
     msgEl.textContent = '';
     lastUserMessage = '';
+    lastMatchedCode = '';  // 폐기된 대화의 모델이 A/S 폼에 프리필되지 않게
+    asWait = false;        // A/S 조회 대기 상태도 함께 초기화
+    asWaitId = '';
+    asWaitP4 = '';
     seedWelcome();
     renderRootBar();
     focusInput();
@@ -853,6 +1198,53 @@
   /* ------------------------------------------------------------------ *
    * 열기/닫기/접근성
    * ------------------------------------------------------------------ */
+  /* 모바일 시트가 열린 동안 배경 페이지 스크롤 잠금(닫으면 보던 위치 복원) */
+  function lockScroll() {
+    if (scrollLocked) return;
+    if (!window.matchMedia || !matchMedia('(max-width: 640px)').matches) return;
+    savedScrollY = window.pageYOffset || document.documentElement.scrollTop || 0;
+    var bs = document.body.style;
+    bs.position = 'fixed';
+    bs.top = (-savedScrollY) + 'px';
+    bs.left = '0';
+    bs.right = '0';
+    bs.width = '100%';
+    scrollLocked = true;
+  }
+
+  function unlockScroll() {
+    if (!scrollLocked) return;
+    scrollLocked = false;
+    var bs = document.body.style;
+    bs.position = '';
+    bs.top = '';
+    bs.left = '';
+    bs.right = '';
+    bs.width = '';
+    window.scrollTo(0, savedScrollY);
+  }
+
+  /* 페이지 이동으로 제품 컨텍스트가 바뀐 채 패널을 열면 한 줄 안내(#30).
+     최초 저장은 finishInit — 같은 페이지 첫 오픈은 환영 인사가 담당하므로 중복 없음 */
+  function contextNotice() {
+    if (!initDone || disabled) return;
+    var cur = productContext() || '';
+    var stored = null;
+    try { stored = sessionStorage.getItem('clapaChat.prod'); } catch (e) { return; }
+    if (stored === null || cur === stored) return;
+    try { sessionStorage.setItem('clapaChat.prod', cur); } catch (e) {}
+    if (!cur) return;                  // 홈으로 이동(컨텍스트 해제)은 조용히 갱신만
+    var hasUserTurn = false;           // 실제 대화가 있어야 안내(환영 인사와 중복 방지)
+    for (var i = 0; i < log.length; i++) {
+      if (log[i].role === 'user') { hasUserTurn = true; break; }
+    }
+    if (!hasUserTurn) return;
+    var m = findModel(cur);
+    if (!m) return;
+    // 제품명이 히스토리에 실려 서버 매칭에도 신호가 되므로 keepHistory
+    pushMenu('지금은 ' + m.name + '(' + m.model + ') 페이지를 보고 계시네요.\n이 제품 기준으로 이어서 도와드릴게요.', null, true);
+  }
+
   function open() {
     if (disabled || isOpen || !panelEl) return;
     isOpen = true;
@@ -866,6 +1258,9 @@
     fabEl.classList.add('cchat-hidden');
     fabEl.setAttribute('aria-expanded', 'true');
     syncTriggers(true);
+    lockScroll();
+    try { localStorage.setItem('clapaChat.hint', '1'); } catch (e) {}  // 챗을 연 사용자는 힌트 영구 미노출
+    contextNotice();
     document.addEventListener('keydown', onEsc, true);
     autoGrow();                 // 패널이 보이는 상태에서 입력창 높이 보정(빈 스크롤바 방지)
     setTimeout(focusInput, 30);
@@ -880,12 +1275,26 @@
     panelEl.classList.remove('is-open');
     scrimEl.hidden = true;
     panelEl.hidden = true;
+    panelEl.style.height = '';   // visualViewport 보정 해제
     fabEl.classList.remove('cchat-hidden');
     fabEl.setAttribute('aria-expanded', 'false');
     syncTriggers(false);
+    unlockScroll();
     document.removeEventListener('keydown', onEsc, true);
     try { (lastFocus && lastFocus.focus) ? lastFocus.focus() : fabEl.focus(); } catch (e) { try { fabEl.focus(); } catch (e2) {} }
     dispatchEvt('clapachat:close');
+  }
+
+  /* 모바일 키보드가 올라오면(visualViewport 축소) 패널 높이를 보정해 입력창이 가려지지 않게 */
+  function onVvResize() {
+    if (!isOpen || !panelEl) return;
+    if (!window.matchMedia || !matchMedia('(max-width: 640px)').matches) return;
+    try {
+      var vv = window.visualViewport;
+      if (!vv || !vv.height) return;
+      panelEl.style.height = Math.round(vv.height * 0.88) + 'px';
+      scrollBottom();
+    } catch (e) {}
   }
 
   function toggle() { isOpen ? close() : open(); }
@@ -1028,12 +1437,20 @@
       __mounted: true
     };
 
-    // 챗 링크로 페이지를 이동해 왔다면 안내 토스트 표시
+    // 챗에서 A/S 폼으로 넘어온 초안이 있으면 폼 프리필(홈에서만 동작)
+    var filledDraft = fillAsForm();
+
+    // 챗 링크로 페이지를 이동해 왔다면 안내 토스트 표시(프리필 토스트와 중복 방지)
     var nav = null;
     try { nav = sessionStorage.getItem('clapaChat.nav'); } catch (e) {}
     if (nav) {
       try { sessionStorage.removeItem('clapaChat.nav'); } catch (e) {}
-      showToast(nav);
+      if (!filledDraft) showToast(nav);
+    }
+
+    // 모바일 화면 키보드 대응(열림 시 패널 높이 보정)
+    if (window.visualViewport) {
+      try { window.visualViewport.addEventListener('resize', onVvResize); } catch (e) {}
     }
 
     loadConfig()
@@ -1061,6 +1478,13 @@
     renderRootBar();
     if (log && log.length) renderAll();
     else seedWelcome();
+    // 제품 컨텍스트 키 최초 저장 — 이후 페이지 이동 감지(contextNotice)의 기준값
+    try {
+      if (sessionStorage.getItem('clapaChat.prod') === null) {
+        sessionStorage.setItem('clapaChat.prod', productContext() || '');
+      }
+    } catch (e) {}
+    maybeShowHint();
     if (pendingAction) {           // 로드 완료 전 눌린 토픽 카드 액션 지연 실행
       var act = pendingAction;
       pendingAction = null;
@@ -1071,6 +1495,24 @@
       pendingAsk = null;
       sendUserMessage(q);
     }
+  }
+
+  /* 모바일 첫 방문자용 1회성 힌트 — FAB가 아이콘만 보이는 소형 화면에서
+     'AI가 바로 답해드려요' 말풍선을 4초 표시 후 자동 소멸(진행 비차단) */
+  function maybeShowHint() {
+    if (disabled || isOpen) return;
+    var seen = null;
+    try { seen = localStorage.getItem('clapaChat.hint'); } catch (e) { return; }  // 프라이빗 모드 등
+    if (seen) return;
+    if (!window.matchMedia || !matchMedia('(max-width: 480px)').matches) return;
+    try { localStorage.setItem('clapaChat.hint', '1'); } catch (e) {}
+    var t = el('div', { 'class': 'cchat-toast cchat-toast--fab', role: 'status', text: 'AI가 바로 답해드려요' });
+    document.body.appendChild(t);
+    setTimeout(function () { t.classList.add('is-on'); }, 20);
+    setTimeout(function () {
+      t.classList.remove('is-on');
+      setTimeout(function () { removeNode(t); }, 300);
+    }, 4000);
   }
 
   if (document.readyState === 'loading') {

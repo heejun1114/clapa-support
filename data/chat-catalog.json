@@ -377,7 +377,7 @@
    "code": "BMD-656",
    "aliases": [],
    "name": "클래파 미니 제습기",
-   "cat": "season",
+   "cat": "dehum",
    "page": null,
    "manual": null,
    "parts": null,
@@ -411,7 +411,7 @@
     "BFB-VC160"
    ],
    "name": "클래파 무선청소기 전용 구성품 (BFB-VC170)",
-   "cat": "clean",
+   "cat": "wireless",
    "page": null,
    "manual": null,
    "parts": "https://smartstore.naver.com/skillfulbrother/products/10228033078",
