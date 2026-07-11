@@ -53,7 +53,7 @@
   window.clapaTrack = send; // chat.js 등에서 선택적으로 사용
 
   /* endpoint 로드 후 큐 방출 */
-  fetch(new URL('data/chat-config.json', ROOT).href, { cache: 'default' })
+  fetch(new URL('data/chat-config.json?t=' + Date.now(), ROOT).href, { cache: 'no-store' })
     .then(function (r) { return r.ok ? r.json() : null; })
     .then(function (cfg) {
       if (!cfg || !cfg.endpoint || !/^https:\/\/script\.google\.com\//.test(cfg.endpoint)) return;

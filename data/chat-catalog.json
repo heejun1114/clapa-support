@@ -387,7 +387,7 @@
    "aliases": [],
    "name": "클래파 미니 제습기",
    "cat": "dehum",
-   "page": null,
+   "page": "products/bmd-656.html",
    "manual": null,
    "parts": null,
    "store": "https://smartstore.naver.com/skillfulbrother/products/10302008839",
@@ -395,7 +395,11 @@
     "미니 제습기",
     "제습기",
     "습기",
-    "제습"
+    "제습",
+    "소형 제습기",
+    "원룸 제습기",
+    "펠티어",
+    "실리카겔"
    ]
   },
   {
@@ -419,13 +423,19 @@
    "aliases": [
     "BFB-VC160"
    ],
-   "name": "클래파 무선청소기 전용 구성품 (BFB-VC170)",
+   "name": "클래파 S9 싸이클론 무선청소기",
    "cat": "wireless",
-   "page": null,
+   "page": "products/bfb-vc170.html",
    "manual": null,
    "parts": "https://smartstore.naver.com/skillfulbrother/products/10228033078",
    "store": "https://smartstore.naver.com/skillfulbrother/products/10228033078",
    "keywords": [
+    "무선청소기",
+    "청소기",
+    "싸이클론",
+    "무선",
+    "물걸레",
+    "S9",
     "구성품",
     "부품"
    ]

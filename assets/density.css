@@ -1,0 +1,35 @@
+/* CLAPA 제품 상세 — 정보 밀도 완화(빽빽함 해소). 홈의 brand-tab/필 시각언어 재사용, 새 색·그림자 없음.
+   자바스크립트가 꺼져도 현행 모습 그대로(점진적 향상). chat.css 뒤에 로드되어 인라인 스타일을 덮는다. */
+
+/* ── FAQ 카테고리 필터 칩 (문항이 많은 페이지에서만 density.js가 삽입) ── */
+.faq-filter{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 14px;}
+.faq-filter .fchip{
+  display:inline-flex;align-items:baseline;gap:7px;
+  background:var(--paper);border:1px solid var(--line);border-radius:100px;
+  padding:8px 14px;font:inherit;font-size:13px;font-weight:600;letter-spacing:-0.01em;color:var(--ink);
+  cursor:pointer;transition:border-color .15s var(--ease),background .15s var(--ease),color .15s var(--ease);
+}
+.faq-filter .fchip .lat{font-size:11px;font-weight:500;letter-spacing:0.03em;color:var(--muted);}
+.faq-filter .fchip:hover{border-color:var(--teal);color:var(--teal-deep);}
+.faq-filter .fchip.is-active{background:var(--teal);border-color:var(--teal);color:#fff;}
+.faq-filter .fchip.is-active .lat{color:rgba(255,255,255,.72);}
+.faq-item[hidden]{display:none;}
+
+/* ── 주요 사양 접기 — 사양이 많은 페이지는 6행만 노출 + '전체 사양 보기' ── */
+.spec-row[hidden]{display:none;}
+.spec-toggle{
+  display:inline-flex;align-items:center;gap:6px;margin-top:14px;
+  background:var(--paper);border:1px solid var(--line);border-radius:100px;
+  padding:9px 16px;font:inherit;font-size:13px;font-weight:600;letter-spacing:-0.01em;color:var(--teal-deep);
+  cursor:pointer;transition:border-color .15s var(--ease),background .15s var(--ease);
+}
+.spec-toggle:hover{border-color:var(--teal);background:var(--teal-wash);}
+.spec-toggle svg{width:14px;height:14px;transition:transform .18s var(--ease);}
+.spec-toggle[aria-expanded="true"] svg{transform:rotate(180deg);}
+@media print{.spec-row[hidden]{display:flex;}.faq-item[hidden]{display:block;}.faq-filter,.spec-toggle{display:none;}}
+
+/* ── 여백 위계 미세 조정(데스크톱만 — 모바일 노안 확대 규칙은 보존) ── */
+@media(min-width:641px){
+  .faq-item>summary{padding:19px 18px;}
+  .faq-qt{line-height:1.5;}
+}

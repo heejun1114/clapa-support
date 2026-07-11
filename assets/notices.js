@@ -192,23 +192,30 @@
     section.hidden = false;
   }
 
-  fetch('data/notices.json', { cache: 'no-cache' })
-    .then(function (r) { return r.ok ? r.json() : null; })
-    .then(function (j) {
-      if (!j || !Array.isArray(j.notices)) return;
-      var today = todayKst();
-      var visible = j.notices.filter(function (n) {
-        return n && n.active !== false && n.title && inWindow(n, today);
+  // GitHub Pages가 notices.json을 10분(max-age=600) 캐시해 공지가 늦게/불규칙하게 반영되던 문제 →
+  // 캐시버스터(?t)+no-store로 항상 최신을 받고, 순간 실패 시 1회 재시도(조용한 미표시 방지).
+  function loadNotices(attempt) {
+    fetch('data/notices.json?t=' + Date.now(), { cache: 'no-store' })
+      .then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+      .then(function (j) {
+        if (!j || !Array.isArray(j.notices)) return;
+        var today = todayKst();
+        var visible = j.notices.filter(function (n) {
+          return n && n.active !== false && n.title && inWindow(n, today);
+        });
+        visible.sort(function (a, b) {
+          if (!!b.pinned - !!a.pinned) return (!!b.pinned - !!a.pinned);
+          return String(b.createdAt || '').localeCompare(String(a.createdAt || ''));
+        });
+        var banner = visible.filter(function (n) { return placeOf(n) === 'banner'; })[0];
+        if (banner) renderBanner(banner);
+        var asNotice = visible.filter(function (n) { return placeOf(n) === 'as'; })[0];
+        if (asNotice) renderAs(asNotice);
+        renderList(visible.filter(function (n) { return placeOf(n) === 'list'; }));
+      })
+      .catch(function () {
+        if (!attempt) setTimeout(function () { loadNotices(1); }, 1500);
       });
-      visible.sort(function (a, b) {
-        if (!!b.pinned - !!a.pinned) return (!!b.pinned - !!a.pinned);
-        return String(b.createdAt || '').localeCompare(String(a.createdAt || ''));
-      });
-      var banner = visible.filter(function (n) { return placeOf(n) === 'banner'; })[0];
-      if (banner) renderBanner(banner);
-      var asNotice = visible.filter(function (n) { return placeOf(n) === 'as'; })[0];
-      if (asNotice) renderAs(asNotice);
-      renderList(visible.filter(function (n) { return placeOf(n) === 'list'; }));
-    })
-    .catch(function () { /* 로드 실패 시 조용히 미표시 */ });
+  }
+  loadNotices(0);
 })();

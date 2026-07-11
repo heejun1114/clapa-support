@@ -252,7 +252,7 @@
    * 설정/카탈로그 로드
    * ------------------------------------------------------------------ */
   function loadConfig() {
-    return fetch(ROOT + 'data/chat-config.json', { cache: 'no-cache' })
+    return fetch(ROOT + 'data/chat-config.json?t=' + Date.now(), { cache: 'no-store' })
       .then(function (r) { return r.ok ? r.json() : null; })
       .then(function (j) {
         if (j && typeof j === 'object') {
@@ -264,7 +264,7 @@
   }
 
   function loadCatalog() {
-    return fetch(ROOT + 'data/chat-catalog.json', { cache: 'no-cache' })
+    return fetch(ROOT + 'data/chat-catalog.json?t=' + Date.now(), { cache: 'no-store' })
       .then(function (r) { return r.ok ? r.json() : null; })
       .then(function (j) { catalog = normalizeCatalog(j); })
       .catch(function () { catalog = null; });
