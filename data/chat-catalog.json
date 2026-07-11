@@ -362,7 +362,7 @@
    "name": "클래파 프리미엄 ECO PTC 온풍기",
    "cat": "heat",
    "page": "products/bfb-ph180w.html",
-   "manual": null,
+   "manual": "manuals/BFB-PH180W.pdf",
    "parts": null,
    "store": "https://smartstore.naver.com/skillfulbrother/products/9574170549",
    "keywords": [
@@ -388,7 +388,7 @@
    "name": "클래파 미니 제습기",
    "cat": "dehum",
    "page": "products/bmd-656.html",
-   "manual": null,
+   "manual": "manuals/BMD-656.pdf",
    "parts": null,
    "store": "https://smartstore.naver.com/skillfulbrother/products/10302008839",
    "keywords": [
@@ -408,7 +408,7 @@
    "name": "클래파 BLDC 드라이기",
    "cat": "living",
    "page": null,
-   "manual": null,
+   "manual": "manuals/CHD-D16G.pdf",
    "parts": null,
    "store": "https://smartstore.naver.com/skillfulbrother/products/10833395664",
    "keywords": [
@@ -426,7 +426,7 @@
    "name": "클래파 S9 싸이클론 무선청소기",
    "cat": "wireless",
    "page": "products/bfb-vc170.html",
-   "manual": null,
+   "manual": "manuals/BFB-VC170.pdf",
    "parts": "https://smartstore.naver.com/skillfulbrother/products/10228033078",
    "store": "https://smartstore.naver.com/skillfulbrother/products/10228033078",
    "keywords": [
@@ -445,7 +445,7 @@
    "name": "클래파 6인치 프리미엄 터치형 무선선풍기",
    "cat": "fan",
    "page": "products/bfb-sf500.html",
-   "manual": "",
+   "manual": "manuals/BFB-SF500_BFB-SF500E.pdf",
    "parts": "https://smartstore.naver.com/skillfulbrother/search?q=BFB-SF500",
    "store": "https://smartstore.naver.com/skillfulbrother/products/6999811935",
    "keywords": [
@@ -463,7 +463,7 @@
    "name": "클래파 6인치 프리미엄 회전형 무선선풍기",
    "cat": "fan",
    "page": "products/bfb-sf500e.html",
-   "manual": "",
+   "manual": "manuals/BFB-SF500_BFB-SF500E.pdf",
    "parts": "https://smartstore.naver.com/skillfulbrother/search?q=BFB-SF500E",
    "store": "https://smartstore.naver.com/skillfulbrother/products/6999752314",
    "keywords": [
@@ -481,7 +481,7 @@
    "name": "클래파 휴대용 대용량 선풍기",
    "cat": "fan",
    "page": "products/bfb-hf5200w.html",
-   "manual": "",
+   "manual": "manuals/BFB-HF5200W.pdf",
    "parts": "https://smartstore.naver.com/skillfulbrother/search?q=BFB-HF5200W",
    "store": "https://smartstore.naver.com/skillfulbrother/products/6999777607",
    "keywords": [
@@ -498,7 +498,7 @@
    "name": "클래파 보조배터리 겸용 휴대용 선풍기",
    "cat": "fan",
    "page": "products/bfb-hf2601w.html",
-   "manual": "",
+   "manual": "manuals/BFB-HF2601W.pdf",
    "parts": "https://smartstore.naver.com/skillfulbrother/search?q=BFB-HF2601W",
    "store": "https://smartstore.naver.com/skillfulbrother/products/6999678677",
    "keywords": [
@@ -514,7 +514,7 @@
    "name": "클래파 8인치 3D 써큘레이터",
    "cat": "fan",
    "page": "products/bfb-cf0802rw.html",
-   "manual": "",
+   "manual": "manuals/BFB-CF0802RW_CCF-30BL.pdf",
    "parts": "https://smartstore.naver.com/skillfulbrother/search?q=BFB-CF0802RW",
    "store": "https://smartstore.naver.com/skillfulbrother",
    "keywords": [
@@ -534,7 +534,7 @@
    "name": "클래파 스탠드 선풍기 (단종)",
    "cat": "fan",
    "page": "products/bdf-3d12r.html",
-   "manual": "",
+   "manual": "manuals/BDF-3D12R.pdf",
    "parts": "https://smartstore.naver.com/skillfulbrother/search?q=BDF-3D12R",
    "store": "https://smartstore.naver.com/skillfulbrother",
    "keywords": [
@@ -553,7 +553,7 @@
    "name": "클래파 날개없는 타워형 선풍기 (단종)",
    "cat": "fan",
    "page": "products/btf-01r.html",
-   "manual": "",
+   "manual": "manuals/BTF-01R.pdf",
    "parts": "https://smartstore.naver.com/skillfulbrother/search?q=BTF-01R",
    "store": "https://smartstore.naver.com/skillfulbrother",
    "keywords": [

@@ -56,7 +56,9 @@
   fetch(new URL('data/chat-config.json?t=' + Date.now(), ROOT).href, { cache: 'no-store' })
     .then(function (r) { return r.ok ? r.json() : null; })
     .then(function (cfg) {
-      if (!cfg || !cfg.endpoint || !/^https:\/\/script\.google\.com\//.test(cfg.endpoint)) return;
+      // GAS 직접 주소 또는 Cloudflare Worker 프록시 주소만 허용
+      if (!cfg || !cfg.endpoint ||
+          !/^https:\/\/(script\.google\.com|[\w.-]+\.workers\.dev)\//.test(cfg.endpoint)) return;
       endpoint = cfg.endpoint;
       var q = queue; queue = [];
       for (var i = 0; i < q.length; i++) post(q[i]);
