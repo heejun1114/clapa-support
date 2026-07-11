@@ -1206,11 +1206,9 @@
     if (stored === null || cur === stored) return;
     try { sessionStorage.setItem('clapaChat.prod', cur); } catch (e) {}
     if (!cur) return;                  // 홈으로 이동(컨텍스트 해제)은 조용히 갱신만
-    var hasUserTurn = false;           // 실제 대화가 있어야 안내(환영 인사와 중복 방지)
-    for (var i = 0; i < log.length; i++) {
-      if (log[i].role === 'user') { hasUserTurn = true; break; }
-    }
-    if (!hasUserTurn) return;
+    // 발화 여부와 무관하게 안내한다(2026-07-11 사장님 피드백 — 제품 페이지에서 열면
+    // "보고 계시네요"가 나와야 함). 같은 페이지 첫 세션은 환영 인사가 컨텍스트를 담당하고
+    // stored===cur 가드가 중복을 막는다.
     var m = findModel(cur);
     if (!m) return;
     // 제품명이 히스토리에 실려 서버 매칭에도 신호가 되므로 keepHistory
