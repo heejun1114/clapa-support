@@ -610,58 +610,27 @@
         text: entry.meta.codes.join(', ') + ' 공식 자료를 참고한 답변이에요'
       }));
     }
-    // 답변 피드백(AI 답변에만, 비차단 미니 버튼) — sessionStorage 복원 시에도 상태 유지
-    if (!isUser && entry.meta && entry.meta.msgId) {
-      wrap.appendChild(buildFeedback(entry));
+    // 접수 상태 스테퍼(접수 조회 결과 메시지에만) — 비차단 시각 표시
+    if (!isUser && typeof entry.steps === 'number') {
+      wrap.appendChild(buildSteps(entry.steps));
     }
+    // (답변 피드백 버튼은 2026-07-11 사장님 지시로 제거 — 재도입 금지)
     msgEl.appendChild(wrap);
   }
 
-  /* '도움됐어요/아쉬워요' — 1회 투표 후 비활성, 전송은 fire-and-forget */
-  function buildFeedback(entry) {
-    var box = el('div', { 'class': 'cchat-fb' });
-    if (entry.meta.vote) {
-      box.appendChild(el('span', { 'class': 'cchat-fb-done', text: '의견 감사해요' }));
-      return box;
+  /* 접수됨 → 확인중 → 처리완료 3단계 스테퍼. idx = 현재 단계(0~2). */
+  function buildSteps(idx) {
+    var names = ['접수됨', '확인중', '처리완료'];
+    var box = el('div', { 'class': 'cchat-steps', role: 'img',
+      'aria-label': '진행 상태: ' + names[idx] });
+    for (var i = 0; i < names.length; i++) {
+      if (i > 0) {
+        box.appendChild(el('span', { 'class': 'cchat-step-bar' + (i <= idx ? ' is-done' : '') }));
+      }
+      var cls = 'cchat-step' + (i < idx ? ' is-done' : (i === idx ? ' is-now' : ''));
+      box.appendChild(el('span', { 'class': cls, text: names[i] }));
     }
-    function onVote(vote) {
-      return function () {
-        if (entry.meta.vote) return;
-        entry.meta.vote = vote;
-        persistSession();
-        sendFeedback(entry, vote);
-        box.textContent = '';
-        box.appendChild(el('span', { 'class': 'cchat-fb-done', text: '의견 감사해요' }));
-        if (vote === 'down') {
-          pushMenu('아쉬운 점을 알려주셔서 감사해요.\n사람 상담으로 이어서 도와드릴게요.', [
-            { label: 'A/S 접수 폼 바로가기', url: 'index.html#as-title' },
-            { label: '전화 걸기', url: 'tel:' + PHONE },
-            { label: '스토어 톡톡 문의', url: STORE }
-          ]);
-        }
-      };
-    }
-    var up = el('button', { 'class': 'cchat-fb-btn', type: 'button', text: '도움됐어요' });
-    var down = el('button', { 'class': 'cchat-fb-btn', type: 'button', text: '아쉬워요' });
-    up.addEventListener('click', onVote('up'));
-    down.addEventListener('click', onVote('down'));
-    box.appendChild(up);
-    box.appendChild(down);
     return box;
-  }
-
-  function sendFeedback(entry, vote) {
-    if (!config.endpoint) return;
-    try {
-      fetch(config.endpoint, {
-        method: 'POST',
-        headers: { 'Content-Type': 'text/plain;charset=UTF-8' },
-        body: JSON.stringify({
-          action: 'feedback', sessionId: sid, msgId: entry.meta.msgId, vote: vote,
-          page: currentPageId(), question: (entry.meta.q || '').slice(0, 300)
-        })
-      }).catch(function () {});
-    } catch (e) {}
   }
 
   function renderAll() {
@@ -975,9 +944,12 @@
       .then(function (data) {
         removeNode(typing);
         if (data && data.ok) {
-          pushMenu('접수번호 ' + id + ' 건은 지금 "' + String(data.status || '접수') + '" 상태예요.' +
+          var st = String(data.status || '접수');
+          // 시트 상태값 → 스테퍼 단계(운영자가 다른 표현을 써도 포함 매칭으로 흡수)
+          var stepIdx = st.indexOf('완료') !== -1 ? 2 : (st.indexOf('확인') !== -1 || st.indexOf('처리') !== -1 ? 1 : 0);
+          pushMessage('model', '접수번호 ' + id + ' 건은 지금 "' + st + '" 상태예요.' +
             (data.date ? '\n(접수일 ' + String(data.date) + ')' : '') +
-            '\n처리되는 대로 순서대로 연락드릴게요.');
+            '\n처리되는 대로 순서대로 연락드릴게요.', null, { local: 1, steps: stepIdx });
         } else {
           pushMenu((data && data.error) ? String(data.error)
             : '접수 내역을 확인하지 못했어요. 접수번호와 연락처 뒷 4자리를 다시 확인해 주세요.',
@@ -1379,6 +1351,7 @@
       case 'parts':  dispatch('cats', 'parts'); return true;
       case 'as':     dispatch('as'); return true;
       case 'ask':    dispatch('ask'); return true;
+      case 'asstatus': dispatch('asstatus'); return true;  // 접수 조회 (홈 퀵메뉴)
       default: return false;
     }
   }

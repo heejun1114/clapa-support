@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>보증·소모품 안내 — CLAPA 고객지원센터</title>
+<meta name="description" content="클래파 제품의 무상 보증 기준, 소모품 교체·세척 주기, 배송·교환·반품 안내.">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230E6F66'/%3E%3Cpath d='M42.5 41.5a13 13 0 1 1 0-19' fill='none' stroke='%23fff' stroke-width='7' stroke-linecap='round'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+  :root{
+    --paper:#FFFFFF;
+    --surface:#F5F4F1;
+    --sand:#EFE9E1;
+    --line:#E6E1D8;
+    --line-soft:#EDE9E1;
+    --ink:#23201B;
+    --muted:#6F675C;
+    --teal:#0E6F66;
+    --teal-deep:#0A5750;
+    --teal-wash:#E4F0ED;
+    --radius:12px;
+    --maxw:1080px;
+    --ease:cubic-bezier(.22,.61,.36,1);
+  }
+  *{box-sizing:border-box;}
+  html{-webkit-text-size-adjust:100%;}
+  body{
+    margin:0;background:var(--paper);color:var(--ink);
+    font-family:'Pretendard Variable',Pretendard,-apple-system,'Apple SD Gothic Neo',sans-serif;
+    font-size:15px;line-height:1.6;letter-spacing:-0.011em;
+    -webkit-font-smoothing:antialiased;word-break:keep-all;
+  }
+  a{color:inherit;text-decoration:none;}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding-inline:clamp(18px,4vw,40px);}
+  .skip{position:absolute;left:-9999px;top:0;background:var(--teal);color:#fff;padding:8px 14px;border-radius:8px;z-index:100;}
+  .skip:focus{left:12px;top:12px;}
+  :focus-visible{outline:2px solid var(--teal);outline-offset:2px;border-radius:3px;}
+
+  .site-header{
+    position:sticky;top:0;z-index:40;
+    background:rgba(255,255,255,.86);
+    backdrop-filter:saturate(180%) blur(10px);
+    border-bottom:1px solid var(--line);
+  }
+  .header-inner{display:flex;align-items:center;justify-content:space-between;gap:18px;height:60px;}
+  .wordmark{display:inline-flex;align-items:baseline;gap:8px;font-weight:700;font-size:16.5px;letter-spacing:-0.02em;}
+  .wordmark .mark-a{color:var(--ink);}
+  .wordmark .mark-b{
+    color:var(--teal);font-weight:600;font-size:13px;letter-spacing:0.06em;
+    padding:2px 7px;border:1px solid var(--teal-wash);border-radius:6px;
+    background:var(--teal-wash);transform:translateY(-1px);
+  }
+  .header-nav{display:flex;align-items:center;gap:6px;}
+  .nav-link{font-size:13.5px;font-weight:500;color:var(--muted);padding:8px 12px;border-radius:8px;}
+  .nav-link:hover{color:var(--ink);background:var(--surface);}
+  .nav-link.is-store{color:var(--teal-deep);font-weight:600;}
+  @media(max-width:480px){
+    .header-inner{gap:10px;min-width:0;}
+    .header-nav .nav-link:not(.is-store){display:none;}
+    .nav-link.is-store{font-size:12.5px;padding:8px 9px;}
+  }
+
+  .page-hero{padding-block:clamp(30px,5vw,52px) clamp(16px,3vw,26px);}
+  .eyebrow{display:inline-block;color:var(--teal-deep);font-size:12.5px;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:12px;}
+  h1{margin:0;font-size:clamp(24px,3.6vw,32px);line-height:1.2;font-weight:700;letter-spacing:-0.03em;}
+  .page-sub{margin:12px 0 0;color:var(--muted);font-size:15px;max-width:56ch;}
+
+  .section{padding-block:clamp(26px,4vw,42px);}
+  .section + .section{border-top:1px solid var(--line-soft);}
+  h2{margin:0 0 6px;font-size:clamp(19px,2.4vw,23px);font-weight:700;letter-spacing:-0.024em;}
+  .section-desc{margin:0 0 18px;color:var(--muted);font-size:14.5px;}
+
+  table{width:100%;border-collapse:collapse;background:var(--paper);}
+  .tbl-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:var(--radius);}
+  th,td{
+    text-align:left;vertical-align:top;
+    padding:12px 14px;border-top:1px solid var(--line-soft);
+    font-size:14.5px;line-height:1.62;
+  }
+  thead th{
+    border-top:0;background:var(--surface);
+    font-size:13px;font-weight:600;color:var(--muted);letter-spacing:-0.01em;
+    white-space:nowrap;
+  }
+  td:first-child,th:first-child{white-space:nowrap;font-weight:600;}
+  td .model{display:inline-block;color:var(--teal-deep);font-weight:600;font-size:13.5px;background:var(--teal-wash);border-radius:6px;padding:1px 7px;margin:1px 2px 1px 0;}
+  td small{color:var(--muted);}
+
+  .note-card{
+    margin-top:14px;background:var(--surface);border:1px solid var(--line);
+    border-radius:var(--radius);padding:14px 16px;
+    font-size:13.5px;color:var(--muted);line-height:1.65;
+  }
+  .note-card strong{color:var(--ink);}
+
+  ul.policy{margin:0;padding-left:19px;}
+  ul.policy li{margin:7px 0;font-size:14.5px;}
+  .policy-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  .policy-card{border:1px solid var(--line);border-radius:var(--radius);padding:18px;}
+  .policy-card h3{margin:0 0 10px;font-size:15.5px;font-weight:700;letter-spacing:-0.02em;}
+  @media(max-width:720px){.policy-grid{grid-template-columns:1fr;}}
+
+  .cta-band{
+    margin-block:clamp(26px,4vw,42px);
+    background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);
+    padding:clamp(18px,3vw,26px);
+    display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap;
+  }
+  .cta-band p{margin:0;font-size:14.5px;color:var(--muted);}
+  .cta-band .tel{font-size:20px;font-weight:700;color:var(--ink);letter-spacing:-0.02em;}
+  .cta-actions{display:flex;gap:9px;flex-wrap:wrap;}
+  .btn{
+    display:inline-flex;align-items:center;justify-content:center;gap:6px;
+    min-height:44px;padding:10px 18px;border-radius:10px;
+    font-size:14px;font-weight:600;letter-spacing:-0.01em;
+    border:1px solid var(--line);background:var(--paper);color:var(--ink);
+    transition:border-color .15s var(--ease),background .15s var(--ease),color .15s var(--ease);
+  }
+  .btn:hover{border-color:var(--teal);color:var(--teal-deep);background:var(--teal-wash);}
+  .btn.is-primary{background:var(--teal);border-color:var(--teal);color:#fff;}
+  .btn.is-primary:hover{background:var(--teal-deep);border-color:var(--teal-deep);color:#fff;}
+
+  .site-footer{border-top:1px solid var(--line);padding-block:26px 34px;margin-top:20px;}
+  .footer-legal{color:var(--muted);font-size:12.5px;}
+
+  @media(max-width:640px){
+    body{font-size:15.5px;}
+    th,td{font-size:14.5px;padding:11px 12px;}
+    /* 좁은 화면: 첫 열 줄바꿈 허용(가로 스크롤 최소화) */
+    td:first-child,th:first-child{white-space:normal;min-width:130px;}
+    td{min-width:110px;}
+    .page-sub{font-size:15px;}
+    ul.policy li{font-size:15px;}
+    .footer-legal{font-size:13px;}
+  }
+  @media(prefers-reduced-motion:reduce){
+    *{transition:none !important;animation:none !important;scroll-behavior:auto !important;}
+  }
+</style>
+<link rel="stylesheet" href="assets/chat.css">
+</head>
+<body>
+<a class="skip" href="#main">본문으로 건너뛰기</a>
+
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a class="wordmark" href="index.html" aria-label="CLAPA SUPPORT 고객지원센터 홈">
+      <span class="mark-a">CLAPA</span><span class="mark-b">SUPPORT</span>
+    </a>
+    <nav class="header-nav" aria-label="주요 메뉴">
+      <a class="nav-link" href="index.html#finder-title">전체 제품</a>
+      <a class="nav-link is-inquiry" href="tel:1522-8508">전화 1522-8508</a>
+      <a class="nav-link is-store" href="https://clapa.kr" rel="noopener">clapa.kr 스토어<span aria-hidden="true"> ↗</span></a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+
+  <section class="page-hero">
+    <div class="wrap">
+      <span class="eyebrow">Warranty &amp; Consumables</span>
+      <h1>보증·소모품 안내</h1>
+      <p class="page-sub">클래파 제품의 무상 보증 기준과 소모품 교체·세척 주기를 모델별로 안내해 드려요.
+        여기에 없는 모델은 고객센터(1522-8508, 평일 09:00~15:00)로 문의해 주세요.</p>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="warranty-title">
+    <div class="wrap">
+      <h2 id="warranty-title">무상 보증 기준</h2>
+      <p class="section-desc">보증 기간과 범위는 제품마다 다릅니다. 아래는 공식 자료로 확인된 모델별 기준이에요.</p>
+      <div class="tbl-wrap">
+        <table>
+          <thead>
+            <tr><th scope="col">제품</th><th scope="col">무상 보증</th><th scope="col">참고</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>미니 핸디형 무선청소기 <span class="model">BVC-H10</span></td>
+              <td>1년 무상 A/S</td>
+              <td>이후 유상 수리 가능(왕복 배송비 고객 부담). 필터 등 소모품은 별도 구매.</td>
+            </tr>
+            <tr>
+              <td>멀티 무선 선풍기 <span class="model">BEF-C156W</span></td>
+              <td>모터 무상 2년</td>
+              <td>그 외 부위는 고객센터 상담 후 안내.</td>
+            </tr>
+            <tr>
+              <td>스테인리스 2단 계란찜기 <span class="model">BES-131W</span> <span class="model">CES-232W</span></td>
+              <td>본체 1년</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>엘리트 타워 무선청소기 <span class="model">BVC-T500W</span></td>
+              <td>본체·모터 1년</td>
+              <td>배터리·필터 등 소모품은 별도 기준. 국내(파주) A/S 센터 운영.</td>
+            </tr>
+            <tr>
+              <td>미니 제습기 <span class="model">BMD-656</span></td>
+              <td>1년</td>
+              <td>모터·전원 관련 작동 불량 시 A/S 가능.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="note-card">
+        <strong>소모품 안내</strong> — 필터·먼지봉투·배터리 등 소모품은 소모성 부품으로, 교체·파손 시 별도 구매 대상이에요.
+        표에 없는 모델의 보증 기준은 고객센터에서 확인해 드립니다.
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="consumable-title">
+    <div class="wrap">
+      <h2 id="consumable-title">소모품 교체·세척 주기</h2>
+      <p class="section-desc">사용 환경에 따라 달라질 수 있어요. 부품 구매는 각 제품 페이지의 '부품' 버튼에서 이어집니다.</p>
+      <div class="tbl-wrap">
+        <table>
+          <thead>
+            <tr><th scope="col">소모품</th><th scope="col">해당 제품</th><th scope="col">주기·관리 방법</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>헤파(HEPA) 필터</td>
+              <td><span class="model">BVC-H10</span> <span class="model">BVC-S185</span> <span class="model">BVC-T500W</span> <span class="model">BVC-H38</span></td>
+              <td>물세척 금지 — 마른 솔로 먼지를 털어 사용하는 교체형 필터예요.
+                <small>BVC-H10·BVC-S185는 사용 빈도에 따라 <strong>3~6개월</strong>에 한 번 교체를 권장해요.</small></td>
+            </tr>
+            <tr>
+              <td>스틸(스테인리스) 필터</td>
+              <td><span class="model">BVC-H10</span></td>
+              <td>물세척 후 반영구 사용. 세척 후 자연건조 약 2일.</td>
+            </tr>
+            <tr>
+              <td>먼지봉투</td>
+              <td><span class="model">BVC-S185</span> <span class="model">BVC-T500W</span></td>
+              <td>재사용 불가, 보통 <strong>약 3개월/1매</strong>(5매로 6개월~1년). 교체 알림(빨간 램프)이 뜨면 교체.
+                <small>T500W와 S185 봉투는 서로 호환되지 않아요.</small></td>
+            </tr>
+            <tr>
+              <td>필터망</td>
+              <td><span class="model">BVC-S185</span></td>
+              <td>3개월 전후 흡입력이 떨어지면 물청소 후 재사용.</td>
+            </tr>
+            <tr>
+              <td>건습식 청소기 필터(부직포·스펀지)</td>
+              <td><span class="model">BVC-L138</span></td>
+              <td>물세척 가능 — 그늘에서 완전히 말린 후 장착. 오염이 심하면 교체 권장.</td>
+            </tr>
+            <tr>
+              <td>제습기 에어필터</td>
+              <td><span class="model">BED-611L</span></td>
+              <td>후면 필터를 분리해 흐르는 물에 세척, 그늘에서 완전 건조 후 장착. <small>필터 없이 작동하면 모터 고장의 원인이 돼요.</small></td>
+            </tr>
+            <tr>
+              <td>실리카겔 습기제거제</td>
+              <td><span class="model">BMD-656</span></td>
+              <td>반영구 — 습기를 머금으면 DRY 모드로 반나절 이상 말려 재사용.</td>
+            </tr>
+            <tr>
+              <td>유청분리기 거름망</td>
+              <td><span class="model">BYF-G18</span></td>
+              <td>반영구 — 부드러운 솔로 세척 후 완전 건조가 중요해요.</td>
+            </tr>
+            <tr>
+              <td>배터리</td>
+              <td><span class="model">BVC-H10</span> <span class="model">BVC-S185</span> <span class="model">BVC-T500W</span> <span class="model">BEF-C156W</span></td>
+              <td>평균 수명 — BVC-H10 약 1년~1년 반(300~350회), BVC-S185·BVC-T500W 약 2년 내외, BEF-C156W 약 3년.
+                <small>BEF-D400은 장기간 안 쓸 때 2개월마다 충전해 두면 배터리 손상을 막을 수 있어요.</small></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="shipping-title">
+    <div class="wrap">
+      <h2 id="shipping-title">배송·교환·반품 안내</h2>
+      <p class="section-desc">스토어 주문 기준 공통 정책이에요.</p>
+      <div class="policy-grid">
+        <div class="policy-card">
+          <h3>배송</h3>
+          <ul class="policy">
+            <li>오후 3시 이전 결제 건까지 CJ택배로 당일 출고됩니다.</li>
+            <li>택배 운송장 번호는 1~2일 내에 확인할 수 있어요.</li>
+            <li>제주도·도서산간 지역은 추가 배송비가 발생하며, 지역 배송사 사정에 따라 지연될 수 있습니다.</li>
+          </ul>
+        </div>
+        <div class="policy-card">
+          <h3>교환·반품</h3>
+          <ul class="policy">
+            <li>교환·반품은 반드시 판매자와 협의 후 신청해 주세요. 협의 없이 발송하시면 반송될 수 있어요.</li>
+            <li>물품 하자·오배송 등 판매자 귀책 사유는 택배비를 판매자가 부담합니다. 단순 변심 반품은 고객 부담(무료배송 제품은 왕복 부담)이에요.</li>
+            <li>포장 훼손으로 상품 가치가 상실된 경우, 고객 책임 사유로 훼손된 경우, 사용·일부 소비로 가치가 감소한 경우에는 교환·반품이 어려워요.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="wrap">
+    <div class="cta-band">
+      <div>
+        <p>더 정확한 확인이 필요하시면 편한 방법으로 연락 주세요.</p>
+        <span class="tel">1522-8508</span> <span style="color:var(--muted);font-size:13px;">평일 09:00~15:00</span>
+      </div>
+      <div class="cta-actions">
+        <a class="btn is-primary" href="index.html#as-title">A/S 접수하기</a>
+        <a class="btn" href="https://smartstore.naver.com/skillfulbrother" target="_blank" rel="noopener">스토어 톡톡 ↗</a>
+        <a class="btn" href="index.html#faq-title">자주 묻는 질문</a>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap footer-legal">
+    <span class="slogan" style="color:var(--teal-deep);font-weight:600;">조용히, 확실하게 돕겠습니다.</span><br>
+    © 2026 CLAPA · 고객센터 1522-8508 (평일 09:00~15:00)
+  </div>
+</footer>
+
+<script src="assets/chat.js" defer></script>
+</body>
+</html>

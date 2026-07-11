@@ -172,6 +172,14 @@
     transform:translateY(16px);
   }
   .cchat-panel.is-open{ transform:translateY(0); }
+
+  /* 노안 대응: 모바일에서 본문·버튼 글씨 확대 (2026-07-11) */
+  .cchat-bubble{ font-size:15.5px; }
+  .cchat-chip{ font-size:14px; min-height:44px; }
+  .cchat-input{ font-size:16px; }   /* iOS 자동 확대(줌) 방지 겸 */
+  .cchat-src{ font-size:12.5px; }
+  .cchat-step{ font-size:13px; }
+  .cchat-title-tx{ font-size:16px; }
 }
 
 .cchat-panel:focus-visible,
@@ -499,35 +507,46 @@
   padding:0 4px;
   letter-spacing:-0.01em;
 }
-.cchat-fb{
+/* 접수 상태 스테퍼 — 접수됨 → 확인중 → 처리완료 (비차단, 색 배지) */
+.cchat-steps{
   display:flex;
   align-items:center;
-  gap:4px;
-  margin-top:4px;
+  gap:0;
+  margin:8px 0 2px;
   padding:0 2px;
 }
-.cchat-fb-btn{
-  border:none;
-  background:transparent;
-  color:var(--cchat-muted);
-  font-family:var(--cchat-font);
+.cchat-step{
+  display:flex;
+  align-items:center;
+  gap:6px;
   font-size:12px;
   font-weight:600;
   letter-spacing:-0.01em;
-  padding:4px 8px;
-  border-radius:8px;
-  cursor:pointer;
-  transition:background .15s var(--cchat-ease),color .15s var(--cchat-ease);
-}
-.cchat-fb-btn:hover{
-  background:var(--cchat-surface);
-  color:var(--cchat-teal-deep);
-}
-.cchat-fb-done{
-  font-size:12px;
   color:var(--cchat-muted);
-  padding:4px 2px;
 }
+.cchat-step::before{
+  content:'';
+  width:9px;
+  height:9px;
+  border-radius:50%;
+  background:#D9D2C7;
+  flex:none;
+}
+.cchat-step.is-done{ color:var(--cchat-teal-deep); }
+.cchat-step.is-done::before{ background:var(--cchat-teal); }
+.cchat-step.is-now{ color:var(--cchat-teal-deep); }
+.cchat-step.is-now::before{
+  background:var(--cchat-teal);
+  box-shadow:0 0 0 3px rgba(14,111,102,.18);
+}
+.cchat-step-bar{
+  width:22px;
+  height:2px;
+  background:#E4DED4;
+  margin:0 7px;
+  flex:none;
+}
+.cchat-step-bar.is-done{ background:var(--cchat-teal); }
 
 /* 페이지 자체 트리거([data-clapa-chat-trigger]) 사용 시 위젯 FAB 대체 */
 .cchat-replaced{ display:none !important; }

@@ -148,6 +148,55 @@
   }
   .tag:hover{border-color:var(--teal);background:var(--teal-wash);color:var(--teal-deep);}
 
+  /* ---------- Quick menu hub (2026-07-11 — 기능 바로가기, 챗 실행 카드 아님) ---------- */
+  .quickmenu{
+    display:grid;grid-template-columns:repeat(6,1fr);
+    gap:8px;
+    margin-top:26px;max-width:760px;
+  }
+  .qm-item{
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;
+    min-height:76px;padding:12px 6px;
+    background:var(--paper);
+    border:1px solid var(--line);
+    border-radius:12px;
+    font-size:13px;font-weight:600;letter-spacing:-0.015em;color:var(--ink);
+    text-align:center;word-break:keep-all;
+    transition:border-color .16s var(--ease),background .16s var(--ease),color .16s var(--ease),transform .16s var(--ease);
+  }
+  .qm-item svg{color:var(--teal);flex:none;}
+  .qm-item:hover{border-color:var(--teal);background:var(--teal-wash);color:var(--teal-deep);transform:translateY(-1px);}
+  .qm-item .ext{font-size:11px;color:var(--muted);font-weight:500;}
+  @media(max-width:640px){
+    .quickmenu{grid-template-columns:repeat(3,1fr);gap:7px;margin-top:20px;}
+    .qm-item{min-height:72px;font-size:13.5px;}
+  }
+
+  /* 검색창 포커스 글로우(그림자 대신 teal 링) */
+  .search-field:focus-within{
+    border-color:var(--teal);
+    box-shadow:0 0 0 3px rgba(14,111,102,.13);
+  }
+
+  /* A/S 폼 라벨 위치 힌트 */
+  .as-hint{
+    margin:6px 2px 0;
+    font-size:12.5px;line-height:1.55;color:var(--muted);
+  }
+  .as-hint.is-model{color:var(--teal-deep);}
+
+  /* 스크롤 리빌 — JS가 reduced-motion 아닐 때만 .reveal 부여(무JS·모션최소화 환경은 항상 표시) */
+  .reveal{opacity:0;transform:translateY(10px);transition:opacity .5s var(--ease),transform .5s var(--ease);}
+  .reveal.is-in{opacity:1;transform:none;}
+
+  /* 헤더 — 스크롤 시 유리 질감 강조 */
+  .site-header{transition:background .25s var(--ease),border-color .25s var(--ease);}
+  .site-header.is-scrolled{
+    background:rgba(255,255,255,.72);
+    backdrop-filter:saturate(180%) blur(14px);
+    border-bottom-color:var(--line-soft);
+  }
+
   /* ---------- A/S intake band (hero role) ---------- */
   .asband{padding-bottom:clamp(30px,5vw,52px);}
   .as-band{
@@ -252,13 +301,17 @@
   }
   .product-row:first-child{border-top:0;}
   .product-row:hover{background:#FBFAF7;}
+  .product-row:hover .thumb img,
+  .product-row:hover .thumb svg{transform:scale(1.05);}
   .thumb{
     width:76px;height:76px;flex:none;
     display:flex;align-items:center;justify-content:center;
     background:var(--surface);
     border:1px solid var(--line-soft);
     border-radius:12px;
+    overflow:hidden;
   }
+  .thumb img,.thumb svg{transition:transform .22s var(--ease);}
   .thumb svg{width:54px;height:54px;}
   .p-main{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px;}
   .p-brand{
@@ -414,17 +467,21 @@
     .as-band{grid-template-columns:1fr;}
   }
 
-  /* --- Mobile: keep the composed, tidy desktop rhythm --- */
+  /* --- Mobile: keep the composed, tidy desktop rhythm ---
+     2026-07-11 노안 대응: 본문·버튼 글씨를 한 단계 키움(제목보다 본문 위주) */
   @media(max-width:640px){
     /* vertical rhythm — PC 비율을 유지한 축소 */
     .hero{padding-block:26px 20px;}
-    .eyebrow{font-size:11.5px;margin-bottom:10px;}
-    .hero-title{font-size:23px;}
-    .hero-sub{font-size:14px;margin-top:12px;}
+    .eyebrow{font-size:12px;margin-bottom:10px;}
+    .hero-title{font-size:24px;}
+    .hero-sub{font-size:15.5px;margin-top:12px;}
     .searchbar{margin-top:18px;}
-    .search-input{font-size:15px;padding:10px 0;}
-    .search-btn{padding:10px 15px;font-size:14px;}
-    .section-eyebrow{font-size:11px;}
+    .search-input{font-size:16px;padding:10px 0;}  /* 16px = iOS 자동 확대 방지 겸 */
+    .search-btn{padding:10px 15px;font-size:15px;}
+    .suggest-label{font-size:13.5px;}
+    .tag{font-size:14px;padding:7px 14px;}
+    .section-eyebrow{font-size:11.5px;}
+    .section-desc{font-size:14.5px;}
     .asband{padding-bottom:26px;}
     .section{padding-block:38px;}
     .section-head{flex-direction:column;align-items:flex-start;margin-bottom:18px;}
@@ -462,31 +519,44 @@
     .brand-tabs::-webkit-scrollbar{display:none;}
     .brand-tab{flex:none;}
 
-    /* product rows: PC와 같은 얇은 리스트 비율 (>=40px 터치 타깃 유지) */
+    /* product rows: PC와 같은 얇은 리스트 비율. 글씨 확대(노안 대응) */
     .product-row{flex-wrap:wrap;gap:9px 12px;padding:12px 14px;}
-    .thumb{width:52px;height:52px;}
-    .thumb svg{width:38px;height:38px;}
+    .thumb{width:56px;height:56px;}
+    .thumb svg{width:40px;height:40px;}
     .p-main{flex:1;min-width:0;}
-    .p-name{font-size:14.5px;}
-    .p-model{font-size:12px;}
+    .p-name{font-size:16px;}
+    .p-model{font-size:13px;}
+    .p-brand{font-size:12px;}
+    /* 퀵링크: 행 전체 폭을 3등분해 오른쪽 여백 해소 + 44px 터치 타깃 */
     .quicklinks{
-      width:100%;gap:6px;flex-wrap:nowrap;padding-left:64px;
+      width:100%;gap:7px;flex-wrap:nowrap;padding-left:0;
     }
     .qlink{
-      flex:0 0 auto;justify-content:center;
-      min-height:40px;padding:0 12px;
-      font-size:12px;border:0;
+      flex:1 1 0;justify-content:center;
+      min-height:44px;padding:0 8px;
+      font-size:14px;
+      border:1px solid var(--line-soft);border-radius:10px;
+      background:var(--paper);
     }
     .group-row{padding:12px 14px 7px;}
+    .group-title{font-size:14px;}
 
-    /* FAQ: 들여쓰기 없애 폭 활용, PC와 같은 인상 */
+    /* FAQ: 들여쓰기 없애 폭 활용, 질문·답변 글씨 확대 */
     .faq-item>summary{padding:15px 16px;}
-    .faq-a{padding:0 16px 18px;}
+    .faq-qt{font-size:16px;}
+    .faq-cat{font-size:12px;}
+    .faq-a{padding:0 16px 18px;font-size:15px;line-height:1.7;}
+
+    /* A/S 폼: 입력 16px(iOS 확대 방지) + 라벨 확대 */
+    .as-field label{font-size:14.5px;}
+    .as-field input,.as-field textarea{font-size:16px;}
+    .as-desc{font-size:15px;}
+    .as-hint{font-size:13px;}
+    .footer-legal{font-size:13px;}
   }
 
   @media(max-width:420px){
     .search-btn{padding:10px 13px;}
-    .quicklinks{padding-left:0;}
   }
 
   @media(prefers-reduced-motion:reduce){
@@ -615,6 +685,33 @@
         <button class="tag" type="button">전기세</button>
         <button class="tag" type="button">유청 분리</button>
       </div>
+
+      <nav class="quickmenu" aria-label="자주 쓰는 메뉴">
+        <a class="qm-item" href="#as-title">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.7 6.3a4.2 4.2 0 0 0-5.9 5.9L3 18v3h3l5.8-5.8a4.2 4.2 0 0 0 5.9-5.9l-2.9 2.9-2.1-2.1z"/></svg>
+          A/S 접수
+        </a>
+        <a class="qm-item" href="tel:1522-8508" data-clapa-chat-action="asstatus">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M16.5 16.5 21 21"/><path d="M8.5 11l2 2 3.5-3.5"/></svg>
+          접수 조회
+        </a>
+        <a class="qm-item" href="#finder-title">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3h9l4 4v14H6z"/><path d="M15 3v4h4"/><path d="M9 12h6M9 16h6"/></svg>
+          설명서·부품
+        </a>
+        <a class="qm-item" href="#faq-title">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a8 8 0 1 1-3.1-6.3L21 5l-.6 3.2A8 8 0 0 1 21 12z"/><path d="M9.6 9.5a2.4 2.4 0 0 1 4.7.8c0 1.6-2.3 2-2.3 3.2"/><circle cx="12" cy="16.8" r=".2"/></svg>
+          자주 묻는 질문
+        </a>
+        <a class="qm-item" href="warranty.html">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l7 3v6c0 4.4-3 7.4-7 9-4-1.6-7-4.6-7-9V6z"/><path d="M9 12l2 2 4-4"/></svg>
+          보증·소모품
+        </a>
+        <a class="qm-item" href="tel:1522-8508" data-clapa-chat-action="ask">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12a8 8 0 1 0-3.2 6.4L20 20l-.6-3A8 8 0 0 0 20 12z"/><path d="M8.5 12h.01M12 12h.01M15.5 12h.01"/></svg>
+          AI 상담
+        </a>
+      </nav>
     </div>
   </section>
 
@@ -668,6 +765,7 @@
               <option value="BHF-8000W">클래파 보조배터리 겸용 핸디 에어건</option>
               <option value="BRC-30W">클래파 미니밥솥</option>
             </datalist>
+            <p class="as-hint" id="as-model-hint">모델명은 제품 본체에 부착된 라벨(모델명 스티커)이나 포장 박스에서 확인할 수 있어요.</p>
           </div>
           <div class="as-field">
             <label for="as-symptom">증상<span class="req">필수</span></label>
@@ -1698,6 +1796,86 @@
     if(e.target.closest && e.target.closest('.tag')) return;
     close();
   });
+})();
+</script>
+<script>
+/* 2026-07-11 개편: 라벨 위치 힌트 · 검색 예시 로테이션 · 스크롤 리빌 · 헤더 유리 질감 */
+(function(){
+  // 1) A/S 모델명 입력 → 해당 제품 라벨 위치 힌트(데이터 있는 모델만, 없으면 일반 안내 유지)
+  var hint = document.getElementById('as-model-hint');
+  var model = document.getElementById('as-model');
+  if (hint && model) {
+    var HINT_DEFAULT = hint.textContent;
+    var LOCS = null;
+    fetch('data/label-locations.json', { cache: 'no-cache' })
+      .then(function(r){ return r.ok ? r.json() : null; })
+      .then(function(j){ if (j && j.locations) LOCS = j.locations; })
+      .catch(function(){});
+    function normCode(s){ return String(s || '').toUpperCase().replace(/[^A-Z0-9]/g, ''); }
+    model.addEventListener('input', function(){
+      if (!LOCS) return;
+      var v = normCode(model.value);
+      var found = '';
+      if (v) {
+        for (var k in LOCS) {
+          if (LOCS[k] && normCode(k) === v) { found = LOCS[k]; break; }
+        }
+      }
+      if (found) {
+        hint.textContent = '이 제품의 라벨 위치: ' + found;
+        hint.classList.add('is-model');
+      } else {
+        hint.textContent = HINT_DEFAULT;
+        hint.classList.remove('is-model');
+      }
+    });
+  }
+
+  // 2) 검색 예시 로테이션 — 포커스·입력 중에는 바꾸지 않음
+  var input = document.getElementById('support-search');
+  if (input) {
+    var examples = [
+      '모델명, 증상, 궁금한 점을 검색하세요',
+      '예) 충전이 안 돼요',
+      '예) BVC-H10 필터',
+      '예) 설명서 다운로드',
+      '예) 제습기 물통 비우기'
+    ];
+    var pi = 0;
+    setInterval(function(){
+      if (document.activeElement === input || input.value) return;
+      pi = (pi + 1) % examples.length;
+      input.setAttribute('placeholder', examples[pi]);
+    }, 3600);
+  }
+
+  // 3) 스크롤 리빌 — 모션 최소화 설정·미지원 브라우저는 건너뜀(콘텐츠 항상 표시)
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (!reduce && 'IntersectionObserver' in window) {
+    // 목록 행(.product-row)은 제외 — 긴 목록을 빠르게 스크롤할 때 빈 행 깜빡임 방지
+    var targets = document.querySelectorAll('.quickmenu, .as-band, .section-head, .faq-item');
+    var io = new IntersectionObserver(function(entries){
+      for (var i = 0; i < entries.length; i++) {
+        if (entries[i].isIntersecting) {
+          entries[i].target.classList.add('is-in');
+          io.unobserve(entries[i].target);
+        }
+      }
+    }, { rootMargin: '0px 0px -8% 0px', threshold: 0.05 });
+    for (var t = 0; t < targets.length; t++) {
+      targets[t].classList.add('reveal');
+      targets[t].style.transitionDelay = Math.min((t % 6) * 45, 220) + 'ms';
+      io.observe(targets[t]);
+    }
+  }
+
+  // 4) 헤더 — 스크롤하면 유리 질감 강조
+  var header = document.querySelector('.site-header');
+  if (header) {
+    function onScroll(){ header.classList.toggle('is-scrolled', (window.scrollY || 0) > 8); }
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+  }
 })();
 </script>
 <script src="assets/chat.js" defer></script>
