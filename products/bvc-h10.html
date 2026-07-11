@@ -358,6 +358,38 @@
   @media(prefers-reduced-motion:reduce){
     *{transition:none !important;animation:none !important;scroll-behavior:auto !important;}
   }
+/*PARTS_CSS*/
+  .parts-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;}
+  .part-card{
+    display:flex;flex-direction:column;
+    border:1px solid var(--line);border-radius:12px;background:var(--paper);
+    overflow:hidden;
+    transition:border-color .16s var(--ease),transform .16s var(--ease);
+  }
+  .part-card:hover{border-color:var(--teal);transform:translateY(-2px);}
+  .part-thumb{display:block;aspect-ratio:1/1;background:var(--surface);position:relative;overflow:hidden;}
+  .part-thumb img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .22s var(--ease);}
+  .part-card:hover .part-thumb img{transform:scale(1.04);}
+  .part-body{display:flex;flex-direction:column;gap:5px;padding:11px 13px 13px;}
+  .part-name{font-size:14px;font-weight:600;letter-spacing:-0.015em;line-height:1.4;color:var(--ink);}
+  .part-model{align-self:flex-start;font-size:12px;font-weight:600;color:var(--teal-deep);background:var(--teal-wash);border-radius:6px;padding:1px 7px;}
+  .part-go{margin-top:1px;font-size:12px;color:var(--muted);}
+  .part-card:hover .part-go{color:var(--teal-deep);}
+  .part-hidden{display:none;}
+  .parts-toggle{
+    margin:16px auto 0;display:flex;align-items:center;justify-content:center;gap:6px;
+    min-height:44px;padding:0 22px;
+    border:1px solid var(--line);border-radius:100px;background:var(--paper);
+    font-family:inherit;font-size:14px;font-weight:600;letter-spacing:-0.01em;color:var(--ink);cursor:pointer;
+    transition:border-color .16s var(--ease),background .16s var(--ease),color .16s var(--ease);
+  }
+  .parts-toggle:hover{border-color:var(--teal);color:var(--teal-deep);background:var(--teal-wash);}
+  @media(max-width:640px){
+    .parts-grid{grid-template-columns:repeat(2,1fr);gap:9px;}
+    .part-name{font-size:13.5px;}
+    .part-body{padding:10px 11px 12px;}
+  }
+/*/PARTS_CSS*/
 </style>
 <link rel="stylesheet" href="../assets/chat.css">
 </head>
@@ -498,6 +530,24 @@
 
   
   <!-- FAQ -->
+<!--PARTS_STRIP-->
+  <section class="section" aria-labelledby="parts-strip-title">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <span class="section-eyebrow">Consumables &amp; Parts</span>
+          <h2 class="section-title" id="parts-strip-title">이 제품의 소모품·부품</h2>
+          <p class="section-desc">실물 사진을 눌러 스토어에서 바로 구매할 수 있어요.</p>
+        </div>
+      </div>
+      <div class="parts-grid">
+        <a class="part-card" href="https://smartstore.naver.com/skillfulbrother/products/10087749367" target="_blank" rel="noopener" aria-label="클래파 BVC-H10 전용 배터리, 본체 — 스토어에서 보기"><span class="part-thumb"><img src="https://shop-phinf.pstatic.net/20240318_1/17107455192771Gu8k_JPEG/38048203156115055_1050235208.jpg?type=f200" alt="" loading="lazy" decoding="async" onerror="this.remove()"></span><span class="part-body"><span class="part-name">전용 배터리·본체</span><span class="part-model">BVC-H10</span><span class="part-go">스토어에서 구매 ↗</span></span></a>
+        <a class="part-card" href="https://smartstore.naver.com/skillfulbrother/products/10078593658" target="_blank" rel="noopener" aria-label="클래파 BVC-H10, BVC-H15 전용 구성품 — 스토어에서 보기"><span class="part-thumb"><img src="https://shop-phinf.pstatic.net/20240418_227/1713401932801d5YDj_JPEG/114537775501698925_832725893.jpg?type=f200" alt="" loading="lazy" decoding="async" onerror="this.remove()"></span><span class="part-body"><span class="part-name">전용 구성품</span><span class="part-model">BVC-H10</span><span class="part-go">스토어에서 구매 ↗</span></span></a>
+      </div>
+    </div>
+  </section>
+<!--/PARTS_STRIP-->
+
   <section class="section band" id="faq" aria-labelledby="faq-title">
     <div class="wrap">
       <div class="section-head">
