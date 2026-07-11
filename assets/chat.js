@@ -74,6 +74,8 @@
   var sid = '';
   var isOpen = false;
   var sending = false;
+  var reqGen = 0;              // 요청 세대 — 초기화/재전송 시 증가시켜 이전 요청 응답을 버린다
+  var activeController = null; // 진행 중 fetch의 AbortController(초기화 시 abort)
   var lastUserMessage = '';
   var lastMatchedCode = '';    // 서버 응답 matched의 마지막 값(A/S 폼 프리필용)
   var disabled = false;        // config.enabled === false
@@ -982,6 +984,7 @@
   }
 
   function callApi(text) {
+    var myGen = ++reqGen;   // 이 요청의 세대 — 응답 처리 전 현재 세대와 일치할 때만 반영
     sending = true;
     setBusy(true);
     var typing = showTyping();
@@ -999,6 +1002,7 @@
     // abort 콜백에서 플래그를 세워 일반 네트워크 오류와 문구를 구분한다.
     var timedOut = false;
     var controller = (typeof AbortController === 'function') ? new AbortController() : null;
+    activeController = controller;
     var timer = controller ? setTimeout(function () { timedOut = true; controller.abort(); }, 30000) : null;
 
     // 대기 단계 안내 — 점 3개 옆에 2.5초 간격으로 문구 로테이션(마지막 문구 유지)
@@ -1019,6 +1023,7 @@
     })
       .then(function (r) { return r.json().catch(function () { throw new Error('bad-json'); }); })
       .then(function (data) {
+        if (myGen !== reqGen) { removeNode(typing); return; }  // 초기화/재전송으로 폐기된 응답은 버림
         removeNode(typing);
         if (data && data.ok) {
           if (data.matched && data.matched.length) {
@@ -1038,6 +1043,7 @@
       })
       .catch(function (err) {
         removeNode(typing);
+        if (myGen !== reqGen) return;  // 초기화로 abort된 요청의 오류는 안내하지 않음
         if (timedOut || (err && err.name === 'AbortError')) {
           // 30초 타임아웃 — 오래 기다린 고객에게 정직한 설명 + 대안 경로
           pushMessage('model',
@@ -1053,7 +1059,7 @@
             [{ label: '다시 시도', cmd: 'retry', arg: text.slice(0, 1000) }], { local: 1 });
         } else {
           pushMessage('model',
-            '연결이 원활하지 않아요. 잠시 후 다시 시도하시거나 고객센터(' + PHONE + ', ' + HOURS + ')로 문의해 주세요.',
+            '연결이 원활하지 않아요.\n잠시 후 다시 시도하시거나 고객센터(' + PHONE + ', ' + HOURS + ')로 문의해 주세요.',
             [
               { label: '다시 시도', cmd: 'retry', arg: text.slice(0, 1000) },
               { label: '전화 걸기', url: 'tel:' + PHONE }
@@ -1063,6 +1069,8 @@
       .then(function () {
         if (timer) clearTimeout(timer);
         clearInterval(stageTimer);
+        if (myGen !== reqGen) return;  // 폐기된 요청이 현재 진행 중 요청의 busy 상태를 풀지 않게
+        activeController = null;
         sending = false;
         setBusy(false);
         focusInput();
@@ -1153,6 +1161,12 @@
    * 초기화(리셋)
    * ------------------------------------------------------------------ */
   function resetConversation() {
+    // 진행 중이던 요청을 무효화 — 세대를 올리고 fetch를 abort해, 이전 대화의 늦은 응답이
+    // 새 대화에 삽입되거나 busy 상태를 잘못 조작하지 않게 한다.
+    reqGen++;
+    if (activeController) { try { activeController.abort(); } catch (e) {} activeController = null; }
+    sending = false;
+    setBusy(false);
     sid = uuid();          // 새 세션 ID
     log = [];
     persistSession();

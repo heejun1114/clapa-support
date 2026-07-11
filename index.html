@@ -4,6 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>CLAPA 고객지원센터</title>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="preconnect" href="https://shop-phinf.pstatic.net">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230E6F66'/%3E%3Cpath d='M42.5 41.5a13 13 0 1 1 0-19' fill='none' stroke='%23fff' stroke-width='7' stroke-linecap='round'/%3E%3C/svg%3E">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <style>
@@ -28,7 +30,8 @@
   }
 
   *{box-sizing:border-box;}
-  html{-webkit-text-size-adjust:100%;}
+  html{-webkit-text-size-adjust:100%;scroll-padding-top:74px;}
+  a,button,summary,.tag,.qm-item,.brand-tab,.qlink,.chat-fab{-webkit-tap-highlight-color:transparent;}
   body{
     margin:0;
     background:var(--paper);
@@ -778,6 +781,18 @@
     .care-notes h3{font-size:15px;}
   }
 /*/PARTS_CSS*/
+
+  /* 노안 대응 — 모바일에서 '읽는' 본문 문단의 하한을 키운다(제목·라벨 제외).
+     기본 규칙보다 뒤에 두어야 소스 순서상 우선한다. */
+  @media(max-width:640px){
+    .faq-a{font-size:15.5px;}
+    .hero-sub{font-size:15.5px;}
+    .section-desc{font-size:15px;}
+    .as-desc{font-size:15px;}
+    .as-note{font-size:13px;}
+    .notice-b{font-size:14.5px;}
+    .as-notice .an-b{font-size:14px;}
+  }
 </style>
 <link rel="stylesheet" href="assets/chat.css">
 </head>
@@ -813,7 +828,8 @@
           <label class="skip" for="support-search">검색어 입력</label>
           <input class="search-input" id="support-search" type="search" name="q"
                  placeholder="모델명, 증상, 궁금한 점을 검색하세요"
-                 aria-label="모델명, 증상, 궁금한 점을 검색하세요" autocomplete="off">
+                 aria-label="모델명, 증상, 궁금한 점을 검색하세요" autocomplete="off"
+                 enterkeyhint="search" autocorrect="off" autocapitalize="off">
           <button class="search-btn" type="submit">검색</button>
         </div>
       </form>
@@ -886,7 +902,7 @@
         <form class="as-form" id="as-form" novalidate>
           <div class="as-field">
             <label for="as-model">제품 모델명</label>
-            <input id="as-model" name="model" list="as-models" placeholder="예) BVC-H10 — 모르시면 제품 이름도 좋아요" autocomplete="off" maxlength="80">
+            <input id="as-model" name="model" list="as-models" placeholder="예) BVC-H10 (제품 이름도 괜찮아요)" autocomplete="off" maxlength="80">
             <datalist id="as-models">
               <option value="BVC-H10">클래파 미니 핸디형 무선청소기</option>
               <option value="BVC-L138">클래파 대용량 30L 건습식 청소기</option>
@@ -1603,10 +1619,19 @@
     .then(function(j){ if(j && typeof j.endpoint === 'string') ENDPOINT = j.endpoint; })
     .catch(function(){});
 
-  // 모바일에서는 폼을 접어두고 '온라인으로 접수하기' 버튼으로 연다
+  // 모바일에서는 폼을 접어두고 '온라인으로 접수하기' 버튼으로 연다.
+  // 데스크톱에서는 summary가 숨겨져 있으므로(=여는 버튼 없음) 반드시 펼쳐 둔다 —
+  // 화면 회전/창 크기 변화로 모바일↔데스크톱을 오갈 때 폼이 사라지지 않도록 미디어쿼리 변화를 추적한다.
   var wrap = document.getElementById('as-form-wrap');
-  if(wrap && window.matchMedia && window.matchMedia('(max-width:640px)').matches){
-    wrap.removeAttribute('open');
+  if(wrap && window.matchMedia){
+    var mqAs = window.matchMedia('(max-width:640px)');
+    var syncAsForm = function(){
+      if(mqAs.matches) wrap.removeAttribute('open');   // 모바일: 접어서 summary 버튼으로 열게
+      else wrap.setAttribute('open', '');              // 데스크톱: 항상 펼침(여는 버튼이 없음)
+    };
+    syncAsForm();
+    if(mqAs.addEventListener) mqAs.addEventListener('change', syncAsForm);
+    else if(mqAs.addListener) mqAs.addListener(syncAsForm);
   }
 
   function showErr(t){ msg.textContent = t; msg.classList.add('is-err'); }
@@ -1684,8 +1709,8 @@
   if(!input || !form) return;
 
   var MAX = 8;
-  var TYPE_LABEL = { product:'제품', manual:'설명서', faq:'FAQ' };
-  var TYPE_ORDER = { product:0, manual:1, faq:2 };
+  var TYPE_LABEL = { product:'제품', manual:'설명서', faq:'FAQ', guide:'안내' };
+  var TYPE_ORDER = { product:0, manual:1, faq:2, guide:3 };
 
   // Results panel
   var panel = document.createElement('div');
@@ -1804,12 +1829,12 @@
     var b = document.createElement('button');
     b.type = 'button';
     b.className = 'sr-ai';
-    b.appendChild(document.createTextNode('💬 "'));
+    b.appendChild(document.createTextNode('"'));
     var qq = document.createElement('span');
     qq.className = 'sr-ai-q';
     qq.textContent = q;
     b.appendChild(qq);
-    b.appendChild(document.createTextNode('" 그대로 AI 상담에게 물어보기'));
+    b.appendChild(document.createTextNode('" 그대로 AI 상담에 물어보기'));
     b.addEventListener('click', function(){
       var query = input.value.trim() || q;
       close();
@@ -1900,7 +1925,7 @@
     if(res.total > res.hits.length){
       var note = document.createElement('div');
       note.className = 'sr-note';
-      note.textContent = '결과 ' + (res.total - res.hits.length) + '건 더 있음 — 검색어를 구체화해 보세요';
+      note.textContent = '결과가 ' + (res.total - res.hits.length) + '건 더 있어요. 검색어를 조금 더 자세히 적어 보세요.';
       panel.appendChild(note);
     }
     if(!sentence){
@@ -2062,5 +2087,6 @@
 })();
 </script>
 <!--/PARTS_JS-->
+<script src="assets/track.js" defer></script>
 </body>
 </html>
