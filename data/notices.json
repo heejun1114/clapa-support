@@ -1,3 +1,17 @@
 {
- "notices": []
+ "notices": [
+  {
+   "id": "n-1783789008586-1",
+   "type": "안내",
+   "title": "반가워요",
+   "body": "반가워요",
+   "link": "",
+   "linkLabel": "",
+   "pinned": false,
+   "active": true,
+   "startsAt": null,
+   "endsAt": null,
+   "createdAt": "2026-07-12T01:56:48+09:00"
+  }
+ ]
 }
