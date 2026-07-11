@@ -3,7 +3,7 @@
   {
    "id": "n-clapa-mall-event",
    "type": "이벤트",
-   "title": "클래파 공식몰에서 진행 중인 이벤트를 확인해 보세요",
+   "title": "클래파 공식몰 신규회원분들께만 3만원 쿠폰 증정!",
    "body": "클래파 공식몰(clapa.kr)에서 다양한 이벤트와 혜택이 진행되고 있어요.\n지금 방문해서 확인해 보세요.",
    "link": "https://clapa.kr",
    "linkLabel": "공식몰 이벤트 보러 가기 →",
@@ -13,20 +13,6 @@
    "startsAt": null,
    "endsAt": null,
    "createdAt": "2026-07-12T02:20:00+09:00"
-  },
-  {
-   "id": "n-1783789008586-1",
-   "type": "안내",
-   "title": "반가워요",
-   "body": "반가워요",
-   "link": "",
-   "linkLabel": "",
-   "pinned": false,
-   "banner": false,
-   "active": true,
-   "startsAt": null,
-   "endsAt": null,
-   "createdAt": "2026-07-12T01:56:48+09:00"
   }
  ]
 }
