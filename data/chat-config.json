@@ -1,6 +1,6 @@
 {
-  "endpoint": "https://script.google.com/macros/s/AKfycbykSb6nIgIZOwDsXUBK8b5FoEJuwS4Gft8V_MFwswJdrL5e6XuTfVSK11LujqujGkg5/exec",
-  "enabled": true,
-  "model": null,
-  "welcome": "안녕하세요! 클래파 고객지원 AI예요.\n궁금한 점을 편하게 입력하시거나, 아래 메뉴에서 골라 주세요."
+ "endpoint": "https://script.google.com/macros/s/AKfycbykSb6nIgIZOwDsXUBK8b5FoEJuwS4Gft8V_MFwswJdrL5e6XuTfVSK11LujqujGkg5/exec",
+ "enabled": true,
+ "model": null,
+ "welcome": "안녕하세요! 클래파 고객지원 AI예요.\n궁금한 점을 편하게 입력하시거나, 아래 메뉴에서 골라 주세요.\n상담 시간이 아니어도 A/S 접수·설명서·부품 안내는 지금 바로 도와드릴 수 있어요."
 }
