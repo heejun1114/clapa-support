@@ -378,19 +378,22 @@
   .part-go{margin-top:1px;font-size:12px;color:var(--muted);}
   .part-card:hover .part-go{color:var(--teal-deep);}
 
-  /* 부품 카드 = 2행 가로 스와이프 캐러셀 (세로로 길어지지 않게). 카드가 적으면 한 화면에 그대로. */
-  .parts-grid{
-    display:grid;grid-auto-flow:column;grid-template-rows:repeat(2,auto);
-    grid-auto-columns:190px;gap:12px;
+  /* 부품 카드 기본 = 반응형 그리드 — 카드가 적으면 나란히(세로로 세우지 않음) */
+  .parts-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px;}
+  /* 카드가 많을 때만(5개+) = 2행 가로 스와이프 캐러셀 */
+  .parts-grid.is-carousel{
+    grid-template-columns:none;grid-auto-flow:column;grid-template-rows:repeat(2,auto);
+    grid-auto-columns:190px;
     overflow-x:auto;overscroll-behavior-x:contain;scroll-snap-type:x proximity;
     -webkit-overflow-scrolling:touch;padding-bottom:4px;
   }
-  .parts-grid > .part-card{scroll-snap-align:start;}
-  .parts-grid::-webkit-scrollbar{height:6px;}
-  .parts-grid::-webkit-scrollbar-thumb{background:var(--line);border-radius:99px;}
-  .parts-grid::-webkit-scrollbar-track{background:transparent;}
+  .parts-grid.is-carousel > .part-card{scroll-snap-align:start;}
+  .parts-grid.is-carousel::-webkit-scrollbar{height:6px;}
+  .parts-grid.is-carousel::-webkit-scrollbar-thumb{background:var(--line);border-radius:99px;}
+  .parts-grid.is-carousel::-webkit-scrollbar-track{background:transparent;}
   @media(max-width:640px){
-    .parts-grid{grid-auto-columns:calc(50% - 4.5px);gap:9px;scroll-snap-type:x mandatory;}
+    .parts-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;}
+    .parts-grid.is-carousel{grid-template-columns:none;grid-auto-columns:calc(50% - 4.5px);scroll-snap-type:x mandatory;}
   }
 
   /* 홈: 행 안에서 펼쳐지는 부품 패널 ([부품] 버튼 토글) */
@@ -584,7 +587,7 @@
           <p class="section-desc">실물 사진을 눌러 스토어에서 바로 구매할 수 있어요.</p>
         </div>
       </div>
-      <div class="parts-grid">
+      <div class="parts-grid is-carousel">
         <a class="part-card" href="https://smartstore.naver.com/skillfulbrother/products/10087861218" target="_blank" rel="noopener" aria-label="전용 배터리·본체 — 스토어에서 보기"><span class="part-thumb"><img src="https://shop-phinf.pstatic.net/20240618_167/1718669686875TSWcB_JPEG/42930911286821010_71743472.jpg?type=f200" alt="" loading="lazy" decoding="async" onerror="this.remove()"></span><span class="part-body"><span class="part-name">전용 배터리·본체</span><span class="part-model">BVC-C13K</span><span class="part-go">스토어에서 구매 ↗</span></span></a>
         <a class="part-card" href="https://smartstore.naver.com/skillfulbrother/products/10078638395" target="_blank" rel="noopener" aria-label="헤파필터 — 스토어에서 보기"><span class="part-thumb"><img src="../assets/parts/10078638395/01.jpg" alt="" loading="lazy" decoding="async" onerror="this.remove()"></span><span class="part-body"><span class="part-name">헤파필터</span><span class="part-model">BVC-C13K</span><span class="part-go">스토어에서 구매 ↗</span></span></a>
         <a class="part-card" href="https://smartstore.naver.com/skillfulbrother/products/10078638395" target="_blank" rel="noopener" aria-label="스틸필터 — 스토어에서 보기"><span class="part-thumb"><img src="../assets/parts/10078638395/02.jpg" alt="" loading="lazy" decoding="async" onerror="this.remove()"></span><span class="part-body"><span class="part-name">스틸필터</span><span class="part-model">BVC-C13K</span><span class="part-go">스토어에서 구매 ↗</span></span></a>
