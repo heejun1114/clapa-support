@@ -378,9 +378,20 @@
   .part-go{margin-top:1px;font-size:12px;color:var(--muted);}
   .part-card:hover .part-go{color:var(--teal-deep);}
 
-  .parts-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;}
-  @media(max-width:900px){.parts-grid{grid-template-columns:repeat(3,1fr);}}
-  @media(max-width:640px){.parts-grid{grid-template-columns:repeat(2,1fr);gap:9px;}}
+  /* 부품 카드 = 2행 가로 스와이프 캐러셀 (세로로 길어지지 않게). 카드가 적으면 한 화면에 그대로. */
+  .parts-grid{
+    display:grid;grid-auto-flow:column;grid-template-rows:repeat(2,auto);
+    grid-auto-columns:190px;gap:12px;
+    overflow-x:auto;overscroll-behavior-x:contain;scroll-snap-type:x proximity;
+    -webkit-overflow-scrolling:touch;padding-bottom:4px;
+  }
+  .parts-grid > .part-card{scroll-snap-align:start;}
+  .parts-grid::-webkit-scrollbar{height:6px;}
+  .parts-grid::-webkit-scrollbar-thumb{background:var(--line);border-radius:99px;}
+  .parts-grid::-webkit-scrollbar-track{background:transparent;}
+  @media(max-width:640px){
+    .parts-grid{grid-auto-columns:calc(50% - 4.5px);gap:9px;scroll-snap-type:x mandatory;}
+  }
 
   /* 홈: 행 안에서 펼쳐지는 부품 패널 ([부품] 버튼 토글) */
   .product-row{flex-wrap:wrap;}
@@ -389,7 +400,12 @@
     padding:14px 2px 6px;
   }
   .row-parts[hidden]{display:none;}
-  .row-parts .parts-grid{grid-template-columns:repeat(4,minmax(0,1fr));}
+  /* 홈 행 펼침은 캐러셀 아님 — 기존 그리드 유지(2x2 캐러셀은 제품 상세에서만) */
+  .row-parts .parts-grid{
+    grid-auto-flow:row;grid-template-rows:none;grid-auto-columns:auto;
+    grid-template-columns:repeat(4,minmax(0,1fr));
+    overflow-x:visible;scroll-snap-type:none;padding-bottom:0;
+  }
   @media(max-width:640px){
     .row-parts .parts-grid{grid-template-columns:repeat(2,minmax(0,1fr));}
   }

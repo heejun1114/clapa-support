@@ -244,7 +244,9 @@
    ]
   },
   "BVC-L125": {
-   "main": null,
+   "main": {
+    "image": "assets/thumbs/BVC-L125.jpg"
+   },
    "parts": [
     {
      "name": "클래파 BVC-L125 25L 전용 본체, 모터",
@@ -288,7 +290,9 @@
    ]
   },
   "BFB-VC120": {
-   "main": null,
+   "main": {
+    "image": "assets/thumbs/BFB-VC120.jpg"
+   },
    "parts": [
     {
      "name": "클래파 BFB-VC120 전용 구성품",
@@ -314,7 +318,9 @@
    ]
   },
   "IB-VC0601": {
-   "main": null,
+   "main": {
+    "image": "assets/thumbs/IB-VC0601.jpg"
+   },
    "parts": [
     {
      "name": "클래파 IB-VC0601, BFB-VC0601, IB-VC0700G/B 전용 먼지통",
@@ -429,6 +435,30 @@
     "image": "https://shop-phinf.pstatic.net/20220804_217/1659593261104f5V0Y_JPEG/60729095936859007_10096389.jpg",
     "price": null,
     "category": ""
+   },
+   "parts": []
+  },
+  "BFB-VC170": {
+   "main": {
+    "image": "assets/thumbs/BFB-VC170.jpg"
+   },
+   "parts": []
+  },
+  "BMD-656": {
+   "main": {
+    "image": "assets/thumbs/BMD-656.jpg"
+   },
+   "parts": []
+  },
+  "CHD-D16G": {
+   "main": {
+    "image": "assets/thumbs/CHD-D16G.jpg"
+   },
+   "parts": []
+  },
+  "BFB-CF0802RW": {
+   "main": {
+    "image": "assets/thumbs/BFB-CF0802RW.jpg"
    },
    "parts": []
   }

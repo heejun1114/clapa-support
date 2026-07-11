@@ -378,9 +378,20 @@
   .part-go{margin-top:1px;font-size:12px;color:var(--muted);}
   .part-card:hover .part-go{color:var(--teal-deep);}
 
-  .parts-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;}
-  @media(max-width:900px){.parts-grid{grid-template-columns:repeat(3,1fr);}}
-  @media(max-width:640px){.parts-grid{grid-template-columns:repeat(2,1fr);gap:9px;}}
+  /* 부품 카드 = 2행 가로 스와이프 캐러셀 (세로로 길어지지 않게). 카드가 적으면 한 화면에 그대로. */
+  .parts-grid{
+    display:grid;grid-auto-flow:column;grid-template-rows:repeat(2,auto);
+    grid-auto-columns:190px;gap:12px;
+    overflow-x:auto;overscroll-behavior-x:contain;scroll-snap-type:x proximity;
+    -webkit-overflow-scrolling:touch;padding-bottom:4px;
+  }
+  .parts-grid > .part-card{scroll-snap-align:start;}
+  .parts-grid::-webkit-scrollbar{height:6px;}
+  .parts-grid::-webkit-scrollbar-thumb{background:var(--line);border-radius:99px;}
+  .parts-grid::-webkit-scrollbar-track{background:transparent;}
+  @media(max-width:640px){
+    .parts-grid{grid-auto-columns:calc(50% - 4.5px);gap:9px;scroll-snap-type:x mandatory;}
+  }
 
   /* 홈: 행 안에서 펼쳐지는 부품 패널 ([부품] 버튼 토글) */
   .product-row{flex-wrap:wrap;}
@@ -389,7 +400,12 @@
     padding:14px 2px 6px;
   }
   .row-parts[hidden]{display:none;}
-  .row-parts .parts-grid{grid-template-columns:repeat(4,minmax(0,1fr));}
+  /* 홈 행 펼침은 캐러셀 아님 — 기존 그리드 유지(2x2 캐러셀은 제품 상세에서만) */
+  .row-parts .parts-grid{
+    grid-auto-flow:row;grid-template-rows:none;grid-auto-columns:auto;
+    grid-template-columns:repeat(4,minmax(0,1fr));
+    overflow-x:visible;scroll-snap-type:none;padding-bottom:0;
+  }
   @media(max-width:640px){
     .row-parts .parts-grid{grid-template-columns:repeat(2,minmax(0,1fr));}
   }
@@ -450,7 +466,7 @@
   <section class="phero" aria-labelledby="product-title">
     <div class="wrap phero-grid">
       <div class="phero-media">
-        <img class="phero-img" src="" alt="클래파 유선 진공청소기" loading="eager" decoding="async" onerror="this.remove()">
+        <img class="phero-img" src="../assets/thumbs/IB-VC0601.jpg" alt="클래파 유선 진공청소기" loading="eager" decoding="async" onerror="this.remove()">
       </div>
       <div class="phero-info">
         <span class="phero-cat">건습식·유선 청소기</span>
@@ -497,40 +513,44 @@
 
       <dl class="spec-grid">
         <div class="spec-row">
+          <dt class="spec-label">제품 유형</dt>
+          <dd class="spec-value">싸이클론 유선 스틱·핸디 청소기</dd>
+        </div>
+        <div class="spec-row">
           <dt class="spec-label">흡입력</dt>
-          <dd class="spec-value">14.5kPa 이상</dd>
+          <dd class="spec-value">14,500Pa (싸이클론 방식)</dd>
         </div>
         <div class="spec-row">
-          <dt class="spec-label">소비전력</dt>
-          <dd class="spec-value">600W</dd>
+          <dt class="spec-label">소비전력 / 정격</dt>
+          <dd class="spec-value">600W / AC 220V, 60Hz</dd>
         </div>
         <div class="spec-row">
-          <dt class="spec-label">정격전압</dt>
-          <dd class="spec-value">AC 220V / 60Hz</dd>
+          <dt class="spec-label">먼지통</dt>
+          <dd class="spec-value">500ml, 원터치 개방(하단 배출)</dd>
         </div>
         <div class="spec-row">
-          <dt class="spec-label">먼지통 용량</dt>
-          <dd class="spec-value">0.5L</dd>
+          <dt class="spec-label">필터</dt>
+          <dd class="spec-value">3단계 — 먼지 분리 필터 · 헤파 필터(물세척 가능) · 배기 스펀지 필터</dd>
         </div>
         <div class="spec-row">
-          <dt class="spec-label">소음</dt>
-          <dd class="spec-value">82dB</dd>
+          <dt class="spec-label">연장관</dt>
+          <dd class="spec-value">초경량 알루미늄 14단 조절 (900 ~ 1,140mm)</dd>
         </div>
         <div class="spec-row">
-          <dt class="spec-label">코드 길이</dt>
-          <dd class="spec-value">약 550cm</dd>
+          <dt class="spec-label">전원 코드</dt>
+          <dd class="spec-value">약 5.5m (유선)</dd>
         </div>
         <div class="spec-row">
-          <dt class="spec-label">크기</dt>
-          <dd class="spec-value">약 250×330×900mm</dd>
+          <dt class="spec-label">크기 / 무게</dt>
+          <dd class="spec-value">250 × 330 × 900mm / 약 2.9kg</dd>
         </div>
         <div class="spec-row">
-          <dt class="spec-label">전자파 인증</dt>
-          <dd class="spec-value">R-R-BFB-BFB-VC0601</dd>
+          <dt class="spec-label">구성품</dt>
+          <dd class="spec-value">본체 · ERP 바닥노즐 · 이지 솔 브러시 · 틈새 브러시 · 벽걸이 거치대</dd>
         </div>
         <div class="spec-row">
-          <dt class="spec-label">제조·수입</dt>
-          <dd class="spec-value">(주)비즈포비즈</dd>
+          <dt class="spec-label">안전인증</dt>
+          <dd class="spec-value">JU071568-18001 · 전자파 R-R-BFB-BFB-VC0601</dd>
         </div>
       </dl>
     </div>

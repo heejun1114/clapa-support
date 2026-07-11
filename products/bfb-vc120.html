@@ -378,9 +378,20 @@
   .part-go{margin-top:1px;font-size:12px;color:var(--muted);}
   .part-card:hover .part-go{color:var(--teal-deep);}
 
-  .parts-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;}
-  @media(max-width:900px){.parts-grid{grid-template-columns:repeat(3,1fr);}}
-  @media(max-width:640px){.parts-grid{grid-template-columns:repeat(2,1fr);gap:9px;}}
+  /* 부품 카드 = 2행 가로 스와이프 캐러셀 (세로로 길어지지 않게). 카드가 적으면 한 화면에 그대로. */
+  .parts-grid{
+    display:grid;grid-auto-flow:column;grid-template-rows:repeat(2,auto);
+    grid-auto-columns:190px;gap:12px;
+    overflow-x:auto;overscroll-behavior-x:contain;scroll-snap-type:x proximity;
+    -webkit-overflow-scrolling:touch;padding-bottom:4px;
+  }
+  .parts-grid > .part-card{scroll-snap-align:start;}
+  .parts-grid::-webkit-scrollbar{height:6px;}
+  .parts-grid::-webkit-scrollbar-thumb{background:var(--line);border-radius:99px;}
+  .parts-grid::-webkit-scrollbar-track{background:transparent;}
+  @media(max-width:640px){
+    .parts-grid{grid-auto-columns:calc(50% - 4.5px);gap:9px;scroll-snap-type:x mandatory;}
+  }
 
   /* 홈: 행 안에서 펼쳐지는 부품 패널 ([부품] 버튼 토글) */
   .product-row{flex-wrap:wrap;}
@@ -389,7 +400,12 @@
     padding:14px 2px 6px;
   }
   .row-parts[hidden]{display:none;}
-  .row-parts .parts-grid{grid-template-columns:repeat(4,minmax(0,1fr));}
+  /* 홈 행 펼침은 캐러셀 아님 — 기존 그리드 유지(2x2 캐러셀은 제품 상세에서만) */
+  .row-parts .parts-grid{
+    grid-auto-flow:row;grid-template-rows:none;grid-auto-columns:auto;
+    grid-template-columns:repeat(4,minmax(0,1fr));
+    overflow-x:visible;scroll-snap-type:none;padding-bottom:0;
+  }
   @media(max-width:640px){
     .row-parts .parts-grid{grid-template-columns:repeat(2,minmax(0,1fr));}
   }
@@ -450,7 +466,7 @@
   <section class="phero" aria-labelledby="product-title">
     <div class="wrap phero-grid">
       <div class="phero-media">
-        <img class="phero-img" src="" alt="클래파 싸이클론 무선 청소기" loading="eager" decoding="async" onerror="this.remove()">
+        <img class="phero-img" src="../assets/thumbs/BFB-VC120.jpg" alt="클래파 싸이클론 무선 청소기" loading="eager" decoding="async" onerror="this.remove()">
       </div>
       <div class="phero-info">
         <span class="phero-cat">무선 청소기</span>
@@ -497,40 +513,48 @@
 
       <dl class="spec-grid">
         <div class="spec-row">
+          <dt class="spec-label">제품 유형</dt>
+          <dd class="spec-value">2in1 자동충전 무선 청소기 (스틱·핸디)</dd>
+        </div>
+        <div class="spec-row">
           <dt class="spec-label">흡입력</dt>
-          <dd class="spec-value">20kPa 이상</dd>
+          <dd class="spec-value">22,000Pa (22kPa)</dd>
         </div>
         <div class="spec-row">
           <dt class="spec-label">소비전력</dt>
-          <dd class="spec-value">160W</dd>
+          <dd class="spec-value">본체 160W BLDC + 브러시 15W 모터</dd>
         </div>
         <div class="spec-row">
           <dt class="spec-label">배터리</dt>
-          <dd class="spec-value">2,200mAh</dd>
+          <dd class="spec-value">리튬이온 2,200mAh</dd>
         </div>
         <div class="spec-row">
-          <dt class="spec-label">사용 시간</dt>
-          <dd class="spec-value">저속 35분 이상 / 고속 15분 이상</dd>
+          <dt class="spec-label">충전 / 사용 시간</dt>
+          <dd class="spec-value">충전 약 4시간 / 표준 약 30분 · 파워 약 15분</dd>
         </div>
         <div class="spec-row">
-          <dt class="spec-label">충전 시간</dt>
-          <dd class="spec-value">약 4시간</dd>
+          <dt class="spec-label">먼지통</dt>
+          <dd class="spec-value">원터치 투명 먼지통 (물세척 가능)</dd>
         </div>
         <div class="spec-row">
-          <dt class="spec-label">먼지통 용량</dt>
-          <dd class="spec-value">0.8L</dd>
+          <dt class="spec-label">필터</dt>
+          <dd class="spec-value">5단계 여과 (헤파필터 물세척 가능, 1+1 구성)</dd>
         </div>
         <div class="spec-row">
-          <dt class="spec-label">크기</dt>
-          <dd class="spec-value">핸디 272×120×210mm / 스틱 결합 230×210×1080mm</dd>
+          <dt class="spec-label">소음</dt>
+          <dd class="spec-value">67dB</dd>
         </div>
         <div class="spec-row">
-          <dt class="spec-label">출시년월</dt>
-          <dd class="spec-value">2020-12</dd>
+          <dt class="spec-label">크기 / 무게</dt>
+          <dd class="spec-value">230 × 200 × 1,130mm / 약 1.9kg</dd>
         </div>
         <div class="spec-row">
-          <dt class="spec-label">제조·수입</dt>
-          <dd class="spec-value">(주)비즈포비즈</dd>
+          <dt class="spec-label">구성품</dt>
+          <dd class="spec-value">본체 · 자동충전 알루미늄 거치대 · 모터 브러시 · 노즐</dd>
+        </div>
+        <div class="spec-row">
+          <dt class="spec-label">안전인증</dt>
+          <dd class="spec-value">YU10759-19001</dd>
         </div>
       </dl>
     </div>

@@ -518,6 +518,40 @@
    "aliases": [
     "CCF-30BL"
    ]
+  },
+  {
+   "code": "BDF-3D12R",
+   "name": "클래파 스탠드 선풍기 (단종)",
+   "cat": "fan",
+   "page": "products/bdf-3d12r.html",
+   "manual": "",
+   "parts": "https://smartstore.naver.com/skillfulbrother/search?q=BDF-3D12R",
+   "store": "https://smartstore.naver.com/skillfulbrother",
+   "keywords": [
+    "선풍기",
+    "스탠드선풍기",
+    "단종",
+    "3D",
+    "리모컨"
+   ],
+   "aliases": [
+    "CDF-3D15R"
+   ]
+  },
+  {
+   "code": "BTF-01R",
+   "name": "클래파 날개없는 타워형 선풍기 (단종)",
+   "cat": "fan",
+   "page": "products/btf-01r.html",
+   "manual": "",
+   "parts": "https://smartstore.naver.com/skillfulbrother/search?q=BTF-01R",
+   "store": "https://smartstore.naver.com/skillfulbrother",
+   "keywords": [
+    "선풍기",
+    "타워형",
+    "날개없는",
+    "단종"
+   ]
   }
  ]
 }
