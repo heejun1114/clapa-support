@@ -359,7 +359,6 @@
     *{transition:none !important;animation:none !important;scroll-behavior:auto !important;}
   }
 /*PARTS_CSS*/
-  .parts-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;}
   .part-card{
     display:flex;flex-direction:column;
     border:1px solid var(--line);border-radius:12px;background:var(--paper);
@@ -375,19 +374,64 @@
   .part-model{align-self:flex-start;font-size:12px;font-weight:600;color:var(--teal-deep);background:var(--teal-wash);border-radius:6px;padding:1px 7px;}
   .part-go{margin-top:1px;font-size:12px;color:var(--muted);}
   .part-card:hover .part-go{color:var(--teal-deep);}
-  .part-hidden{display:none;}
-  .parts-toggle{
-    margin:16px auto 0;display:flex;align-items:center;justify-content:center;gap:6px;
-    min-height:44px;padding:0 22px;
-    border:1px solid var(--line);border-radius:100px;background:var(--paper);
-    font-family:inherit;font-size:14px;font-weight:600;letter-spacing:-0.01em;color:var(--ink);cursor:pointer;
-    transition:border-color .16s var(--ease),background .16s var(--ease),color .16s var(--ease);
+
+  /* 홈: 한 줄 가로 스크롤(옆으로 펼침) */
+  .parts-rail-wrap{position:relative;}
+  .parts-rail{
+    display:flex;gap:12px;
+    overflow-x:auto;scroll-snap-type:x proximity;
+    -webkit-overflow-scrolling:touch;scrollbar-width:none;
+    padding:2px 2px 8px;
   }
-  .parts-toggle:hover{border-color:var(--teal);color:var(--teal-deep);background:var(--teal-wash);}
+  .parts-rail::-webkit-scrollbar{display:none;}
+  .parts-rail .part-card{flex:0 0 190px;scroll-snap-align:start;}
+  .parts-arrow{
+    position:absolute;top:88px;z-index:5;
+    width:38px;height:38px;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    border:1px solid var(--line);background:rgba(255,255,255,.92);color:var(--ink);
+    cursor:pointer;font-size:16px;line-height:1;
+    transition:border-color .15s var(--ease),color .15s var(--ease),opacity .15s var(--ease);
+  }
+  .parts-arrow:hover{border-color:var(--teal);color:var(--teal-deep);}
+  .parts-arrow.is-prev{left:-14px;}
+  .parts-arrow.is-next{right:-14px;}
+  .parts-arrow[disabled]{opacity:0;pointer-events:none;}
   @media(max-width:640px){
-    .parts-grid{grid-template-columns:repeat(2,1fr);gap:9px;}
+    .parts-arrow{display:none;}
+    .parts-rail{
+      margin-inline:calc(-1 * clamp(18px,4vw,40px));
+      padding-inline:clamp(18px,4vw,40px);
+    }
+    .parts-rail .part-card{flex:0 0 160px;}
     .part-name{font-size:13.5px;}
     .part-body{padding:10px 11px 12px;}
+  }
+
+  /* 제품 상세: 카드 그리드 + 교체주기·주의사항 */
+  .parts-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;}
+  @media(max-width:900px){.parts-grid{grid-template-columns:repeat(3,1fr);}}
+  @media(max-width:640px){.parts-grid{grid-template-columns:repeat(2,1fr);gap:9px;}}
+  .care-notes{
+    margin-top:16px;
+    background:var(--surface);border:1px solid var(--line);border-radius:12px;
+    padding:16px 18px;
+  }
+  .care-notes h3{
+    margin:0 0 9px;font-size:14px;font-weight:700;letter-spacing:-0.01em;color:var(--ink);
+  }
+  .care-notes ul{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:7px;}
+  .care-notes li{font-size:13.5px;line-height:1.6;color:var(--muted);}
+  .care-notes li strong{color:var(--teal-deep);font-weight:600;margin-right:6px;}
+  .care-notes .care-more{
+    display:inline-block;margin-top:10px;
+    font-size:13px;font-weight:600;color:var(--teal-deep);
+    border-bottom:1px solid var(--teal-wash);padding-bottom:1px;
+  }
+  .care-notes .care-more:hover{border-bottom-color:var(--teal);}
+  @media(max-width:640px){
+    .care-notes li{font-size:14.5px;}
+    .care-notes h3{font-size:15px;}
   }
 /*/PARTS_CSS*/
 </style>
@@ -540,6 +584,13 @@
       </div>
       <div class="parts-grid">
         <a class="part-card" href="https://smartstore.naver.com/skillfulbrother/products/12166003860" target="_blank" rel="noopener" aria-label="클래파 BEF-C156W 추가 배터리 — 스토어에서 보기"><span class="part-thumb"><img src="https://shop-phinf.pstatic.net/20250728_95/1753670381290EYvg0_JPEG/57182918250382160_633872153.jpg?type=f200" alt="" loading="lazy" decoding="async" onerror="this.remove()"></span><span class="part-body"><span class="part-name">추가 배터리</span><span class="part-model">BEF-C156W</span><span class="part-go">스토어에서 구매 ↗</span></span></a>
+      </div>
+      <div class="care-notes">
+        <h3>교체 주기·주의사항</h3>
+        <ul>
+          <li><strong>배터리</strong>평균 수명 약 3년 — 장기 보관 시 분리 보관 권장</li>
+        </ul>
+        <a class="care-more" href="../warranty.html">보증·소모품 전체 안내 →</a>
       </div>
     </div>
   </section>
