@@ -10,10 +10,11 @@
    "pinned": false,
    "banner": false,
    "bannerColor": "",
-   "active": false,
+   "active": true,
    "startsAt": null,
    "endsAt": null,
-   "createdAt": "2026-07-12T02:19:08+09:00"
+   "createdAt": "2026-07-12T02:19:08+09:00",
+   "place": "as"
   },
   {
    "id": "n-clapa-mall-event",
@@ -28,7 +29,8 @@
    "active": true,
    "startsAt": null,
    "endsAt": null,
-   "createdAt": "2026-07-12T02:20:00+09:00"
+   "createdAt": "2026-07-12T02:20:00+09:00",
+   "place": "banner"
   }
  ]
 }

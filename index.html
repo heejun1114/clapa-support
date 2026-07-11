@@ -384,6 +384,22 @@
     .site-banner{font-size:12.5px;padding:8px 10px;}
     .site-banner-in{justify-content:flex-start;}
   }
+  /* A/S 영역 공지(place='as') — 접수 밴드 위 조용한 안내 카드 */
+  .as-notice{
+    margin-bottom:14px;
+    background:#FBF3E2;border:1px solid #EBDCB9;border-radius:var(--radius);
+    padding:13px 16px;font-size:14px;line-height:1.65;
+    display:flex;gap:10px;align-items:flex-start;
+  }
+  .as-notice .an-pill{
+    flex:none;font-size:11px;font-weight:700;letter-spacing:0;
+    color:#7A5A17;background:rgba(143,106,30,.13);border-radius:999px;padding:3px 9px;margin-top:1px;
+  }
+  .as-notice .an-tx{min-width:0;}
+  .as-notice .an-t{font-weight:650;letter-spacing:-0.014em;}
+  .as-notice .an-b{color:#6F675C;white-space:pre-line;margin-top:2px;font-size:13.5px;}
+  .as-notice a{color:var(--teal-deep);font-weight:600;border-bottom:1px solid var(--teal-wash);}
+
   /* 배너 색상 프리셋 (백오피스에서 선택) — 기본은 청록(teal-deep) */
   .site-banner.sb-c-charcoal{background:#23201B;color:#EFEBE3;}
   .site-banner.sb-c-amber{background:#8F6A1E;color:#FBF3E2;}
@@ -848,6 +864,8 @@
   <!-- A/S INTAKE -->
   <section class="asband" aria-labelledby="as-title">
     <div class="wrap">
+      <!-- A/S 관련 공지 슬롯: place='as' 공지 1건 (assets/notices.js) -->
+      <div class="as-notice" id="notice-as-slot" hidden></div>
       <div class="as-band">
 
         <div class="as-lead">
