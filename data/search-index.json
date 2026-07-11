@@ -2091,5 +2091,45 @@
   "url": "warranty.html#consumable-title",
   "k": "부품 소모품 구매 필터 먼지통 먼지봉투 노즐 어댑터 배터리 별도 구매 따로 파나요 부품만",
   "img": ""
+ },
+ {
+  "t": "product",
+  "title": "클래파 6인치 프리미엄 터치형 무선선풍기",
+  "sub": "6인치 터치형 무선선풍기",
+  "url": "products/bfb-sf500.html",
+  "img": "",
+  "k": "BFB-SF500 선풍기 무선선풍기 탁상용선풍기 미니선풍기 터치형 충전식 6인치"
+ },
+ {
+  "t": "product",
+  "title": "클래파 6인치 프리미엄 회전형 무선선풍기",
+  "sub": "6인치 회전형 무선선풍기",
+  "url": "products/bfb-sf500e.html",
+  "img": "",
+  "k": "BFB-SF500E 선풍기 무선선풍기 회전형 탁상용선풍기 타이머 충전식 6인치"
+ },
+ {
+  "t": "product",
+  "title": "클래파 휴대용 대용량 선풍기",
+  "sub": "휴대용 대용량 선풍기",
+  "url": "products/bfb-hf5200w.html",
+  "img": "",
+  "k": "BFB-HF5200W 휴대용선풍기 손선풍기 핸디선풍기 대용량 보조배터리 미니선풍기"
+ },
+ {
+  "t": "product",
+  "title": "클래파 보조배터리 겸용 휴대용 선풍기",
+  "sub": "보조배터리 겸용 휴대용 선풍기",
+  "url": "products/bfb-hf2601w.html",
+  "img": "",
+  "k": "BFB-HF2601W 휴대용선풍기 손선풍기 핸디선풍기 보조배터리 미니선풍기"
+ },
+ {
+  "t": "product",
+  "title": "클래파 8인치 3D 써큘레이터",
+  "sub": "8인치 3D 써큘레이터",
+  "url": "products/bfb-cf0802rw.html",
+  "img": "",
+  "k": "BFB-CF0802RW CCF-30BL 써큘레이터 서큘레이터 circulator 선풍기 스탠드 리모컨"
  }
 ]

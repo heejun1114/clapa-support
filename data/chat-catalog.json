@@ -429,6 +429,95 @@
     "구성품",
     "부품"
    ]
+  },
+  {
+   "code": "BFB-SF500",
+   "name": "클래파 6인치 프리미엄 터치형 무선선풍기",
+   "cat": "fan",
+   "page": "products/bfb-sf500.html",
+   "manual": "",
+   "parts": "https://smartstore.naver.com/skillfulbrother/search?q=BFB-SF500",
+   "store": "https://smartstore.naver.com/skillfulbrother/products/6999811935",
+   "keywords": [
+    "선풍기",
+    "무선선풍기",
+    "탁상용선풍기",
+    "미니선풍기",
+    "터치형",
+    "충전식",
+    "6인치"
+   ]
+  },
+  {
+   "code": "BFB-SF500E",
+   "name": "클래파 6인치 프리미엄 회전형 무선선풍기",
+   "cat": "fan",
+   "page": "products/bfb-sf500e.html",
+   "manual": "",
+   "parts": "https://smartstore.naver.com/skillfulbrother/search?q=BFB-SF500E",
+   "store": "https://smartstore.naver.com/skillfulbrother/products/6999752314",
+   "keywords": [
+    "선풍기",
+    "무선선풍기",
+    "회전형",
+    "탁상용선풍기",
+    "타이머",
+    "충전식",
+    "6인치"
+   ]
+  },
+  {
+   "code": "BFB-HF5200W",
+   "name": "클래파 휴대용 대용량 선풍기",
+   "cat": "fan",
+   "page": "products/bfb-hf5200w.html",
+   "manual": "",
+   "parts": "https://smartstore.naver.com/skillfulbrother/search?q=BFB-HF5200W",
+   "store": "https://smartstore.naver.com/skillfulbrother/products/6999777607",
+   "keywords": [
+    "휴대용선풍기",
+    "손선풍기",
+    "핸디선풍기",
+    "대용량",
+    "보조배터리",
+    "미니선풍기"
+   ]
+  },
+  {
+   "code": "BFB-HF2601W",
+   "name": "클래파 보조배터리 겸용 휴대용 선풍기",
+   "cat": "fan",
+   "page": "products/bfb-hf2601w.html",
+   "manual": "",
+   "parts": "https://smartstore.naver.com/skillfulbrother/search?q=BFB-HF2601W",
+   "store": "https://smartstore.naver.com/skillfulbrother/products/6999678677",
+   "keywords": [
+    "휴대용선풍기",
+    "손선풍기",
+    "핸디선풍기",
+    "보조배터리",
+    "미니선풍기"
+   ]
+  },
+  {
+   "code": "BFB-CF0802RW",
+   "name": "클래파 8인치 3D 써큘레이터",
+   "cat": "fan",
+   "page": "products/bfb-cf0802rw.html",
+   "manual": "",
+   "parts": "https://smartstore.naver.com/skillfulbrother/search?q=BFB-CF0802RW",
+   "store": "https://smartstore.naver.com/skillfulbrother",
+   "keywords": [
+    "써큘레이터",
+    "서큘레이터",
+    "circulator",
+    "선풍기",
+    "스탠드",
+    "리모컨"
+   ],
+   "aliases": [
+    "CCF-30BL"
+   ]
   }
  ]
 }

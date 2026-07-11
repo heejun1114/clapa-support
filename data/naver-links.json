@@ -391,6 +391,46 @@
     "category": "디지털/가전>주방가전>전기밥솥>일반밥솥"
    },
    "parts": []
+  },
+  "BFB-SF500": {
+   "main": {
+    "name": "클래파 6인치 터치형 무선선풍기",
+    "url": "https://smartstore.naver.com/skillfulbrother/products/6999811935",
+    "image": "https://shop-phinf.pstatic.net/20220804_11/1659595922828X0k43_JPEG/60731818555485833_2023244069.jpg",
+    "price": null,
+    "category": ""
+   },
+   "parts": []
+  },
+  "BFB-SF500E": {
+   "main": {
+    "name": "클래파 6인치 회전형 무선선풍기",
+    "url": "https://smartstore.naver.com/skillfulbrother/products/6999752314",
+    "image": "https://shop-phinf.pstatic.net/20220804_174/1659594492610EiRYd_JPEG/60730388342432510_359334393.jpg",
+    "price": null,
+    "category": ""
+   },
+   "parts": []
+  },
+  "BFB-HF5200W": {
+   "main": {
+    "name": "클래파 휴대용 대용량 선풍기",
+    "url": "https://smartstore.naver.com/skillfulbrother/products/6999777607",
+    "image": "https://shop-phinf.pstatic.net/20220804_180/1659595230353Vc9yX_JPEG/60731064162315388_365543189.jpg",
+    "price": null,
+    "category": ""
+   },
+   "parts": []
+  },
+  "BFB-HF2601W": {
+   "main": {
+    "name": "클래파 보조배터리 겸용 휴대용 선풍기",
+    "url": "https://smartstore.naver.com/skillfulbrother/products/6999678677",
+    "image": "https://shop-phinf.pstatic.net/20220804_217/1659593261104f5V0Y_JPEG/60729095936859007_10096389.jpg",
+    "price": null,
+    "category": ""
+   },
+   "parts": []
   }
  }
 }
