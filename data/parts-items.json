@@ -1,0 +1,429 @@
+{
+ "_note": "부품(옵션) 단위 카드 정본 — 커머스 API 옵션 + 상세 스트립 크로핑(2026-07-11). img 상대경로=로컬 자산(assets/parts/), http=네이버 CDN. 갱신: scratchpad fetch_part_options.py → 크로핑 → 본 파일 → scripts/render_parts_cards.py",
+ "items": {
+  "10078593658": {
+   "model": "BVC-H10",
+   "url": "https://smartstore.naver.com/skillfulbrother/products/10078593658",
+   "cards": [
+    {
+     "name": "헤파필터",
+     "img": "assets/parts/10078593658/01.jpg"
+    },
+    {
+     "name": "USB 충전 케이블",
+     "img": "assets/parts/10078593658/04.jpg"
+    },
+    {
+     "name": "바닥 노즐",
+     "img": "assets/parts/10078593658/05.jpg"
+    },
+    {
+     "name": "솔 브러쉬 노즐",
+     "img": "assets/parts/10078593658/06.jpg"
+    },
+    {
+     "name": "틈새 노즐",
+     "img": "assets/parts/10078593658/07.jpg"
+    },
+    {
+     "name": "연결봉",
+     "img": "assets/parts/10078593658/08.jpg"
+    }
+   ]
+  },
+  "12142660346": {
+   "model": "BVC-S185",
+   "url": "https://smartstore.naver.com/skillfulbrother/products/12142660346",
+   "cards": [
+    {
+     "name": "헤파필터 2EA",
+     "img": "assets/parts/12142660346/01.jpg"
+    },
+    {
+     "name": "먼지봉투 5EA",
+     "img": "assets/parts/12142660346/02.jpg"
+    },
+    {
+     "name": "LED 헤드 브러시",
+     "img": "assets/parts/12142660346/03.jpg"
+    },
+    {
+     "name": "솔 브러시",
+     "img": "assets/parts/12142660346/04.jpg"
+    },
+    {
+     "name": "틈새 브러시",
+     "img": "assets/parts/12142660346/05.jpg"
+    },
+    {
+     "name": "연장봉",
+     "img": "assets/parts/12142660346/06.jpg"
+    },
+    {
+     "name": "브러시 거치대",
+     "img": "assets/parts/12142660346/07.jpg"
+    },
+    {
+     "name": "먼지통",
+     "img": "assets/parts/12142660346/08.jpg"
+    },
+    {
+     "name": "필터망",
+     "img": "assets/parts/12142660346/09.jpg"
+    },
+    {
+     "name": "물걸레 세트",
+     "img": "assets/parts/12142660346/10.jpg"
+    },
+    {
+     "name": "물걸레 패드 4EA",
+     "img": "assets/parts/12142660346/11.jpg"
+    }
+   ]
+  },
+  "12142699458": {
+   "model": "BVC-S185",
+   "url": "https://smartstore.naver.com/skillfulbrother/products/12142699458",
+   "cards": [
+    {
+     "name": "청소기 본체",
+     "img": "assets/parts/12142699458/01.jpg"
+    },
+    {
+     "name": "스테이션",
+     "img": "assets/parts/12142699458/02.jpg"
+    }
+   ]
+  },
+  "10103618128": {
+   "model": "BVC-L138",
+   "url": "https://smartstore.naver.com/skillfulbrother/products/10103618128",
+   "cards": [
+    {
+     "name": "집진 필터",
+     "img": "assets/parts/10103618128/01.jpg"
+    },
+    {
+     "name": "프리 필터",
+     "img": "assets/parts/10103618128/02.jpg"
+    },
+    {
+     "name": "바닥 브러쉬",
+     "img": "assets/parts/10103618128/03.jpg"
+    },
+    {
+     "name": "틈새 브러쉬",
+     "img": "assets/parts/10103618128/04.jpg"
+    },
+    {
+     "name": "주름 호스",
+     "img": "assets/parts/10103618128/05.jpg"
+    },
+    {
+     "name": "연결봉",
+     "img": "assets/parts/10103618128/06.jpg"
+    },
+    {
+     "name": "바닥판 + 앞바퀴 2개",
+     "img": "assets/parts/10103618128/07.jpg"
+    },
+    {
+     "name": "뒷바퀴 2개",
+     "img": "assets/parts/10103618128/08.jpg"
+    },
+    {
+     "name": "잠금 장치 2개",
+     "img": "assets/parts/10103618128/09.jpg"
+    }
+   ]
+  },
+  "10212588473": {
+   "model": "BYF-G18",
+   "url": "https://smartstore.naver.com/skillfulbrother/products/10212588473",
+   "cards": [
+    {
+     "name": "거름망",
+     "img": "assets/parts/10212588473/01.jpg"
+    },
+    {
+     "name": "유리용기",
+     "img": "assets/parts/10212588473/02.jpg"
+    }
+   ]
+  },
+  "10212157424": {
+   "model": "BYF-G18",
+   "url": "https://smartstore.naver.com/skillfulbrother/products/10212157424",
+   "cards": [
+    {
+     "name": "뚜껑",
+     "img": "assets/parts/10212157424/01.jpg"
+    },
+    {
+     "name": "스프링",
+     "img": "assets/parts/10212157424/02.jpg"
+    },
+    {
+     "name": "누름판",
+     "img": "assets/parts/10212157424/03.jpg"
+    }
+   ]
+  },
+  "10311125246": {
+   "model": "BHF-8000W",
+   "url": "https://smartstore.naver.com/skillfulbrother/products/10311125246",
+   "cards": [
+    {
+     "name": "본체 + 보조배터리 모듈",
+     "img": "assets/parts/10311125246/01.jpg"
+    },
+    {
+     "name": "팬 헤드",
+     "img": "assets/parts/10311125246/02.jpg"
+    },
+    {
+     "name": "노즐 4종",
+     "img": "assets/parts/10311125246/03.jpg"
+    }
+   ]
+  },
+  "13648701308": {
+   "model": "BVC-H38",
+   "url": "https://smartstore.naver.com/skillfulbrother/products/13648701308",
+   "cards": [
+    {
+     "name": "전용 배터리",
+     "img": "assets/parts/13648701308/01.jpg"
+    },
+    {
+     "name": "모터 헤드",
+     "img": "assets/parts/13648701308/02.jpg"
+    }
+   ]
+  },
+  "13513768685": {
+   "model": "BVC-H38",
+   "url": "https://smartstore.naver.com/skillfulbrother/products/13513768685",
+   "cards": [
+    {
+     "name": "바닥 브러시",
+     "img": "assets/parts/13513768685/01.jpg"
+    },
+    {
+     "name": "연결봉",
+     "img": "assets/parts/13513768685/02.jpg"
+    },
+    {
+     "name": "먼지통",
+     "img": "assets/parts/13513768685/03.jpg"
+    },
+    {
+     "name": "헤파필터 2EA",
+     "img": "assets/parts/13513768685/04.jpg"
+    },
+    {
+     "name": "스틸필터 1EA",
+     "img": "assets/parts/13513768685/05.jpg"
+    },
+    {
+     "name": "어댑터",
+     "img": "assets/parts/13513768685/06.jpg"
+    }
+   ]
+  },
+  "11174828658": {
+   "model": "BVC-T500W",
+   "url": "https://smartstore.naver.com/skillfulbrother/products/11174828658",
+   "cards": [
+    {
+     "name": "타워 먼지봉투 4매",
+     "img": "assets/parts/11174828658/01.jpg"
+    },
+    {
+     "name": "청소기 헤파필터",
+     "img": "assets/parts/11174828658/02.jpg"
+    },
+    {
+     "name": "타워 헤파필터",
+     "img": "assets/parts/11174828658/03.jpg"
+    },
+    {
+     "name": "3단 스틸필터",
+     "img": "assets/parts/11174828658/04.jpg"
+    },
+    {
+     "name": "청소기 먼지통",
+     "img": "assets/parts/11174828658/05.jpg"
+    },
+    {
+     "name": "UV 침구 브러시",
+     "img": "assets/parts/11174828658/06.jpg"
+    },
+    {
+     "name": "UV 헤드 브러시",
+     "img": "assets/parts/11174828658/07.jpg"
+    },
+    {
+     "name": "2in1 멀티 브러시",
+     "img": "assets/parts/11174828658/08.jpg"
+    },
+    {
+     "name": "틈새 브러시",
+     "img": "assets/parts/11174828658/09.jpg"
+    },
+    {
+     "name": "필터 보관함 + 여분 배터리 충전기",
+     "img": "assets/parts/11174828658/10.jpg"
+    },
+    {
+     "name": "연결봉",
+     "img": "assets/parts/11174828658/11.jpg"
+    }
+   ]
+  },
+  "11150145784": {
+   "model": "BVC-T500W",
+   "url": "https://smartstore.naver.com/skillfulbrother/products/11150145784",
+   "cards": [
+    {
+     "name": "전용 배터리",
+     "img": "assets/parts/11150145784/01.jpg"
+    },
+    {
+     "name": "모터 헤드",
+     "img": "assets/parts/11150145784/02.jpg"
+    }
+   ]
+  },
+  "10223301151": {
+   "model": "BVC-L125",
+   "url": "https://smartstore.naver.com/skillfulbrother/products/10223301151",
+   "cards": [
+    {
+     "name": "집진 필터",
+     "img": "assets/parts/10223301151/01.jpg"
+    },
+    {
+     "name": "프리 필터",
+     "img": "assets/parts/10223301151/02.jpg"
+    },
+    {
+     "name": "바닥 브러쉬",
+     "img": "assets/parts/10223301151/03.jpg"
+    },
+    {
+     "name": "틈새 브러쉬",
+     "img": "assets/parts/10223301151/04.jpg"
+    },
+    {
+     "name": "주름 호스",
+     "img": "assets/parts/10223301151/05.jpg"
+    },
+    {
+     "name": "연결봉",
+     "img": "assets/parts/10223301151/06.jpg"
+    },
+    {
+     "name": "바닥판 + 바퀴 4개",
+     "img": "assets/parts/10223301151/07.jpg"
+    },
+    {
+     "name": "잠금 장치 2개",
+     "img": "assets/parts/10223301151/08.jpg"
+    }
+   ]
+  },
+  "10078638395": {
+   "model": "BVC-C13K",
+   "url": "https://smartstore.naver.com/skillfulbrother/products/10078638395",
+   "cards": [
+    {
+     "name": "헤파필터",
+     "img": "assets/parts/10078638395/01.jpg"
+    },
+    {
+     "name": "스틸필터",
+     "img": "assets/parts/10078638395/02.jpg"
+    },
+    {
+     "name": "먼지통",
+     "img": "assets/parts/10078638395/03.jpg"
+    },
+    {
+     "name": "USB 충전 케이블",
+     "img": "assets/parts/10078638395/04.jpg"
+    },
+    {
+     "name": "바닥 노즐",
+     "img": "assets/parts/10078638395/05.jpg"
+    },
+    {
+     "name": "솔&틈새 노즐",
+     "img": "assets/parts/10078638395/06.jpg"
+    },
+    {
+     "name": "진공 노즐",
+     "img": "assets/parts/10078638395/07.jpg"
+    },
+    {
+     "name": "송풍 노즐",
+     "img": "assets/parts/10078638395/08.jpg"
+    },
+    {
+     "name": "침구 솔 브러쉬",
+     "img": "assets/parts/10078638395/09.jpg"
+    },
+    {
+     "name": "연결봉",
+     "img": "assets/parts/10078638395/10.jpg"
+    }
+   ]
+  },
+  "10227959757": {
+   "model": "BFB-VC120",
+   "url": "https://smartstore.naver.com/skillfulbrother/products/10227959757",
+   "cards": [
+    {
+     "name": "헤파 필터",
+     "img": "assets/parts/10227959757/01.jpg"
+    },
+    {
+     "name": "스틸 필터",
+     "img": "assets/parts/10227959757/02.jpg"
+    },
+    {
+     "name": "바닥 브러쉬",
+     "img": "assets/parts/10227959757/03.jpg"
+    },
+    {
+     "name": "침구 브러쉬",
+     "img": "assets/parts/10227959757/04.jpg"
+    },
+    {
+     "name": "틈새 브러쉬",
+     "img": "assets/parts/10227959757/05.jpg"
+    },
+    {
+     "name": "틈새 노즐",
+     "img": "assets/parts/10227959757/06.jpg"
+    },
+    {
+     "name": "먼지통",
+     "img": "assets/parts/10227959757/07.jpg"
+    },
+    {
+     "name": "물걸레 패드 4장",
+     "img": "assets/parts/10227959757/08.jpg"
+    },
+    {
+     "name": "연결봉",
+     "img": "assets/parts/10227959757/09.jpg"
+    },
+    {
+     "name": "충전 어댑터",
+     "img": "assets/parts/10227959757/10.jpg"
+    }
+   ]
+  }
+ }
+}
