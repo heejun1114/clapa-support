@@ -654,43 +654,26 @@
   .part-go{margin-top:1px;font-size:12px;color:var(--muted);}
   .part-card:hover .part-go{color:var(--teal-deep);}
 
-  /* 홈: 한 줄 가로 스크롤(옆으로 펼침) */
-  .parts-rail-wrap{position:relative;}
-  .parts-rail{
-    display:flex;gap:12px;
-    overflow-x:auto;scroll-snap-type:x proximity;
-    -webkit-overflow-scrolling:touch;scrollbar-width:none;
-    padding:2px 2px 8px;
-  }
-  .parts-rail::-webkit-scrollbar{display:none;}
-  .parts-rail .part-card{flex:0 0 190px;scroll-snap-align:start;}
-  .parts-arrow{
-    position:absolute;top:88px;z-index:5;
-    width:38px;height:38px;border-radius:50%;
-    display:flex;align-items:center;justify-content:center;
-    border:1px solid var(--line);background:rgba(255,255,255,.92);color:var(--ink);
-    cursor:pointer;font-size:16px;line-height:1;
-    transition:border-color .15s var(--ease),color .15s var(--ease),opacity .15s var(--ease);
-  }
-  .parts-arrow:hover{border-color:var(--teal);color:var(--teal-deep);}
-  .parts-arrow.is-prev{left:-14px;}
-  .parts-arrow.is-next{right:-14px;}
-  .parts-arrow[disabled]{opacity:0;pointer-events:none;}
-  @media(max-width:640px){
-    .parts-arrow{display:none;}
-    .parts-rail{
-      margin-inline:calc(-1 * clamp(18px,4vw,40px));
-      padding-inline:clamp(18px,4vw,40px);
-    }
-    .parts-rail .part-card{flex:0 0 160px;}
-    .part-name{font-size:13.5px;}
-    .part-body{padding:10px 11px 12px;}
-  }
-
-  /* 제품 상세: 카드 그리드 + 교체주기·주의사항 */
   .parts-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;}
   @media(max-width:900px){.parts-grid{grid-template-columns:repeat(3,1fr);}}
   @media(max-width:640px){.parts-grid{grid-template-columns:repeat(2,1fr);gap:9px;}}
+
+  /* 홈: 행 안에서 펼쳐지는 부품 패널 ([부품] 버튼 토글) */
+  .product-row{flex-wrap:wrap;}
+  .row-parts{
+    flex-basis:100%;width:100%;display:block;
+    padding:14px 2px 6px;
+  }
+  .row-parts[hidden]{display:none;}
+  .row-parts .parts-grid{grid-template-columns:repeat(4,minmax(0,1fr));}
+  @media(max-width:640px){
+    .row-parts .parts-grid{grid-template-columns:repeat(2,minmax(0,1fr));}
+  }
+  .qlink.is-open{
+    border-color:var(--teal);background:var(--teal-wash);color:var(--teal-deep);
+  }
+
+  /* 제품 상세: 교체주기·주의사항 */
   .care-notes{
     margin-top:16px;
     background:var(--surface);border:1px solid var(--line);border-radius:12px;
@@ -899,7 +882,8 @@
             <a class="qlink" href="https://smartstore.naver.com/skillfulbrother/search?q=BVC-H10" target="_blank" rel="noopener"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><rect x="3" y="4.5" width="10" height="8" rx="1.2"/><path d="M3 7.3h10"/></svg>부품</a>
             <a class="qlink" href="products/bvc-h10.html#faq"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><path d="M3 3h10v7H7l-3 2.5V10H3z"/></svg>FAQ</a>
           </span>
-        </div>
+                        <!--ROW_PARTS:BVC-H10--><span class="row-parts" data-code="BVC-H10" hidden><span class="parts-grid"><a class="part-card" href="https://smartstore.naver.com/skillfulbrother/products/10087749367" target="_blank" rel="noopener" aria-label="클래파 BVC-H10 전용 배터리, 본체 — 스토어에서 보기"><span class="part-thumb"><img src="https://shop-phinf.pstatic.net/20240318_1/17107455192771Gu8k_JPEG/38048203156115055_1050235208.jpg?type=f200" alt="" loading="lazy" decoding="async" onerror="this.remove()"></span><span class="part-body"><span class="part-name">전용 배터리·본체</span><span class="part-model">BVC-H10</span><span class="part-go">스토어에서 구매 ↗</span></span></a><a class="part-card" href="https://smartstore.naver.com/skillfulbrother/products/10078593658" target="_blank" rel="noopener" aria-label="클래파 BVC-H10, BVC-H15 전용 구성품 — 스토어에서 보기"><span class="part-thumb"><img src="https://shop-phinf.pstatic.net/20240418_227/1713401932801d5YDj_JPEG/114537775501698925_832725893.jpg?type=f200" alt="" loading="lazy" decoding="async" onerror="this.remove()"></span><span class="part-body"><span class="part-name">전용 구성품</span><span class="part-model">BVC-H10</span><span class="part-go">스토어에서 구매 ↗</span></span></a></span></span><!--/ROW_PARTS:BVC-H10-->
+</div>
 
         <div class="product-row" data-cat="wireless">
           <span class="thumb" data-thumb="BVC-S185" aria-hidden="true" style="position:relative;overflow:hidden">
@@ -916,7 +900,8 @@
             <a class="qlink" href="https://smartstore.naver.com/skillfulbrother/search?q=BVC-S185" target="_blank" rel="noopener"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><rect x="3" y="4.5" width="10" height="8" rx="1.2"/><path d="M3 7.3h10"/></svg>부품</a>
             <a class="qlink" href="products/bvc-s185.html#faq"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><path d="M3 3h10v7H7l-3 2.5V10H3z"/></svg>FAQ</a>
           </span>
-        </div>
+                        <!--ROW_PARTS:BVC-S185--><span class="row-parts" data-code="BVC-S185" hidden><span class="parts-grid"><a class="part-card" href="https://smartstore.naver.com/skillfulbrother/products/12142699458" target="_blank" rel="noopener" aria-label="클래파 BVC-S185, CVC-S230 전용 본체, 스테이션 — 스토어에서 보기"><span class="part-thumb"><img src="https://shop-phinf.pstatic.net/20250820_257/1755650147367tkfJI_JPEG/69030129223624772_1074052102.jpg?type=f200" alt="" loading="lazy" decoding="async" onerror="this.remove()"></span><span class="part-body"><span class="part-name">전용 본체·스테이션</span><span class="part-model">BVC-S185</span><span class="part-go">스토어에서 구매 ↗</span></span></a><a class="part-card" href="https://smartstore.naver.com/skillfulbrother/products/12142660346" target="_blank" rel="noopener" aria-label="클래파 BVC-S185, CVC-S230 전용 구성품 — 스토어에서 보기"><span class="part-thumb"><img src="https://shop-phinf.pstatic.net/20260109_168/1767931494728Fvs6x_JPEG/17448733919846836_1152751588.jpg?type=f200" alt="" loading="lazy" decoding="async" onerror="this.remove()"></span><span class="part-body"><span class="part-name">전용 구성품</span><span class="part-model">BVC-S185</span><span class="part-go">스토어에서 구매 ↗</span></span></a></span></span><!--/ROW_PARTS:BVC-S185-->
+</div>
 
         <div class="product-row" data-cat="wireless">
           <span class="thumb" data-thumb="BVC-H38" aria-hidden="true" style="position:relative;overflow:hidden">
@@ -933,7 +918,8 @@
             <a class="qlink" href="https://smartstore.naver.com/skillfulbrother/search?q=BVC-H38" target="_blank" rel="noopener"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><rect x="3" y="4.5" width="10" height="8" rx="1.2"/><path d="M3 7.3h10"/></svg>부품</a>
             <a class="qlink" href="products/bvc-h38.html#faq"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><path d="M3 3h10v7H7l-3 2.5V10H3z"/></svg>FAQ</a>
           </span>
-        </div>
+                        <!--ROW_PARTS:BVC-H38--><span class="row-parts" data-code="BVC-H38" hidden><span class="parts-grid"><a class="part-card" href="https://smartstore.naver.com/skillfulbrother/products/13648701308" target="_blank" rel="noopener" aria-label="클래파 BVC-H38 전용 배터리, 모터 헤드 — 스토어에서 보기"><span class="part-thumb"><img src="https://shop-phinf.pstatic.net/20260702_207/1782959769732DXCrw_JPEG/117092604870813584_1534247803.jpg?type=f200" alt="" loading="lazy" decoding="async" onerror="this.remove()"></span><span class="part-body"><span class="part-name">전용 배터리·모터 헤드</span><span class="part-model">BVC-H38</span><span class="part-go">스토어에서 구매 ↗</span></span></a><a class="part-card" href="https://smartstore.naver.com/skillfulbrother/products/13513768685" target="_blank" rel="noopener" aria-label="클래파 BVC-H38 전용 구성품 — 스토어에서 보기"><span class="part-thumb"><img src="https://shop-phinf.pstatic.net/20260511_59/1778480040235nyrNI_JPEG/27236311360616920_1241133379.jpg?type=f200" alt="" loading="lazy" decoding="async" onerror="this.remove()"></span><span class="part-body"><span class="part-name">전용 구성품</span><span class="part-model">BVC-H38</span><span class="part-go">스토어에서 구매 ↗</span></span></a></span></span><!--/ROW_PARTS:BVC-H38-->
+</div>
 
         <div class="product-row" data-cat="wireless">
           <span class="thumb" data-thumb="BVC-T500W" aria-hidden="true" style="position:relative;overflow:hidden">
@@ -950,7 +936,8 @@
             <a class="qlink" href="https://smartstore.naver.com/skillfulbrother/search?q=BVC-T500W" target="_blank" rel="noopener"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><rect x="3" y="4.5" width="10" height="8" rx="1.2"/><path d="M3 7.3h10"/></svg>부품</a>
             <a class="qlink" href="products/bvc-t500w.html#faq"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><path d="M3 3h10v7H7l-3 2.5V10H3z"/></svg>FAQ</a>
           </span>
-        </div>
+                        <!--ROW_PARTS:BVC-T500W--><span class="row-parts" data-code="BVC-T500W" hidden><span class="parts-grid"><a class="part-card" href="https://smartstore.naver.com/skillfulbrother/products/11174828658" target="_blank" rel="noopener" aria-label="클래파 BVC-T500W 전용 구성품 — 스토어에서 보기"><span class="part-thumb"><img src="https://shop-phinf.pstatic.net/20241216_155/1734326940831JIt0a_JPEG/17094534698673389_1752328966.jpg?type=f200" alt="" loading="lazy" decoding="async" onerror="this.remove()"></span><span class="part-body"><span class="part-name">전용 구성품</span><span class="part-model">BVC-T500W</span><span class="part-go">스토어에서 구매 ↗</span></span></a><a class="part-card" href="https://smartstore.naver.com/skillfulbrother/products/11150145784" target="_blank" rel="noopener" aria-label="클래파 BVC-T500W 전용 배터리, 모터 헤드 — 스토어에서 보기"><span class="part-thumb"><img src="https://shop-phinf.pstatic.net/20241120_200/1732065383439jgho8_JPEG/46976675255876645_380371183.jpg?type=f200" alt="" loading="lazy" decoding="async" onerror="this.remove()"></span><span class="part-body"><span class="part-name">전용 배터리·모터 헤드</span><span class="part-model">BVC-T500W</span><span class="part-go">스토어에서 구매 ↗</span></span></a></span></span><!--/ROW_PARTS:BVC-T500W-->
+</div>
 
         <div class="product-row" data-cat="wireless">
           <span class="thumb" data-thumb="BVC-C13K" aria-hidden="true" style="position:relative;overflow:hidden">
@@ -967,7 +954,8 @@
             <a class="qlink" href="https://smartstore.naver.com/skillfulbrother/search?q=BVC-C13K" target="_blank" rel="noopener"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><rect x="3" y="4.5" width="10" height="8" rx="1.2"/><path d="M3 7.3h10"/></svg>부품</a>
             <a class="qlink" href="products/bvc-c13k.html#faq"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><path d="M3 3h10v7H7l-3 2.5V10H3z"/></svg>FAQ</a>
           </span>
-        </div>
+                        <!--ROW_PARTS:BVC-C13K--><span class="row-parts" data-code="BVC-C13K" hidden><span class="parts-grid"><a class="part-card" href="https://smartstore.naver.com/skillfulbrother/products/10087861218" target="_blank" rel="noopener" aria-label="클래파 BVC-C13K 전용 배터리, 본체 — 스토어에서 보기"><span class="part-thumb"><img src="https://shop-phinf.pstatic.net/20240618_167/1718669686875TSWcB_JPEG/42930911286821010_71743472.jpg?type=f200" alt="" loading="lazy" decoding="async" onerror="this.remove()"></span><span class="part-body"><span class="part-name">전용 배터리·본체</span><span class="part-model">BVC-C13K</span><span class="part-go">스토어에서 구매 ↗</span></span></a><a class="part-card" href="https://smartstore.naver.com/skillfulbrother/products/10078638395" target="_blank" rel="noopener" aria-label="클래파 BVC-C13K 전용 구성품 — 스토어에서 보기"><span class="part-thumb"><img src="https://shop-phinf.pstatic.net/20240418_102/1713402175440juwGo_JPEG/114538018151323256_363824938.jpg?type=f200" alt="" loading="lazy" decoding="async" onerror="this.remove()"></span><span class="part-body"><span class="part-name">전용 구성품</span><span class="part-model">BVC-C13K</span><span class="part-go">스토어에서 구매 ↗</span></span></a></span></span><!--/ROW_PARTS:BVC-C13K-->
+</div>
 
         <div class="product-row" data-cat="wireless">
           <span class="thumb" data-thumb="BFB-VC120" aria-hidden="true">
@@ -983,11 +971,12 @@
             <a class="qlink" href="https://smartstore.naver.com/skillfulbrother/search?q=BFB-VC120" target="_blank" rel="noopener"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><rect x="3" y="4.5" width="10" height="8" rx="1.2"/><path d="M3 7.3h10"/></svg>부품</a>
             <a class="qlink" href="products/bfb-vc120.html#faq"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><path d="M3 3h10v7H7l-3 2.5V10H3z"/></svg>FAQ</a>
           </span>
-        </div>
+                        <!--ROW_PARTS:BFB-VC120--><span class="row-parts" data-code="BFB-VC120" hidden><span class="parts-grid"><a class="part-card" href="https://smartstore.naver.com/skillfulbrother/products/10227959757" target="_blank" rel="noopener" aria-label="클래파 BFB-VC120 전용 구성품 — 스토어에서 보기"><span class="part-thumb"><img src="https://shop-phinf.pstatic.net/20240517_268/17159108704223QvSs_JPEG/43213554281967744_721966342.jpg?type=f200" alt="" loading="lazy" decoding="async" onerror="this.remove()"></span><span class="part-body"><span class="part-name">전용 구성품</span><span class="part-model">BFB-VC120</span><span class="part-go">스토어에서 구매 ↗</span></span></a><a class="part-card" href="https://smartstore.naver.com/skillfulbrother/products/10227817216" target="_blank" rel="noopener" aria-label="클래파 BFB-VC120, BFB-VC160, BFB-VC170 물걸레 키트 — 스토어에서 보기"><span class="part-thumb"><img src="https://shop-phinf.pstatic.net/20240419_227/1713508375871xr76u_JPEG/114644271583231126_1329641418.jpg?type=f200" alt="" loading="lazy" decoding="async" onerror="this.remove()"></span><span class="part-body"><span class="part-name">물걸레 키트</span><span class="part-model">BFB-VC120</span><span class="part-go">스토어에서 구매 ↗</span></span></a><a class="part-card" href="https://smartstore.naver.com/skillfulbrother/products/10226993687" target="_blank" rel="noopener" aria-label="클래파 BFB-VC120, BFB-VC160, BFB-VC170 배터리 — 스토어에서 보기"><span class="part-thumb"><img src="https://shop-phinf.pstatic.net/20240419_287/1713493002791YVJJG_JPEG/114628898523495154_1896378069.jpg?type=f200" alt="" loading="lazy" decoding="async" onerror="this.remove()"></span><span class="part-body"><span class="part-name">배터리</span><span class="part-model">BFB-VC120</span><span class="part-go">스토어에서 구매 ↗</span></span></a></span></span><!--/ROW_PARTS:BFB-VC120-->
+</div>
 
         <div class="group-row" data-cat="wetdry">
           <h3 class="group-title">건습식·유선 청소기</h3><span class="group-count">3개</span>
-        </div>
+                </div>
 
         <div class="product-row" data-cat="wetdry">
           <span class="thumb" data-thumb="BVC-L138" aria-hidden="true" style="position:relative;overflow:hidden">
@@ -1004,7 +993,8 @@
             <a class="qlink" href="https://smartstore.naver.com/skillfulbrother/search?q=BVC-L138" target="_blank" rel="noopener"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><rect x="3" y="4.5" width="10" height="8" rx="1.2"/><path d="M3 7.3h10"/></svg>부품</a>
             <a class="qlink" href="products/bvc-l138.html#faq"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><path d="M3 3h10v7H7l-3 2.5V10H3z"/></svg>FAQ</a>
           </span>
-        </div>
+                        <!--ROW_PARTS:BVC-L138--><span class="row-parts" data-code="BVC-L138" hidden><span class="parts-grid"><a class="part-card" href="https://smartstore.naver.com/skillfulbrother/products/10103618128" target="_blank" rel="noopener" aria-label="클래파 BVC-L138 30L 전용 구성품 — 스토어에서 보기"><span class="part-thumb"><img src="https://shop-phinf.pstatic.net/20240321_133/1711003481270YaS2b_JPEG/112139376975682616_1078989574.jpg?type=f200" alt="" loading="lazy" decoding="async" onerror="this.remove()"></span><span class="part-body"><span class="part-name">30L 전용 구성품</span><span class="part-model">BVC-L138</span><span class="part-go">스토어에서 구매 ↗</span></span></a><a class="part-card" href="https://smartstore.naver.com/skillfulbrother/products/10103615546" target="_blank" rel="noopener" aria-label="클래파 BVC-L138 30L 전용 본체, 모터 — 스토어에서 보기"><span class="part-thumb"><img src="https://shop-phinf.pstatic.net/20240321_291/1711002984461GeJRx_JPEG/112138880177039938_1679159912.jpg?type=f200" alt="" loading="lazy" decoding="async" onerror="this.remove()"></span><span class="part-body"><span class="part-name">30L 전용 본체·모터</span><span class="part-model">BVC-L138</span><span class="part-go">스토어에서 구매 ↗</span></span></a></span></span><!--/ROW_PARTS:BVC-L138-->
+</div>
 
         <div class="product-row" data-cat="wetdry">
           <span class="thumb" data-thumb="BVC-L125" aria-hidden="true">
@@ -1020,7 +1010,8 @@
             <a class="qlink" href="https://smartstore.naver.com/skillfulbrother/search?q=BVC-L125" target="_blank" rel="noopener"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><rect x="3" y="4.5" width="10" height="8" rx="1.2"/><path d="M3 7.3h10"/></svg>부품</a>
             <a class="qlink" href="products/bvc-l125.html#faq"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><path d="M3 3h10v7H7l-3 2.5V10H3z"/></svg>FAQ</a>
           </span>
-        </div>
+                        <!--ROW_PARTS:BVC-L125--><span class="row-parts" data-code="BVC-L125" hidden><span class="parts-grid"><a class="part-card" href="https://smartstore.naver.com/skillfulbrother/products/10223276363" target="_blank" rel="noopener" aria-label="클래파 BVC-L125 25L 전용 본체, 모터 — 스토어에서 보기"><span class="part-thumb"><img src="https://shop-phinf.pstatic.net/20240418_74/1713424239629D2wKi_JPEG/114560082339734247_943450705.jpg?type=f200" alt="" loading="lazy" decoding="async" onerror="this.remove()"></span><span class="part-body"><span class="part-name">25L 전용 본체·모터</span><span class="part-model">BVC-L125</span><span class="part-go">스토어에서 구매 ↗</span></span></a><a class="part-card" href="https://smartstore.naver.com/skillfulbrother/products/10223301151" target="_blank" rel="noopener" aria-label="클래파 BVC-L125 25L 전용 구성품 — 스토어에서 보기"><span class="part-thumb"><img src="https://shop-phinf.pstatic.net/20240418_38/1713424618521FNCG2_JPEG/114560461217980609_1815641555.jpg?type=f200" alt="" loading="lazy" decoding="async" onerror="this.remove()"></span><span class="part-body"><span class="part-name">25L 전용 구성품</span><span class="part-model">BVC-L125</span><span class="part-go">스토어에서 구매 ↗</span></span></a></span></span><!--/ROW_PARTS:BVC-L125-->
+</div>
 
         <div class="product-row" data-cat="wetdry">
           <span class="thumb" data-thumb="IB-VC0601" aria-hidden="true">
@@ -1036,11 +1027,12 @@
             <a class="qlink" href="https://smartstore.naver.com/skillfulbrother/search?q=IB-VC0601" target="_blank" rel="noopener"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><rect x="3" y="4.5" width="10" height="8" rx="1.2"/><path d="M3 7.3h10"/></svg>부품</a>
             <a class="qlink" href="products/ib-vc0601.html#faq"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><path d="M3 3h10v7H7l-3 2.5V10H3z"/></svg>FAQ</a>
           </span>
-        </div>
+                        <!--ROW_PARTS:IB-VC0601--><span class="row-parts" data-code="IB-VC0601" hidden><span class="parts-grid"><a class="part-card" href="https://smartstore.naver.com/skillfulbrother/products/8555887193" target="_blank" rel="noopener" aria-label="클래파 IB-VC0601, BFB-VC0601, IB-VC0700G/B 전용 먼지통 — 스토어에서 보기"><span class="part-thumb"><img src="https://shop-phinf.pstatic.net/20230516_247/16842313918543VTC2_PNG/2317879715567700_1278080849.png?type=f200" alt="" loading="lazy" decoding="async" onerror="this.remove()"></span><span class="part-body"><span class="part-name">전용 먼지통</span><span class="part-model">IB-VC0601</span><span class="part-go">스토어에서 구매 ↗</span></span></a><a class="part-card" href="https://smartstore.naver.com/skillfulbrother/products/8555835752" target="_blank" rel="noopener" aria-label="클래파 IB-VC0601, BFB-VC0601, IB-VC0700G/B 전용 필터 — 스토어에서 보기"><span class="part-thumb"><img src="https://shop-phinf.pstatic.net/20240319_189/1710808486747LQe7Q_JPEG/111944382484427101_1296183797.jpg?type=f200" alt="" loading="lazy" decoding="async" onerror="this.remove()"></span><span class="part-body"><span class="part-name">전용 필터</span><span class="part-model">IB-VC0601</span><span class="part-go">스토어에서 구매 ↗</span></span></a></span></span><!--/ROW_PARTS:IB-VC0601-->
+</div>
 
         <div class="group-row" data-cat="fan">
           <h3 class="group-title">선풍기</h3><span class="group-count">4개</span>
-        </div>
+                </div>
 
         <div class="product-row" data-cat="fan">
           <span class="thumb" data-thumb="BEF-C156W" aria-hidden="true" style="position:relative;overflow:hidden">
@@ -1057,7 +1049,8 @@
             <a class="qlink" href="https://smartstore.naver.com/skillfulbrother/products/12166003860" target="_blank" rel="noopener"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><rect x="3" y="4.5" width="10" height="8" rx="1.2"/><path d="M3 7.3h10"/></svg>부품</a>
             <a class="qlink" href="products/bef-c156w.html#faq"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><path d="M3 3h10v7H7l-3 2.5V10H3z"/></svg>FAQ</a>
           </span>
-        </div>
+                        <!--ROW_PARTS:BEF-C156W--><span class="row-parts" data-code="BEF-C156W" hidden><span class="parts-grid"><a class="part-card" href="https://smartstore.naver.com/skillfulbrother/products/12166003860" target="_blank" rel="noopener" aria-label="클래파 BEF-C156W 추가 배터리 — 스토어에서 보기"><span class="part-thumb"><img src="https://shop-phinf.pstatic.net/20250728_95/1753670381290EYvg0_JPEG/57182918250382160_633872153.jpg?type=f200" alt="" loading="lazy" decoding="async" onerror="this.remove()"></span><span class="part-body"><span class="part-name">추가 배터리</span><span class="part-model">BEF-C156W</span><span class="part-go">스토어에서 구매 ↗</span></span></a></span></span><!--/ROW_PARTS:BEF-C156W-->
+</div>
 
         <div class="product-row" data-cat="fan">
           <span class="thumb" data-thumb="BEF-D400" aria-hidden="true" style="position:relative;overflow:hidden">
@@ -1074,7 +1067,7 @@
             <span class="qlink is-off" aria-disabled="true" title="부품 준비 중"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><rect x="3" y="4.5" width="10" height="8" rx="1.2"/><path d="M3 7.3h10"/></svg>부품</span>
             <a class="qlink" href="products/bef-d400.html#faq"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><path d="M3 3h10v7H7l-3 2.5V10H3z"/></svg>FAQ</a>
           </span>
-        </div>
+                </div>
 
         <div class="product-row" data-cat="fan">
           <span class="thumb" data-thumb="BHF-360W" aria-hidden="true" style="position:relative;overflow:hidden">
@@ -1091,7 +1084,7 @@
             <span class="qlink is-off" aria-disabled="true" title="부품 준비 중"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><rect x="3" y="4.5" width="10" height="8" rx="1.2"/><path d="M3 7.3h10"/></svg>부품</span>
             <a class="qlink" href="products/bhf-360w.html#faq"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><path d="M3 3h10v7H7l-3 2.5V10H3z"/></svg>FAQ</a>
           </span>
-        </div>
+                </div>
 
         <div class="product-row" data-cat="fan">
           <span class="thumb" data-thumb="BHF-8000W" aria-hidden="true" style="position:relative;overflow:hidden">
@@ -1108,11 +1101,12 @@
             <a class="qlink" href="https://smartstore.naver.com/skillfulbrother/products/10311125246" target="_blank" rel="noopener"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><rect x="3" y="4.5" width="10" height="8" rx="1.2"/><path d="M3 7.3h10"/></svg>부품</a>
             <a class="qlink" href="products/bhf-8000w.html#faq"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><path d="M3 3h10v7H7l-3 2.5V10H3z"/></svg>FAQ</a>
           </span>
-        </div>
+                        <!--ROW_PARTS:BHF-8000W--><span class="row-parts" data-code="BHF-8000W" hidden><span class="parts-grid"><a class="part-card" href="https://smartstore.naver.com/skillfulbrother/products/10311125246" target="_blank" rel="noopener" aria-label="클래파 BHF-8000W 전용 구성품 — 스토어에서 보기"><span class="part-thumb"><img src="https://shop-phinf.pstatic.net/20240510_249/1715322909470GE1DE_JPEG/116458808175035570_1446307045.jpg?type=f200" alt="" loading="lazy" decoding="async" onerror="this.remove()"></span><span class="part-body"><span class="part-name">전용 구성품</span><span class="part-model">BHF-8000W</span><span class="part-go">스토어에서 구매 ↗</span></span></a></span></span><!--/ROW_PARTS:BHF-8000W-->
+</div>
 
         <div class="group-row" data-cat="heat">
           <h3 class="group-title">히터·온풍기</h3><span class="group-count">5개</span>
-        </div>
+                </div>
 
         <div class="product-row" data-cat="heat">
           <span class="thumb" data-thumb="BMH-200R" aria-hidden="true" style="position:relative;overflow:hidden">
@@ -1129,7 +1123,7 @@
             <span class="qlink is-off" aria-disabled="true" title="부품 준비 중"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><rect x="3" y="4.5" width="10" height="8" rx="1.2"/><path d="M3 7.3h10"/></svg>부품</span>
             <a class="qlink" href="products/bmh-200r.html#faq"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><path d="M3 3h10v7H7l-3 2.5V10H3z"/></svg>FAQ</a>
           </span>
-        </div>
+                </div>
 
         <div class="product-row" data-cat="heat">
           <span class="thumb" data-thumb="BHH-2000S" aria-hidden="true" style="position:relative;overflow:hidden">
@@ -1146,7 +1140,7 @@
             <span class="qlink is-off" aria-disabled="true" title="부품 준비 중"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><rect x="3" y="4.5" width="10" height="8" rx="1.2"/><path d="M3 7.3h10"/></svg>부품</span>
             <a class="qlink" href="products/bhh-2000s.html#faq"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><path d="M3 3h10v7H7l-3 2.5V10H3z"/></svg>FAQ</a>
           </span>
-        </div>
+                </div>
 
         <div class="product-row" data-cat="heat">
           <span class="thumb" data-thumb="BPH-W181" aria-hidden="true" style="position:relative;overflow:hidden">
@@ -1163,7 +1157,7 @@
             <span class="qlink is-off" aria-disabled="true" title="부품 준비 중"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><rect x="3" y="4.5" width="10" height="8" rx="1.2"/><path d="M3 7.3h10"/></svg>부품</span>
             <span class="qlink is-off" aria-disabled="true" title="FAQ 준비 중"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><path d="M3 3h10v7H7l-3 2.5V10H3z"/></svg>FAQ</span>
           </span>
-        </div>
+                </div>
 
         <div class="product-row" data-cat="heat">
           <span class="thumb" data-thumb="BOH-235" aria-hidden="true" style="position:relative;overflow:hidden">
@@ -1180,7 +1174,7 @@
             <span class="qlink is-off" aria-disabled="true" title="부품 준비 중"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><rect x="3" y="4.5" width="10" height="8" rx="1.2"/><path d="M3 7.3h10"/></svg>부품</span>
             <a class="qlink" href="products/boh-235.html#faq"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><path d="M3 3h10v7H7l-3 2.5V10H3z"/></svg>FAQ</a>
           </span>
-        </div>
+                </div>
 
         <div class="product-row" data-cat="heat">
           <span class="thumb" data-thumb="BFB-PH180W" aria-hidden="true" style="position:relative;overflow:hidden">
@@ -1197,11 +1191,11 @@
             <span class="qlink is-off" aria-disabled="true" title="부품 준비 중"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><rect x="3" y="4.5" width="10" height="8" rx="1.2"/><path d="M3 7.3h10"/></svg>부품</span>
             <a class="qlink" href="products/bfb-ph180w.html#faq"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><path d="M3 3h10v7H7l-3 2.5V10H3z"/></svg>FAQ</a>
           </span>
-        </div>
+                </div>
 
         <div class="group-row" data-cat="dehum">
           <h3 class="group-title">제습기</h3><span class="group-count">1개</span>
-        </div>
+                </div>
 
         <div class="product-row" data-cat="dehum">
           <span class="thumb" data-thumb="BED-611L" aria-hidden="true" style="position:relative;overflow:hidden">
@@ -1273,7 +1267,8 @@
             <a class="qlink" href="https://smartstore.naver.com/skillfulbrother/search?q=BYF-G18" target="_blank" rel="noopener"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><rect x="3" y="4.5" width="10" height="8" rx="1.2"/><path d="M3 7.3h10"/></svg>부품</a>
             <a class="qlink" href="products/byf-g18.html#faq"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><path d="M3 3h10v7H7l-3 2.5V10H3z"/></svg>FAQ</a>
           </span>
-        </div>
+                        <!--ROW_PARTS:BYF-G18--><span class="row-parts" data-code="BYF-G18" hidden><span class="parts-grid"><a class="part-card" href="https://smartstore.naver.com/skillfulbrother/products/10212588473" target="_blank" rel="noopener" aria-label="클래파 유청분리기 BYF-G18 전용 구성품 — 스토어에서 보기"><span class="part-thumb"><img src="https://shop-phinf.pstatic.net/20240416_242/1713242059115O47V1_JPEG/114377957823680379_533635671.jpg?type=f200" alt="" loading="lazy" decoding="async" onerror="this.remove()"></span><span class="part-body"><span class="part-name">유청분리기 전용 구성품</span><span class="part-model">BYF-G18</span><span class="part-go">스토어에서 구매 ↗</span></span></a><a class="part-card" href="https://smartstore.naver.com/skillfulbrother/products/10212157424" target="_blank" rel="noopener" aria-label="클래파 유청분리기 BYF-G18 전용 부품 — 스토어에서 보기"><span class="part-thumb"><img src="https://shop-phinf.pstatic.net/20240416_14/1713235435460mV0tB_JPEG/114371324162939254_125967972.jpg?type=f200" alt="" loading="lazy" decoding="async" onerror="this.remove()"></span><span class="part-body"><span class="part-name">유청분리기 전용 부품</span><span class="part-model">BYF-G18</span><span class="part-go">스토어에서 구매 ↗</span></span></a><a class="part-card" href="https://smartstore.naver.com/skillfulbrother/products/9020323151" target="_blank" rel="noopener" aria-label="클래파 유청분리기 리뉴얼 누름판 버전 — 스토어에서 보기"><span class="part-thumb"><img src="https://shop-phinf.pstatic.net/20230914_115/1694676619663D3A3D_JPEG/7884018108443229_1160266765.jpg?type=f200" alt="" loading="lazy" decoding="async" onerror="this.remove()"></span><span class="part-body"><span class="part-name">유청분리기 리뉴얼 누름판 버전</span><span class="part-model">BYF-G18</span><span class="part-go">스토어에서 구매 ↗</span></span></a></span></span><!--/ROW_PARTS:BYF-G18-->
+</div>
 
         <div class="product-row" data-cat="living">
           <span class="thumb" data-thumb="BWF-200T" aria-hidden="true" style="position:relative;overflow:hidden">
@@ -1290,7 +1285,7 @@
             <span class="qlink is-off" aria-disabled="true" title="부품 준비 중"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><rect x="3" y="4.5" width="10" height="8" rx="1.2"/><path d="M3 7.3h10"/></svg>부품</span>
             <a class="qlink" href="products/bwf-200t.html#faq"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><path d="M3 3h10v7H7l-3 2.5V10H3z"/></svg>FAQ</a>
           </span>
-        </div>
+                </div>
 
         <div class="product-row" data-cat="living">
           <span class="thumb" data-thumb="BRC-30W" aria-hidden="true" style="position:relative;overflow:hidden">
@@ -1321,65 +1316,6 @@
   </section>
 
   <!-- FAQ -->
-<!--PARTS_SECTION-->
-  <section class="section" aria-labelledby="parts-title" id="parts">
-    <div class="wrap">
-      <div class="section-head">
-        <div>
-          <span class="section-eyebrow">Consumables &amp; Parts</span>
-          <h2 class="section-title" id="parts-title">소모품·부품 바로 구매</h2>
-          <p class="section-desc">필터·배터리·구성품을 실물 사진으로 골라 스토어에서 바로 구매하세요. 옆으로 넘겨 보세요.</p>
-        </div>
-      </div>
-      <div class="parts-rail-wrap">
-        <button class="parts-arrow is-prev" type="button" aria-label="이전 소모품 보기" disabled>‹</button>
-        <div class="parts-rail" id="parts-rail" tabindex="0" role="group" aria-label="소모품 목록 (가로 스크롤)">
-          <a class="part-card" href="https://smartstore.naver.com/skillfulbrother/products/10087749367" target="_blank" rel="noopener" aria-label="클래파 BVC-H10 전용 배터리, 본체 — 스토어에서 보기"><span class="part-thumb"><img src="https://shop-phinf.pstatic.net/20240318_1/17107455192771Gu8k_JPEG/38048203156115055_1050235208.jpg?type=f200" alt="" loading="lazy" decoding="async" onerror="this.remove()"></span><span class="part-body"><span class="part-name">전용 배터리·본체</span><span class="part-model">BVC-H10</span><span class="part-go">스토어에서 구매 ↗</span></span></a>
-          <a class="part-card" href="https://smartstore.naver.com/skillfulbrother/products/10078593658" target="_blank" rel="noopener" aria-label="클래파 BVC-H10, BVC-H15 전용 구성품 — 스토어에서 보기"><span class="part-thumb"><img src="https://shop-phinf.pstatic.net/20240418_227/1713401932801d5YDj_JPEG/114537775501698925_832725893.jpg?type=f200" alt="" loading="lazy" decoding="async" onerror="this.remove()"></span><span class="part-body"><span class="part-name">전용 구성품</span><span class="part-model">BVC-H10</span><span class="part-go">스토어에서 구매 ↗</span></span></a>
-          <a class="part-card" href="https://smartstore.naver.com/skillfulbrother/products/10103618128" target="_blank" rel="noopener" aria-label="클래파 BVC-L138 30L 전용 구성품 — 스토어에서 보기"><span class="part-thumb"><img src="https://shop-phinf.pstatic.net/20240321_133/1711003481270YaS2b_JPEG/112139376975682616_1078989574.jpg?type=f200" alt="" loading="lazy" decoding="async" onerror="this.remove()"></span><span class="part-body"><span class="part-name">30L 전용 구성품</span><span class="part-model">BVC-L138</span><span class="part-go">스토어에서 구매 ↗</span></span></a>
-          <a class="part-card" href="https://smartstore.naver.com/skillfulbrother/products/10103615546" target="_blank" rel="noopener" aria-label="클래파 BVC-L138 30L 전용 본체, 모터 — 스토어에서 보기"><span class="part-thumb"><img src="https://shop-phinf.pstatic.net/20240321_291/1711002984461GeJRx_JPEG/112138880177039938_1679159912.jpg?type=f200" alt="" loading="lazy" decoding="async" onerror="this.remove()"></span><span class="part-body"><span class="part-name">30L 전용 본체·모터</span><span class="part-model">BVC-L138</span><span class="part-go">스토어에서 구매 ↗</span></span></a>
-          <a class="part-card" href="https://smartstore.naver.com/skillfulbrother/products/12166003860" target="_blank" rel="noopener" aria-label="클래파 BEF-C156W 추가 배터리 — 스토어에서 보기"><span class="part-thumb"><img src="https://shop-phinf.pstatic.net/20250728_95/1753670381290EYvg0_JPEG/57182918250382160_633872153.jpg?type=f200" alt="" loading="lazy" decoding="async" onerror="this.remove()"></span><span class="part-body"><span class="part-name">추가 배터리</span><span class="part-model">BEF-C156W</span><span class="part-go">스토어에서 구매 ↗</span></span></a>
-          <a class="part-card" href="https://smartstore.naver.com/skillfulbrother/products/12142699458" target="_blank" rel="noopener" aria-label="클래파 BVC-S185, CVC-S230 전용 본체, 스테이션 — 스토어에서 보기"><span class="part-thumb"><img src="https://shop-phinf.pstatic.net/20250820_257/1755650147367tkfJI_JPEG/69030129223624772_1074052102.jpg?type=f200" alt="" loading="lazy" decoding="async" onerror="this.remove()"></span><span class="part-body"><span class="part-name">전용 본체·스테이션</span><span class="part-model">BVC-S185</span><span class="part-go">스토어에서 구매 ↗</span></span></a>
-          <a class="part-card" href="https://smartstore.naver.com/skillfulbrother/products/12142660346" target="_blank" rel="noopener" aria-label="클래파 BVC-S185, CVC-S230 전용 구성품 — 스토어에서 보기"><span class="part-thumb"><img src="https://shop-phinf.pstatic.net/20260109_168/1767931494728Fvs6x_JPEG/17448733919846836_1152751588.jpg?type=f200" alt="" loading="lazy" decoding="async" onerror="this.remove()"></span><span class="part-body"><span class="part-name">전용 구성품</span><span class="part-model">BVC-S185</span><span class="part-go">스토어에서 구매 ↗</span></span></a>
-          <a class="part-card" href="https://smartstore.naver.com/skillfulbrother/products/10212588473" target="_blank" rel="noopener" aria-label="클래파 유청분리기 BYF-G18 전용 구성품 — 스토어에서 보기"><span class="part-thumb"><img src="https://shop-phinf.pstatic.net/20240416_242/1713242059115O47V1_JPEG/114377957823680379_533635671.jpg?type=f200" alt="" loading="lazy" decoding="async" onerror="this.remove()"></span><span class="part-body"><span class="part-name">유청분리기 전용 구성품</span><span class="part-model">BYF-G18</span><span class="part-go">스토어에서 구매 ↗</span></span></a>
-          <a class="part-card" href="https://smartstore.naver.com/skillfulbrother/products/10212157424" target="_blank" rel="noopener" aria-label="클래파 유청분리기 BYF-G18 전용 부품 — 스토어에서 보기"><span class="part-thumb"><img src="https://shop-phinf.pstatic.net/20240416_14/1713235435460mV0tB_JPEG/114371324162939254_125967972.jpg?type=f200" alt="" loading="lazy" decoding="async" onerror="this.remove()"></span><span class="part-body"><span class="part-name">유청분리기 전용 부품</span><span class="part-model">BYF-G18</span><span class="part-go">스토어에서 구매 ↗</span></span></a>
-          <a class="part-card" href="https://smartstore.naver.com/skillfulbrother/products/9020323151" target="_blank" rel="noopener" aria-label="클래파 유청분리기 리뉴얼 누름판 버전 — 스토어에서 보기"><span class="part-thumb"><img src="https://shop-phinf.pstatic.net/20230914_115/1694676619663D3A3D_JPEG/7884018108443229_1160266765.jpg?type=f200" alt="" loading="lazy" decoding="async" onerror="this.remove()"></span><span class="part-body"><span class="part-name">유청분리기 리뉴얼 누름판 버전</span><span class="part-model">BYF-G18</span><span class="part-go">스토어에서 구매 ↗</span></span></a>
-          <a class="part-card" href="https://smartstore.naver.com/skillfulbrother/products/10311125246" target="_blank" rel="noopener" aria-label="클래파 BHF-8000W 전용 구성품 — 스토어에서 보기"><span class="part-thumb"><img src="https://shop-phinf.pstatic.net/20240510_249/1715322909470GE1DE_JPEG/116458808175035570_1446307045.jpg?type=f200" alt="" loading="lazy" decoding="async" onerror="this.remove()"></span><span class="part-body"><span class="part-name">전용 구성품</span><span class="part-model">BHF-8000W</span><span class="part-go">스토어에서 구매 ↗</span></span></a>
-          <a class="part-card" href="https://smartstore.naver.com/skillfulbrother/products/13648701308" target="_blank" rel="noopener" aria-label="클래파 BVC-H38 전용 배터리, 모터 헤드 — 스토어에서 보기"><span class="part-thumb"><img src="https://shop-phinf.pstatic.net/20260702_207/1782959769732DXCrw_JPEG/117092604870813584_1534247803.jpg?type=f200" alt="" loading="lazy" decoding="async" onerror="this.remove()"></span><span class="part-body"><span class="part-name">전용 배터리·모터 헤드</span><span class="part-model">BVC-H38</span><span class="part-go">스토어에서 구매 ↗</span></span></a>
-          <a class="part-card" href="https://smartstore.naver.com/skillfulbrother/products/13513768685" target="_blank" rel="noopener" aria-label="클래파 BVC-H38 전용 구성품 — 스토어에서 보기"><span class="part-thumb"><img src="https://shop-phinf.pstatic.net/20260511_59/1778480040235nyrNI_JPEG/27236311360616920_1241133379.jpg?type=f200" alt="" loading="lazy" decoding="async" onerror="this.remove()"></span><span class="part-body"><span class="part-name">전용 구성품</span><span class="part-model">BVC-H38</span><span class="part-go">스토어에서 구매 ↗</span></span></a>
-          <a class="part-card" href="https://smartstore.naver.com/skillfulbrother/products/11174828658" target="_blank" rel="noopener" aria-label="클래파 BVC-T500W 전용 구성품 — 스토어에서 보기"><span class="part-thumb"><img src="https://shop-phinf.pstatic.net/20241216_155/1734326940831JIt0a_JPEG/17094534698673389_1752328966.jpg?type=f200" alt="" loading="lazy" decoding="async" onerror="this.remove()"></span><span class="part-body"><span class="part-name">전용 구성품</span><span class="part-model">BVC-T500W</span><span class="part-go">스토어에서 구매 ↗</span></span></a>
-          <a class="part-card" href="https://smartstore.naver.com/skillfulbrother/products/11150145784" target="_blank" rel="noopener" aria-label="클래파 BVC-T500W 전용 배터리, 모터 헤드 — 스토어에서 보기"><span class="part-thumb"><img src="https://shop-phinf.pstatic.net/20241120_200/1732065383439jgho8_JPEG/46976675255876645_380371183.jpg?type=f200" alt="" loading="lazy" decoding="async" onerror="this.remove()"></span><span class="part-body"><span class="part-name">전용 배터리·모터 헤드</span><span class="part-model">BVC-T500W</span><span class="part-go">스토어에서 구매 ↗</span></span></a>
-          <a class="part-card" href="https://smartstore.naver.com/skillfulbrother/products/10223276363" target="_blank" rel="noopener" aria-label="클래파 BVC-L125 25L 전용 본체, 모터 — 스토어에서 보기"><span class="part-thumb"><img src="https://shop-phinf.pstatic.net/20240418_74/1713424239629D2wKi_JPEG/114560082339734247_943450705.jpg?type=f200" alt="" loading="lazy" decoding="async" onerror="this.remove()"></span><span class="part-body"><span class="part-name">25L 전용 본체·모터</span><span class="part-model">BVC-L125</span><span class="part-go">스토어에서 구매 ↗</span></span></a>
-          <a class="part-card" href="https://smartstore.naver.com/skillfulbrother/products/10223301151" target="_blank" rel="noopener" aria-label="클래파 BVC-L125 25L 전용 구성품 — 스토어에서 보기"><span class="part-thumb"><img src="https://shop-phinf.pstatic.net/20240418_38/1713424618521FNCG2_JPEG/114560461217980609_1815641555.jpg?type=f200" alt="" loading="lazy" decoding="async" onerror="this.remove()"></span><span class="part-body"><span class="part-name">25L 전용 구성품</span><span class="part-model">BVC-L125</span><span class="part-go">스토어에서 구매 ↗</span></span></a>
-          <a class="part-card" href="https://smartstore.naver.com/skillfulbrother/products/10087861218" target="_blank" rel="noopener" aria-label="클래파 BVC-C13K 전용 배터리, 본체 — 스토어에서 보기"><span class="part-thumb"><img src="https://shop-phinf.pstatic.net/20240618_167/1718669686875TSWcB_JPEG/42930911286821010_71743472.jpg?type=f200" alt="" loading="lazy" decoding="async" onerror="this.remove()"></span><span class="part-body"><span class="part-name">전용 배터리·본체</span><span class="part-model">BVC-C13K</span><span class="part-go">스토어에서 구매 ↗</span></span></a>
-          <a class="part-card" href="https://smartstore.naver.com/skillfulbrother/products/10078638395" target="_blank" rel="noopener" aria-label="클래파 BVC-C13K 전용 구성품 — 스토어에서 보기"><span class="part-thumb"><img src="https://shop-phinf.pstatic.net/20240418_102/1713402175440juwGo_JPEG/114538018151323256_363824938.jpg?type=f200" alt="" loading="lazy" decoding="async" onerror="this.remove()"></span><span class="part-body"><span class="part-name">전용 구성품</span><span class="part-model">BVC-C13K</span><span class="part-go">스토어에서 구매 ↗</span></span></a>
-          <a class="part-card" href="https://smartstore.naver.com/skillfulbrother/products/10227959757" target="_blank" rel="noopener" aria-label="클래파 BFB-VC120 전용 구성품 — 스토어에서 보기"><span class="part-thumb"><img src="https://shop-phinf.pstatic.net/20240517_268/17159108704223QvSs_JPEG/43213554281967744_721966342.jpg?type=f200" alt="" loading="lazy" decoding="async" onerror="this.remove()"></span><span class="part-body"><span class="part-name">전용 구성품</span><span class="part-model">BFB-VC120</span><span class="part-go">스토어에서 구매 ↗</span></span></a>
-          <a class="part-card" href="https://smartstore.naver.com/skillfulbrother/products/10227817216" target="_blank" rel="noopener" aria-label="클래파 BFB-VC120, BFB-VC160, BFB-VC170 물걸레 키트 — 스토어에서 보기"><span class="part-thumb"><img src="https://shop-phinf.pstatic.net/20240419_227/1713508375871xr76u_JPEG/114644271583231126_1329641418.jpg?type=f200" alt="" loading="lazy" decoding="async" onerror="this.remove()"></span><span class="part-body"><span class="part-name">물걸레 키트</span><span class="part-model">BFB-VC120</span><span class="part-go">스토어에서 구매 ↗</span></span></a>
-          <a class="part-card" href="https://smartstore.naver.com/skillfulbrother/products/10226993687" target="_blank" rel="noopener" aria-label="클래파 BFB-VC120, BFB-VC160, BFB-VC170 배터리 — 스토어에서 보기"><span class="part-thumb"><img src="https://shop-phinf.pstatic.net/20240419_287/1713493002791YVJJG_JPEG/114628898523495154_1896378069.jpg?type=f200" alt="" loading="lazy" decoding="async" onerror="this.remove()"></span><span class="part-body"><span class="part-name">배터리</span><span class="part-model">BFB-VC120</span><span class="part-go">스토어에서 구매 ↗</span></span></a>
-          <a class="part-card" href="https://smartstore.naver.com/skillfulbrother/products/8555887193" target="_blank" rel="noopener" aria-label="클래파 IB-VC0601, BFB-VC0601, IB-VC0700G/B 전용 먼지통 — 스토어에서 보기"><span class="part-thumb"><img src="https://shop-phinf.pstatic.net/20230516_247/16842313918543VTC2_PNG/2317879715567700_1278080849.png?type=f200" alt="" loading="lazy" decoding="async" onerror="this.remove()"></span><span class="part-body"><span class="part-name">전용 먼지통</span><span class="part-model">IB-VC0601</span><span class="part-go">스토어에서 구매 ↗</span></span></a>
-          <a class="part-card" href="https://smartstore.naver.com/skillfulbrother/products/8555835752" target="_blank" rel="noopener" aria-label="클래파 IB-VC0601, BFB-VC0601, IB-VC0700G/B 전용 필터 — 스토어에서 보기"><span class="part-thumb"><img src="https://shop-phinf.pstatic.net/20240319_189/1710808486747LQe7Q_JPEG/111944382484427101_1296183797.jpg?type=f200" alt="" loading="lazy" decoding="async" onerror="this.remove()"></span><span class="part-body"><span class="part-name">전용 필터</span><span class="part-model">IB-VC0601</span><span class="part-go">스토어에서 구매 ↗</span></span></a>
-        </div>
-        <button class="parts-arrow is-next" type="button" aria-label="다음 소모품 보기">›</button>
-      </div>
-      <script>(function(){
-        var rail=document.getElementById("parts-rail");if(!rail)return;
-        var wrap=rail.parentNode;
-        var prev=wrap.querySelector(".is-prev"),next=wrap.querySelector(".is-next");
-        function step(){return Math.max(rail.clientWidth-120,220);}
-        function sync(){
-          if(prev) prev.disabled = rail.scrollLeft<=4;
-          if(next) next.disabled = rail.scrollLeft>=rail.scrollWidth-rail.clientWidth-4;
-        }
-        if(prev) prev.addEventListener("click",function(){rail.scrollBy({left:-step(),behavior:"smooth"});});
-        if(next) next.addEventListener("click",function(){rail.scrollBy({left:step(),behavior:"smooth"});});
-        rail.addEventListener("scroll",sync,{passive:true});
-        window.addEventListener("resize",sync);
-        sync();
-      })();</script>
-    </div>
-  </section>
-<!--/PARTS_SECTION-->
-
   <section class="section band" aria-labelledby="faq-title">
     <div class="wrap">
       <div class="section-head">
@@ -2010,5 +1946,53 @@
 })();
 </script>
 <script src="assets/chat.js" defer></script>
+<!--PARTS_JS-->
+<script>
+/* [부품] 버튼 → 행 아래 부품 카드 펼침 (한 번에 한 행만, 비차단) */
+(function(){
+  function closeAll(except){
+    var panels = document.querySelectorAll('.row-parts');
+    for (var i = 0; i < panels.length; i++) {
+      if (panels[i] !== except) panels[i].hidden = true;
+    }
+    var btns = document.querySelectorAll('.qlink.is-open');
+    for (var j = 0; j < btns.length; j++) {
+      if (!except || btns[j].getAttribute('data-parts-btn') !== except.getAttribute('data-code')) {
+        btns[j].classList.remove('is-open');
+        btns[j].setAttribute('aria-expanded', 'false');
+      }
+    }
+  }
+  var rows = document.querySelectorAll('.product-row');
+  for (var r = 0; r < rows.length; r++) {
+    (function(row){
+      var panel = row.querySelector('.row-parts');
+      if (!panel) return;
+      var links = row.querySelectorAll('.qlink');
+      var btn = null;
+      for (var k = 0; k < links.length; k++) {
+        if (/부품/.test(links[k].textContent)) { btn = links[k]; break; }
+      }
+      if (!btn) return;
+      btn.setAttribute('data-parts-btn', panel.getAttribute('data-code') || '');
+      btn.setAttribute('aria-expanded', 'false');
+      btn.addEventListener('click', function(e){
+        e.preventDefault();
+        var willOpen = panel.hidden;
+        closeAll(willOpen ? panel : null);
+        panel.hidden = !willOpen;
+        btn.classList.toggle('is-open', willOpen);
+        btn.setAttribute('aria-expanded', willOpen ? 'true' : 'false');
+      });
+    })(rows[r]);
+  }
+  // 카테고리 탭 전환 시 전부 접기
+  var tabs = document.querySelectorAll('.brand-tab');
+  for (var t = 0; t < tabs.length; t++) {
+    tabs[t].addEventListener('click', function(){ closeAll(null); });
+  }
+})();
+</script>
+<!--/PARTS_JS-->
 </body>
 </html>
