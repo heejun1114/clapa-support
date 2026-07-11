@@ -48,6 +48,8 @@
 
     var bar = document.createElement('div');
     bar.className = 'site-banner';
+    var COLORS = ['charcoal', 'amber', 'red', 'ivory'];
+    if (COLORS.indexOf(n.bannerColor) !== -1) bar.className += ' sb-c-' + n.bannerColor;
     bar.setAttribute('role', 'region');
     bar.setAttribute('aria-label', '공지 배너');
 

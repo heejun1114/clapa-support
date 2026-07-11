@@ -384,6 +384,15 @@
     .site-banner{font-size:12.5px;padding:8px 10px;}
     .site-banner-in{justify-content:flex-start;}
   }
+  /* 배너 색상 프리셋 (백오피스에서 선택) — 기본은 청록(teal-deep) */
+  .site-banner.sb-c-charcoal{background:#23201B;color:#EFEBE3;}
+  .site-banner.sb-c-amber{background:#8F6A1E;color:#FBF3E2;}
+  .site-banner.sb-c-red{background:#A8432D;color:#FBEAE4;}
+  .site-banner.sb-c-ivory{background:var(--sand);color:var(--ink);border-bottom:1px solid var(--line);}
+  .sb-c-ivory .sb-pill{background:rgba(35,32,27,.08);color:var(--ink);}
+  .sb-c-ivory a.sb-t:hover{color:var(--teal-deep);}
+  .sb-c-ivory .sb-close{color:rgba(35,32,27,.5);}
+  .sb-c-ivory .sb-close:hover{background:rgba(35,32,27,.08);color:var(--ink);}
 
   /* ---------- 공지 (assets/notices.js 런타임 렌더 — data/notices.json 비면 미표시) ---------- */
   .notices{padding:26px 0 0;}
