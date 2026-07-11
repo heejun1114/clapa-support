@@ -1,7 +1,24 @@
 {
  "notices": [
   {
+   "id": "n-1783790348345-1",
+   "place": "as",
+   "type": "점검",
+   "title": "배송지연안내",
+   "body": "태풍으로 인한 배송지연이 예상됩니다",
+   "link": "",
+   "linkLabel": "",
+   "pinned": false,
+   "banner": false,
+   "bannerColor": "",
+   "active": true,
+   "startsAt": null,
+   "endsAt": null,
+   "createdAt": "2026-07-12T02:19:08+09:00"
+  },
+  {
    "id": "n-clapa-mall-event",
+   "place": "banner",
    "type": "이벤트",
    "title": "클래파 공식몰 신규회원분들께만 3만원 쿠폰 증정!",
    "body": "클래파 공식몰(clapa.kr)에서 다양한 이벤트와 혜택이 진행되고 있어요.\n지금 방문해서 확인해 보세요.",
@@ -13,8 +30,7 @@
    "active": true,
    "startsAt": null,
    "endsAt": null,
-   "createdAt": "2026-07-12T02:20:00+09:00",
-   "place": "banner"
+   "createdAt": "2026-07-12T02:20:00+09:00"
   }
  ]
 }
