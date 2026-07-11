@@ -1,22 +1,6 @@
 {
  "notices": [
   {
-   "id": "n-1783790348345-1",
-   "place": "as",
-   "type": "점검",
-   "title": "배송지연안내",
-   "body": "태풍으로 인한 배송지연이 예상됩니다",
-   "link": "",
-   "linkLabel": "",
-   "pinned": false,
-   "banner": false,
-   "bannerColor": "",
-   "active": false,
-   "startsAt": null,
-   "endsAt": null,
-   "createdAt": "2026-07-12T02:19:08+09:00"
-  },
-  {
    "id": "n-clapa-mall-event",
    "place": "banner",
    "type": "이벤트",
