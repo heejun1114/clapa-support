@@ -41,25 +41,43 @@
     return iso.slice(5, 7) + '.' + iso.slice(8, 10);
   }
 
-  /* ---------- 최상단 배너 ---------- */
-  function renderBanner(n) {
-    var key = 'clapa-banner-closed:' + (n.id || n.title);
-    try { if (localStorage.getItem(key)) return; } catch (e) {}
+  /* ---------- 최상단 배너 ----------
+   * 배너는 index.html 에 직접 구워져(scripts/render_notices.py) 즉시·항상 뜬다.
+   * 여기서는 (1) 구워진 배너의 닫기 버튼을 바로 연결하고, (2) fetch 로 최신값과
+   * 대조해 서명이 다르면 갱신, 게시가 사라졌으면 제거한다. fetch 가 실패해도
+   * 구워진 배너는 그대로 남아 '떴다 안 떴다'가 생기지 않는다.
+   * 닫기 기억은 sessionStorage(세션 한정) — 다음 방문 때 다시 보인다. */
+  function bannerSig(n) {
+    return [n.id || '', n.title || '', n.link || '', n.bannerColor || '', n.type || ''].join('|');
+  }
+  function dismissKeyFromSig(sig) { return 'clapa-banner-closed:' + sig; }
+  function isDismissed(sig) {
+    try { return !!sessionStorage.getItem(dismissKeyFromSig(sig)); } catch (e) { return false; }
+  }
+  function wireClose(bar, sig) {
+    var btn = bar.querySelector('.sb-close');
+    if (!btn || btn.getAttribute('data-wired')) return;
+    btn.setAttribute('data-wired', '1');
+    btn.addEventListener('click', function () {
+      bar.remove();
+      try { sessionStorage.setItem(dismissKeyFromSig(sig), '1'); } catch (e) {}
+    });
+  }
 
+  function buildBanner(n) {
     var bar = document.createElement('div');
     bar.className = 'site-banner';
     var COLORS = ['charcoal', 'amber', 'red', 'ivory'];
     if (COLORS.indexOf(n.bannerColor) !== -1) bar.className += ' sb-c-' + n.bannerColor;
     bar.setAttribute('role', 'region');
     bar.setAttribute('aria-label', '공지 배너');
+    bar.setAttribute('data-sig', bannerSig(n));
 
     var inner = document.createElement('div');
     inner.className = 'site-banner-in';
-
     var pill = document.createElement('span');
     pill.className = 'sb-pill';
     pill.textContent = (typeof n.type === 'string' && n.type.trim()) ? n.type.trim() : '안내';
-
     var href = safeHref(n.link);
     var t;
     if (href) {
@@ -78,22 +96,39 @@
       arrow.textContent = ' →';
       t.appendChild(arrow);
     }
-
     var close = document.createElement('button');
     close.type = 'button';
     close.className = 'sb-close';
     close.setAttribute('aria-label', '공지 배너 닫기');
     close.textContent = '×';
-    close.addEventListener('click', function () {
-      bar.remove();
-      try { localStorage.setItem(key, '1'); } catch (e) {}
-    });
-
     inner.appendChild(pill);
     inner.appendChild(t);
     bar.appendChild(inner);
     bar.appendChild(close);
-    document.body.insertBefore(bar, document.body.firstChild);
+    return bar;
+  }
+
+  /* 페이지 로드 즉시: 구워진 배너의 닫기 버튼을 연결(팬딩 fetch 와 무관하게 바로 작동) */
+  function wireBakedBannerNow() {
+    var baked = document.querySelector('.site-banner');
+    if (!baked) return;
+    var sig = baked.getAttribute('data-sig') || '';
+    if (isDismissed(sig)) { baked.remove(); return; }
+    wireClose(baked, sig);
+  }
+
+  /* fetch 결과로 배너 보강(안전): 구워진 배너는 절대 지우거나 바꾸지 않고,
+   * 아직 안 구워진 경우(예: 재빌드 전 notices.json 만 바뀜)에만 새로 삽입.
+   * → 오래된 CDN 캐시가 멀쩡히 구워진 배너를 지우는 사고를 원천 차단. */
+  function reconcileBanner(n) {
+    if (!n) return;                                               // fetch에 배너 없음 → 구워진 것 유지(권위는 HTML)
+    var existing = document.querySelector('.site-banner');
+    var sig = bannerSig(n);
+    if (existing) { wireClose(existing, sig); return; }           // 이미 배너 있음 → 유지, 닫기만 연결
+    if (isDismissed(sig)) return;
+    var fresh = buildBanner(n);                                   // 구워진 게 없을 때만 삽입
+    wireClose(fresh, sig);
+    document.body.insertBefore(fresh, document.body.firstChild);
   }
 
   /* ---------- A/S 영역 안내(place='as') ---------- */
@@ -208,7 +243,7 @@
           return String(b.createdAt || '').localeCompare(String(a.createdAt || ''));
         });
         var banner = visible.filter(function (n) { return placeOf(n) === 'banner'; })[0];
-        if (banner) renderBanner(banner);
+        reconcileBanner(banner);
         var asNotice = visible.filter(function (n) { return placeOf(n) === 'as'; })[0];
         if (asNotice) renderAs(asNotice);
         renderList(visible.filter(function (n) { return placeOf(n) === 'list'; }));
@@ -217,5 +252,6 @@
         if (!attempt) setTimeout(function () { loadNotices(1); }, 1500);
       });
   }
+  wireBakedBannerNow();  // 구워진 배너 즉시 활성(닫기 버튼·닫힘 기억) — fetch 실패해도 배너 유지
   loadNotices(0);
 })();
