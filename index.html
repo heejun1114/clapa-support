@@ -178,12 +178,6 @@
     box-shadow:0 0 0 3px rgba(14,111,102,.13);
   }
 
-  /* A/S 폼 라벨 위치 힌트 */
-  .as-hint{
-    margin:6px 2px 0;
-    font-size:12.5px;line-height:1.55;color:var(--muted);
-  }
-  .as-hint.is-model{color:var(--teal-deep);}
 
   /* 스크롤 리빌 — JS가 reduced-motion 아닐 때만 .reveal 부여(무JS·모션최소화 환경은 항상 표시) */
   .reveal{opacity:0;transform:translateY(10px);transition:opacity .5s var(--ease),transform .5s var(--ease);}
@@ -551,7 +545,6 @@
     .as-field label{font-size:14.5px;}
     .as-field input,.as-field textarea{font-size:16px;}
     .as-desc{font-size:15px;}
-    .as-hint{font-size:13px;}
     .footer-legal{font-size:13px;}
   }
 
@@ -820,7 +813,6 @@
               <option value="BHF-8000W">클래파 보조배터리 겸용 핸디 에어건</option>
               <option value="BRC-30W">클래파 미니밥솥</option>
             </datalist>
-            <p class="as-hint" id="as-model-hint">모델명은 제품 본체에 부착된 라벨(모델명 스티커)이나 포장 박스에서 확인할 수 있어요.</p>
           </div>
           <div class="as-field">
             <label for="as-symptom">증상<span class="req">필수</span></label>
@@ -1866,39 +1858,10 @@
 })();
 </script>
 <script>
-/* 2026-07-11 개편: 라벨 위치 힌트 · 검색 예시 로테이션 · 스크롤 리빌 · 헤더 유리 질감 */
+/* 2026-07-11 개편: 검색 예시 로테이션 · 스크롤 리빌 · 헤더 유리 질감
+   (라벨 위치 힌트는 사장님 지시로 삭제 — 재도입 금지) */
 (function(){
-  // 1) A/S 모델명 입력 → 해당 제품 라벨 위치 힌트(데이터 있는 모델만, 없으면 일반 안내 유지)
-  var hint = document.getElementById('as-model-hint');
-  var model = document.getElementById('as-model');
-  if (hint && model) {
-    var HINT_DEFAULT = hint.textContent;
-    var LOCS = null;
-    fetch('data/label-locations.json', { cache: 'no-cache' })
-      .then(function(r){ return r.ok ? r.json() : null; })
-      .then(function(j){ if (j && j.locations) LOCS = j.locations; })
-      .catch(function(){});
-    function normCode(s){ return String(s || '').toUpperCase().replace(/[^A-Z0-9]/g, ''); }
-    model.addEventListener('input', function(){
-      if (!LOCS) return;
-      var v = normCode(model.value);
-      var found = '';
-      if (v) {
-        for (var k in LOCS) {
-          if (LOCS[k] && normCode(k) === v) { found = LOCS[k]; break; }
-        }
-      }
-      if (found) {
-        hint.textContent = '이 제품의 라벨 위치: ' + found;
-        hint.classList.add('is-model');
-      } else {
-        hint.textContent = HINT_DEFAULT;
-        hint.classList.remove('is-model');
-      }
-    });
-  }
-
-  // 2) 검색 예시 로테이션 — 포커스·입력 중에는 바꾸지 않음
+  // 1) 검색 예시 로테이션 — 포커스·입력 중에는 바꾸지 않음
   var input = document.getElementById('support-search');
   if (input) {
     var examples = [
@@ -1916,7 +1879,7 @@
     }, 3600);
   }
 
-  // 3) 스크롤 리빌 — 모션 최소화 설정·미지원 브라우저는 건너뜀(콘텐츠 항상 표시)
+  // 2) 스크롤 리빌 — 모션 최소화 설정·미지원 브라우저는 건너뜀(콘텐츠 항상 표시)
   var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   if (!reduce && 'IntersectionObserver' in window) {
     // 목록 행(.product-row)은 제외 — 긴 목록을 빠르게 스크롤할 때 빈 행 깜빡임 방지
@@ -1936,7 +1899,7 @@
     }
   }
 
-  // 4) 헤더 — 스크롤하면 유리 질감 강조
+  // 3) 헤더 — 스크롤하면 유리 질감 강조
   var header = document.querySelector('.site-header');
   if (header) {
     function onScroll(){ header.classList.toggle('is-scrolled', (window.scrollY || 0) > 8); }
