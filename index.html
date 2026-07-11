@@ -356,6 +356,35 @@
   }
   .products-foot .dot{width:4px;height:4px;border-radius:50%;background:var(--sil);flex:none;}
 
+  /* ---------- 최상단 공지 배너 (assets/notices.js — banner=true 공지 1건) ---------- */
+  .site-banner{
+    display:flex;align-items:center;gap:8px;
+    background:var(--teal-deep);color:#EAF4F1;
+    padding:9px clamp(14px,3vw,22px);font-size:13.5px;letter-spacing:-0.01em;
+  }
+  .site-banner-in{
+    flex:1;min-width:0;display:flex;align-items:center;gap:10px;justify-content:center;
+  }
+  .sb-pill{
+    flex:none;font-size:11px;font-weight:700;letter-spacing:0;
+    background:rgba(255,255,255,.16);color:#fff;border-radius:999px;padding:2.5px 9px;
+  }
+  .sb-t{
+    min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+    color:inherit;font-weight:600;
+  }
+  a.sb-t:hover{color:#fff;text-decoration:underline;text-underline-offset:3px;}
+  .sb-arrow{font-weight:400;}
+  .sb-close{
+    flex:none;border:0;background:transparent;color:rgba(255,255,255,.75);
+    font-size:19px;line-height:1;width:28px;height:28px;border-radius:7px;
+  }
+  .sb-close:hover{background:rgba(255,255,255,.12);color:#fff;}
+  @media (max-width:480px){
+    .site-banner{font-size:12.5px;padding:8px 10px;}
+    .site-banner-in{justify-content:flex-start;}
+  }
+
   /* ---------- 공지 (assets/notices.js 런타임 렌더 — data/notices.json 비면 미표시) ---------- */
   .notices{padding:26px 0 0;}
   .notice-list{
