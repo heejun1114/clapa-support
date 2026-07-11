@@ -11,66 +11,13 @@
   }
 
   ready(function () {
-    try { initFaqFilter(); } catch (e) {}
     try { initSpecToggle(); } catch (e) {}
   });
 
-  /* ── ① FAQ 카테고리 필터 ── */
-  function initFaqFilter() {
-    var list = document.querySelector('.faq-list');
-    if (!list) return;
-    var items = [].slice.call(list.querySelectorAll('.faq-item'));
-    if (items.length < 6) return;
+  /* FAQ 주제 분류(카테고리 필터 칩)는 사장님 지시로 제거됨 — 재도입 금지.
+     각 문항의 주제 라벨(.faq-cat)은 density.css에서 숨김. */
 
-    var cats = [], counts = {};
-    items.forEach(function (it) {
-      var el = it.querySelector('.faq-cat');
-      var c = el ? el.textContent.trim() : '';
-      if (!c) return;
-      if (cats.indexOf(c) === -1) { cats.push(c); counts[c] = 0; }
-      counts[c]++;
-      it.setAttribute('data-fcat', c);
-    });
-    if (cats.length < 2) return;   // 분류가 하나뿐이면 필터가 의미 없음
-
-    var bar = document.createElement('div');
-    bar.className = 'faq-filter';
-    bar.setAttribute('role', 'group');
-    bar.setAttribute('aria-label', '질문 분류 필터');
-    bar.appendChild(makeChip('전체', items.length, true));
-    cats.forEach(function (c) { bar.appendChild(makeChip(c, counts[c], false)); });
-    list.parentNode.insertBefore(bar, list);
-
-    bar.addEventListener('click', function (e) {
-      var chip = e.target && e.target.closest ? e.target.closest('.fchip') : null;
-      if (!chip) return;
-      var sel = chip.getAttribute('data-cat');
-      for (var i = 0; i < bar.children.length; i++) {
-        var on = bar.children[i] === chip;
-        bar.children[i].classList.toggle('is-active', on);
-        bar.children[i].setAttribute('aria-pressed', on ? 'true' : 'false');
-      }
-      items.forEach(function (it) {
-        it.hidden = !(sel === '' || it.getAttribute('data-fcat') === sel);
-      });
-    });
-
-    function makeChip(label, n, active) {
-      var b = document.createElement('button');
-      b.type = 'button';
-      b.className = 'fchip' + (active ? ' is-active' : '');
-      b.setAttribute('data-cat', active ? '' : label);
-      b.setAttribute('aria-pressed', active ? 'true' : 'false');
-      b.appendChild(document.createTextNode(label + ' '));
-      var lat = document.createElement('span');
-      lat.className = 'lat';
-      lat.textContent = String(n);
-      b.appendChild(lat);
-      return b;
-    }
-  }
-
-  /* ── ② 주요 사양 접기 ── */
+  /* ── 주요 사양 접기 ── */
   function initSpecToggle() {
     var grid = document.querySelector('.spec-grid');
     if (!grid) return;

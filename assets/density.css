@@ -1,18 +1,9 @@
 /* CLAPA 제품 상세 — 정보 밀도 완화(빽빽함 해소). 홈의 brand-tab/필 시각언어 재사용, 새 색·그림자 없음.
    자바스크립트가 꺼져도 현행 모습 그대로(점진적 향상). chat.css 뒤에 로드되어 인라인 스타일을 덮는다. */
 
-/* ── FAQ 카테고리 필터 칩 (문항이 많은 페이지에서만 density.js가 삽입) ── */
-.faq-filter{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 14px;}
-.faq-filter .fchip{
-  display:inline-flex;align-items:baseline;gap:7px;
-  background:var(--paper);border:1px solid var(--line);border-radius:100px;
-  padding:8px 14px;font:inherit;font-size:13px;font-weight:600;letter-spacing:-0.01em;color:var(--ink);
-  cursor:pointer;transition:border-color .15s var(--ease),background .15s var(--ease),color .15s var(--ease);
-}
-.faq-filter .fchip .lat{font-size:11px;font-weight:500;letter-spacing:0.03em;color:var(--muted);}
-.faq-filter .fchip:hover{border-color:var(--teal);color:var(--teal-deep);}
-.faq-filter .fchip.is-active{background:var(--teal);border-color:var(--teal);color:#fff;}
-.faq-filter .fchip.is-active .lat{color:rgba(255,255,255,.72);}
+/* ── FAQ 주제 분류 제거(사장님 지시, 재도입 금지) ──
+   문항별 주제 라벨(.faq-cat)을 숨겨 FAQ를 주제 구분 없는 단순 목록으로. */
+.faq-cat{display:none;}
 .faq-item[hidden]{display:none;}
 
 /* ── 주요 사양 접기 — 사양이 많은 페이지는 6행만 노출 + '전체 사양 보기' ── */
