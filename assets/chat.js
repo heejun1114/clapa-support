@@ -265,6 +265,30 @@
       .catch(function () { /* 기본값 유지 — configLoaded=false 로 남아 전송 시 1회 재시도 */ });
   }
 
+  /* A/S 점검 모드: notices.json 의 place='as' + stopAs 활성 공지 1건이면 접수 흐름을 막는다(전 페이지 유효) */
+  var asStopByNotice = false;
+  function kstToday() {
+    return new Date(Date.now() + 9 * 3600 * 1000).toISOString().slice(0, 10);
+  }
+  function loadAsStatus() {
+    return fetch(ROOT + 'data/notices.json?t=' + Date.now(), { cache: 'no-store' })
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (j) {
+        var list = (j && Array.isArray(j.notices)) ? j.notices : [];
+        var today = kstToday();
+        asStopByNotice = list.some(function (n) {
+          if (!n || n.active === false || n.stopAs !== true) return false;
+          var place = (n.place === 'banner' || n.place === 'list' || n.place === 'as')
+            ? n.place : (n.banner === true ? 'banner' : 'list');
+          if (place !== 'as') return false;
+          if (typeof n.startsAt === 'string' && today < n.startsAt) return false;
+          if (typeof n.endsAt === 'string' && today > n.endsAt) return false;
+          return true;
+        });
+      })
+      .catch(function () { /* 실패 시 false 유지(fail-open) */ });
+  }
+
   function loadCatalog() {
     return fetch(ROOT + 'data/chat-catalog.json?t=' + Date.now(), { cache: 'no-store' })
       .then(function (r) { return r.ok ? r.json() : null; })
@@ -779,8 +803,9 @@
     }
   }
 
-  /* A/S 접수 점검 중 여부 — 설정 플래그(모든 페이지) 우선, 없으면 홈의 .as-band.is-paused 로 판별 */
+  /* A/S 접수 점검 중 여부 — 공지(notices.json stopAs) 우선, 설정 플래그·홈 DOM(.as-band.is-paused) 폴백 */
   function asPaused() {
+    if (asStopByNotice) return true;
     if (config && config.asPaused === true) return true;
     try { return !!document.querySelector('.as-band.is-paused'); } catch (e) { return false; }
   }
@@ -1457,6 +1482,7 @@
       try { window.visualViewport.addEventListener('resize', onVvResize); } catch (e) {}
     }
 
+    loadAsStatus();   // A/S 점검 상태(비차단) — 사용자가 A/S 메뉴를 누르는 시점엔 반영돼 있음
     loadConfig()
       .then(loadCatalog)
       .then(finishInit)

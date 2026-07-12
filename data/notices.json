@@ -15,6 +15,23 @@
    "startsAt": null,
    "endsAt": null,
    "createdAt": "2026-07-12T02:20:00+09:00"
+  },
+  {
+   "id": "n-as-maintenance",
+   "place": "as",
+   "type": "점검 중",
+   "title": "A/S 접수를 잠시 점검하고 있어요",
+   "body": "점검이 끝나는 대로 다시 정상적으로 접수를 받겠습니다.",
+   "stopAs": true,
+   "link": "",
+   "linkLabel": "",
+   "pinned": false,
+   "banner": false,
+   "bannerColor": "",
+   "active": true,
+   "startsAt": null,
+   "endsAt": null,
+   "createdAt": "2026-07-13T02:40:00+09:00"
   }
  ]
 }
