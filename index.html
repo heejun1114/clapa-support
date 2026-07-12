@@ -848,7 +848,7 @@
     <div class="wrap">
       <span class="eyebrow">CLAPA 고객지원센터</span>
       <h1 class="hero-title" id="hero-title">무엇을 도와드릴까요?</h1>
-      <p class="hero-sub">모델명이나 증상으로 검색하면 설명서·부품·자주 묻는 질문을 한 번에 찾아드려요.</p>
+      <p class="hero-sub">모델명이나 증상으로 검색하면 설명서·부품·자주 묻는 질문을 한 번에 찾아드립니다.</p>
 
       <form class="searchbar" role="search" action="#" onsubmit="return false;">
         <div class="search-field">
@@ -913,13 +913,13 @@
       <!-- A/S 관련 공지 슬롯: place='as' 공지 1건 (assets/notices.js) -->
       <div class="as-notice" id="notice-as-slot" hidden></div>
       <!-- A/S 점검 안내: 백오피스에서 'A/S 접수 중단(점검)' 공지를 켜면 render_notices.py 가 이 마커 안에 연노랑 카드를 굽고 아래 #as-band 에 is-paused 를 붙인다. 끄면 자동 원복. -->
-      <!--BO:AS_MAINT:START--><div class="as-notice as-maint" id="as-maintenance"><span class="an-pill">점검 중</span><div class="an-tx"><div class="an-t">A/S 접수를 잠시 점검하고 있어요</div><div class="an-b">점검이 끝나는 대로 다시 정상적으로 접수를 받겠습니다.</div></div></div><!--BO:AS_MAINT:END-->
+      <!--BO:AS_MAINT:START--><div class="as-notice as-maint" id="as-maintenance"><span class="an-pill">점검 중</span><div class="an-tx"><div class="an-t">A/S 접수를 잠시 점검하고 있습니다</div><div class="an-b">점검이 끝나는 대로 다시 정상적으로 접수를 받겠습니다.</div></div></div><!--BO:AS_MAINT:END-->
       <div class="as-band is-paused" id="as-band">
 
         <div class="as-lead">
           <span class="section-eyebrow">Repair request</span>
           <h2 class="section-title" id="as-title">A/S 접수</h2>
-          <p class="as-desc">모델명과 증상을 남겨 주세요. 상담 시간에 순서대로 연락드립니다.<br>증상 사진·영상을 미리 준비해 두시면 접수 확인이 더 빨라져요.</p>
+          <p class="as-desc">모델명과 증상을 남겨 주세요. 상담 시간에 순서대로 연락드립니다.<br>증상 사진·영상을 미리 준비해 두시면 접수 확인이 더 빨라집니다.</p>
           <div class="as-alt">
             <a class="as-tel" href="tel:1522-8508" aria-label="고객센터 전화 1522-8508, 평일 09시부터 15시">
               <strong>1522-8508</strong>
@@ -934,7 +934,7 @@
         <form class="as-form" id="as-form" novalidate>
           <div class="as-field">
             <label for="as-model">제품 모델명</label>
-            <input id="as-model" name="model" list="as-models" placeholder="예) BVC-H10 (제품 이름도 괜찮아요)" autocomplete="off" maxlength="80">
+            <input id="as-model" name="model" list="as-models" placeholder="예) BVC-H10 (제품 이름도 괜찮습니다)" autocomplete="off" maxlength="80">
             <datalist id="as-models"><!-- 옵션은 상품 그리드에서 자동 생성(페이지 하단 스크립트) — 하드코딩 금지 --></datalist>
           </div>
           <div class="as-field">
@@ -962,7 +962,7 @@
         <div>
           <span class="section-eyebrow">Find your product</span>
           <h2 class="section-title" id="finder-title">상품 찾기</h2>
-          <p class="section-desc">쓰시는 제품을 모델명으로 고르면 설명서·부품·FAQ를 바로 확인할 수 있어요.</p>
+          <p class="section-desc">쓰시는 제품을 모델명으로 고르면 설명서·부품·FAQ를 바로 확인할 수 있습니다.</p>
         </div>
       </div>
 
@@ -1544,7 +1544,7 @@
       </div>
 
       <p class="products-foot">
-        <span id="finder-count">전체 31개 제품을 보고 있어요.</span>
+        <span id="finder-count">전체 31개 제품을 보고 있습니다.</span>
         <span class="dot" aria-hidden="true"></span>
         <span>찾는 제품이 없다면 AI 상담으로 문의해 주세요.</span>
       </p>
@@ -1708,7 +1708,7 @@
     var c = g.getAttribute('data-cat'), gc = g.querySelector('.group-count');
     if(gc) gc.textContent = (byCat[c] || 0) + '개';
   });
-  if(count) count.textContent = '전체 ' + rows.length + '개 제품을 보고 있어요.';
+  if(count) count.textContent = '전체 ' + rows.length + '개 제품을 보고 있습니다.';
 
   // A/S 모델 자동완성(datalist)도 그리드에서 자동 생성 — 24종 하드코딩 목록 드리프트 방지.
   var asDl = document.getElementById('as-models');
@@ -1739,14 +1739,14 @@
     });
     if(shown === 0){
       empty.hidden = false;
-      empty.textContent = label + ' 카테고리 제품은 순차적으로 등록하고 있어요. 곧 만나보실 수 있습니다.';
+      empty.textContent = label + ' 카테고리 제품은 순차적으로 등록하고 있습니다. 곧 만나보실 수 있습니다.';
     } else {
       empty.hidden = true;
     }
     if(count){
       count.textContent = (cat === 'all')
-        ? '전체 ' + rows.length + '개 제품을 보고 있어요.'
-        : label + ' ' + shown + '개를 보고 있어요.';
+        ? '전체 ' + rows.length + '개 제품을 보고 있습니다.'
+        : label + ' ' + shown + '개를 보고 있습니다.';
     }
   }
 
@@ -1819,7 +1819,7 @@
     var info = document.createElement('p');
     info.textContent = '상담 시간(평일 09:00–15:00)에 순서대로 연락드립니다. 급하시면 1522-8508로 전화해 주세요.';
     var lookup = document.createElement('p');
-    lookup.textContent = '접수번호를 메모해 두시면 AI 상담의 [A/S 신청 → 접수 조회]에서 진행 상태를 확인하실 수 있어요.';
+    lookup.textContent = '접수번호를 메모해 두시면 AI 상담의 [A/S 신청 → 접수 조회]에서 진행 상태를 확인하실 수 있습니다.';
     done.appendChild(head);
     done.appendChild(idLine);
     done.appendChild(info);
@@ -1858,7 +1858,7 @@
         setBusy(false);
       })
       .catch(function(){
-        showErr('연결이 원활하지 않아요. ' + PHONE_GUIDE);
+        showErr('연결이 원활하지 않습니다. ' + PHONE_GUIDE);
         setBusy(false);
       });
   });
@@ -2089,7 +2089,7 @@
     if(res.total > res.hits.length){
       var note = document.createElement('div');
       note.className = 'sr-note';
-      note.textContent = '결과가 ' + (res.total - res.hits.length) + '건 더 있어요. 검색어를 조금 더 자세히 적어 보세요.';
+      note.textContent = '결과가 ' + (res.total - res.hits.length) + '건 더 있습니다. 검색어를 조금 더 자세히 적어 보세요.';
       panel.appendChild(note);
     }
     if(!sentence){

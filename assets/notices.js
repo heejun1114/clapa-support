@@ -244,7 +244,9 @@
         });
         var banner = visible.filter(function (n) { return placeOf(n) === 'banner'; })[0];
         reconcileBanner(banner);
-        var asNotice = visible.filter(function (n) { return placeOf(n) === 'as'; })[0];
+        // stopAs(점검) 공지는 render_notices.py 가 #as-maintenance 에 직접 구워두므로 런타임 렌더 제외(중복 카드 방지).
+        // 일반 A/S 안내(비-stopAs)만 #notice-as-slot 에 그린다.
+        var asNotice = visible.filter(function (n) { return placeOf(n) === 'as' && n.stopAs !== true; })[0];
         if (asNotice) renderAs(asNotice);
         renderList(visible.filter(function (n) { return placeOf(n) === 'list'; }));
       })
