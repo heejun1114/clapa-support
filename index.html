@@ -913,8 +913,8 @@
       <!-- A/S 관련 공지 슬롯: place='as' 공지 1건 (assets/notices.js) -->
       <div class="as-notice" id="notice-as-slot" hidden></div>
       <!-- A/S 점검 안내: 백오피스에서 'A/S 접수 중단(점검)' 공지를 켜면 render_notices.py 가 이 마커 안에 연노랑 카드를 굽고 아래 #as-band 에 is-paused 를 붙인다. 끄면 자동 원복. -->
-      <!--BO:AS_MAINT:START--><div class="as-notice as-maint" id="as-maintenance"><span class="an-pill">점검 중</span><div class="an-tx"><div class="an-t">A/S 접수를 잠시 점검하고 있습니다</div><div class="an-b">점검이 끝나는 대로 다시 정상적으로 접수를 받겠습니다.</div></div></div><!--BO:AS_MAINT:END-->
-      <div class="as-band is-paused" id="as-band">
+      <!--BO:AS_MAINT:START--><!--BO:AS_MAINT:END-->
+      <div class="as-band" id="as-band">
 
         <div class="as-lead">
           <span class="section-eyebrow">Repair request</span>
@@ -1664,7 +1664,7 @@
         <p class="foot-h">바로가기</p>
         <div class="foot-brandrow">
           <a class="foot-brand" href="https://clapa.kr" target="_blank" rel="noopener">클래파 공식몰 <span class="lat" aria-hidden="true">↗</span></a>
-          <!--BO:AS_FOOT:START--><span class="foot-brand" aria-disabled="true" style="opacity:.5;pointer-events:none;cursor:default;">A/S 접수 점검 중</span><!--BO:AS_FOOT:END-->
+          <!--BO:AS_FOOT:START--><a class="foot-brand" href="tel:1522-8508">A/S 신청 1522-8508</a><!--BO:AS_FOOT:END-->
           <a class="foot-brand" href="#finder-title">설명서 다운로드</a>
           <a class="foot-brand" href="warranty.html">보증·교환/반품 안내</a>
         </div>
