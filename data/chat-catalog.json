@@ -446,7 +446,7 @@
    "cat": "fan",
    "page": "products/bfb-sf500.html",
    "manual": "manuals/BFB-SF500_BFB-SF500E.pdf",
-   "parts": "https://smartstore.naver.com/skillfulbrother/search?q=BFB-SF500",
+   "parts": null,
    "store": "https://smartstore.naver.com/skillfulbrother/products/6999811935",
    "keywords": [
     "선풍기",
@@ -464,7 +464,7 @@
    "cat": "fan",
    "page": "products/bfb-sf500e.html",
    "manual": "manuals/BFB-SF500_BFB-SF500E.pdf",
-   "parts": "https://smartstore.naver.com/skillfulbrother/search?q=BFB-SF500E",
+   "parts": null,
    "store": "https://smartstore.naver.com/skillfulbrother/products/6999752314",
    "keywords": [
     "선풍기",
@@ -482,7 +482,7 @@
    "cat": "fan",
    "page": "products/bfb-hf5200w.html",
    "manual": "manuals/BFB-HF5200W.pdf",
-   "parts": "https://smartstore.naver.com/skillfulbrother/search?q=BFB-HF5200W",
+   "parts": null,
    "store": "https://smartstore.naver.com/skillfulbrother/products/6999777607",
    "keywords": [
     "휴대용선풍기",
@@ -499,7 +499,7 @@
    "cat": "fan",
    "page": "products/bfb-hf2601w.html",
    "manual": "manuals/BFB-HF2601W.pdf",
-   "parts": "https://smartstore.naver.com/skillfulbrother/search?q=BFB-HF2601W",
+   "parts": null,
    "store": "https://smartstore.naver.com/skillfulbrother/products/6999678677",
    "keywords": [
     "휴대용선풍기",
@@ -515,7 +515,7 @@
    "cat": "fan",
    "page": "products/bfb-cf0802rw.html",
    "manual": "manuals/BFB-CF0802RW_CCF-30BL.pdf",
-   "parts": "https://smartstore.naver.com/skillfulbrother/search?q=BFB-CF0802RW",
+   "parts": null,
    "store": "https://smartstore.naver.com/skillfulbrother",
    "keywords": [
     "써큘레이터",
@@ -535,7 +535,7 @@
    "cat": "fan",
    "page": "products/bdf-3d12r.html",
    "manual": "manuals/BDF-3D12R.pdf",
-   "parts": "https://smartstore.naver.com/skillfulbrother/search?q=BDF-3D12R",
+   "parts": null,
    "store": "https://smartstore.naver.com/skillfulbrother",
    "keywords": [
     "선풍기",
@@ -554,7 +554,7 @@
    "cat": "fan",
    "page": "products/btf-01r.html",
    "manual": "manuals/BTF-01R.pdf",
-   "parts": "https://smartstore.naver.com/skillfulbrother/search?q=BTF-01R",
+   "parts": null,
    "store": "https://smartstore.naver.com/skillfulbrother",
    "keywords": [
     "선풍기",
