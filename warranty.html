@@ -18,6 +18,7 @@
     --line-soft:#EDE9E1;
     --ink:#23201B;
     --muted:#6F675C;
+    --sil-d:#AAA294;
     --teal:#0E6F66;
     --teal-deep:#0A5750;
     --teal-wash:#E4F0ED;
@@ -58,6 +59,7 @@
   .nav-link{font-size:13.5px;font-weight:500;color:var(--muted);padding:8px 12px;border-radius:8px;}
   .nav-link:hover{color:var(--ink);background:var(--surface);}
   .nav-link.is-store{color:var(--teal-deep);font-weight:600;}
+  .nav-link.is-store .ext{font-size:12px;margin-left:3px;color:var(--teal);}
   @media(max-width:480px){
     .header-inner{gap:10px;min-width:0;}
     .header-nav .nav-link:not(.is-store){display:none;}
@@ -71,7 +73,7 @@
 
   .section{padding-block:clamp(26px,4vw,42px);}
   .section + .section{border-top:1px solid var(--line-soft);}
-  h2{margin:0 0 6px;font-size:clamp(19px,2.4vw,23px);font-weight:700;letter-spacing:-0.024em;}
+  h2{margin:0 0 6px;font-size:clamp(20px,2.6vw,25px);font-weight:700;letter-spacing:-0.026em;}
   .section-desc{margin:0 0 18px;color:var(--muted);font-size:14.5px;}
 
   table{width:100%;border-collapse:collapse;background:var(--paper);}
@@ -102,7 +104,7 @@
   .policy-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
   .policy-card{border:1px solid var(--line);border-radius:var(--radius);padding:18px;}
   .policy-card h3{margin:0 0 10px;font-size:15.5px;font-weight:700;letter-spacing:-0.02em;}
-  @media(max-width:720px){.policy-grid{grid-template-columns:1fr;}}
+  @media(max-width:820px){.policy-grid{grid-template-columns:1fr;}}
 
   .cta-band{
     margin-block:clamp(26px,4vw,42px);
@@ -115,17 +117,67 @@
   .cta-actions{display:flex;gap:9px;flex-wrap:wrap;}
   .btn{
     display:inline-flex;align-items:center;justify-content:center;gap:6px;
-    min-height:44px;padding:10px 18px;border-radius:10px;
-    font-size:14px;font-weight:600;letter-spacing:-0.01em;
-    border:1px solid var(--line);background:var(--paper);color:var(--ink);
+    min-height:44px;padding:12px 20px;border-radius:10px;
+    font-size:14.5px;font-weight:600;letter-spacing:-0.01em;
+    border:1.5px solid var(--line);background:var(--paper);color:var(--ink);
     transition:border-color .15s var(--ease),background .15s var(--ease),color .15s var(--ease);
   }
   .btn:hover{border-color:var(--teal);color:var(--teal-deep);background:var(--teal-wash);}
   .btn.is-primary{background:var(--teal);border-color:var(--teal);color:#fff;}
   .btn.is-primary:hover{background:var(--teal-deep);border-color:var(--teal-deep);color:#fff;}
 
-  .site-footer{border-top:1px solid var(--line);padding-block:26px 34px;margin-top:20px;}
-  .footer-legal{color:var(--muted);font-size:12.5px;}
+  .site-footer{
+    background:#F1EEE8;border-top:1px solid var(--line);
+    padding-block:clamp(34px,5vw,52px);margin-top:8px;
+  }
+  .footer-top{
+    display:flex;flex-wrap:wrap;justify-content:space-between;gap:28px 40px;
+    padding-bottom:26px;border-bottom:1px solid var(--line);
+  }
+  .foot-contact .foot-h{font-size:12px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;}
+  .foot-tel{font-size:22px;font-weight:700;letter-spacing:-0.02em;font-variant-numeric:tabular-nums;color:var(--ink);}
+  .foot-hours{font-size:13px;color:var(--muted);margin-top:5px;}
+  .foot-hours .off{color:var(--sil-d);}
+  .foot-brands{display:flex;flex-direction:column;gap:9px;}
+  .foot-brands .foot-h{font-size:12px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);margin-bottom:2px;}
+  .foot-brandrow{display:flex;flex-wrap:wrap;gap:8px 10px;}
+  .foot-brand{
+    display:inline-flex;align-items:baseline;gap:6px;
+    font-size:13.5px;font-weight:500;color:var(--ink);
+    padding:5px 0;transition:color .14s var(--ease);
+  }
+  .foot-brand .lat{font-size:11px;color:var(--muted);letter-spacing:0.04em;}
+  .foot-brand:hover{color:var(--teal-deep);}
+  .foot-brand:hover .lat{color:var(--teal);}
+  .footer-legal{
+    display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;
+    padding-top:22px;color:var(--muted);font-size:12.5px;
+  }
+  .footer-legal .slogan{color:var(--teal-deep);font-weight:600;letter-spacing:-0.01em;}
+
+  /* ---------- Chat FAB (홈·상세와 동일한 진입점) ---------- */
+  .chat-fab{
+    position:fixed;right:clamp(16px,3vw,28px);bottom:clamp(16px,3vw,28px);z-index:50;
+    display:inline-flex;align-items:center;gap:10px;
+    background:var(--paper);
+    border:1px solid var(--line);
+    border-radius:999px;
+    padding:11px 17px 11px 14px;
+    box-shadow:0 6px 22px -8px rgba(35,32,27,.22),0 2px 6px -3px rgba(35,32,27,.12);
+    transition:border-color .16s var(--ease),transform .16s var(--ease);
+  }
+  .chat-fab:hover{border-color:var(--teal);transform:translateY(-1px);}
+  .chat-ic{
+    width:32px;height:32px;flex:none;border-radius:50%;
+    background:var(--teal-wash);color:var(--teal-deep);
+    display:flex;align-items:center;justify-content:center;
+  }
+  .chat-ic svg{width:17px;height:17px;}
+  .chat-tx{display:flex;flex-direction:column;line-height:1.25;text-align:left;}
+  .chat-tt{font-size:14px;font-weight:600;letter-spacing:-0.015em;color:var(--ink);}
+  .chat-st{font-size:11.5px;color:var(--muted);display:inline-flex;align-items:center;gap:5px;}
+  .chat-live{width:6px;height:6px;border-radius:50%;background:var(--teal);flex:none;}
+  @media(max-width:480px){ .chat-tx{display:none;} .chat-fab{padding:11px;} }
 
   @media(max-width:640px){
     body{font-size:15.5px;}
@@ -134,6 +186,7 @@
     td:first-child,th:first-child{white-space:normal;min-width:130px;}
     td{min-width:110px;}
     .page-sub{font-size:15px;}
+    .section-desc{font-size:15px;}
     ul.policy li{font-size:15px;}
     .footer-legal{font-size:13px;}
   }
@@ -154,7 +207,7 @@
     <nav class="header-nav" aria-label="주요 메뉴">
       <a class="nav-link" href="index.html#finder-title">전체 제품</a>
       <a class="nav-link is-inquiry" href="tel:1522-8508">전화 1522-8508</a>
-      <a class="nav-link is-store" href="https://clapa.kr" rel="noopener">clapa.kr 스토어<span aria-hidden="true"> ↗</span></a>
+      <a class="nav-link is-store" href="https://clapa.kr" target="_blank" rel="noopener">공식몰<span class="ext" aria-hidden="true">↗</span></a>
     </nav>
   </div>
 </header>
@@ -166,7 +219,7 @@
       <span class="eyebrow">Warranty &amp; Consumables</span>
       <h1>보증·소모품 안내</h1>
       <p class="page-sub">클래파 제품의 무상 보증 기준과 소모품 교체·세척 주기를 모델별로 안내해 드려요.
-        여기에 없는 모델은 고객센터(1522-8508, 평일 09:00~15:00)로 문의해 주세요.</p>
+        여기에 없는 모델은 고객센터(1522-8508, 평일 09:00–15:00)로 문의해 주세요.</p>
     </div>
   </section>
 
@@ -355,11 +408,11 @@
     <div class="cta-band">
       <div>
         <p>더 정확한 확인이 필요하시면 편한 방법으로 연락 주세요.</p>
-        <span class="tel">1522-8508</span> <span style="color:var(--muted);font-size:13px;">평일 09:00~15:00</span>
+        <span class="tel">1522-8508</span> <span style="color:var(--muted);font-size:13px;">평일 09:00–15:00</span>
       </div>
       <div class="cta-actions">
         <a class="btn is-primary" href="index.html#as-title">A/S 접수하기</a>
-        <a class="btn" href="https://smartstore.naver.com/skillfulbrother" target="_blank" rel="noopener">스토어 톡톡 ↗</a>
+        <a class="btn" href="https://smartstore.naver.com/skillfulbrother" target="_blank" rel="noopener">네이버 스토어 톡톡 ↗</a>
         <a class="btn" href="index.html#faq-title">자주 묻는 질문</a>
       </div>
     </div>
@@ -367,10 +420,39 @@
 
 </main>
 
+<!-- Chat entry point: quiet floating pill -->
+<button class="chat-fab" type="button" data-clapa-chat-trigger aria-label="AI 상담 열기">
+  <span class="chat-ic" aria-hidden="true">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6.5v8a2.5 2.5 0 0 1-2.5 2.5H9l-4 3.2V17H6.5A2.5 2.5 0 0 1 4 14.5v-8A2.5 2.5 0 0 1 6.5 4h11A2.5 2.5 0 0 1 20 6.5z"/><path d="M8.5 10h7M8.5 13h4.5"/></svg>
+  </span>
+  <span class="chat-tx">
+    <span class="chat-tt">AI 상담</span>
+    <span class="chat-st"><span class="chat-live" aria-hidden="true"></span>AI가 먼저 답해드려요</span>
+  </span>
+</button>
+
 <footer class="site-footer">
-  <div class="wrap footer-legal">
-    <span class="slogan" style="color:var(--teal-deep);font-weight:600;">조용히, 확실하게 돕겠습니다.</span><br>
-    © 2026 CLAPA · 고객센터 1522-8508 (평일 09:00~15:00)
+  <div class="wrap">
+    <div class="footer-top">
+      <div class="foot-contact">
+        <p class="foot-h">고객센터</p>
+        <a class="foot-tel" href="tel:1522-8508">1522-8508</a>
+        <p class="foot-hours">평일 09:00–15:00 <span class="off">· 주말·공휴일 휴무</span></p>
+      </div>
+      <nav class="foot-brands" aria-label="바로가기">
+        <p class="foot-h">바로가기</p>
+        <div class="foot-brandrow">
+          <a class="foot-brand" href="https://clapa.kr" target="_blank" rel="noopener">클래파 공식몰 <span class="lat" aria-hidden="true">↗</span></a>
+          <a class="foot-brand" href="tel:1522-8508">A/S 신청 1522-8508</a>
+          <a class="foot-brand" href="index.html#finder-title">설명서 다운로드</a>
+          <a class="foot-brand" href="warranty.html">보증·교환/반품 안내</a>
+        </div>
+      </nav>
+    </div>
+    <div class="footer-legal">
+      <span>© 2026 CLAPA. <a href="https://clapa.kr" target="_blank" rel="noopener" style="border-bottom:1px solid var(--line);">clapa.kr</a></span>
+      <span class="slogan">조용함이 만드는 박수 칠 일상</span>
+    </div>
   </div>
 </footer>
 

@@ -361,7 +361,7 @@
     fabEl = el('button', {
       'class': 'cchat-fab',
       type: 'button',
-      'aria-label': 'CLAPA 상담 열기',
+      'aria-label': 'CLAPA AI 상담 열기',
       'aria-haspopup': 'dialog',
       'aria-expanded': 'false',
       hidden: 'hidden'  // config 로드 후 enabled면 노출(깜빡임 방지)
@@ -372,7 +372,7 @@
       { t: 'path', d: 'M8.5 10h7M8.5 13h4.5' }
     ]));
     fabEl.appendChild(fabIc);
-    fabEl.appendChild(el('span', { 'class': 'cchat-fab-label', text: '상담' }));
+    fabEl.appendChild(el('span', { 'class': 'cchat-fab-label', text: 'AI 상담' }));
     fabEl.addEventListener('click', toggle);
 
     /* 스크림(모바일 시트 배경) */
@@ -557,9 +557,10 @@
     if (code) {
       var m = findModel(code);
       var chips = [
-        { label: '이 제품 설명서', cmd: 'pmanual' },
-        { label: '이 제품 FAQ', cmd: 'pfaq' }
+        { label: '이 제품 설명서', cmd: 'pmanual' }
       ];
+      /* 페이지에 FAQ 섹션이 없는 모델(카탈로그 faq:false)은 FAQ 칩 생략 */
+      if (!m || m.faq !== false) chips.push({ label: '이 제품 FAQ', cmd: 'pfaq' });
       if (m && m.page) chips.push({ label: '이 제품 스펙', url: m.page + '#spec-title' });
       chips.push({ label: '부품 구매', cmd: 'cats', arg: 'parts' });
       chips.push({ label: 'A/S 신청', cmd: 'as' });
@@ -710,8 +711,8 @@
       return catalog.models.some(function (m) { return m.category === c.id; });
     });
     if (!cats.length) {
-      pushMenu((mode === 'parts' ? '부품' : '설명서') + ' 정보를 찾지 못했어요.\n스토어 톡톡으로 문의하시거나 AI 상담에게 물어봐 주세요.', [
-        { label: '스토어 톡톡 문의', url: STORE },
+      pushMenu((mode === 'parts' ? '부품' : '설명서') + ' 정보를 찾지 못했어요.\n네이버 스토어 톡톡으로 문의하시거나 AI 상담에게 물어봐 주세요.', [
+        { label: '네이버 스토어 톡톡 문의', url: STORE },
         { label: 'AI 상담에 물어보기', cmd: 'ask' }
       ]);
       return;
@@ -736,8 +737,8 @@
       // 막다른 길이 아니라 대안 제시 — 톡톡·AI 상담으로 잇는다
       pushMenu('죄송해요, ' + catLabel + ' 종류는 아직 ' +
         (mode === 'parts' ? '등록된 부품 상품이 없어요' : '등록된 설명서가 없어요') +
-        '.\n스토어 톡톡으로 문의하시거나 AI 상담에게 편하게 물어봐 주세요.', [
-        { label: '스토어 톡톡 문의', url: STORE },
+        '.\n네이버 스토어 톡톡으로 문의하시거나 AI 상담에게 편하게 물어봐 주세요.', [
+        { label: '네이버 스토어 톡톡 문의', url: STORE },
         { label: 'AI 상담에 물어보기', cmd: 'ask' }
       ]);
       return;
@@ -782,7 +783,7 @@
         { label: 'A/S 접수 폼 바로가기', url: 'index.html#as-title' },
         { label: '접수 조회', cmd: 'asstatus' },
         { label: '전화 걸기', url: 'tel:' + PHONE },
-        { label: '스토어 톡톡 문의', url: STORE }
+        { label: '네이버 스토어 톡톡 문의', url: STORE }
       ]
     );
   }
@@ -820,7 +821,7 @@
   function botProductFaq() {
     var code = productContext();
     var m = findModel(code);
-    if (m && m.page) {
+    if (m && m.page && m.faq !== false) {
       var url = m.page + (m.page.indexOf('#') >= 0 ? '' : '#faq');
       pushMenu((m.model || '이 제품') + '에 대해 자주 묻는 질문을 모아뒀어요.\n아래 버튼에서 확인해 보세요.', [{ label: '제품 FAQ 보기', url: url }], true);
     } else if (config.endpoint) {
@@ -883,7 +884,7 @@
           } else {
             pushMenu('연결이 원활하지 않아요.\n잠시 후 다시 시도하시거나 고객센터(' + PHONE + ', ' + HOURS + ')로 문의해 주세요.', [
               { label: '전화 걸기', url: 'tel:' + PHONE },
-              { label: '스토어 톡톡 문의', url: STORE }
+              { label: '네이버 스토어 톡톡 문의', url: STORE }
             ]);
           }
         });
@@ -1051,7 +1052,7 @@
             [
               { label: '다시 시도', cmd: 'retry', arg: text.slice(0, 1000) },
               { label: 'A/S 접수 폼 바로가기', url: 'index.html#as-title' },
-              { label: '스토어 톡톡 문의', url: STORE }
+              { label: '네이버 스토어 톡톡 문의', url: STORE }
             ], { local: 1 });
         } else if (typeof navigator !== 'undefined' && navigator.onLine === false) {
           pushMessage('model',
@@ -1081,7 +1082,7 @@
   function errorChips(data, text) {
     var chips = [
       { label: '전화 걸기', url: 'tel:' + PHONE },
-      { label: '스토어 톡톡 문의', url: STORE }
+      { label: '네이버 스토어 톡톡 문의', url: STORE }
     ];
     var retryable = !(data && data.retryable === false);
     if (retryable && text) chips.push({ label: '다시 시도', cmd: 'retry', arg: text.slice(0, 1000) });

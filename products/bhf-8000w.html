@@ -126,7 +126,7 @@
     display:inline-block;
     background:var(--teal-wash);color:var(--teal-deep);
     font-size:12px;font-weight:600;letter-spacing:0.03em;
-    padding:4px 11px;border-radius:100px;
+    padding:4px 11px;border-radius:999px;
   }
   .phero-title{
     margin:13px 0 0;
@@ -154,7 +154,7 @@
   .btn svg{width:16px;height:16px;flex:none;}
   .btn .ext{font-size:12.5px;}
   .btn-primary{background:var(--teal);color:#fff;border-color:var(--teal);}
-  .btn-primary:hover{background:var(--teal-deep);border-color:var(--teal-deep);transform:translateY(-1px);}
+  .btn-primary:hover{background:var(--teal-deep);border-color:var(--teal-deep);}
   .btn-ghost{background:var(--paper);color:var(--ink);border-color:var(--line);}
   .btn-ghost:hover{border-color:var(--teal);color:var(--teal-deep);background:var(--teal-wash);}
   .btn-ghost svg{color:var(--sil-d);}
@@ -273,7 +273,7 @@
     display:inline-flex;align-items:center;gap:10px;
     background:var(--paper);
     border:1px solid var(--line);
-    border-radius:100px;
+    border-radius:999px;
     padding:11px 17px 11px 14px;
     box-shadow:0 6px 22px -8px rgba(35,32,27,.22),0 2px 6px -3px rgba(35,32,27,.12);
     transition:border-color .16s var(--ease),transform .16s var(--ease);
@@ -328,6 +328,7 @@
     .phero-title{max-width:none;}
   }
   @media(max-width:640px){
+    body{font-size:15.5px;}
     .phero{padding-block:16px 30px;}
     .phero-media{aspect-ratio:4/3;}
     .section{padding-block:42px;}
@@ -342,6 +343,7 @@
     .spec-label{font-size:14.5px;}
     .spec-value{font-size:15px;}
     .contact-desc{font-size:15px;}
+    .section-desc{font-size:15px;}
     /* contact band stacks */
     .contact-card{flex-direction:column;align-items:flex-start;}
     .footer-top{gap:24px 32px;}
@@ -389,7 +391,7 @@
   }
   .parts-grid.is-carousel > .part-card{scroll-snap-align:start;}
   .parts-grid.is-carousel::-webkit-scrollbar{height:6px;}
-  .parts-grid.is-carousel::-webkit-scrollbar-thumb{background:var(--line);border-radius:99px;}
+  .parts-grid.is-carousel::-webkit-scrollbar-thumb{background:var(--line);border-radius:999px;}
   .parts-grid.is-carousel::-webkit-scrollbar-track{background:transparent;}
   @media(max-width:640px){
     .parts-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;}
@@ -453,7 +455,8 @@
     </a>
     <nav class="header-nav" aria-label="주요 메뉴">
       <a class="nav-link" href="../index.html#finder-title">전체 제품</a>
-      <a class="nav-link is-store" href="https://clapa.kr" rel="noopener">clapa.kr 스토어<span class="ext" aria-hidden="true">↗</span></a>
+      <a class="nav-link is-inquiry" href="tel:1522-8508">전화 1522-8508</a>
+      <a class="nav-link is-store" href="https://clapa.kr" target="_blank" rel="noopener">공식몰<span class="ext" aria-hidden="true">↗</span></a>
     </nav>
   </div>
 </header>
@@ -495,8 +498,8 @@
             부품·소모품 구매 <span class="ext" aria-hidden="true">↗</span>
           </a>
           
-          <a class="btn btn-primary" href="https://smartstore.naver.com/skillfulbrother/products/10248748515" target="_blank" rel="noopener" aria-label="클래파 보조배터리 겸용 핸디 에어건 스토어에서 보기 (새 창)">
-            스토어에서 보기 <span class="ext" aria-hidden="true">↗</span>
+          <a class="btn btn-primary" href="https://smartstore.naver.com/skillfulbrother/products/10248748515" target="_blank" rel="noopener" aria-label="클래파 보조배터리 겸용 핸디 에어건 네이버 스토어에서 보기 (새 창)">
+            네이버 스토어에서 보기 <span class="ext" aria-hidden="true">↗</span>
           </a>
         </div>
       </div>
@@ -581,14 +584,14 @@
       <div class="section-head">
         <div>
           <span class="section-eyebrow">Consumables &amp; Parts</span>
-          <h2 class="section-title" id="parts-strip-title">이 제품의 소모품·부품</h2>
-          <p class="section-desc">실물 사진을 눌러 스토어에서 바로 구매할 수 있어요.</p>
+          <h2 class="section-title" id="parts-strip-title">이 제품의 부품·소모품</h2>
+          <p class="section-desc">실물 사진을 눌러 네이버 스토어에서 바로 구매할 수 있어요.</p>
         </div>
       </div>
       <div class="parts-grid">
-        <a class="part-card" href="https://smartstore.naver.com/skillfulbrother/products/10311125246" target="_blank" rel="noopener" aria-label="본체 + 보조배터리 모듈 — 스토어에서 보기"><span class="part-thumb"><img src="../assets/parts/10311125246/01.jpg" alt="" loading="lazy" decoding="async" onerror="this.remove()"></span><span class="part-body"><span class="part-name">본체 + 보조배터리 모듈</span><span class="part-model">BHF-8000W</span><span class="part-go">스토어에서 구매 ↗</span></span></a>
-        <a class="part-card" href="https://smartstore.naver.com/skillfulbrother/products/10311125246" target="_blank" rel="noopener" aria-label="팬 헤드 — 스토어에서 보기"><span class="part-thumb"><img src="../assets/parts/10311125246/02.jpg" alt="" loading="lazy" decoding="async" onerror="this.remove()"></span><span class="part-body"><span class="part-name">팬 헤드</span><span class="part-model">BHF-8000W</span><span class="part-go">스토어에서 구매 ↗</span></span></a>
-        <a class="part-card" href="https://smartstore.naver.com/skillfulbrother/products/10311125246" target="_blank" rel="noopener" aria-label="노즐 4종 — 스토어에서 보기"><span class="part-thumb"><img src="../assets/parts/10311125246/03.jpg" alt="" loading="lazy" decoding="async" onerror="this.remove()"></span><span class="part-body"><span class="part-name">노즐 4종</span><span class="part-model">BHF-8000W</span><span class="part-go">스토어에서 구매 ↗</span></span></a>
+        <a class="part-card" href="https://smartstore.naver.com/skillfulbrother/products/10311125246" target="_blank" rel="noopener" aria-label="본체 + 보조배터리 모듈 — 네이버 스토어에서 보기"><span class="part-thumb"><img src="../assets/parts/10311125246/01.jpg" alt="" loading="lazy" decoding="async" onerror="this.remove()"></span><span class="part-body"><span class="part-name">본체 + 보조배터리 모듈</span><span class="part-model">BHF-8000W</span><span class="part-go">네이버 스토어에서 구매 ↗</span></span></a>
+        <a class="part-card" href="https://smartstore.naver.com/skillfulbrother/products/10311125246" target="_blank" rel="noopener" aria-label="팬 헤드 — 네이버 스토어에서 보기"><span class="part-thumb"><img src="../assets/parts/10311125246/02.jpg" alt="" loading="lazy" decoding="async" onerror="this.remove()"></span><span class="part-body"><span class="part-name">팬 헤드</span><span class="part-model">BHF-8000W</span><span class="part-go">네이버 스토어에서 구매 ↗</span></span></a>
+        <a class="part-card" href="https://smartstore.naver.com/skillfulbrother/products/10311125246" target="_blank" rel="noopener" aria-label="노즐 4종 — 네이버 스토어에서 보기"><span class="part-thumb"><img src="../assets/parts/10311125246/03.jpg" alt="" loading="lazy" decoding="async" onerror="this.remove()"></span><span class="part-body"><span class="part-name">노즐 4종</span><span class="part-model">BHF-8000W</span><span class="part-go">네이버 스토어에서 구매 ↗</span></span></a>
       </div>
     </div>
   </section>
@@ -751,14 +754,14 @@
       <div class="contact-card">
         <div class="contact-lead">
           <h2 class="section-title" id="contact-title">더 궁금한 점이 있으신가요?</h2>
-          <p class="contact-desc">원하는 답을 찾지 못하셨다면 전화나 채팅 상담으로 편하게 문의해 주세요.</p>
+          <p class="contact-desc">원하는 답을 찾지 못하셨다면 전화나 AI 상담으로 편하게 문의해 주세요.</p>
         </div>
         <div class="contact-side">
           <a class="contact-tel" href="tel:1522-8508" aria-label="고객센터 전화 1522-8508, 평일 09시부터 15시">
             <span class="ct-num">1522-8508</span>
             <span class="ct-hours">평일 09:00–15:00 · 주말·공휴일 휴무</span>
           </a>
-          <button class="contact-chat" type="button" data-clapa-chat-trigger><span class="cc-dot" aria-hidden="true"></span>채팅 상담 시작하기 · AI가 먼저 답해드려요</button>
+          <button class="contact-chat" type="button" data-clapa-chat-trigger><span class="cc-dot" aria-hidden="true"></span>AI 상담 시작하기 · AI가 먼저 답해드려요</button>
         </div>
       </div>
     </div>
@@ -767,12 +770,12 @@
 </main>
 
 <!-- Chat entry point: quiet floating pill (inherited from home) -->
-<button class="chat-fab" type="button" data-clapa-chat-trigger aria-label="채팅 상담 열기">
+<button class="chat-fab" type="button" data-clapa-chat-trigger aria-label="AI 상담 열기">
   <span class="chat-ic" aria-hidden="true">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6.5v8a2.5 2.5 0 0 1-2.5 2.5H9l-4 3.2V17H6.5A2.5 2.5 0 0 1 4 14.5v-8A2.5 2.5 0 0 1 6.5 4h11A2.5 2.5 0 0 1 20 6.5z"/><path d="M8.5 10h7M8.5 13h4.5"/></svg>
   </span>
   <span class="chat-tx">
-    <span class="chat-tt">채팅 상담</span>
+    <span class="chat-tt">AI 상담</span>
     <span class="chat-st"><span class="chat-live" aria-hidden="true"></span>AI가 먼저 답해드려요</span>
   </span>
 </button>
@@ -788,14 +791,15 @@
       <nav class="foot-brands" aria-label="바로가기">
         <p class="foot-h">바로가기</p>
         <div class="foot-brandrow">
-          <a class="foot-brand" href="https://clapa.kr" rel="noopener">클래파 스토어 <span class="lat" aria-hidden="true">↗</span></a>
+          <a class="foot-brand" href="https://clapa.kr" target="_blank" rel="noopener">클래파 공식몰 <span class="lat" aria-hidden="true">↗</span></a>
           <a class="foot-brand" href="tel:1522-8508">A/S 신청 1522-8508</a>
           <a class="foot-brand" href="../index.html#finder-title">설명서 다운로드</a>
+          <a class="foot-brand" href="../warranty.html">보증·교환/반품 안내</a>
         </div>
       </nav>
     </div>
     <div class="footer-legal">
-      <span>© 2026 CLAPA. <a href="https://clapa.kr" rel="noopener" style="border-bottom:1px solid var(--line);">clapa.kr</a></span>
+      <span>© 2026 CLAPA. <a href="https://clapa.kr" target="_blank" rel="noopener" style="border-bottom:1px solid var(--line);">clapa.kr</a></span>
       <span class="slogan">조용함이 만드는 박수 칠 일상</span>
     </div>
   </div>
