@@ -22,6 +22,7 @@
   var PHONE = '1522-8508';
   var HOURS = '평일 09:00~15:00';
   var STORE = 'https://smartstore.naver.com/skillfulbrother';
+  var TALK = 'https://talk.naver.com/ct/w44cu1?frm=psf';   // 네이버 톡톡 상담 채널
   var SVGNS = 'http://www.w3.org/2000/svg';
 
   var DEFAULT_CONFIG = {
@@ -35,7 +36,7 @@
   var DEFAULT_CATEGORIES = [
     { id: 'clean', label: '청소기' },
     { id: 'season', label: '계절가전' },
-    { id: 'living', label: '주방·생활' }
+    { id: 'living', label: '주방 가전' }
   ];
 
   /* ------------------------------------------------------------------ *
@@ -192,7 +193,7 @@
 
   /* ------------------------------------------------------------------ *
    * URL 허용 목록 검증
-   *  - 상대경로(사이트 동일 오리진), https://smartstore.naver.com/, https://clapa.kr, tel: 만 허용
+   *  - 상대경로(사이트 동일 오리진), https://smartstore.naver.com/, https://talk.naver.com/, https://clapa.kr, tel: 만 허용
    *  - 그 외는 null → 링크 버튼을 아예 만들지 않음
    * ------------------------------------------------------------------ */
   function safeHref(raw) {
@@ -211,6 +212,7 @@
 
     if (proto === 'https:') {
       if (host === 'smartstore.naver.com') return u.href;
+      if (host === 'talk.naver.com') return u.href;      // 네이버 톡톡 상담 채널
       if (host === 'clapa.kr' || host === 'www.clapa.kr') return u.href;
     }
     return null;
@@ -483,6 +485,7 @@
   }
 
   function fillAsForm() {
+    if (asPaused()) return false;   // A/S 점검 중엔 폼 프리필·'접수해 주세요' 토스트 생략
     var raw = null;
     try { raw = sessionStorage.getItem('clapaChat.asDraft'); } catch (e) {}
     if (!raw) return false;
@@ -711,8 +714,8 @@
       return catalog.models.some(function (m) { return m.category === c.id; });
     });
     if (!cats.length) {
-      pushMenu((mode === 'parts' ? '부품' : '설명서') + ' 정보를 찾지 못했어요.\n네이버 스토어 톡톡으로 문의하시거나 AI 상담에게 물어봐 주세요.', [
-        { label: '네이버 스토어 톡톡 문의', url: STORE },
+      pushMenu((mode === 'parts' ? '부품' : '설명서') + ' 정보를 찾지 못했어요.\n네이버 톡톡으로 문의하시거나 AI 상담에게 물어봐 주세요.', [
+        { label: '네이버 톡톡 문의', url: TALK},
         { label: 'AI 상담에 물어보기', cmd: 'ask' }
       ]);
       return;
@@ -737,8 +740,8 @@
       // 막다른 길이 아니라 대안 제시 — 톡톡·AI 상담으로 잇는다
       pushMenu('죄송해요, ' + catLabel + ' 종류는 아직 ' +
         (mode === 'parts' ? '등록된 부품 상품이 없어요' : '등록된 설명서가 없어요') +
-        '.\n네이버 스토어 톡톡으로 문의하시거나 AI 상담에게 편하게 물어봐 주세요.', [
-        { label: '네이버 스토어 톡톡 문의', url: STORE },
+        '.\n네이버 톡톡으로 문의하시거나 AI 상담에게 편하게 물어봐 주세요.', [
+        { label: '네이버 톡톡 문의', url: TALK},
         { label: 'AI 상담에 물어보기', cmd: 'ask' }
       ]);
       return;
@@ -776,14 +779,29 @@
     }
   }
 
+  /* A/S 접수 점검 중 여부 — 설정 플래그(모든 페이지) 우선, 없으면 홈의 .as-band.is-paused 로 판별 */
+  function asPaused() {
+    if (config && config.asPaused === true) return true;
+    try { return !!document.querySelector('.as-band.is-paused'); } catch (e) { return false; }
+  }
+
   function botAS() {
+    if (asPaused()) {
+      pushMenu(
+        '지금은 A/S 접수 기능을 점검하고 있어요.\n온라인·전화·톡톡 접수를 잠시 중단 중이며, 점검이 끝나는 대로 정상적으로 접수를 받겠습니다.\n이미 접수하신 건은 아래에서 진행 상태를 확인하실 수 있어요.',
+        [
+          { label: '접수 조회', cmd: 'asstatus' }
+        ]
+      );
+      return;
+    }
     pushMenu(
       'A/S 접수를 도와드릴게요.\n증상과 모델명을 함께 알려주시면 접수가 훨씬 빨라요.\n전화 ' + PHONE + ' · ' + HOURS + ' (주말·공휴일 휴무)',
       [
         { label: 'A/S 접수 폼 바로가기', url: 'index.html#as-title' },
         { label: '접수 조회', cmd: 'asstatus' },
         { label: '전화 걸기', url: 'tel:' + PHONE },
-        { label: '네이버 스토어 톡톡 문의', url: STORE }
+        { label: '네이버 톡톡 문의', url: TALK}
       ]
     );
   }
@@ -884,7 +902,7 @@
           } else {
             pushMenu('연결이 원활하지 않아요.\n잠시 후 다시 시도하시거나 고객센터(' + PHONE + ', ' + HOURS + ')로 문의해 주세요.', [
               { label: '전화 걸기', url: 'tel:' + PHONE },
-              { label: '네이버 스토어 톡톡 문의', url: STORE }
+              { label: '네이버 톡톡 문의', url: TALK}
             ]);
           }
         });
@@ -1052,7 +1070,7 @@
             [
               { label: '다시 시도', cmd: 'retry', arg: text.slice(0, 1000) },
               { label: 'A/S 접수 폼 바로가기', url: 'index.html#as-title' },
-              { label: '네이버 스토어 톡톡 문의', url: STORE }
+              { label: '네이버 톡톡 문의', url: TALK}
             ], { local: 1 });
         } else if (typeof navigator !== 'undefined' && navigator.onLine === false) {
           pushMessage('model',
@@ -1082,7 +1100,7 @@
   function errorChips(data, text) {
     var chips = [
       { label: '전화 걸기', url: 'tel:' + PHONE },
-      { label: '네이버 스토어 톡톡 문의', url: STORE }
+      { label: '네이버 톡톡 문의', url: TALK}
     ];
     var retryable = !(data && data.retryable === false);
     if (retryable && text) chips.push({ label: '다시 시도', cmd: 'retry', arg: text.slice(0, 1000) });

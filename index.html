@@ -409,6 +409,14 @@
   .as-notice .an-t{font-weight:650;letter-spacing:-0.014em;}
   .as-notice .an-b{color:#6F675C;white-space:pre-line;margin-top:2px;font-size:13.5px;}
   .as-notice a{color:var(--teal-deep);font-weight:600;border-bottom:1px solid var(--teal-wash);}
+  /* A/S 점검 중: 접수 컨트롤(전화·톡톡·온라인 폼) 전부 비활성 — 안내 카드만 남긴다 */
+  .as-band.is-paused .as-tel,
+  .as-band.is-paused .as-talk,
+  .as-band.is-paused .as-form-wrap{opacity:.4;pointer-events:none;filter:grayscale(.4);}
+  .as-band.is-paused .as-tel,
+  .as-band.is-paused .as-talk{cursor:default;}
+  .as-maint .an-pill{color:#9A4B2E;background:rgba(154,75,46,.12);}
+  .as-maint{background:#FAEFE9;border-color:#EFD8CC;}
 
   /* 배너 색상 프리셋 (백오피스에서 선택) — 기본은 청록(teal-deep) */
   .site-banner.sb-c-charcoal{background:#23201B;color:#EFEBE3;}
@@ -845,8 +853,8 @@
   <section class="hero" aria-labelledby="hero-title">
     <div class="wrap">
       <span class="eyebrow">CLAPA 고객지원센터</span>
-      <h1 class="hero-title" id="hero-title">찾으시는 것부터 조용히 안내해 드립니다</h1>
-      <p class="hero-sub">모델명이나 증상으로 검색해 보세요. 설명서·부품·자주 묻는 질문을 한곳에 모았습니다.</p>
+      <h1 class="hero-title" id="hero-title">무엇을 도와드릴까요?</h1>
+      <p class="hero-sub">모델명이나 증상으로 검색하면 설명서·부품·자주 묻는 질문을 한 번에 찾아드려요.</p>
 
       <form class="searchbar" role="search" action="#" onsubmit="return false;">
         <div class="search-field">
@@ -910,18 +918,27 @@
     <div class="wrap">
       <!-- A/S 관련 공지 슬롯: place='as' 공지 1건 (assets/notices.js) -->
       <div class="as-notice" id="notice-as-slot" hidden></div>
-      <div class="as-band">
+      <!-- A/S 점검 안내(정적) — 점검이 끝나면 이 카드와 .as-band 의 is-paused 클래스를 함께 제거하세요. -->
+      <div class="as-notice as-maint" id="as-maintenance">
+        <span class="an-pill">점검 중</span>
+        <div class="an-tx">
+          <div class="an-t">A/S 접수 기능을 점검하고 있어요</div>
+          <div class="an-b">현재 시스템 점검으로 A/S 온라인 접수와 전화·톡톡 접수를 잠시 중단하고 있습니다.
+점검이 끝나는 대로 정상적으로 접수를 받겠습니다. 이용에 불편을 드려 죄송합니다.</div>
+        </div>
+      </div>
+      <div class="as-band is-paused">
 
         <div class="as-lead">
           <span class="section-eyebrow">Repair request</span>
           <h2 class="section-title" id="as-title">A/S 접수</h2>
           <p class="as-desc">모델명과 증상을 남겨 주세요. 상담 시간에 순서대로 연락드립니다.<br>증상 사진·영상을 미리 준비해 두시면 접수 확인이 더 빨라져요.</p>
           <div class="as-alt">
-            <a class="as-tel" href="tel:1522-8508" aria-label="고객센터 전화 1522-8508, 평일 09시부터 15시">
+            <a class="as-tel" href="tel:1522-8508" tabindex="-1" aria-disabled="true" aria-label="고객센터 전화 1522-8508, 평일 09시부터 15시 (현재 A/S 접수 점검 중)">
               <strong>1522-8508</strong>
               <span>전화 접수 · 평일 09:00–15:00 · 주말·공휴일 휴무</span>
             </a>
-            <a class="as-talk" href="https://smartstore.naver.com/skillfulbrother" target="_blank" rel="noopener">네이버 스토어 톡톡으로 접수하기 <span aria-hidden="true">↗</span></a>
+            <a class="as-talk" href="https://talk.naver.com/ct/w44cu1?frm=psf" target="_blank" rel="noopener" tabindex="-1" aria-disabled="true">네이버 톡톡으로 접수하기 <span aria-hidden="true">↗</span></a>
           </div>
         </div>
 
@@ -930,19 +947,19 @@
         <form class="as-form" id="as-form" novalidate>
           <div class="as-field">
             <label for="as-model">제품 모델명</label>
-            <input id="as-model" name="model" list="as-models" placeholder="예) BVC-H10 (제품 이름도 괜찮아요)" autocomplete="off" maxlength="80">
+            <input id="as-model" name="model" list="as-models" placeholder="예) BVC-H10 (제품 이름도 괜찮아요)" autocomplete="off" maxlength="80" disabled>
             <datalist id="as-models"><!-- 옵션은 상품 그리드에서 자동 생성(페이지 하단 스크립트) — 하드코딩 금지 --></datalist>
           </div>
           <div class="as-field">
             <label for="as-symptom">증상<span class="req">필수</span></label>
-            <textarea id="as-symptom" name="symptom" rows="3" placeholder="예) 충전기를 꽂아도 램프가 켜지지 않아요" maxlength="1000" required></textarea>
+            <textarea id="as-symptom" name="symptom" rows="3" placeholder="예) 충전기를 꽂아도 램프가 켜지지 않아요" maxlength="1000" required disabled></textarea>
           </div>
           <div class="as-field">
             <label for="as-phone">연락처<span class="req">필수</span></label>
-            <input id="as-phone" name="phone" type="tel" inputmode="tel" placeholder="010-0000-0000" maxlength="20" autocomplete="off" required>
+            <input id="as-phone" name="phone" type="tel" inputmode="tel" placeholder="010-0000-0000" maxlength="20" autocomplete="off" required disabled>
           </div>
           <p class="as-msg" id="as-msg" role="alert"></p>
-          <button class="as-submit" type="submit">A/S 접수하기</button>
+          <button class="as-submit" type="submit" disabled>A/S 접수 점검 중</button>
           <p class="as-note">남겨주신 정보는 A/S 상담 용도로만 사용합니다.</p>
         </form>
         </details>
@@ -958,24 +975,24 @@
         <div>
           <span class="section-eyebrow">Find your product</span>
           <h2 class="section-title" id="finder-title">상품 찾기</h2>
-          <p class="section-desc">쓰고 계신 제품을 고르면 설명서·부품·FAQ로 바로 이동합니다.</p>
+          <p class="section-desc">쓰시는 제품을 모델명으로 고르면 설명서·부품·FAQ를 바로 확인할 수 있어요.</p>
         </div>
       </div>
 
       <div class="brand-tabs" role="group" aria-label="카테고리 필터">
         <button class="brand-tab is-active" type="button" data-cat="all" aria-pressed="true">전체 <span class="lat">31</span></button>
-        <button class="brand-tab" type="button" data-cat="wireless" data-label="무선 청소기" aria-pressed="false">무선 청소기 <span class="lat">7</span></button>
-        <button class="brand-tab" type="button" data-cat="wetdry" data-label="건습식·유선 청소기" aria-pressed="false">건습식·유선 청소기 <span class="lat">3</span></button>
+        <button class="brand-tab" type="button" data-cat="wireless" data-label="무선청소기" aria-pressed="false">무선청소기 <span class="lat">7</span></button>
+        <button class="brand-tab" type="button" data-cat="wetdry" data-label="유선청소기" aria-pressed="false">유선청소기 <span class="lat">3</span></button>
         <button class="brand-tab" type="button" data-cat="fan" data-label="선풍기" aria-pressed="false">선풍기 <span class="lat">9</span></button>
         <button class="brand-tab" type="button" data-cat="heat" data-label="히터·온풍기" aria-pressed="false">히터·온풍기 <span class="lat">5</span></button>
         <button class="brand-tab" type="button" data-cat="dehum" data-label="제습기" aria-pressed="false">제습기 <span class="lat">2</span></button>
-        <button class="brand-tab" type="button" data-cat="living" data-label="주방·생활" aria-pressed="false">주방·생활 <span class="lat">5</span></button>
+        <button class="brand-tab" type="button" data-cat="living" data-label="주방 가전" aria-pressed="false">주방 가전 <span class="lat">5</span></button>
       </div>
 
       <div class="product-list" id="product-list">
 
         <div class="group-row" data-cat="wireless">
-          <h3 class="group-title">무선 청소기</h3><span class="group-count">7개</span>
+          <h3 class="group-title">무선청소기</h3><span class="group-count">7개</span>
         </div>
 
         <div class="product-row" data-cat="wireless">
@@ -984,9 +1001,9 @@
             <img src="https://shop-phinf.pstatic.net/20220804_20/1659593373393NR2Nm_JPEG/60729269121296021_228981064.jpg?type=f200" alt="" loading="lazy" decoding="async" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:9px" onerror="this.remove()">
           </span>
           <span class="p-main">
-            <span class="p-brand">무선 청소기</span>
-            <a class="p-name" href="products/bvc-h10.html">클래파 미니 핸디형 무선청소기</a>
-            <span class="p-model">BVC-H10 · CVC-H15</span>
+            <span class="p-brand">무선청소기</span>
+            <a class="p-name" href="products/bvc-h10.html">BVC-H10 · CVC-H15</a>
+            <span class="p-model">클래파 미니 핸디형 무선청소기</span>
           </span>
           <span class="quicklinks">
             <a class="qlink" href="manuals/BVC-H10.pdf" target="_blank" rel="noopener"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><path d="M4 2h5l3 3v9H4z"/><path d="M9 2v3h3"/></svg>설명서</a>
@@ -1002,9 +1019,9 @@
             <img src="https://shop-phinf.pstatic.net/20250912_85/1757642121575jVkFJ_JPEG/91775064701409514_690877959.jpg?type=f200" alt="" loading="lazy" decoding="async" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:9px" onerror="this.remove()">
           </span>
           <span class="p-main">
-            <span class="p-brand">무선 청소기</span>
-            <a class="p-name" href="products/bvc-s185.html">클래파 스탠딩 슬림 무선 청소기</a>
-            <span class="p-model">BVC-S185 · CVC-S230</span>
+            <span class="p-brand">무선청소기</span>
+            <a class="p-name" href="products/bvc-s185.html">BVC-S185 · CVC-S230</a>
+            <span class="p-model">클래파 스탠딩 슬림 무선 청소기</span>
           </span>
           <span class="quicklinks">
             <a class="qlink" href="manuals/BVC-S185.pdf" target="_blank" rel="noopener"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><path d="M4 2h5l3 3v9H4z"/><path d="M9 2v3h3"/></svg>설명서</a>
@@ -1020,9 +1037,9 @@
             <img src="https://shop-phinf.pstatic.net/20251125_160/1764062144930WLV3M_JPEG/98195101180211813_490687712.jpg?type=f200" alt="" loading="lazy" decoding="async" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:9px" onerror="this.remove()">
           </span>
           <span class="p-main">
-            <span class="p-brand">무선 청소기</span>
-            <a class="p-name" href="products/bvc-h38.html">클래파 AI 흡입 무선 청소기 400W</a>
-            <span class="p-model">BVC-H38</span>
+            <span class="p-brand">무선청소기</span>
+            <a class="p-name" href="products/bvc-h38.html">BVC-H38</a>
+            <span class="p-model">클래파 AI 흡입 무선 청소기 400W</span>
           </span>
           <span class="quicklinks">
             <a class="qlink" href="manuals/BVC-H38.pdf" target="_blank" rel="noopener"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><path d="M4 2h5l3 3v9H4z"/><path d="M9 2v3h3"/></svg>설명서</a>
@@ -1038,9 +1055,9 @@
             <img src="https://shop-phinf.pstatic.net/20241206_14/1733475057527oQilm_JPEG/46719549352790734_1657445480.jpg?type=f200" alt="" loading="lazy" decoding="async" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:9px" onerror="this.remove()">
           </span>
           <span class="p-main">
-            <span class="p-brand">무선 청소기</span>
-            <a class="p-name" href="products/bvc-t500w.html">클래파 엘리트 타워 무선청소기</a>
-            <span class="p-model">BVC-T500W</span>
+            <span class="p-brand">무선청소기</span>
+            <a class="p-name" href="products/bvc-t500w.html">BVC-T500W</a>
+            <span class="p-model">클래파 엘리트 타워 무선청소기</span>
           </span>
           <span class="quicklinks">
             <a class="qlink" href="manuals/BVC-T500W.pdf" target="_blank" rel="noopener"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><path d="M4 2h5l3 3v9H4z"/><path d="M9 2v3h3"/></svg>설명서</a>
@@ -1056,9 +1073,9 @@
             <img src="https://shop-phinf.pstatic.net/20250403_130/1743668425353miVMX_JPEG/6656656487534632_1967190543.jpg?type=f200" alt="" loading="lazy" decoding="async" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:9px" onerror="this.remove()">
           </span>
           <span class="p-main">
-            <span class="p-brand">무선 청소기</span>
-            <a class="p-name" href="products/bvc-c13k.html">클래파 차량용 무선 청소기</a>
-            <span class="p-model">BVC-C13K</span>
+            <span class="p-brand">무선청소기</span>
+            <a class="p-name" href="products/bvc-c13k.html">BVC-C13K</a>
+            <span class="p-model">클래파 차량용 무선 청소기</span>
           </span>
           <span class="quicklinks">
             <a class="qlink" href="manuals/BVC-C13K.pdf" target="_blank" rel="noopener"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><path d="M4 2h5l3 3v9H4z"/><path d="M9 2v3h3"/></svg>설명서</a>
@@ -1075,9 +1092,9 @@
             <img src="assets/thumbs/BFB-VC120.jpg" alt="" loading="lazy" decoding="async" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:9px" onerror="this.remove()">
           </span>
           <span class="p-main">
-            <span class="p-brand">무선 청소기</span>
-            <a class="p-name" href="products/bfb-vc120.html">클래파 싸이클론 무선 청소기</a>
-            <span class="p-model">BFB-VC120</span>
+            <span class="p-brand">무선청소기</span>
+            <a class="p-name" href="products/bfb-vc120.html">BFB-VC120</a>
+            <span class="p-model">클래파 싸이클론 무선 청소기</span>
           </span>
           <span class="quicklinks">
             <a class="qlink" href="manuals/BFB-VC120.pdf" target="_blank" rel="noopener"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><path d="M4 2h5l3 3v9H4z"/><path d="M9 2v3h3"/></svg>설명서</a>
@@ -1093,9 +1110,9 @@
             <img src="assets/thumbs/BFB-VC170.jpg" alt="" loading="lazy" decoding="async" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:9px" onerror="this.remove()">
           </span>
           <span class="p-main">
-            <span class="p-brand">무선 청소기</span>
-            <a class="p-name" href="products/bfb-vc170.html">클래파 2in1 물걸레 무선청소기</a>
-            <span class="p-model">BFB-VC170 · BFB-VC160</span>
+            <span class="p-brand">무선청소기</span>
+            <a class="p-name" href="products/bfb-vc170.html">BFB-VC170 · BFB-VC160</a>
+            <span class="p-model">클래파 2in1 물걸레 무선청소기</span>
           </span>
           <span class="quicklinks">
             <a class="qlink" href="manuals/BFB-VC170.pdf" target="_blank" rel="noopener"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><path d="M4 2h5l3 3v9H4z"/><path d="M9 2v3h3"/></svg>설명서</a>
@@ -1105,7 +1122,7 @@
         </div>
 
         <div class="group-row" data-cat="wetdry">
-          <h3 class="group-title">건습식·유선 청소기</h3><span class="group-count">3개</span>
+          <h3 class="group-title">유선청소기</h3><span class="group-count">3개</span>
                 </div>
 
         <div class="product-row" data-cat="wetdry">
@@ -1114,9 +1131,9 @@
             <img src="https://shop-phinf.pstatic.net/20260520_187/1779256803783BlJ2W_JPEG/10271422372873445_542465911.jpg?type=f200" alt="" loading="lazy" decoding="async" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:9px" onerror="this.remove()">
           </span>
           <span class="p-main">
-            <span class="p-brand">건습식·유선 청소기</span>
-            <a class="p-name" href="products/bvc-l138.html">클래파 대용량 30L 건습식 청소기</a>
-            <span class="p-model">BVC-L138</span>
+            <span class="p-brand">유선청소기</span>
+            <a class="p-name" href="products/bvc-l138.html">BVC-L138</a>
+            <span class="p-model">클래파 대용량 30L 건습식 청소기</span>
           </span>
           <span class="quicklinks">
             <a class="qlink" href="manuals/BVC-L138.pdf" target="_blank" rel="noopener"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><path d="M4 2h5l3 3v9H4z"/><path d="M9 2v3h3"/></svg>설명서</a>
@@ -1133,9 +1150,9 @@
             <img src="assets/thumbs/BVC-L125.jpg" alt="" loading="lazy" decoding="async" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:9px" onerror="this.remove()">
           </span>
           <span class="p-main">
-            <span class="p-brand">건습식·유선 청소기</span>
-            <a class="p-name" href="products/bvc-l125.html">클래파 대용량 25L 건습식 청소기</a>
-            <span class="p-model">BVC-L125</span>
+            <span class="p-brand">유선청소기</span>
+            <a class="p-name" href="products/bvc-l125.html">BVC-L125</a>
+            <span class="p-model">클래파 대용량 25L 건습식 청소기</span>
           </span>
           <span class="quicklinks">
             <a class="qlink" href="manuals/BVC-L125.pdf" target="_blank" rel="noopener"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><path d="M4 2h5l3 3v9H4z"/><path d="M9 2v3h3"/></svg>설명서</a>
@@ -1152,9 +1169,9 @@
             <img src="assets/thumbs/IB-VC0601.jpg" alt="" loading="lazy" decoding="async" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:9px" onerror="this.remove()">
           </span>
           <span class="p-main">
-            <span class="p-brand">건습식·유선 청소기</span>
-            <a class="p-name" href="products/ib-vc0601.html">클래파 유선 진공청소기</a>
-            <span class="p-model">IB-VC0601</span>
+            <span class="p-brand">유선청소기</span>
+            <a class="p-name" href="products/ib-vc0601.html">IB-VC0601</a>
+            <span class="p-model">클래파 유선 진공청소기</span>
           </span>
           <span class="quicklinks">
             <a class="qlink" href="manuals/IB-VC0601.pdf" target="_blank" rel="noopener"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><path d="M4 2h5l3 3v9H4z"/><path d="M9 2v3h3"/></svg>설명서</a>
@@ -1175,8 +1192,8 @@
           </span>
           <span class="p-main">
             <span class="p-brand">선풍기</span>
-            <a class="p-name" href="products/bef-c156w.html">클래파 멀티 무선 선풍기</a>
-            <span class="p-model">BEF-C156W</span>
+            <a class="p-name" href="products/bef-c156w.html">BEF-C156W</a>
+            <span class="p-model">클래파 멀티 무선 선풍기</span>
           </span>
           <span class="quicklinks">
             <a class="qlink" href="manuals/BEF-C156W.pdf" target="_blank" rel="noopener"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><path d="M4 2h5l3 3v9H4z"/><path d="M9 2v3h3"/></svg>설명서</a>
@@ -1193,8 +1210,8 @@
           </span>
           <span class="p-main">
             <span class="p-brand">선풍기</span>
-            <a class="p-name" href="products/bef-d400.html">클래파 탁상용 무선 선풍기</a>
-            <span class="p-model">BEF-D400W · BEF-D400M · BEF-D400B</span>
+            <a class="p-name" href="products/bef-d400.html">BEF-D400W · BEF-D400M · BEF-D400B</a>
+            <span class="p-model">클래파 탁상용 무선 선풍기</span>
           </span>
           <span class="quicklinks">
             <a class="qlink" href="manuals/BEF-D400.pdf" target="_blank" rel="noopener"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><path d="M4 2h5l3 3v9H4z"/><path d="M9 2v3h3"/></svg>설명서</a>
@@ -1210,8 +1227,8 @@
           </span>
           <span class="p-main">
             <span class="p-brand">선풍기</span>
-            <a class="p-name" href="products/bhf-360w.html">클래파 냉각 휴대용 선풍기</a>
-            <span class="p-model">BHF-360W</span>
+            <a class="p-name" href="products/bhf-360w.html">BHF-360W</a>
+            <span class="p-model">클래파 냉각 휴대용 선풍기</span>
           </span>
           <span class="quicklinks">
             <a class="qlink" href="manuals/BHF-360W.pdf" target="_blank" rel="noopener"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><path d="M4 2h5l3 3v9H4z"/><path d="M9 2v3h3"/></svg>설명서</a>
@@ -1227,8 +1244,8 @@
           </span>
           <span class="p-main">
             <span class="p-brand">선풍기</span>
-            <a class="p-name" href="products/bhf-8000w.html">클래파 보조배터리 겸용 핸디 에어건</a>
-            <span class="p-model">BHF-8000W · BHF-8000KK</span>
+            <a class="p-name" href="products/bhf-8000w.html">BHF-8000W · BHF-8000KK</a>
+            <span class="p-model">클래파 보조배터리 겸용 핸디 에어건</span>
           </span>
           <span class="quicklinks">
             <a class="qlink" href="manuals/BHF-8000W.pdf" target="_blank" rel="noopener"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><path d="M4 2h5l3 3v9H4z"/><path d="M9 2v3h3"/></svg>설명서</a>
@@ -1245,8 +1262,8 @@
           </span>
           <span class="p-main">
             <span class="p-brand">선풍기</span>
-            <a class="p-name" href="products/bfb-sf500.html">클래파 6인치 프리미엄 터치형 무선선풍기</a>
-            <span class="p-model">BFB-SF500</span>
+            <a class="p-name" href="products/bfb-sf500.html">BFB-SF500</a>
+            <span class="p-model">클래파 6인치 프리미엄 터치형 무선선풍기</span>
           </span>
           <span class="quicklinks">
             <a class="qlink" href="manuals/BFB-SF500_BFB-SF500E.pdf" target="_blank" rel="noopener"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><path d="M4 2h5l3 3v9H4z"/><path d="M9 2v3h3"/></svg>설명서</a>
@@ -1261,8 +1278,8 @@
           </span>
           <span class="p-main">
             <span class="p-brand">선풍기</span>
-            <a class="p-name" href="products/bfb-sf500e.html">클래파 6인치 프리미엄 회전형 무선선풍기</a>
-            <span class="p-model">BFB-SF500E</span>
+            <a class="p-name" href="products/bfb-sf500e.html">BFB-SF500E</a>
+            <span class="p-model">클래파 6인치 프리미엄 회전형 무선선풍기</span>
           </span>
           <span class="quicklinks">
             <a class="qlink" href="manuals/BFB-SF500_BFB-SF500E.pdf" target="_blank" rel="noopener"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><path d="M4 2h5l3 3v9H4z"/><path d="M9 2v3h3"/></svg>설명서</a>
@@ -1277,8 +1294,8 @@
           </span>
           <span class="p-main">
             <span class="p-brand">선풍기</span>
-            <a class="p-name" href="products/bfb-hf5200w.html">클래파 휴대용 대용량 선풍기</a>
-            <span class="p-model">BFB-HF5200W</span>
+            <a class="p-name" href="products/bfb-hf5200w.html">BFB-HF5200W</a>
+            <span class="p-model">클래파 휴대용 대용량 선풍기</span>
           </span>
           <span class="quicklinks">
             <a class="qlink" href="manuals/BFB-HF5200W.pdf" target="_blank" rel="noopener"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><path d="M4 2h5l3 3v9H4z"/><path d="M9 2v3h3"/></svg>설명서</a>
@@ -1293,8 +1310,8 @@
           </span>
           <span class="p-main">
             <span class="p-brand">선풍기</span>
-            <a class="p-name" href="products/bfb-hf2601w.html">클래파 보조배터리 겸용 휴대용 선풍기</a>
-            <span class="p-model">BFB-HF2601W</span>
+            <a class="p-name" href="products/bfb-hf2601w.html">BFB-HF2601W</a>
+            <span class="p-model">클래파 보조배터리 겸용 휴대용 선풍기</span>
           </span>
           <span class="quicklinks">
             <a class="qlink" href="manuals/BFB-HF2601W.pdf" target="_blank" rel="noopener"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><path d="M4 2h5l3 3v9H4z"/><path d="M9 2v3h3"/></svg>설명서</a>
@@ -1309,9 +1326,9 @@
             <img src="assets/thumbs/BFB-CF0802RW.jpg" alt="" loading="lazy" decoding="async" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:9px" onerror="this.remove()">
           </span>
           <span class="p-main">
-            <span class="p-brand">써큘레이터</span>
-            <a class="p-name" href="products/bfb-cf0802rw.html">클래파 8인치 3D 써큘레이터</a>
-            <span class="p-model">BFB-CF0802RW · CCF-30BL</span>
+            <span class="p-brand">선풍기</span>
+            <a class="p-name" href="products/bfb-cf0802rw.html">BFB-CF0802RW · CCF-30BL</a>
+            <span class="p-model">클래파 8인치 3D 써큘레이터</span>
           </span>
           <span class="quicklinks">
             <a class="qlink" href="manuals/BFB-CF0802RW_CCF-30BL.pdf" target="_blank" rel="noopener"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><path d="M4 2h5l3 3v9H4z"/><path d="M9 2v3h3"/></svg>설명서</a>
@@ -1330,8 +1347,8 @@
           </span>
           <span class="p-main">
             <span class="p-brand">히터·온풍기</span>
-            <a class="p-name" href="products/bmh-200r.html">클래파 마이카 컨벡션 히터</a>
-            <span class="p-model">BMH-200R</span>
+            <a class="p-name" href="products/bmh-200r.html">BMH-200R</a>
+            <span class="p-model">클래파 마이카 컨벡션 히터</span>
           </span>
           <span class="quicklinks">
             <a class="qlink" href="manuals/BMH-200R.pdf" target="_blank" rel="noopener"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><path d="M4 2h5l3 3v9H4z"/><path d="M9 2v3h3"/></svg>설명서</a>
@@ -1347,8 +1364,8 @@
           </span>
           <span class="p-main">
             <span class="p-brand">히터·온풍기</span>
-            <a class="p-name" href="products/bhh-2000s.html">클래파 하이라이트 전기 히터</a>
-            <span class="p-model">BHH-2000S</span>
+            <a class="p-name" href="products/bhh-2000s.html">BHH-2000S</a>
+            <span class="p-model">클래파 하이라이트 전기 히터</span>
           </span>
           <span class="quicklinks">
             <a class="qlink" href="manuals/BHH-2000S.pdf" target="_blank" rel="noopener"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><path d="M4 2h5l3 3v9H4z"/><path d="M9 2v3h3"/></svg>설명서</a>
@@ -1364,8 +1381,8 @@
           </span>
           <span class="p-main">
             <span class="p-brand">히터·온풍기</span>
-            <a class="p-name" href="products/bph-w181.html">클래파 욕실 난방기</a>
-            <span class="p-model">BPH-W181 · CPH-W181G</span>
+            <a class="p-name" href="products/bph-w181.html">BPH-W181 · CPH-W181G</a>
+            <span class="p-model">클래파 욕실 난방기</span>
           </span>
           <span class="quicklinks">
             <a class="qlink" href="manuals/BPH-W181.pdf" target="_blank" rel="noopener"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><path d="M4 2h5l3 3v9H4z"/><path d="M9 2v3h3"/></svg>설명서</a>
@@ -1381,8 +1398,8 @@
           </span>
           <span class="p-main">
             <span class="p-brand">히터·온풍기</span>
-            <a class="p-name" href="products/boh-235.html">클래파 카본 오방난로</a>
-            <span class="p-model">BOH-235</span>
+            <a class="p-name" href="products/boh-235.html">BOH-235</a>
+            <span class="p-model">클래파 카본 오방난로</span>
           </span>
           <span class="quicklinks">
             <a class="qlink" href="manuals/BOH-235.pdf" target="_blank" rel="noopener"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><path d="M4 2h5l3 3v9H4z"/><path d="M9 2v3h3"/></svg>설명서</a>
@@ -1398,8 +1415,8 @@
           </span>
           <span class="p-main">
             <span class="p-brand">히터·온풍기</span>
-            <a class="p-name" href="products/bfb-ph180w.html">클래파 프리미엄 ECO PTC 온풍기</a>
-            <span class="p-model">BFB-PH180W</span>
+            <a class="p-name" href="products/bfb-ph180w.html">BFB-PH180W</a>
+            <span class="p-model">클래파 프리미엄 ECO PTC 온풍기</span>
           </span>
           <span class="quicklinks">
             <a class="qlink" href="manuals/BFB-PH180W.pdf" target="_blank" rel="noopener"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><path d="M4 2h5l3 3v9H4z"/><path d="M9 2v3h3"/></svg>설명서</a>
@@ -1419,8 +1436,8 @@
           </span>
           <span class="p-main">
             <span class="p-brand">제습기</span>
-            <a class="p-name" href="products/bed-611l.html">클래파 저소음 제습기 11L</a>
-            <span class="p-model">BED-611L · CED-L611</span>
+            <a class="p-name" href="products/bed-611l.html">BED-611L · CED-L611</a>
+            <span class="p-model">클래파 저소음 제습기 11L</span>
           </span>
           <span class="quicklinks">
             <a class="qlink" href="manuals/BED-611L_CED-L611.pdf" target="_blank" rel="noopener"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><path d="M4 2h5l3 3v9H4z"/><path d="M9 2v3h3"/></svg>설명서</a>
@@ -1436,8 +1453,8 @@
           </span>
           <span class="p-main">
             <span class="p-brand">제습기</span>
-            <a class="p-name" href="products/bmd-656.html">클래파 미니 제습기</a>
-            <span class="p-model">BMD-656</span>
+            <a class="p-name" href="products/bmd-656.html">BMD-656</a>
+            <span class="p-model">클래파 미니 제습기</span>
           </span>
           <span class="quicklinks">
             <a class="qlink" href="manuals/BMD-656.pdf" target="_blank" rel="noopener"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><path d="M4 2h5l3 3v9H4z"/><path d="M9 2v3h3"/></svg>설명서</a>
@@ -1447,7 +1464,7 @@
         </div>
 
         <div class="group-row" data-cat="living">
-          <h3 class="group-title">주방·생활</h3><span class="group-count">5개</span>
+          <h3 class="group-title">주방 가전</h3><span class="group-count">5개</span>
         </div>
 
         <div class="product-row" data-cat="living">
@@ -1456,9 +1473,9 @@
             <img src="https://shop-phinf.pstatic.net/20250401_203/1743483581250FAB5g_PNG/71071015169634780_52351296.png?type=f200" alt="" loading="lazy" decoding="async" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:9px" onerror="this.remove()">
           </span>
           <span class="p-main">
-            <span class="p-brand">주방·생활</span>
-            <a class="p-name" href="products/bes-131w.html">클래파 스테인리스 2단 계란찜기</a>
-            <span class="p-model">BES-131W · CES-232W</span>
+            <span class="p-brand">주방 가전</span>
+            <a class="p-name" href="products/bes-131w.html">BES-131W · CES-232W</a>
+            <span class="p-model">클래파 스테인리스 2단 계란찜기</span>
           </span>
           <span class="quicklinks">
             <a class="qlink" href="manuals/BES-131W_CES-232W.pdf" target="_blank" rel="noopener"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><path d="M4 2h5l3 3v9H4z"/><path d="M9 2v3h3"/></svg>설명서</a>
@@ -1473,9 +1490,9 @@
             <img src="https://shop-phinf.pstatic.net/20250203_31/1738557907884KTwkH_JPEG/51937889724296347_1399309729.jpg?type=f200" alt="" loading="lazy" decoding="async" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:9px" onerror="this.remove()">
           </span>
           <span class="p-main">
-            <span class="p-brand">주방·생활</span>
-            <a class="p-name" href="products/cek-s220.html">클래파 분리형 프리볼트 멀티포트</a>
-            <span class="p-model">BEK-120P · CEK-S220</span>
+            <span class="p-brand">주방 가전</span>
+            <a class="p-name" href="products/cek-s220.html">BEK-120P · CEK-S220</a>
+            <span class="p-model">클래파 분리형 프리볼트 멀티포트</span>
           </span>
           <span class="quicklinks">
             <a class="qlink" href="manuals/CEK-S220_BEK-120P.pdf" target="_blank" rel="noopener"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><path d="M4 2h5l3 3v9H4z"/><path d="M9 2v3h3"/></svg>설명서</a>
@@ -1490,9 +1507,9 @@
             <img src="https://shop-phinf.pstatic.net/20230816_199/16921709910693YukK_JPEG/19001222603202836_96037042.jpg?type=f200" alt="" loading="lazy" decoding="async" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:9px" onerror="this.remove()">
           </span>
           <span class="p-main">
-            <span class="p-brand">주방·생활</span>
-            <a class="p-name" href="products/byf-g18.html">클래파 대용량 그릭요거트 메이커</a>
-            <span class="p-model">BYF-G18</span>
+            <span class="p-brand">주방 가전</span>
+            <a class="p-name" href="products/byf-g18.html">BYF-G18</a>
+            <span class="p-model">클래파 대용량 그릭요거트 메이커</span>
           </span>
           <span class="quicklinks">
             <a class="qlink" href="manuals/BYF-G18.pdf" target="_blank" rel="noopener"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><path d="M4 2h5l3 3v9H4z"/><path d="M9 2v3h3"/></svg>설명서</a>
@@ -1508,9 +1525,9 @@
             <img src="https://shop-phinf.pstatic.net/20250203_4/17385685862379nntj_JPEG/85533841023782884_972098572.jpg?type=f200" alt="" loading="lazy" decoding="async" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:9px" onerror="this.remove()">
           </span>
           <span class="p-main">
-            <span class="p-brand">주방·생활</span>
-            <a class="p-name" href="products/bwf-200t.html">클래파 휴대용 구강세정기</a>
-            <span class="p-model">BWF-200T</span>
+            <span class="p-brand">주방 가전</span>
+            <a class="p-name" href="products/bwf-200t.html">BWF-200T</a>
+            <span class="p-model">클래파 휴대용 구강세정기</span>
           </span>
           <span class="quicklinks">
             <a class="qlink" href="manuals/BWF-200T.pdf" target="_blank" rel="noopener"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><path d="M4 2h5l3 3v9H4z"/><path d="M9 2v3h3"/></svg>설명서</a>
@@ -1525,9 +1542,9 @@
             <img src="https://shop-phinf.pstatic.net/20240115_98/1705297379536I7Rp3_JPEG/106433159251355969_187046719.jpg?type=f200" alt="" loading="lazy" decoding="async" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:9px" onerror="this.remove()">
           </span>
           <span class="p-main">
-            <span class="p-brand">주방·생활</span>
-            <a class="p-name" href="products/brc-30w.html">클래파 미니밥솥</a>
-            <span class="p-model">BRC-30W</span>
+            <span class="p-brand">주방 가전</span>
+            <a class="p-name" href="products/brc-30w.html">BRC-30W</a>
+            <span class="p-model">클래파 미니밥솥</span>
           </span>
           <span class="quicklinks">
             <a class="qlink" href="manuals/BRC-30W.pdf" target="_blank" rel="noopener"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><path d="M4 2h5l3 3v9H4z"/><path d="M9 2v3h3"/></svg>설명서</a>
@@ -1660,7 +1677,7 @@
         <p class="foot-h">바로가기</p>
         <div class="foot-brandrow">
           <a class="foot-brand" href="https://clapa.kr" target="_blank" rel="noopener">클래파 공식몰 <span class="lat" aria-hidden="true">↗</span></a>
-          <a class="foot-brand" href="tel:1522-8508">A/S 신청 1522-8508</a>
+          <span class="foot-brand" aria-disabled="true" style="opacity:.5;pointer-events:none;cursor:default;">A/S 접수 점검 중</span>
           <a class="foot-brand" href="#finder-title">설명서 다운로드</a>
           <a class="foot-brand" href="warranty.html">보증·교환/반품 안내</a>
         </div>
@@ -1714,7 +1731,7 @@
       var thEl = r.querySelector('[data-thumb]');
       var code = thEl ? (thEl.getAttribute('data-thumb') || '').trim() : '';
       if(!code || asSeen[code]) return; asSeen[code] = 1;
-      var nmEl = r.querySelector('.p-name');
+      var nmEl = r.querySelector('.p-model');  // 모델명 대표 스왑 후 제품명은 .p-model — 자동완성 라벨은 제품명으로
       var nm = nmEl ? nmEl.textContent.trim() : '';
       var o = document.createElement('option');
       o.value = code; if(nm) o.textContent = nm;
@@ -1764,6 +1781,11 @@
 (function(){
   var form = document.getElementById('as-form');
   if(!form) return;
+  // A/S 점검 중이면(.as-band.is-paused) 폼을 완전히 비활성화하고 접수 로직을 걸지 않는다.
+  if(document.querySelector('.as-band.is-paused')){
+    Array.prototype.forEach.call(form.querySelectorAll('input,textarea,button,select'), function(el){ el.disabled = true; });
+    return;
+  }
   var btn = form.querySelector('.as-submit');
   var msg = document.getElementById('as-msg');
   var PHONE_GUIDE = '지금은 온라인 접수가 어려워요. 전화 1522-8508(평일 09:00–15:00)로 접수 부탁드립니다.';
@@ -1894,7 +1916,7 @@
       .then(function(r){ if(!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
       .then(function(data){
         INDEX = data.map(function(it, i){
-          var hay = ((it.title || '') + ' ' + (it.k || '')).toLowerCase();
+          var hay = ((it.title || '') + ' ' + (it.sub || '') + ' ' + (it.k || '')).toLowerCase();
           return {
             t: it.t, title: it.title, sub: it.sub, url: it.url, img: it.img,
             hay: hay, hayNoHyphen: hay.replace(/-/g, ''), order: i

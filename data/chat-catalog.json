@@ -2,12 +2,12 @@
  "updated": "2026-07-12",
  "store": "https://smartstore.naver.com/skillfulbrother",
  "cats": {
-  "wireless": "무선 청소기",
-  "wetdry": "건습식·유선 청소기",
+  "wireless": "무선청소기",
+  "wetdry": "유선청소기",
   "fan": "선풍기",
   "heat": "히터·온풍기",
   "dehum": "제습기",
-  "living": "주방·생활"
+  "living": "주방 가전"
  },
  "models": [
   {
