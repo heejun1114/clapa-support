@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>A/S 접수 조회 — CLAPA 고객지원센터</title>
+<meta name="description" content="클래파 A/S 접수 진행 상태를 접수번호와 연락처 뒷 4자리로 바로 확인하고, 담당자와 대화를 이어갈 수 있습니다.">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230E6F66'/%3E%3Cpath d='M42.5 41.5a13 13 0 1 1 0-19' fill='none' stroke='%23fff' stroke-width='7' stroke-linecap='round'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+  :root{
+    --paper:#FFFFFF;
+    --surface:#F5F4F1;
+    --sand:#EFE9E1;
+    --line:#E6E1D8;
+    --line-soft:#EDE9E1;
+    --ink:#23201B;
+    --muted:#6F675C;
+    --sil-d:#AAA294;
+    --glass:#E3DED4;
+    --teal:#0E6F66;
+    --teal-deep:#0A5750;
+    --teal-wash:#E4F0ED;
+    --radius:12px;
+    --maxw:1080px;
+    --ease:cubic-bezier(.22,.61,.36,1);
+  }
+  *{box-sizing:border-box;}
+  html{-webkit-text-size-adjust:100%;scroll-padding-top:72px;}
+  a,button,summary,.btn,.chat-fab{-webkit-tap-highlight-color:transparent;}
+  body{
+    margin:0;background:var(--paper);color:var(--ink);
+    font-family:'Pretendard Variable',Pretendard,-apple-system,'Apple SD Gothic Neo',sans-serif;
+    font-size:15px;line-height:1.6;letter-spacing:-0.011em;
+    -webkit-font-smoothing:antialiased;word-break:keep-all;
+  }
+  a{color:inherit;text-decoration:none;}
+  button{font:inherit;color:inherit;cursor:pointer;}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding-inline:clamp(18px,4vw,40px);}
+  .skip{position:absolute;left:-9999px;top:0;background:var(--teal);color:#fff;padding:8px 14px;border-radius:8px;z-index:100;}
+  .skip:focus{left:12px;top:12px;}
+  :focus-visible{outline:2px solid var(--teal);outline-offset:2px;border-radius:3px;}
+
+  .site-header{
+    position:sticky;top:0;z-index:40;
+    background:rgba(255,255,255,.86);
+    backdrop-filter:saturate(180%) blur(10px);
+    border-bottom:1px solid var(--line);
+  }
+  .header-inner{display:flex;align-items:center;justify-content:space-between;gap:18px;height:60px;}
+  .wordmark{display:inline-flex;align-items:baseline;gap:8px;font-weight:700;font-size:16.5px;letter-spacing:-0.02em;}
+  .wordmark .mark-a{color:var(--ink);}
+  .wordmark .mark-b{
+    color:var(--teal);font-weight:600;font-size:13px;letter-spacing:0.06em;
+    padding:2px 7px;border:1px solid var(--teal-wash);border-radius:6px;
+    background:var(--teal-wash);transform:translateY(-1px);
+  }
+  .header-nav{display:flex;align-items:center;gap:6px;}
+  .nav-link{font-size:13.5px;font-weight:500;color:var(--muted);padding:8px 12px;border-radius:8px;}
+  .nav-link:hover{color:var(--ink);background:var(--surface);}
+  .nav-link.is-store{color:var(--teal-deep);font-weight:600;}
+  .nav-link.is-store .ext{font-size:12px;margin-left:3px;color:var(--teal);}
+  @media(max-width:480px){
+    .header-inner{gap:10px;min-width:0;}
+    .header-nav .nav-link:not(.is-store){display:none;}
+    .nav-link.is-store{font-size:12.5px;padding:8px 9px;}
+  }
+
+  .page-hero{padding-block:clamp(30px,5vw,52px) clamp(16px,3vw,26px);}
+  .eyebrow{display:inline-block;color:var(--teal-deep);font-size:12.5px;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:12px;}
+  h1{margin:0;font-size:clamp(24px,3.6vw,32px);line-height:1.2;font-weight:700;letter-spacing:-0.03em;}
+  .page-sub{margin:12px 0 0;color:var(--muted);font-size:15px;max-width:56ch;}
+
+  .section{padding-block:clamp(26px,4vw,42px);}
+
+  /* ---------- 조회 카드 ---------- */
+  .lookup-card{
+    max-width:560px;display:flex;flex-direction:column;gap:12px;
+    background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);
+    padding:clamp(18px,3vw,24px);
+  }
+  .as-field{display:flex;flex-direction:column;gap:6px;}
+  .as-field label{font-size:13px;font-weight:600;color:var(--ink);}
+  .as-field input{
+    font:inherit;font-size:16px;color:var(--ink);
+    background:var(--paper);border:1.5px solid var(--line);border-radius:10px;
+    padding:11px 13px;outline:none;width:100%;
+    transition:border-color .15s var(--ease);
+  }
+  .as-field input::placeholder{color:#9C948A;}
+  .as-field input:focus{border-color:var(--teal);}
+  .lk-msg{margin:0;padding:11px 13px;border-radius:10px;font-size:13.5px;line-height:1.55;background:#FAEFE9;color:#9A4B2E;border:1px solid #EFD8CC;}
+  .lk-btn{
+    min-height:48px;background:var(--teal);color:#fff;border:0;border-radius:10px;
+    padding:12px 20px;font-size:15px;font-weight:600;letter-spacing:-0.01em;
+    transition:background .16s var(--ease),opacity .16s var(--ease);
+  }
+  .lk-btn:hover{background:var(--teal-deep);}
+  .lk-btn:disabled{opacity:.6;cursor:default;}
+
+  /* ---------- 결과 카드 + 스테퍼 ---------- */
+  .status-card{
+    margin-top:22px;max-width:560px;
+    border:1px solid var(--line);border-radius:var(--radius);background:var(--paper);
+    padding:clamp(18px,3vw,24px);display:flex;flex-direction:column;gap:14px;
+  }
+  .st-head{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+  .st-id{font-weight:700;font-variant-numeric:tabular-nums;color:var(--teal-deep);font-size:16px;}
+  .st-badge{font-size:12px;font-weight:700;border-radius:999px;padding:4px 11px;}
+  .st-badge.is-cancel{background:#FAEFE9;color:#9A4B2E;border:1px solid #EFD8CC;}
+  .st-badge.is-hold{background:#FBF3E2;color:#7A5A17;border:1px solid #EBDCB9;}
+  .stepper{display:flex;align-items:center;gap:0;padding:2px 0;}
+  .stp{display:flex;align-items:center;gap:6px;font-size:13px;font-weight:600;letter-spacing:-0.01em;color:var(--muted);}
+  .stp::before{content:'';width:10px;height:10px;border-radius:50%;background:#D9D2C7;flex:none;}
+  .stp.is-done{color:var(--teal-deep);}
+  .stp.is-done::before{background:var(--teal);}
+  .stp.is-now{color:var(--teal-deep);}
+  .stp.is-now::before{background:var(--teal);box-shadow:0 0 0 3px rgba(14,111,102,.18);}
+  .stp-bar{width:22px;height:2px;background:#E4DED4;margin:0 7px;flex:none;}
+  .stp-bar.is-done{background:var(--teal);}
+  .st-flag-note{margin:0;color:var(--muted);font-size:13.5px;line-height:1.6;}
+  .st-meta{display:flex;gap:18px;flex-wrap:wrap;margin:0;font-size:13px;color:var(--muted);}
+  .st-meta div{display:flex;gap:6px;}
+  .st-meta dt{font-weight:600;}
+  .st-meta dd{margin:0;font-variant-numeric:tabular-nums;}
+
+  /* ---------- 상시 대안(전화·톡톡) ---------- */
+  .cta-band{
+    margin-block:clamp(26px,4vw,42px);max-width:560px;
+    background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);
+    padding:clamp(18px,3vw,26px);
+    display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap;
+  }
+  .cta-band p{margin:0;font-size:14.5px;color:var(--muted);}
+  .cta-band .tel{font-size:20px;font-weight:700;color:var(--ink);letter-spacing:-0.02em;}
+  .cta-actions{display:flex;gap:9px;flex-wrap:wrap;}
+  .btn{
+    display:inline-flex;align-items:center;justify-content:center;gap:6px;
+    min-height:44px;padding:12px 20px;border-radius:10px;
+    font-size:14.5px;font-weight:600;letter-spacing:-0.01em;
+    border:1.5px solid var(--line);background:var(--paper);color:var(--ink);
+    transition:border-color .15s var(--ease),background .15s var(--ease),color .15s var(--ease);
+  }
+  .btn:hover{border-color:var(--teal);color:var(--teal-deep);background:var(--teal-wash);}
+
+  .site-footer{
+    background:#F1EEE8;border-top:1px solid var(--line);
+    padding-block:clamp(34px,5vw,52px);margin-top:8px;
+  }
+  .footer-top{
+    display:flex;flex-wrap:wrap;justify-content:space-between;gap:28px 40px;
+    padding-bottom:26px;border-bottom:1px solid var(--line);
+  }
+  .foot-contact .foot-h{font-size:12px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;}
+  .foot-tel{font-size:22px;font-weight:700;letter-spacing:-0.02em;font-variant-numeric:tabular-nums;color:var(--ink);}
+  .foot-hours{font-size:13px;color:var(--muted);margin-top:5px;}
+  .foot-hours .off{color:var(--sil-d);}
+  .foot-brands{display:flex;flex-direction:column;gap:9px;}
+  .foot-brands .foot-h{font-size:12px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);margin-bottom:2px;}
+  .foot-brandrow{display:flex;flex-wrap:wrap;gap:8px 10px;}
+  .foot-brand{
+    display:inline-flex;align-items:baseline;gap:6px;
+    font-size:13.5px;font-weight:500;color:var(--ink);
+    padding:5px 0;transition:color .14s var(--ease);
+  }
+  .foot-brand .lat{font-size:11px;color:var(--muted);letter-spacing:0.04em;}
+  .foot-brand:hover{color:var(--teal-deep);}
+  .footer-legal{
+    display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;
+    padding-top:22px;color:var(--muted);font-size:12.5px;
+  }
+  .footer-legal .slogan{color:var(--teal-deep);font-weight:600;letter-spacing:-0.01em;}
+
+  /* ---------- Chat FAB (홈·상세와 동일한 진입점) ---------- */
+  .chat-fab{
+    position:fixed;right:clamp(16px,3vw,28px);bottom:clamp(16px,3vw,28px);z-index:50;
+    display:inline-flex;align-items:center;gap:10px;
+    background:var(--paper);border:1px solid var(--line);border-radius:999px;
+    padding:11px 17px 11px 14px;
+    box-shadow:0 6px 22px -8px rgba(35,32,27,.22),0 2px 6px -3px rgba(35,32,27,.12);
+    transition:border-color .16s var(--ease),transform .16s var(--ease);
+  }
+  .chat-fab:hover{border-color:var(--teal);transform:translateY(-1px);}
+  .chat-ic{
+    width:32px;height:32px;flex:none;border-radius:50%;
+    background:var(--teal-wash);color:var(--teal-deep);
+    display:flex;align-items:center;justify-content:center;
+  }
+  .chat-ic svg{width:17px;height:17px;}
+  .chat-tx{display:flex;flex-direction:column;line-height:1.25;text-align:left;}
+  .chat-tt{font-size:14px;font-weight:600;letter-spacing:-0.015em;color:var(--ink);}
+  .chat-st{font-size:11.5px;color:var(--muted);display:inline-flex;align-items:center;gap:5px;}
+  .chat-live{width:6px;height:6px;border-radius:50%;background:var(--teal);flex:none;}
+  @media(max-width:480px){ .chat-tx{display:none;} .chat-fab{padding:11px;} }
+
+  @media(max-width:640px){
+    body{font-size:15.5px;}
+    .page-sub{font-size:15px;}
+    .stp{font-size:12.5px;}
+    .stp-bar{width:12px;margin:0 5px;}
+  }
+  @media(prefers-reduced-motion:reduce){
+    *{transition:none !important;animation:none !important;scroll-behavior:auto !important;}
+  }
+</style>
+<link rel="stylesheet" href="assets/chat.css">
+</head>
+<body>
+<a class="skip" href="#main">본문으로 건너뛰기</a>
+
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a class="wordmark" href="index.html" aria-label="CLAPA SUPPORT 고객지원센터 홈">
+      <span class="mark-a">CLAPA</span><span class="mark-b">SUPPORT</span>
+    </a>
+    <nav class="header-nav" aria-label="주요 메뉴">
+      <a class="nav-link" href="index.html#finder-title">전체 제품</a>
+      <a class="nav-link is-inquiry" href="tel:1522-8508">전화 1522-8508</a>
+      <a class="nav-link is-store" href="https://clapa.kr" target="_blank" rel="noopener">공식몰<span class="ext" aria-hidden="true">↗</span></a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+
+  <section class="page-hero">
+    <div class="wrap">
+      <span class="eyebrow">Repair status</span>
+      <h1>A/S 접수 조회</h1>
+      <p class="page-sub">접수번호와 연락처 뒷 4자리만 입력하시면 진행 상태를 바로 확인하실 수 있습니다.
+        접수번호는 접수 완료 화면과 상담 안내에서 확인하실 수 있습니다.</p>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="lookup-title">
+    <div class="wrap">
+      <h2 id="lookup-title" class="sr-only" style="position:absolute;left:-9999px;">접수 조회</h2>
+      <form class="lookup-card" id="lookup-form" novalidate>
+        <div class="as-field">
+          <label for="lk-id">접수번호</label>
+          <input id="lk-id" name="asid" placeholder="예) AS-260710-160225" autocomplete="off" maxlength="40"
+                 autocorrect="off" autocapitalize="characters">
+        </div>
+        <div class="as-field">
+          <label for="lk-p4">연락처 뒷 4자리</label>
+          <input id="lk-p4" name="phone4" inputmode="numeric" pattern="[0-9]*" placeholder="0000" maxlength="4" autocomplete="off">
+        </div>
+        <p class="lk-msg" id="lk-msg" role="alert" hidden></p>
+        <button class="lk-btn" type="submit" id="lk-btn">조회하기</button>
+      </form>
+
+      <div id="result" hidden>
+        <div class="status-card">
+          <div class="st-head">
+            <span class="st-id" id="st-id"></span>
+            <span class="st-badge" id="st-badge" hidden></span>
+          </div>
+          <div class="stepper" id="stepper" role="img"></div>
+          <p class="st-flag-note" id="st-flag-note" hidden></p>
+          <dl class="st-meta">
+            <div><dt>접수일</dt><dd id="st-date">-</dd></div>
+            <div><dt>마지막 업데이트</dt><dd id="st-updated">-</dd></div>
+          </dl>
+        </div>
+      </div>
+
+      <div class="cta-band">
+        <div>
+          <p>확인이 어려우시면 편한 방법으로 연락 주세요.</p>
+          <span class="tel">1522-8508</span> <span style="color:var(--muted);font-size:13px;">평일 09:00–15:00</span>
+        </div>
+        <div class="cta-actions">
+          <a class="btn" href="tel:1522-8508">전화 걸기</a>
+          <a class="btn" href="https://talk.naver.com/ct/w44cu1?frm=psf" target="_blank" rel="noopener">네이버 톡톡 ↗</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- Chat entry point: quiet floating pill -->
+<button class="chat-fab" type="button" data-clapa-chat-trigger aria-label="AI 상담 열기">
+  <span class="chat-ic" aria-hidden="true">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6.5v8a2.5 2.5 0 0 1-2.5 2.5H9l-4 3.2V17H6.5A2.5 2.5 0 0 1 4 14.5v-8A2.5 2.5 0 0 1 6.5 4h11A2.5 2.5 0 0 1 20 6.5z"/><path d="M8.5 10h7M8.5 13h4.5"/></svg>
+  </span>
+  <span class="chat-tx">
+    <span class="chat-tt">AI 상담</span>
+    <span class="chat-st"><span class="chat-live" aria-hidden="true"></span>AI가 먼저 답해드려요</span>
+  </span>
+</button>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-top">
+      <div class="foot-contact">
+        <p class="foot-h">고객센터</p>
+        <a class="foot-tel" href="tel:1522-8508">1522-8508</a>
+        <p class="foot-hours">평일 09:00–15:00 <span class="off">· 주말·공휴일 휴무</span></p>
+      </div>
+      <nav class="foot-brands" aria-label="바로가기">
+        <p class="foot-h">바로가기</p>
+        <div class="foot-brandrow">
+          <a class="foot-brand" href="https://clapa.kr" target="_blank" rel="noopener">클래파 공식몰 <span class="lat" aria-hidden="true">↗</span></a>
+          <a class="foot-brand" href="index.html#as-title">A/S 접수</a>
+          <a class="foot-brand" href="index.html#finder-title">설명서 다운로드</a>
+          <a class="foot-brand" href="warranty.html">보증·교환/반품 안내</a>
+        </div>
+      </nav>
+    </div>
+    <div class="footer-legal">
+      <span>© 2026 CLAPA. <a href="https://clapa.kr" target="_blank" rel="noopener" style="border-bottom:1px solid var(--line);">clapa.kr</a></span>
+      <span class="slogan">조용함이 만드는 박수 칠 일상</span>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/chat.js" defer></script>
+<script src="assets/track.js" defer></script>
+<script src="assets/as-media.js" defer></script>
+<script src="assets/as-status.js" defer></script>
+</body>
+</html>
