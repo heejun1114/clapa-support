@@ -187,6 +187,7 @@
   var POLL_MS = 15000;
   var pollTimer = null;
   var threadBound = false;
+  var msgsSeq = 0;          // 응답 순서 경합 가드 — 최신 요청의 응답만 렌더
   var lastTs = '';          // 마지막으로 본 CS 메시지 ts — 새 답변 감지(스크롤·타이틀)용
   var renderedSig = '';     // 렌더된 스레드 서명 — 같으면 재구성 생략(깜빡임 방지)
   var firstLoad = true;
@@ -219,7 +220,8 @@
     renderedSig = '';
     firstLoad = true;
     fetchMsgs();
-    startPoll();
+    // 백그라운드 탭으로 로드된 경우 폴링은 보류 — 복귀(onVisChange) 때 시작
+    if (!document.hidden) startPoll();
   }
 
   function startPoll() { if (!pollTimer) pollTimer = setInterval(fetchMsgs, POLL_MS); }
@@ -242,7 +244,12 @@
   /* toBottom: 전송·첨부 직후 내 메시지가 보이도록 하단 고정 */
   function fetchMsgs(toBottom) {
     if (!cred) return;
+    var seq = ++msgsSeq;
+    var reqId = cred.id;
     api({ action: 'asMsgs', id: cred.id, phone4: cred.phone4 }).then(function (d) {
+      // 구 요청의 늦은 응답이 최신 렌더를 되돌리거나(전송 직후) 접수 전환 후
+      // 타 접수 스레드를 그리지 않도록, 최신 요청·동일 접수의 응답만 처리
+      if (seq !== msgsSeq || !cred || cred.id !== reqId) return;
       if (!d || !d.ok || !Array.isArray(d.msgs)) return;
       var sig = threadSig(d.msgs);
       if (sig === renderedSig) return;   // 변화 없음 — DOM 그대로 유지
@@ -299,20 +306,23 @@
     img.className = 'th-thumb';
     img.alt = String(f.name || '첨부 사진');
     if (fileCache[f.id]) { img.src = fileCache[f.id]; return img; }
+    function fallback() {   // 로드 실패 — 빈 placeholder 대신 파일명 텍스트로 대체
+      if (img.parentNode) img.parentNode.replaceChild(el('span', 'th-time', String(f.name || '첨부 사진')), img);
+    }
     api({ action: 'asFile', fileId: f.id, id: cred.id, phone4: cred.phone4 })
       .then(function (d) {
         if (d && d.ok && d.data) {
           var src = 'data:' + String(d.mime || 'image/jpeg') + ';base64,' + String(d.data);
           fileCache[f.id] = src;
           img.src = src;
-        }
-      }).catch(function () {});
+        } else fallback();
+      }).catch(fallback);
     return img;
   }
 
   function formatTs(ts) {
     var s = String(ts == null ? '' : ts);
-    var m = s.match(/^\d{4}-(\d{2}-\d{2}) (\d{2}:\d{2})/);   // 'yyyy-MM-dd HH:mm:ss' → 'MM-dd HH:mm'
+    var m = s.match(/^\d{4}-(\d{2}-\d{2})[T ](\d{2}:\d{2})/);   // 'yyyy-MM-dd HH:mm:ss'·ISO 'yyyy-MM-ddTHH:mm:ss…' → 'MM-dd HH:mm'
     return m ? (m[1] + ' ' + m[2]) : s;
   }
 
