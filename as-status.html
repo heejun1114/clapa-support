@@ -125,6 +125,42 @@
   .st-meta dt{font-weight:600;}
   .st-meta dd{margin:0;font-variant-numeric:tabular-nums;}
 
+  /* ---------- 접수 대화창 ---------- */
+  .thread-sec{margin-top:22px;max-width:560px;}
+  .thread-title{margin:0 0 4px;font-size:17px;font-weight:700;letter-spacing:-0.02em;}
+  .thread-desc{margin:0 0 12px;color:var(--muted);font-size:13.5px;}
+  .th-list{
+    display:flex;flex-direction:column;gap:10px;
+    max-height:420px;overflow-y:auto;
+    padding:14px;border:1px solid var(--line);border-radius:var(--radius);background:var(--surface);
+  }
+  .th-row{display:flex;flex-direction:column;max-width:86%;}
+  .th-row.is-me{align-self:flex-end;align-items:flex-end;}
+  .th-row.is-cs{align-self:flex-start;align-items:flex-start;}
+  .th-bubble{padding:9px 13px;border-radius:14px;font-size:14.5px;line-height:1.55;word-break:break-word;}
+  .is-me .th-bubble{background:var(--teal);color:#fff;border-bottom-right-radius:4px;}
+  .is-cs .th-bubble{background:var(--paper);border:1px solid var(--line);border-bottom-left-radius:4px;}
+  .th-thumb{margin-top:6px;width:150px;max-width:100%;border-radius:10px;border:1px solid var(--line);background:var(--glass);min-height:60px;}
+  .th-time{margin-top:3px;font-size:11.5px;color:var(--muted);font-variant-numeric:tabular-nums;}
+  .th-composer{display:flex;gap:8px;margin-top:10px;align-items:flex-end;}
+  .th-input{
+    flex:1;min-width:0;font:inherit;font-size:16px;line-height:1.5;color:var(--ink);
+    padding:11px 13px;border:1.5px solid var(--line);border-radius:10px;outline:none;resize:none;background:var(--paper);
+  }
+  .th-input:focus{border-color:var(--teal);}
+  .th-attach{
+    flex:none;min-height:44px;padding:11px 12px;border-radius:10px;
+    background:var(--paper);border:1.5px solid var(--line);font-size:13.5px;font-weight:600;color:var(--teal-deep);
+  }
+  .th-attach:hover{border-color:var(--teal);background:var(--teal-wash);}
+  .th-attach:disabled{opacity:.6;cursor:default;}
+  .th-send{
+    flex:none;min-height:44px;padding:11px 16px;border-radius:10px;border:0;
+    background:var(--teal);color:#fff;font-size:14px;font-weight:600;
+  }
+  .th-send:hover{background:var(--teal-deep);}
+  .th-send:disabled{opacity:.6;cursor:default;}
+
   /* ---------- 상시 대안(전화·톡톡) ---------- */
   .cta-band{
     margin-block:clamp(26px,4vw,42px);max-width:560px;
@@ -263,6 +299,18 @@
             <div><dt>마지막 업데이트</dt><dd id="st-updated">-</dd></div>
           </dl>
         </div>
+
+        <section class="thread-sec" id="thread-sec" aria-label="접수 상담 대화" hidden>
+          <h2 class="thread-title">상담 대화</h2>
+          <p class="thread-desc">남겨주신 메시지는 상담 시간(평일 09:00–15:00)에 순서대로 답변드립니다.</p>
+          <div class="th-list" id="th-list" role="log" aria-live="polite"></div>
+          <form class="th-composer" id="th-form">
+            <input id="th-file" type="file" accept="image/*" hidden>
+            <button class="th-attach" type="button" id="th-attach">사진 첨부</button>
+            <textarea class="th-input" id="th-input" rows="1" maxlength="1000" placeholder="메시지를 입력하세요" aria-label="메시지 입력"></textarea>
+            <button class="th-send" type="submit" id="th-send">보내기</button>
+          </form>
+        </section>
       </div>
 
       <div class="cta-band">
