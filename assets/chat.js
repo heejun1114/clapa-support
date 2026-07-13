@@ -78,12 +78,8 @@
   var reqGen = 0;              // 요청 세대 — 초기화/재전송 시 증가시켜 이전 요청 응답을 버린다
   var activeController = null; // 진행 중 fetch의 AbortController(초기화 시 abort)
   var lastUserMessage = '';
-  var lastMatchedCode = '';    // 서버 응답 matched의 마지막 값(A/S 폼 프리필용)
   var disabled = false;        // config.enabled === false
   var lastFocus = null;
-  var asWait = false;          // A/S 접수 조회 입력 대기 상태
-  var asWaitId = '';           // 조회 대기 중 확보한 접수번호
-  var asWaitP4 = '';           // 조회 대기 중 먼저 받은 연락처 뒷 4자리
   var savedScrollY = 0;        // 모바일 배경 스크롤 잠금 복원용
   var scrollLocked = false;
 
@@ -484,53 +480,6 @@
     }, 2600);
   }
 
-  /* ------------------------------------------------------------------ *
-   * 챗 → A/S 접수 폼 컨텍스트 전달 (재입력 방지)
-   *  - 저장: A/S 폼 링크 칩 클릭 시 모델·최근 증상 서술·sid 를 sessionStorage에
-   *  - 소비: index.html 도착(boot) 또는 같은 페이지 즉시(fillAsForm) — 빈 칸만 채움
-   * ------------------------------------------------------------------ */
-  function saveAsDraft() {
-    try {
-      var code = lastMatchedCode || productContext() || '';
-      var model = '';
-      if (code) {
-        var m = findModel(code);
-        model = m ? m.model : String(code);
-      }
-      var texts = [];
-      for (var i = log.length - 1; i >= 0 && texts.length < 2; i--) {
-        var e = log[i];
-        if (e.role === 'user' && e.text && String(e.text).trim()) texts.unshift(String(e.text).trim());
-      }
-      sessionStorage.setItem('clapaChat.asDraft', JSON.stringify({
-        model: model, symptom: texts.join('\n').slice(0, 900), sid: sid
-      }));
-    } catch (e) {}
-  }
-
-  function fillAsForm() {
-    if (asPaused()) return false;   // A/S 점검 중엔 폼 프리필·'접수해 주세요' 토스트 생략
-    var raw = null;
-    try { raw = sessionStorage.getItem('clapaChat.asDraft'); } catch (e) {}
-    if (!raw) return false;
-    var modelEl = document.getElementById('as-model');
-    var sympEl = document.getElementById('as-symptom');
-    if (!modelEl && !sympEl) return false;   // A/S 폼이 없는 페이지 — 이동 후 boot에서 소비
-    var draft = null;
-    try { draft = JSON.parse(raw); } catch (e) { draft = null; }
-    try { sessionStorage.removeItem('clapaChat.asDraft'); } catch (e) {}
-    if (!draft) return false;
-    var filled = false;
-    if (modelEl && !modelEl.value && draft.model) { modelEl.value = String(draft.model).slice(0, 80); filled = true; }
-    if (sympEl && !sympEl.value && draft.symptom) { sympEl.value = String(draft.symptom); filled = true; }
-    if (!filled) return false;
-    // 모바일에서는 폼이 접혀 있으므로 펼쳐서 채워진 값이 보이게
-    var wrap = document.getElementById('as-form-wrap');
-    if (wrap) wrap.setAttribute('open', '');
-    showToast('대화 내용을 미리 담아뒀어요. 확인 후 접수해 주세요.');
-    return true;
-  }
-
   function buildChip(spec) {
     if (!spec || !spec.label) return null;
 
@@ -546,16 +495,13 @@
       if (ext) a.appendChild(el('span', { 'class': 'cchat-chip-ext', 'aria-hidden': 'true', text: '↗' }));
       if (!ext && !isPdf && !/^tel:/i.test(href)) {
         a.addEventListener('click', function () {
-          var toAsForm = href.indexOf('#as-title') !== -1;
-          if (toAsForm) saveAsDraft();   // 챗에서 파악한 모델·증상을 A/S 폼으로 전달
           var msg = navMessage(href);
           if (!msg) return;
           var samePage = false;
           try { samePage = (new URL(href, location.href).pathname === location.pathname); } catch (e) {}
           if (samePage) {
             close();          // 패널을 닫아 이동한 위치가 보이게
-            var filled = toAsForm ? fillAsForm() : false;  // 리로드가 없으므로 즉시 프리필
-            if (!filled) showToast(msg);
+            showToast(msg);
           } else {
             try { sessionStorage.setItem('clapaChat.nav', msg); } catch (e) {}
           }
@@ -640,27 +586,8 @@
         text: entry.meta.codes.join(', ') + ' 공식 자료를 참고한 답변이에요'
       }));
     }
-    // 접수 상태 스테퍼(접수 조회 결과 메시지에만) — 비차단 시각 표시
-    if (!isUser && typeof entry.steps === 'number') {
-      wrap.appendChild(buildSteps(entry.steps));
-    }
     // (답변 피드백 버튼은 2026-07-11 사장님 지시로 제거 — 재도입 금지)
     msgEl.appendChild(wrap);
-  }
-
-  /* 접수됨 → 확인중 → 처리완료 3단계 스테퍼. idx = 현재 단계(0~2). */
-  function buildSteps(idx) {
-    var names = ['접수됨', '확인중', '처리완료'];
-    var box = el('div', { 'class': 'cchat-steps', role: 'img',
-      'aria-label': '진행 상태: ' + names[idx] });
-    for (var i = 0; i < names.length; i++) {
-      if (i > 0) {
-        box.appendChild(el('span', { 'class': 'cchat-step-bar' + (i <= idx ? ' is-done' : '') }));
-      }
-      var cls = 'cchat-step' + (i < idx ? ' is-done' : (i === idx ? ' is-now' : ''));
-      box.appendChild(el('span', { 'class': cls, text: names[i] }));
-    }
-    return box;
   }
 
   function renderAll() {
@@ -717,7 +644,6 @@
       case 'pick':    botPick(arg); break;
       case 'as':      botAS(); break;
       case 'ask':     botAsk(); break;
-      case 'asstatus': botAsStatus(); break;
       case 'pmanual': botProductManual(); break;
       case 'pfaq':    botProductFaq(); break;
       case 'retry':   retry(arg); break;
@@ -815,7 +741,7 @@
       pushMenu(
         '지금은 A/S 접수 기능을 점검하고 있어요.\n온라인·전화·톡톡 접수를 잠시 중단 중이며, 점검이 끝나는 대로 정상적으로 접수를 받겠습니다.\n이미 접수하신 건은 아래에서 진행 상태를 확인하실 수 있어요.',
         [
-          { label: '접수 조회', cmd: 'asstatus' }
+          { label: '접수 조회', url: 'as-status.html' }
         ]
       );
       return;
@@ -824,20 +750,11 @@
       'A/S 접수를 도와드릴게요.\n증상과 모델명을 함께 알려주시면 접수가 훨씬 빨라요.\n전화 ' + PHONE + ' · ' + HOURS + ' (주말·공휴일 휴무)',
       [
         { label: 'A/S 접수 폼 바로가기', url: 'index.html#as-title' },
-        { label: '접수 조회', cmd: 'asstatus' },
+        { label: '접수 조회', url: 'as-status.html' },
         { label: '전화 걸기', url: 'tel:' + PHONE },
         { label: '네이버 톡톡 문의', url: TALK}
       ]
     );
-  }
-
-  /* A/S 접수 상태 조회 — 접수번호+연락처 뒷 4자리를 받아 서버 조회(AI 미경유) */
-  function botAsStatus() {
-    asWait = true;
-    asWaitId = '';
-    asWaitP4 = '';
-    pushMenu('접수 조회를 도와드릴게요.\n접수번호와 연락처 뒷 4자리를 알려주시면 바로 확인해 드릴게요.\n예) AS-260710-160225, 0000');
-    focusInput(true);   // 직접 입력 의사가 명확한 흐름
   }
 
   function botAsk() {
@@ -902,16 +819,8 @@
     taEl.value = '';
     autoGrow();
     dropKeyboard();           // 모바일: 전송하면 키보드를 내려 답변이 보이게
-    var entry = pushMessage('user', text);
+    pushMessage('user', text);
     lastUserMessage = text;
-
-    // A/S 접수 조회 흐름은 AI를 거치지 않고 서버 조회로 처리.
-    // 가로챈 발화(접수번호·연락처 뒷 4자리)는 AI 히스토리에서 제외(개인정보 미전송).
-    if (interceptAsStatus(text)) {
-      entry.local = 1;
-      persistSession();
-      return;
-    }
 
     if (!config.endpoint) {
       if (configLoaded) {
@@ -935,78 +844,6 @@
       return;
     }
     callApi(text);
-  }
-
-  /* A/S 접수번호 조회 가로채기 — 접수번호 패턴 감지 또는 조회 대기 상태의 뒷 4자리 */
-  function interceptAsStatus(text) {
-    var idM = text.match(/AS-?\s?\d{6}-?\s?\d{6}/i);
-    if (idM) {
-      var norm = 'AS-' + idM[0].replace(/\D/g, '').slice(0, 12).replace(/(\d{6})(\d{6})/, '$1-$2');
-      var rest4 = text.replace(idM[0], '').replace(/\D/g, '').slice(-4);
-      if (rest4.length !== 4 && asWaitP4) rest4 = asWaitP4;
-      if (rest4.length === 4) {
-        asWait = false; asWaitId = ''; asWaitP4 = '';
-        callAsStatus(norm, rest4);
-        return true;
-      }
-      asWait = true;
-      asWaitId = norm;
-      pushMenu('접수번호를 확인했어요.\n본인 확인을 위해 연락처 뒷 4자리를 알려주시겠어요?');
-      return true;
-    }
-    if (asWait) {
-      if (/^\D*\d{4}\D*$/.test(text)) {
-        var l4 = text.replace(/\D/g, '');
-        if (asWaitId) {
-          var savedId = asWaitId;
-          asWait = false; asWaitId = ''; asWaitP4 = '';
-          callAsStatus(savedId, l4);
-        } else {
-          asWaitP4 = l4;
-          pushMenu('확인 감사해요.\n접수번호(예: AS-260710-160225)도 알려주시면 바로 조회해 드릴게요.');
-        }
-        return true;
-      }
-      // 조회 흐름에서 벗어난 일반 질문 — 대기 해제 후 평소대로 처리
-      asWait = false; asWaitId = ''; asWaitP4 = '';
-      return false;
-    }
-    return false;
-  }
-
-  function callAsStatus(id, last4) {
-    if (!config.endpoint) {
-      pushMenu('지금은 온라인 조회가 어려워요.\n전화(' + PHONE + ', ' + HOURS + ')로 확인 부탁드려요.', [{ label: '전화 걸기', url: 'tel:' + PHONE }]);
-      return;
-    }
-    setBusy(true);
-    var typing = showTyping();
-    fetch(config.endpoint, {
-      method: 'POST',
-      headers: { 'Content-Type': 'text/plain;charset=UTF-8' },
-      body: JSON.stringify({ action: 'asStatus', sessionId: sid, id: id, phone4: last4 })
-    })
-      .then(function (r) { return r.json(); })
-      .then(function (data) {
-        removeNode(typing);
-        if (data && data.ok) {
-          var st = String(data.status || '접수');
-          // 시트 상태값 → 스테퍼 단계(운영자가 다른 표현을 써도 포함 매칭으로 흡수)
-          var stepIdx = st.indexOf('완료') !== -1 ? 2 : (st.indexOf('확인') !== -1 || st.indexOf('처리') !== -1 ? 1 : 0);
-          pushMessage('model', '접수번호 ' + id + ' 건은 지금 "' + st + '" 상태예요.' +
-            (data.date ? '\n(접수일 ' + String(data.date) + ')' : '') +
-            '\n처리되는 대로 순서대로 연락드릴게요.', null, { local: 1, steps: stepIdx });
-        } else {
-          pushMenu((data && data.error) ? String(data.error)
-            : '접수 내역을 확인하지 못했어요. 접수번호와 연락처 뒷 4자리를 다시 확인해 주세요.',
-            [{ label: '전화 걸기', url: 'tel:' + PHONE }]);
-        }
-      })
-      .catch(function () {
-        removeNode(typing);
-        pushMenu('연결이 원활하지 않아요.\n잠시 후 다시 시도하시거나 전화(' + PHONE + ', ' + HOURS + ')로 확인 부탁드려요.', [{ label: '전화 걸기', url: 'tel:' + PHONE }]);
-      })
-      .then(function () { setBusy(false); });
   }
 
   /* 서버로 보낼 history — 로컬 안내(메뉴·오류·환영)는 제외해 12턴 창 오염 방지.
@@ -1070,9 +907,6 @@
         if (myGen !== reqGen) { removeNode(typing); return; }  // 초기화/재전송으로 폐기된 응답은 버림
         removeNode(typing);
         if (data && data.ok) {
-          if (data.matched && data.matched.length) {
-            lastMatchedCode = String(data.matched[data.matched.length - 1]);
-          }
           var meta = { msgId: (typeof data.msgId === 'string' ? data.msgId : ''), q: text };
           // 출처 캡션은 되묻기(ambiguous) 답변에는 붙이지 않는다 — 확인 질문에 '자료 참고' 표기는 오인
           if (data.grounded && data.groundedCodes && data.groundedCodes.length && !data.ambiguous) {
@@ -1216,10 +1050,6 @@
     persistSession();
     msgEl.textContent = '';
     lastUserMessage = '';
-    lastMatchedCode = '';  // 폐기된 대화의 모델이 A/S 폼에 프리필되지 않게
-    asWait = false;        // A/S 조회 대기 상태도 함께 초기화
-    asWaitId = '';
-    asWaitP4 = '';
     seedWelcome();
     renderRootBar();
     focusInput();
@@ -1407,7 +1237,6 @@
       case 'parts':  dispatch('cats', 'parts'); return true;
       case 'as':     dispatch('as'); return true;
       case 'ask':    dispatch('ask'); return true;
-      case 'asstatus': dispatch('asstatus'); return true;  // 접수 조회 (홈 퀵메뉴)
       default: return false;
     }
   }
@@ -1466,15 +1295,12 @@
       __mounted: true
     };
 
-    // 챗에서 A/S 폼으로 넘어온 초안이 있으면 폼 프리필(홈에서만 동작)
-    var filledDraft = fillAsForm();
-
-    // 챗 링크로 페이지를 이동해 왔다면 안내 토스트 표시(프리필 토스트와 중복 방지)
+    // 챗 링크로 페이지를 이동해 왔다면 안내 토스트 표시
     var nav = null;
     try { nav = sessionStorage.getItem('clapaChat.nav'); } catch (e) {}
     if (nav) {
       try { sessionStorage.removeItem('clapaChat.nav'); } catch (e) {}
-      if (!filledDraft) showToast(nav);
+      showToast(nav);
     }
 
     // 모바일 화면 키보드 대응(열림 시 패널 높이 보정)
