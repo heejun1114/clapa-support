@@ -122,7 +122,7 @@
       renderStepper(step);
     }
     dateEl.textContent = d.date ? String(d.date) : '-';
-    updatedEl.textContent = d.updatedAt ? String(d.updatedAt) : '-';
+    updatedEl.textContent = d.updatedAt ? formatTs(d.updatedAt) : '-';
     /* 조회 성공 훅 — 접수 대화창(Task 10)·알림 받기(Task 11)가 여기서 초기화됩니다 */
     if (typeof initThread === 'function') initThread();
     if (typeof initPush === 'function') initPush();
