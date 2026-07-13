@@ -20,9 +20,9 @@
   {
    "id": "n-as-maintenance",
    "place": "as",
-   "type": "점검 중",
-   "title": "A/S 접수를 잠시 점검하고 있습니다",
-   "body": "점검이 끝나는 대로 다시 정상적으로 접수를 받겠습니다.",
+   "type": "안내",
+   "title": "A/S 접수, 곧 오픈 예정입니다",
+   "body": "",
    "link": "",
    "linkLabel": "",
    "pinned": false,
