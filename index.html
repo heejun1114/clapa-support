@@ -2041,6 +2041,7 @@
     if(!date.value && /^\d{4}-\d{2}-\d{2}$/.test(order.paymentDate || '')) date.value = order.paymentDate;
   }
   function runLookup(){
+    if (lookBtn.disabled) return;   // 조회 중 Enter 재발화 방지
     clearErr();
     resetLook();
     var oid = orderInput.value.replace(/[\s-]/g, '');
@@ -2289,7 +2290,7 @@
     // 구매처·구매일·주소는 증상에 섞지 않고 extra 필드로만 전달(F1 계약)
     var symptom = chipPrefix() + text;
     if (manual && !manualIsOrderId) symptom += '\n(구매 메모: ' + manual + ')';
-    if (symptom.length > 1000) { showErr('증상 설명이 너무 길어요. 증상 유형·구매 메모를 포함해 1,000자 이내로 줄여 주세요.'); return; }
+    if (symptom.length > 1000) { showErr('증상 설명이 너무 깁니다. 증상 유형·구매 메모를 포함해 1,000자 이내로 줄여 주세요.'); return; }
 
     // 추가 구매정보(extra) — 입력분만. 자동조회로 채워진 구매일이 그대로면 order와 중복이라 생략
     var extra = {};
