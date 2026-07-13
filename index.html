@@ -251,6 +251,36 @@
   .as-done strong{font-size:17px;letter-spacing:-0.02em;}
   .as-done p{margin:0;color:var(--muted);font-size:14px;line-height:1.6;}
   .as-done .as-id{font-variant-numeric:tabular-nums;color:var(--teal-deep);font-weight:700;}
+  /* A/S 첨부 UI (2026-07-13 접수 개편) */
+  .as-field-label{font-size:13px;font-weight:600;color:var(--ink);}
+  .as-attach-btn{
+    min-height:44px;padding:11px 14px;
+    background:var(--paper);border:1.5px dashed var(--line);border-radius:10px;
+    font-size:14.5px;font-weight:600;color:var(--teal-deep);
+    transition:border-color .15s var(--ease),background .15s var(--ease);
+  }
+  .as-attach-btn:hover{border-color:var(--teal);background:var(--teal-wash);}
+  .as-attach-list{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:8px;}
+  .as-attach-list:empty{display:none;}
+  .as-attach-item{
+    display:flex;align-items:center;gap:8px;
+    background:var(--surface);border:1px solid var(--line);border-radius:10px;
+    padding:6px 8px;max-width:100%;
+  }
+  .as-attach-item img{width:44px;height:44px;object-fit:cover;border-radius:7px;flex:none;}
+  .as-attach-video{
+    width:44px;height:44px;flex:none;display:flex;align-items:center;justify-content:center;
+    background:var(--glass);border-radius:7px;font-size:11.5px;font-weight:600;color:var(--muted);
+  }
+  .as-attach-name{min-width:0;max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:12.5px;color:var(--muted);}
+  .as-attach-del{
+    flex:none;width:40px;height:40px;border:0;background:transparent;border-radius:8px;
+    font-size:18px;line-height:1;color:var(--muted);
+    transition:background .15s var(--ease),color .15s var(--ease);
+  }
+  .as-attach-del:hover{background:var(--sand);color:var(--ink);}
+  .as-attach-note{margin:0;color:var(--muted);font-size:12px;}
+  .as-done-go{display:flex;align-items:center;justify-content:center;text-align:center;text-decoration:none;margin-top:4px;}
 
   /* ---------- Section shell ---------- */
   .section{padding-block:clamp(46px,6.5vw,78px);}
@@ -880,7 +910,7 @@
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.7 6.3a4.2 4.2 0 0 0-5.9 5.9L3 18v3h3l5.8-5.8a4.2 4.2 0 0 0 5.9-5.9l-2.9 2.9-2.1-2.1z"/></svg>
           A/S 접수
         </a>
-        <a class="qm-item" href="tel:1522-8508" data-clapa-chat-action="asstatus">
+        <a class="qm-item" href="as-status.html">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M16.5 16.5 21 21"/><path d="M8.5 11l2 2 3.5-3.5"/></svg>
           접수 조회
         </a>
@@ -933,6 +963,10 @@
           <summary class="as-form-toggle">온라인으로 접수하기</summary>
         <form class="as-form" id="as-form" novalidate>
           <div class="as-field">
+            <label for="as-name">이름<span class="req">필수</span></label>
+            <input id="as-name" name="name" placeholder="예) 홍길동" autocomplete="name" maxlength="40" required>
+          </div>
+          <div class="as-field">
             <label for="as-model">제품 모델명</label>
             <input id="as-model" name="model" list="as-models" placeholder="예) BVC-H10 (제품 이름도 괜찮습니다)" autocomplete="off" maxlength="80">
             <datalist id="as-models"><!-- 옵션은 상품 그리드에서 자동 생성(페이지 하단 스크립트) — 하드코딩 금지 --></datalist>
@@ -944,6 +978,13 @@
           <div class="as-field">
             <label for="as-phone">연락처<span class="req">필수</span></label>
             <input id="as-phone" name="phone" type="tel" inputmode="tel" placeholder="010-0000-0000" maxlength="20" autocomplete="off" required>
+          </div>
+          <div class="as-field">
+            <span class="as-field-label" id="as-attach-label">사진·영상 첨부 (선택)</span>
+            <input id="as-files" type="file" multiple accept="image/*,video/*" hidden>
+            <button class="as-attach-btn" type="button" id="as-attach-btn" aria-describedby="as-attach-label">사진·영상 첨부하기</button>
+            <ul class="as-attach-list" id="as-attach-list" aria-live="polite"></ul>
+            <p class="as-attach-note">사진 최대 5장, 영상 1개(25MB 이하)까지 함께 보내실 수 있습니다.</p>
           </div>
           <p class="as-msg" id="as-msg" role="alert"></p>
           <button class="as-submit" type="submit">A/S 접수하기</button>
@@ -1763,6 +1804,7 @@
 })();
 </script>
 
+<script src="assets/as-media.js" defer></script>
 <script>
 /* A/S 접수 폼 → GAS 웹앱(action:'as'). 실패 시 전화 접수 안내 폴백 */
 (function(){
@@ -1805,7 +1847,113 @@
     btn.textContent = b ? '접수 중…' : 'A/S 접수하기';
   }
 
-  function showDone(id){
+  /* ---- 첨부 선택·목록 (사진 ≤5장 canvas 압축, 영상 1개 ≤25MB) ---- */
+  var picked = [];               // [{file, kind:'image'|'video', name, url}]
+  var MAX_PHOTOS = 5;
+  var MAX_VIDEO_MB = 25;
+  var ORIGINAL_IMG_MAX_MB = 5;   // 압축 실패(HEIC 등) 시 원본 허용 상한
+  var attachBtn = document.getElementById('as-attach-btn');
+  var fileInput = document.getElementById('as-files');
+  var attachList = document.getElementById('as-attach-list');
+
+  function photoCount(){ var n = 0; for(var i = 0; i < picked.length; i++) if(picked[i].kind === 'image') n++; return n; }
+  function hasVideo(){ for(var i = 0; i < picked.length; i++) if(picked[i].kind === 'video') return true; return false; }
+
+  function renderAttachList(){
+    attachList.textContent = '';
+    for (var i = 0; i < picked.length; i++) (function(item, idx){
+      var li = document.createElement('li');
+      li.className = 'as-attach-item';
+      if (item.kind === 'image') {
+        var img = document.createElement('img');
+        img.alt = item.name;
+        img.src = item.url;
+        li.appendChild(img);
+      } else {
+        var vid = document.createElement('span');
+        vid.className = 'as-attach-video';
+        vid.textContent = '영상';
+        li.appendChild(vid);
+      }
+      var nm = document.createElement('span');
+      nm.className = 'as-attach-name';
+      nm.textContent = item.name;
+      li.appendChild(nm);
+      var del = document.createElement('button');
+      del.type = 'button';
+      del.className = 'as-attach-del';
+      del.setAttribute('aria-label', item.name + ' 첨부 삭제');
+      del.textContent = '×';
+      del.addEventListener('click', function(){
+        try { URL.revokeObjectURL(item.url); } catch(err){}
+        picked.splice(idx, 1);
+        renderAttachList();
+      });
+      li.appendChild(del);
+      attachList.appendChild(li);
+    })(picked[i], i);
+  }
+
+  if (attachBtn && fileInput) {
+    attachBtn.addEventListener('click', function(){ fileInput.click(); });
+    fileInput.addEventListener('change', function(){
+      clearErr();
+      var files = fileInput.files || [];
+      for (var i = 0; i < files.length; i++) {
+        var f = files[i];
+        var isImage = /^image\//.test(f.type);
+        var isVideo = f.type === 'video/mp4' || f.type === 'video/quicktime';
+        if (!isImage && !isVideo) { showErr('사진 또는 영상(mp4·mov) 파일만 첨부하실 수 있습니다.'); continue; }
+        if (isImage && photoCount() >= MAX_PHOTOS) { showErr('사진은 최대 ' + MAX_PHOTOS + '장까지 첨부하실 수 있습니다.'); continue; }
+        if (isVideo && hasVideo()) { showErr('영상은 1개만 첨부하실 수 있습니다.'); continue; }
+        if (isVideo && f.size > MAX_VIDEO_MB * 1024 * 1024) {
+          showErr('영상이 큽니다. 접수 후 대화창 또는 톡톡으로 보내 주세요. (해당 파일만 제외했습니다)');
+          continue;
+        }
+        picked.push({ file: f, kind: isImage ? 'image' : 'video', name: f.name, url: URL.createObjectURL(f) });
+      }
+      fileInput.value = '';
+      renderAttachList();
+    });
+  }
+
+  /* ---- 순차 업로드 (접수 성공 후 asUpload, 일부 실패해도 접수는 유효) ---- */
+  function prepareUpload(item){
+    if (item.kind !== 'image') return Promise.resolve({ blob: item.file, name: item.name, mime: item.file.type });
+    return window.ClapaAsMedia.compressImage(item.file, 1600, 0.8)
+      .catch(function(){
+        if (item.file.size <= ORIGINAL_IMG_MAX_MB * 1024 * 1024) {
+          return { blob: item.file, name: item.name, mime: item.file.type || 'image/jpeg' };
+        }
+        throw new Error('too-big');
+      });
+  }
+
+  function uploadAll(id, phone4, sid){
+    var fails = 0;
+    var seq = Promise.resolve();
+    for (var i = 0; i < picked.length; i++) (function(item, idx){
+      seq = seq.then(function(){
+        btn.textContent = '첨부 ' + (idx + 1) + '/' + picked.length + ' 올리는 중…';
+        return prepareUpload(item)
+          .then(function(p){
+            return window.ClapaAsMedia.fileToB64(p.blob).then(function(b64){
+              return fetch(ENDPOINT, {
+                method: 'POST',
+                headers: { 'Content-Type': 'text/plain;charset=UTF-8' },
+                body: JSON.stringify({ action: 'asUpload', sessionId: sid, id: id, phone4: phone4, name: p.name, mime: p.mime, data: b64 })
+              });
+            });
+          })
+          .then(function(r){ return r.json(); })
+          .then(function(d){ if (!d || !d.ok) fails++; })
+          .catch(function(){ fails++; });
+      });
+    })(picked[i], i);
+    return seq.then(function(){ return fails; });
+  }
+
+  function showDone(id, phone4, failCount){
     var done = document.createElement('div');
     done.className = 'as-done';
     var head = document.createElement('strong');
@@ -1818,21 +1966,33 @@
     idLine.appendChild(idEl);
     var info = document.createElement('p');
     info.textContent = '상담 시간(평일 09:00–15:00)에 순서대로 연락드립니다. 급하시면 1522-8508로 전화해 주세요.';
-    var lookup = document.createElement('p');
-    lookup.textContent = '접수번호를 메모해 두시면 AI 상담의 [A/S 신청 → 접수 조회]에서 진행 상태를 확인하실 수 있습니다.';
     done.appendChild(head);
     done.appendChild(idLine);
     done.appendChild(info);
-    done.appendChild(lookup);
+    if (failCount > 0) {
+      var warn = document.createElement('p');
+      warn.textContent = '일부 첨부가 올라가지 못했습니다. 진행 상황 화면의 대화창에서 다시 보내실 수 있습니다.';
+      done.appendChild(warn);
+    }
+    var go = document.createElement('a');
+    go.className = 'as-submit as-done-go';
+    go.href = 'as-status.html?id=' + encodeURIComponent(id);
+    go.textContent = '진행 상황 확인·알림 받기';
+    done.appendChild(go);
+    // 조회 페이지 자동 조회용 인증정보(탭 단위) — as-status.js 가 소비
+    try { sessionStorage.setItem('asStatus.cred', JSON.stringify({ id: id, phone4: phone4 })); } catch (e) {}
     form.parentNode.replaceChild(done, form);
   }
 
   form.addEventListener('submit', function(e){
     e.preventDefault();
     clearErr();
+    var name = document.getElementById('as-name').value.trim();
     var model = document.getElementById('as-model').value.trim();
     var symptom = document.getElementById('as-symptom').value.trim();
     var phone = document.getElementById('as-phone').value.trim();
+    if(!name){ showErr('이름을 입력해 주세요.'); return; }
+    if(name.length > 40){ showErr('이름은 40자 이내로 입력해 주세요.'); return; }
     if(symptom.length < 5){ showErr('증상을 5자 이상 적어 주세요.'); return; }
     if(!/^[0-9+\-() ]{9,20}$/.test(phone)){ showErr('연락처를 숫자로 입력해 주세요. 예) 010-1234-5678'); return; }
     if(!ENDPOINT){ showErr(PHONE_GUIDE); return; }
@@ -1841,15 +2001,20 @@
     // 챗 세션 ID가 있으면 함께 기록 — 접수 건과 챗 로그를 조인해 후속 응대에 활용
     var sid = 'asform';
     try { sid = sessionStorage.getItem('clapaChat.sid') || 'asform'; } catch(err){}
+    var phone4 = phone.replace(/\D/g, '').slice(-4);
     fetch(ENDPOINT, {
       method: 'POST',
       headers: { 'Content-Type': 'text/plain;charset=UTF-8' },
-      body: JSON.stringify({ action: 'as', model: model, symptom: symptom, phone: phone, sessionId: sid, page: 'index' })
+      body: JSON.stringify({ action: 'as', name: name, model: model, symptom: symptom, phone: phone, sessionId: sid, page: 'index' })
     })
       .then(function(r){ return r.json(); })
       .then(function(d){
         if(d && d.ok && d.id){
-          showDone(d.id);
+          if (picked.length) {
+            uploadAll(d.id, phone4, sid).then(function(fails){ showDone(d.id, phone4, fails); });
+          } else {
+            showDone(d.id, phone4, 0);
+          }
           return;
         }
         var t = (d && d.error) ? d.error : '';
