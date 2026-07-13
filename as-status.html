@@ -125,6 +125,19 @@
   .st-meta dt{font-weight:600;}
   .st-meta dd{margin:0;font-variant-numeric:tabular-nums;}
 
+  /* ---------- 알림 받기 (push-config.json enabled=false 면 슬롯이 빈 채 유지) ---------- */
+  .push-slot{display:flex;flex-direction:column;gap:6px;}
+  .push-slot:empty{display:none;}
+  .push-btn{
+    align-self:flex-start;min-height:44px;padding:11px 18px;border-radius:10px;
+    background:var(--paper);border:1.5px solid var(--teal);color:var(--teal-deep);
+    font-size:14px;font-weight:600;
+    transition:background .15s var(--ease);
+  }
+  .push-btn:hover{background:var(--teal-wash);}
+  .push-btn:disabled{opacity:.6;cursor:default;}
+  .push-note{margin:0;color:var(--muted);font-size:12.5px;line-height:1.6;}
+
   /* ---------- 접수 대화창 ---------- */
   .thread-sec{margin-top:22px;max-width:560px;}
   .thread-title{margin:0 0 4px;font-size:17px;font-weight:700;letter-spacing:-0.02em;}
@@ -298,6 +311,7 @@
             <div><dt>접수일</dt><dd id="st-date">-</dd></div>
             <div><dt>마지막 업데이트</dt><dd id="st-updated">-</dd></div>
           </dl>
+          <div class="push-slot" id="push-slot"></div>
         </div>
 
         <section class="thread-sec" id="thread-sec" aria-label="접수 상담 대화" hidden>

@@ -370,6 +370,109 @@
       });
   }
 
+  /* ------------------------------------------------------------------ *
+   * 웹 푸시 [알림 받기] — data/push-config.json enabled=true 일 때만 노출
+   * ------------------------------------------------------------------ */
+  var FIREBASE_BASE = 'https://www.gstatic.com/firebasejs/10.12.2/';
+  var pushCfgPromise = null;
+
+  function loadPushConfig() {
+    if (!pushCfgPromise) {
+      pushCfgPromise = fetch('data/push-config.json?t=' + Date.now(), { cache: 'no-store' })
+        .then(function (r) { return r.ok ? r.json() : null; })
+        .then(function (j) {
+          if (j && j.enabled === true && j.firebaseConfig && j.firebaseConfig.projectId &&
+              typeof j.vapidKey === 'string' && j.vapidKey) return j;
+          return null;   // enabled=false·구성 미비 → 알림 UI 전체 숨김
+        })
+        .catch(function () { return null; });
+    }
+    return pushCfgPromise;
+  }
+
+  function isIosBrowser() {
+    var ua = navigator.userAgent || '';
+    return /iPad|iPhone|iPod/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  }
+  function isStandalone() {
+    if (window.navigator.standalone === true) return true;
+    try { return !!(window.matchMedia && matchMedia('(display-mode: standalone)').matches); } catch (e) { return false; }
+  }
+
+  function initPush() {
+    var slot = document.getElementById('push-slot');
+    if (!slot) return;
+    slot.textContent = '';
+    loadPushConfig().then(function (cfg) {
+      if (!cfg || !cred) return;
+      // iOS 미설치 브라우저: 버튼 대신 홈 화면 추가 안내(비차단)
+      if (isIosBrowser() && !isStandalone()) {
+        slot.appendChild(el('p', 'push-note', "아이폰은 공유 → '홈 화면에 추가' 후 알림을 켤 수 있습니다."));
+        return;
+      }
+      if (!('serviceWorker' in navigator) || !('Notification' in window)) return;
+      if (Notification.permission === 'denied') return;   // 거부 이력 → 조용히 숨김
+      var btn = el('button', 'push-btn', '알림 받기');
+      btn.type = 'button';
+      btn.addEventListener('click', function () { onPushClick(btn, cfg); });
+      slot.appendChild(btn);
+      slot.appendChild(el('p', 'push-note', '처리 상태가 바뀌거나 답변이 도착하면 이 기기로 알려드립니다.'));
+    });
+  }
+
+  function loadScript(src) {
+    return new Promise(function (resolve, reject) {
+      var s = document.createElement('script');
+      s.src = src;
+      s.onload = resolve;
+      s.onerror = function () { reject(new Error('script')); };
+      document.head.appendChild(s);
+    });
+  }
+  function loadFirebaseSdk() {
+    if (window.firebase && window.firebase.messaging) return Promise.resolve();
+    return loadScript(FIREBASE_BASE + 'firebase-app-compat.js').then(function () {
+      return loadScript(FIREBASE_BASE + 'firebase-messaging-compat.js');
+    });
+  }
+
+  function onPushClick(btn, cfg) {
+    if (!cred) return;
+    btn.disabled = true;
+    btn.textContent = '설정 중…';
+    Notification.requestPermission()
+      .then(function (perm) {
+        if (perm !== 'granted') throw new Error('denied');
+        return loadFirebaseSdk();
+      })
+      .then(function () {
+        var q = encodeURIComponent(JSON.stringify(cfg.firebaseConfig));
+        return navigator.serviceWorker.register('firebase-messaging-sw.js?config=' + q);
+      })
+      .then(function (reg) {
+        if (!window.firebase.apps || !window.firebase.apps.length) window.firebase.initializeApp(cfg.firebaseConfig);
+        return window.firebase.messaging().getToken({ vapidKey: cfg.vapidKey, serviceWorkerRegistration: reg });
+      })
+      .then(function (token) {
+        if (!token) throw new Error('token');
+        return api({ action: 'asPushReg', id: cred.id, phone4: cred.phone4, fcmToken: token });
+      })
+      .then(function (d) {
+        if (!d || !d.ok) throw new Error('reg');
+        btn.textContent = '알림 신청 완료';   // 성공 — 비활성 유지
+      })
+      .catch(function (err) {
+        if (err && err.message === 'denied') {   // 권한 거부 → 조용히 숨김(비차단)
+          if (btn.parentNode) btn.parentNode.textContent = '';
+          return;
+        }
+        btn.disabled = false;
+        btn.textContent = '알림 받기';
+        var note = btn.parentNode && btn.parentNode.querySelector('.push-note');
+        if (note) note.textContent = '알림 설정에 실패했습니다. 잠시 후 다시 시도해 주세요.';
+      });
+  }
+
   /* 콘솔 검증용 최소 노출 */
   window.ClapaAsStatus = { normalizeAsId: normalizeAsId };
 })();

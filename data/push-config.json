@@ -1,0 +1,11 @@
+{
+  "enabled": false,
+  "firebaseConfig": {
+    "apiKey": "",
+    "authDomain": "",
+    "projectId": "",
+    "messagingSenderId": "",
+    "appId": ""
+  },
+  "vapidKey": ""
+}
