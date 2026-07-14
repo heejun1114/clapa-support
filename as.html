@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>A/S 접수·조회 — CLAPA 고객지원센터</title>
+<meta name="description" content="클래파 A/S를 3분이면 접수하고, 접수한 기기에서는 입력 없이 진행 상태와 담당자 대화를 바로 확인할 수 있습니다.">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230E6F66'/%3E%3Cpath d='M42.5 41.5a13 13 0 1 1 0-19' fill='none' stroke='%23fff' stroke-width='7' stroke-linecap='round'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="preconnect" href="https://shop-phinf.pstatic.net">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+  /* ===== [이식] warranty.html 공통 크롬(토큰·리셋·헤더·히어로·버튼·푸터·FAB) — 값 변형 금지 ===== */
+  :root{
+    --paper:#FFFFFF;
+    --surface:#F5F4F1;
+    --sand:#EFE9E1;
+    --line:#E6E1D8;
+    --line-soft:#EDE9E1;
+    --ink:#23201B;
+    --muted:#6F675C;
+    --sil-d:#AAA294;
+    --teal:#0E6F66;
+    --teal-deep:#0A5750;
+    --teal-wash:#E4F0ED;
+    --radius:12px;
+    --radius-sm:9px;   /* index.html 폼 토큰 — S2~S5 입력 필드가 재사용 */
+    --maxw:1080px;
+    --ease:cubic-bezier(.22,.61,.36,1);
+  }
+  *{box-sizing:border-box;}
+  html{-webkit-text-size-adjust:100%;scroll-padding-top:72px;}
+  a,button,summary,.tag,.qm-item,.brand-tab,.qlink,.chat-fab,.part-card,.btn{-webkit-tap-highlight-color:transparent;}
+  body{
+    margin:0;background:var(--paper);color:var(--ink);
+    font-family:'Pretendard Variable',Pretendard,-apple-system,'Apple SD Gothic Neo',sans-serif;
+    font-size:15px;line-height:1.6;letter-spacing:-0.011em;
+    -webkit-font-smoothing:antialiased;word-break:keep-all;
+  }
+  a{color:inherit;text-decoration:none;}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding-inline:clamp(18px,4vw,40px);}
+  .skip{position:absolute;left:-9999px;top:0;background:var(--teal);color:#fff;padding:8px 14px;border-radius:8px;z-index:100;}
+  .skip:focus{left:12px;top:12px;}
+  :focus-visible{outline:2px solid var(--teal);outline-offset:2px;border-radius:3px;}
+
+  .site-header{
+    position:sticky;top:0;z-index:40;
+    background:rgba(255,255,255,.86);
+    backdrop-filter:saturate(180%) blur(10px);
+    border-bottom:1px solid var(--line);
+  }
+  .header-inner{display:flex;align-items:center;justify-content:space-between;gap:18px;height:60px;}
+  .wordmark{display:inline-flex;align-items:baseline;gap:8px;font-weight:700;font-size:16.5px;letter-spacing:-0.02em;}
+  .wordmark .mark-a{color:var(--ink);}
+  .wordmark .mark-b{
+    color:var(--teal);font-weight:600;font-size:13px;letter-spacing:0.06em;
+    padding:2px 7px;border:1px solid var(--teal-wash);border-radius:6px;
+    background:var(--teal-wash);transform:translateY(-1px);
+  }
+  .header-nav{display:flex;align-items:center;gap:6px;}
+  .nav-link{font-size:13.5px;font-weight:500;color:var(--muted);padding:8px 12px;border-radius:8px;}
+  .nav-link:hover{color:var(--ink);background:var(--surface);}
+  .nav-link.is-store{color:var(--teal-deep);font-weight:600;}
+  .nav-link.is-store .ext{font-size:12px;margin-left:3px;color:var(--teal);}
+  @media(max-width:480px){
+    .header-inner{gap:10px;min-width:0;}
+    .header-nav .nav-link:not(.is-store){display:none;}
+    .nav-link.is-store{font-size:12.5px;padding:8px 9px;}
+  }
+
+  .page-hero{padding-block:clamp(30px,5vw,52px) clamp(16px,3vw,26px);}
+  .eyebrow{display:inline-block;color:var(--teal-deep);font-size:12.5px;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:12px;}
+  h1{margin:0;font-size:clamp(24px,3.6vw,32px);line-height:1.2;font-weight:700;letter-spacing:-0.03em;}
+  .page-sub{margin:12px 0 0;color:var(--muted);font-size:15px;max-width:56ch;}
+
+  .btn{
+    display:inline-flex;align-items:center;justify-content:center;gap:6px;
+    min-height:44px;padding:12px 20px;border-radius:10px;
+    font-size:14.5px;font-weight:600;letter-spacing:-0.01em;
+    border:1.5px solid var(--line);background:var(--paper);color:var(--ink);
+    transition:border-color .15s var(--ease),background .15s var(--ease),color .15s var(--ease);
+  }
+  .btn:hover{border-color:var(--teal);color:var(--teal-deep);background:var(--teal-wash);}
+  .btn.is-primary{background:var(--teal);border-color:var(--teal);color:#fff;}
+  .btn.is-primary:hover{background:var(--teal-deep);border-color:var(--teal-deep);color:#fff;}
+
+  .site-footer{
+    background:#F1EEE8;border-top:1px solid var(--line);
+    padding-block:clamp(34px,5vw,52px);margin-top:8px;
+  }
+  .footer-top{
+    display:flex;flex-wrap:wrap;justify-content:space-between;gap:28px 40px;
+    padding-bottom:26px;border-bottom:1px solid var(--line);
+  }
+  .foot-contact .foot-h{font-size:12px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;}
+  .foot-tel{font-size:22px;font-weight:700;letter-spacing:-0.02em;font-variant-numeric:tabular-nums;color:var(--ink);}
+  .foot-hours{font-size:13px;color:var(--muted);margin-top:5px;}
+  .foot-hours .off{color:var(--sil-d);}
+  .foot-brands{display:flex;flex-direction:column;gap:9px;}
+  .foot-brands .foot-h{font-size:12px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);margin-bottom:2px;}
+  .foot-brandrow{display:flex;flex-wrap:wrap;gap:8px 10px;}
+  .foot-brand{
+    display:inline-flex;align-items:baseline;gap:6px;
+    font-size:13.5px;font-weight:500;color:var(--ink);
+    padding:5px 0;transition:color .14s var(--ease);
+  }
+  .foot-brand .lat{font-size:11px;color:var(--muted);letter-spacing:0.04em;}
+  .foot-brand:hover{color:var(--teal-deep);}
+  .foot-brand:hover .lat{color:var(--teal);}
+  .footer-legal{
+    display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;
+    padding-top:22px;color:var(--muted);font-size:12.5px;
+  }
+  .footer-legal .slogan{color:var(--teal-deep);font-weight:600;letter-spacing:-0.01em;}
+
+  /* ---------- Chat FAB (홈·상세와 동일한 진입점) ---------- */
+  .chat-fab{
+    position:fixed;right:clamp(16px,3vw,28px);bottom:clamp(16px,3vw,28px);z-index:50;
+    display:inline-flex;align-items:center;gap:10px;
+    background:var(--paper);
+    border:1px solid var(--line);
+    border-radius:999px;
+    padding:11px 17px 11px 14px;
+    box-shadow:0 6px 22px -8px rgba(35,32,27,.22),0 2px 6px -3px rgba(35,32,27,.12);
+    transition:border-color .16s var(--ease),transform .16s var(--ease);
+  }
+  .chat-fab:hover{border-color:var(--teal);transform:translateY(-1px);}
+  .chat-ic{
+    width:32px;height:32px;flex:none;border-radius:50%;
+    background:var(--teal-wash);color:var(--teal-deep);
+    display:flex;align-items:center;justify-content:center;
+  }
+  .chat-ic svg{width:17px;height:17px;}
+  .chat-tx{display:flex;flex-direction:column;line-height:1.25;text-align:left;}
+  .chat-tt{font-size:14px;font-weight:600;letter-spacing:-0.015em;color:var(--ink);}
+  .chat-st{font-size:11.5px;color:var(--muted);display:inline-flex;align-items:center;gap:5px;}
+  .chat-live{width:6px;height:6px;border-radius:50%;background:var(--teal);flex:none;}
+  @media(max-width:480px){ .chat-tx{display:none;} .chat-fab{padding:11px;} }
+
+  @media(max-width:640px){
+    body{font-size:15.5px;}
+    .page-sub{font-size:15px;}
+    .footer-legal{font-size:13px;}
+  }
+  @media(prefers-reduced-motion:reduce){
+    *{transition:none !important;animation:none !important;scroll-behavior:auto !important;}
+  }
+
+  /* ===== [as.html 고유] 탭 세그먼트·2단 레이아웃·아코디언 카드·점검 카드·토스트 ===== */
+  .as-shell{max-width:960px;margin:0 auto;padding-inline:clamp(18px,4vw,40px);padding-bottom:clamp(40px,7vw,72px);}
+
+  /* 탭 세그먼트 — 선택 탭은 teal 채움 */
+  .as-tabs{
+    display:flex;gap:6px;max-width:420px;
+    background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:4px;
+    margin:4px 0 22px;
+  }
+  .as-tab{
+    flex:1;min-height:44px;border:0;background:transparent;border-radius:999px;
+    padding:10px 14px;font:inherit;font-size:14.5px;font-weight:650;letter-spacing:-0.01em;
+    color:var(--muted);cursor:pointer;
+    transition:background .15s var(--ease),color .15s var(--ease),box-shadow .15s var(--ease);
+  }
+  .as-tab:not([aria-selected="true"]):hover{color:var(--ink);}
+  .as-tab[aria-selected="true"]{background:var(--teal);color:#fff;box-shadow:0 1px 5px -1px rgba(14,111,102,.4);}
+
+  /* 접수 탭 2단 — ≥900px에서만 우측 264px sticky 요약·도움 패널 */
+  .as-layout{display:block;}
+  @media(min-width:900px){
+    .as-layout{display:grid;grid-template-columns:1fr 264px;gap:28px;align-items:start;}
+  }
+  .as-main{min-width:0;}
+  .as-aside{position:sticky;top:80px;}
+  @media(max-width:899px){ .as-aside{display:none;} }   /* 폰: 요약 패널 숨김(각 섹션이 요약 역할) */
+
+  /* 아코디언 섹션 카드 — 상태(대기/열림/완료)는 S2 엔진이 토글 */
+  .sec-card{border:1px solid var(--line);border-radius:var(--radius);background:var(--paper);margin-bottom:14px;}
+  .sec-card.is-dim{opacity:.55;}                                                  /* 대기 */
+  .sec-card.is-dim .sec-head{cursor:default;}
+  .sec-card.is-open{border-color:var(--teal);box-shadow:0 3px 14px -8px rgba(14,111,102,.28);}  /* 열림 */
+  .sec-card.is-done .sec-body{display:none;}                                      /* 완료(요약 한 줄만) */
+  .sec-head{display:flex;align-items:center;gap:12px;min-height:52px;padding:14px 16px;cursor:pointer;}
+  .sec-body{padding:0 16px 16px;}
+  .sec-done-line{font-weight:700;color:var(--teal-deep);letter-spacing:-0.015em;}
+
+  /* 점검 카드 — index.html .as-notice.as-maint 연노랑 팔레트 재사용 */
+  .as-maint-card{
+    background:#FBF3E2;border:1px solid #EBDCB9;border-radius:var(--radius);
+    padding:18px 20px;
+  }
+  .as-maint-card .amc-t{font-size:16px;font-weight:700;letter-spacing:-0.015em;color:var(--ink);}
+  .as-maint-card .amc-b{margin-top:6px;color:#6F675C;font-size:14px;line-height:1.65;}
+
+  /* 토스트 — 자동 소멸(reduced-motion은 위 전역 규칙이 애니메이션 차단) */
+  .toast{
+    position:fixed;left:50%;bottom:clamp(20px,5vw,34px);transform:translateX(-50%);
+    z-index:60;max-width:min(92vw,420px);
+    background:var(--ink);color:#fff;border-radius:12px;padding:12px 18px;
+    font-size:14px;font-weight:600;line-height:1.5;text-align:center;
+    box-shadow:0 10px 30px -12px rgba(35,32,27,.45);
+    animation:toast-in .22s var(--ease);
+  }
+  @keyframes toast-in{from{opacity:0;transform:translate(-50%,10px);}to{opacity:1;transform:translate(-50%,0);}}
+</style>
+<link rel="stylesheet" href="assets/chat.css">
+</head>
+<body>
+<a class="skip" href="#main">본문으로 건너뛰기</a>
+
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a class="wordmark" href="index.html" aria-label="CLAPA SUPPORT 고객지원센터 홈">
+      <span class="mark-a">CLAPA</span><span class="mark-b">SUPPORT</span>
+    </a>
+    <nav class="header-nav" aria-label="주요 메뉴">
+      <a class="nav-link" href="index.html#finder-title">전체 제품</a>
+      <a class="nav-link is-inquiry" href="tel:1522-8508">전화 1522-8508</a>
+      <a class="nav-link is-store" href="https://clapa.kr" target="_blank" rel="noopener">공식몰<span class="ext" aria-hidden="true">↗</span></a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+  <section class="page-hero">
+    <div class="wrap">
+      <span class="eyebrow">A/S</span>
+      <h1>A/S 접수·조회</h1>
+      <p class="page-sub">접수는 3분이면 끝납니다. 접수하신 기기에서는 다음부터 입력 없이 진행 상태를 확인하실 수 있어요.</p>
+    </div>
+  </section>
+
+  <div class="as-shell">
+    <div class="as-tabs" role="tablist" aria-label="A/S 접수·조회">
+      <button class="as-tab" id="tab-intake" role="tab" aria-selected="true"  aria-controls="panel-intake" type="button">A/S 접수</button>
+      <button class="as-tab" id="tab-status" role="tab" aria-selected="false" aria-controls="panel-status" type="button">내 접수 조회</button>
+    </div>
+
+    <!-- 접수 탭 -->
+    <section id="panel-intake" role="tabpanel" aria-labelledby="tab-intake">
+      <!-- 점검 카드 슬롯(stopAs ON 시 as.js가 채움 — 접수 탭만) -->
+      <div id="intake-maint" hidden></div>
+      <div class="as-layout" id="intake-live">
+        <div class="as-main">
+          <!-- [S3] 스마트 위층: <div id="upstairs"></div> -->
+          <!-- [S2] 섹션1 제품:  <div id="sec-product" class="sec-card"></div> -->
+          <!-- [S4] 섹션2 증상:  <div id="sec-symptom" class="sec-card is-dim"></div> -->
+          <!-- [S4] 섹션3 사진:  <div id="sec-photo"   class="sec-card is-dim"></div> -->
+          <!-- [S4] 섹션4 연락처:<div id="sec-contact" class="sec-card is-dim"></div> -->
+          <!-- [S4] 제출·완료:  <div id="sec-submit"></div> / <div id="intake-done" hidden></div> -->
+        </div>
+        <aside class="as-aside" id="intake-aside" aria-label="접수 요약">
+          <!-- [S2~S4] 실시간 요약·도움 패널(제품·증상·연락처 채움 상태) -->
+        </aside>
+      </div>
+    </section>
+
+    <!-- 조회 탭 -->
+    <section id="panel-status" role="tabpanel" aria-labelledby="tab-status" hidden>
+      <!-- [S5] 자동 목록 <div id="ticket-list"></div> / 상세 <div id="ticket-detail"></div>
+           / 수동 조회 폼 <form id="manual-lookup"></form> / "이 기기의 기억 지우기" 버튼 -->
+    </section>
+  </div>
+</main>
+
+<!-- Chat entry point: quiet floating pill -->
+<button class="chat-fab" type="button" data-clapa-chat-trigger aria-label="AI 상담 열기">
+  <span class="chat-ic" aria-hidden="true">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6.5v8a2.5 2.5 0 0 1-2.5 2.5H9l-4 3.2V17H6.5A2.5 2.5 0 0 1 4 14.5v-8A2.5 2.5 0 0 1 6.5 4h11A2.5 2.5 0 0 1 20 6.5z"/><path d="M8.5 10h7M8.5 13h4.5"/></svg>
+  </span>
+  <span class="chat-tx">
+    <span class="chat-tt">AI 상담</span>
+    <span class="chat-st"><span class="chat-live" aria-hidden="true"></span>AI가 먼저 답해드려요</span>
+  </span>
+</button>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-top">
+      <div class="foot-contact">
+        <p class="foot-h">고객센터</p>
+        <a class="foot-tel" href="tel:1522-8508">1522-8508</a>
+        <p class="foot-hours">평일 09:00–15:00 <span class="off">· 주말·공휴일 휴무</span></p>
+      </div>
+      <nav class="foot-brands" aria-label="바로가기">
+        <p class="foot-h">바로가기</p>
+        <div class="foot-brandrow">
+          <a class="foot-brand" href="https://clapa.kr" target="_blank" rel="noopener">클래파 공식몰 <span class="lat" aria-hidden="true">↗</span></a>
+          <a class="foot-brand" href="tel:1522-8508">A/S 신청 1522-8508</a>
+          <a class="foot-brand" href="index.html#finder-title">설명서 다운로드</a>
+          <a class="foot-brand" href="warranty.html">보증·교환/반품 안내</a>
+        </div>
+      </nav>
+    </div>
+    <div class="footer-legal">
+      <span>© 2026 CLAPA. <a href="https://clapa.kr" target="_blank" rel="noopener" style="border-bottom:1px solid var(--line);">clapa.kr</a></span>
+      <span class="slogan">조용함이 만드는 박수 칠 일상</span>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/as-media.js" defer></script>
+<script src="assets/as.js" defer></script>
+<script src="assets/chat.js" defer></script>
+</body>
+</html>
