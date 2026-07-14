@@ -174,13 +174,21 @@
   @media(max-width:899px){ .as-aside{display:none;} }   /* 폰: 요약 패널 숨김(각 섹션이 요약 역할) */
 
   /* 아코디언 섹션 카드 — 상태(대기/열림/완료)는 S2 엔진이 토글 */
-  .sec-card{border:1px solid var(--line);border-radius:var(--radius);background:var(--paper);margin-bottom:14px;}
+  /* 카드 본문 열림/닫힘은 grid-template-rows 0fr↔1fr 로 부드럽게 전환(글리치 없음).
+     닫힘 상태는 visibility:hidden 로 접근성 트리·탭 순서에서 제거(display:none 이점 유지).
+     전역 reduced-motion 규칙(*{transition:none})이 자동으로 즉시 전환으로 되돌린다. */
+  .sec-card{
+    border:1px solid var(--line);border-radius:var(--radius);background:var(--paper);margin-bottom:14px;
+    display:grid;grid-template-rows:auto 1fr;
+    transition:grid-template-rows .32s var(--ease),border-color .15s var(--ease),box-shadow .15s var(--ease);
+  }
   .sec-card.is-dim{opacity:.55;}                                                  /* 대기 */
   .sec-card.is-dim .sec-head{cursor:default;}
   .sec-card.is-open{border-color:var(--teal);box-shadow:0 3px 14px -8px rgba(14,111,102,.28);}  /* 열림 */
-  .sec-card.is-done .sec-body{display:none;}                                      /* 완료(요약 한 줄만) */
+  .sec-card.is-dim,.sec-card.is-done{grid-template-rows:auto 0fr;}                /* 대기·완료 = 본문 접힘 */
+  .sec-card.is-dim .sec-body,.sec-card.is-done .sec-body{visibility:hidden;}
   .sec-head{display:flex;align-items:center;gap:12px;min-height:52px;padding:14px 16px;cursor:pointer;}
-  .sec-body{padding:0 16px 16px;}
+  .sec-body{padding:0 16px 16px;overflow:hidden;min-height:0;}
   .sec-done-line{font-weight:700;color:var(--teal-deep);letter-spacing:-0.015em;}
 
   /* ---- [S2] 섹션 헤드(번호·제목·변경)·제품 그리드·요약 aside ---- */
@@ -195,7 +203,7 @@
   .sec-head-main{flex:1;min-width:0;display:flex;align-items:center;gap:10px;}
   .sec-title{font-size:16px;font-weight:700;letter-spacing:-0.015em;color:var(--ink);}
   .sec-edit{
-    flex:none;min-height:32px;padding:5px 12px;border-radius:999px;
+    flex:none;min-height:40px;padding:8px 14px;border-radius:999px;
     border:1px solid var(--line);background:var(--paper);color:var(--muted);
     font:inherit;font-size:13px;font-weight:600;cursor:pointer;
     transition:border-color .15s var(--ease),color .15s var(--ease);
@@ -415,6 +423,163 @@
     .up-input{min-width:0;flex-basis:100%;}
   }
 
+  /* ---------- [S4] 증상·사진·연락처·제출·완료 화면 ---------- */
+  .sec-help{margin:0 0 13px;color:var(--muted);font-size:15.5px;line-height:1.55;}
+
+  /* 증상 칩(다중 토글) + 자세히 textarea */
+  .sym-chips{display:flex;flex-wrap:wrap;gap:8px;}
+  .chip{
+    min-height:40px;padding:9px 15px;border-radius:999px;
+    border:1px solid var(--line);background:var(--paper);color:var(--ink);
+    font:inherit;font-size:14.5px;font-weight:600;letter-spacing:-0.01em;cursor:pointer;
+    transition:border-color .14s var(--ease),background .14s var(--ease),color .14s var(--ease);
+  }
+  .chip:hover{border-color:var(--teal);color:var(--teal-deep);}
+  .chip.on{background:var(--teal);border-color:var(--teal);color:#fff;}
+  .chip.on:hover{background:var(--teal-deep);color:#fff;}
+  .sym-text{
+    display:block;width:100%;margin-top:12px;min-height:84px;resize:vertical;
+    padding:12px 14px;font-family:inherit;font-size:16px;line-height:1.55;color:var(--ink);
+    background:var(--paper);border:1px solid var(--line);border-radius:var(--radius-sm);
+    transition:border-color .15s var(--ease),box-shadow .15s var(--ease);
+  }
+  .sym-text:focus{outline:none;border-color:var(--teal);box-shadow:0 0 0 3px var(--teal-wash);}
+
+  /* 섹션 진행 버튼 */
+  .sec-next{
+    margin-top:15px;min-height:44px;padding:11px 22px;
+    border:1.5px solid var(--teal);background:var(--teal);color:#fff;border-radius:var(--radius-sm);
+    font:inherit;font-size:14.5px;font-weight:650;cursor:pointer;
+    transition:background .15s var(--ease),border-color .15s var(--ease);
+  }
+  .sec-next:hover{background:var(--teal-deep);border-color:var(--teal-deep);}
+
+  /* 사진·영상 드롭존·타일 */
+  .ph-drop{
+    display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center;
+    padding:22px 16px;border:1.5px dashed var(--line);border-radius:var(--radius-sm);
+    background:var(--surface);cursor:pointer;
+    transition:border-color .15s var(--ease),background .15s var(--ease);
+  }
+  .ph-drop:hover,.ph-drop.hot{border-color:var(--teal);background:var(--teal-wash);}
+  .ph-drop-ic{color:var(--teal-deep);display:flex;}
+  .ph-drop-ic svg{width:26px;height:26px;}
+  .ph-drop-t{font-size:15px;font-weight:650;color:var(--ink);}
+  .ph-drop-s{font-size:12.5px;line-height:1.5;color:var(--muted);}
+  .ph-file-input{position:absolute;width:1px;height:1px;opacity:0;pointer-events:none;}
+  .ph-tiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(92px,1fr));gap:9px;margin-top:11px;}
+  .ph-tiles:empty{display:none;}
+  .ph-tile{
+    position:relative;aspect-ratio:1/1;border-radius:var(--radius-sm);overflow:hidden;
+    background:var(--surface);border:1px solid var(--line-soft);
+    display:flex;align-items:center;justify-content:center;
+  }
+  .ph-tile img{width:100%;height:100%;object-fit:cover;display:block;}
+  .ph-tile-vid{display:flex;flex-direction:column;align-items:center;gap:4px;color:var(--teal-deep);font-size:12px;font-weight:650;}
+  .ph-tile-vid svg{width:22px;height:22px;}
+  .ph-tile-name{
+    position:absolute;left:0;right:0;bottom:0;padding:3px 6px;
+    font-size:10.5px;line-height:1.3;color:#fff;background:rgba(35,32,27,.62);
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  }
+  .ph-rm{
+    position:absolute;top:4px;right:4px;width:26px;height:26px;border-radius:50%;
+    border:0;background:rgba(35,32,27,.66);color:#fff;font-size:16px;line-height:1;cursor:pointer;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .ph-rm:hover{background:rgba(35,32,27,.85);}
+
+  /* 연락처 필드 */
+  .ct-prefill{margin:0 0 13px;font-size:13.5px;line-height:1.55;color:var(--teal-deep);}
+  .ct-field{margin-bottom:12px;}
+  .ct-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+  .ct-grid .ct-field{margin-bottom:0;}
+  .ct-label{display:flex;align-items:center;gap:6px;margin-bottom:6px;font-size:13.5px;font-weight:650;color:var(--ink);}
+  .ct-req{font-size:11px;font-weight:700;color:var(--teal-deep);background:var(--teal-wash);padding:1px 8px;border-radius:999px;}
+  .ct-input{
+    width:100%;min-height:46px;padding:12px 14px;
+    font-family:inherit;font-size:16px;color:var(--ink);
+    background:var(--paper);border:1px solid var(--line);border-radius:var(--radius-sm);
+    transition:border-color .15s var(--ease),box-shadow .15s var(--ease);
+  }
+  .ct-input:focus{outline:none;border-color:var(--teal);box-shadow:0 0 0 3px var(--teal-wash);}
+  .ct-safe{
+    display:flex;align-items:flex-start;gap:6px;margin-top:13px;
+    font-size:12px;line-height:1.5;color:var(--muted);
+  }
+  .ct-safe svg{flex:none;width:13px;height:13px;margin-top:2px;color:var(--sil-d);}
+  @media(max-width:520px){ .ct-grid{grid-template-columns:1fr;gap:12px;} }
+
+  /* 제출 */
+  #sec-submit{margin-top:2px;}
+  .as-submit{
+    width:100%;min-height:52px;padding:14px 24px;
+    border:1.5px solid var(--teal);background:var(--teal);color:#fff;border-radius:var(--radius);
+    font:inherit;font-size:16px;font-weight:700;letter-spacing:-0.01em;cursor:pointer;
+    transition:background .15s var(--ease),border-color .15s var(--ease);
+  }
+  .as-submit:hover{background:var(--teal-deep);border-color:var(--teal-deep);}
+  .as-submit[disabled]{opacity:.6;cursor:default;}
+  .as-submit-note{margin:10px 2px 0;font-size:13px;line-height:1.5;color:var(--muted);text-align:center;}
+
+  /* 완료 화면 */
+  #intake-done{padding-top:6px;}
+  .done-card{
+    background:linear-gradient(180deg,var(--teal-wash),var(--paper) 58%);
+    border:1px solid #CFE4DF;border-radius:var(--radius);
+    padding:clamp(26px,5vw,38px) clamp(18px,4vw,32px);text-align:center;
+  }
+  .done-check{
+    display:inline-flex;align-items:center;justify-content:center;
+    width:52px;height:52px;border-radius:50%;background:var(--teal);color:#fff;margin-bottom:14px;
+  }
+  .done-check svg{width:28px;height:28px;}
+  .done-title{font-size:clamp(20px,3vw,24px);font-weight:700;letter-spacing:-0.02em;color:var(--ink);}
+  .done-sub{margin:8px auto 0;max-width:40ch;font-size:14.5px;line-height:1.55;color:var(--muted);}
+  .done-ticket{
+    display:inline-flex;flex-direction:column;gap:3px;align-items:center;
+    margin:20px auto 0;padding:14px 30px;background:var(--paper);
+    border:1px solid var(--line);border-radius:var(--radius);
+  }
+  .done-ticket-k{font-size:12px;font-weight:650;letter-spacing:0.06em;text-transform:uppercase;color:var(--muted);}
+  .done-ticket-v{font-size:clamp(22px,4vw,29px);font-weight:800;letter-spacing:0.02em;color:var(--teal-deep);font-variant-numeric:tabular-nums;word-break:break-all;}
+
+  .done-steps{display:flex;align-items:flex-start;justify-content:center;margin:24px auto 0;max-width:360px;}
+  .done-step{display:flex;flex-direction:column;align-items:center;gap:6px;flex:none;width:64px;}
+  .done-dot{width:16px;height:16px;border-radius:50%;background:var(--sand);border:2px solid var(--line);}
+  .done-step.is-now .done-dot{background:var(--teal);border-color:var(--teal);box-shadow:0 0 0 4px var(--teal-wash);}
+  .done-step.is-done .done-dot{background:var(--teal);border-color:var(--teal);}
+  .done-step-l{font-size:12px;font-weight:600;color:var(--muted);}
+  .done-step.is-now .done-step-l{color:var(--teal-deep);font-weight:700;}
+  .done-bar{flex:1;height:2px;background:var(--line);margin-top:7px;}
+
+  .done-save{margin:20px auto 0;max-width:44ch;font-size:13.5px;line-height:1.6;color:var(--muted);}
+  .done-acts{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin-top:20px;}
+  .done-go{
+    min-height:48px;padding:13px 24px;border:1.5px solid var(--teal);
+    background:var(--teal);color:#fff;border-radius:var(--radius-sm);
+    font:inherit;font-size:15px;font-weight:650;cursor:pointer;
+    transition:background .15s var(--ease),border-color .15s var(--ease);
+  }
+  .done-go:hover{background:var(--teal-deep);border-color:var(--teal-deep);}
+  .done-tel{
+    display:inline-flex;align-items:center;min-height:48px;padding:13px 22px;
+    border:1.5px solid var(--line);background:var(--paper);color:var(--ink);border-radius:var(--radius-sm);
+    font-size:15px;font-weight:650;
+    transition:border-color .15s var(--ease),color .15s var(--ease);
+  }
+  .done-tel:hover{border-color:var(--teal);color:var(--teal-deep);}
+  .done-talk{
+    display:inline-block;margin-top:14px;font-size:13.5px;font-weight:600;color:var(--teal-deep);
+    border-bottom:1px solid var(--teal-wash);
+  }
+  .done-talk:hover{border-bottom-color:var(--teal);}
+  .done-safe{
+    display:flex;align-items:flex-start;gap:6px;justify-content:center;margin-top:16px;
+    font-size:12px;line-height:1.5;color:var(--muted);
+  }
+  .done-safe svg{flex:none;width:13px;height:13px;margin-top:2px;color:var(--sil-d);}
+
   /* 점검 카드 — index.html .as-notice.as-maint 연노랑 팔레트 재사용 */
   .as-maint-card{
     background:#FBF3E2;border:1px solid #EBDCB9;border-radius:var(--radius);
@@ -477,15 +642,21 @@
           <div id="upstairs"></div>
           <!-- [S2] 섹션1 제품 -->
           <div id="sec-product" class="sec-card is-open"></div>
-          <!-- [S4] 섹션2 증상:  <div id="sec-symptom" class="sec-card is-dim"></div> -->
-          <!-- [S4] 섹션3 사진:  <div id="sec-photo"   class="sec-card is-dim"></div> -->
-          <!-- [S4] 섹션4 연락처:<div id="sec-contact" class="sec-card is-dim"></div> -->
-          <!-- [S4] 제출·완료:  <div id="sec-submit"></div> / <div id="intake-done" hidden></div> -->
+          <!-- [S4] 섹션2 증상 -->
+          <div id="sec-symptom" class="sec-card is-dim"></div>
+          <!-- [S4] 섹션3 사진 -->
+          <div id="sec-photo" class="sec-card is-dim"></div>
+          <!-- [S4] 섹션4 연락처 -->
+          <div id="sec-contact" class="sec-card is-dim"></div>
+          <!-- [S4] 제출 -->
+          <div id="sec-submit"></div>
         </div>
         <aside class="as-aside" id="intake-aside" aria-label="접수 요약">
           <!-- [S2~S4] 실시간 요약·도움 패널(제품·증상·연락처 채움 상태) -->
         </aside>
       </div>
+      <!-- [S4] 완료 화면(제출 성공 시 as.js가 채우고 intake-live 숨김) -->
+      <div id="intake-done" hidden></div>
     </section>
 
     <!-- 조회 탭 -->

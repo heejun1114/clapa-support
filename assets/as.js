@@ -246,17 +246,21 @@
     var head = el('div', 'sec-head');
     head.appendChild(el('span', 'sec-num', '1'));
     var main = el('span', 'sec-head-main');
+    var titleEl;
     if (sectionState.product === 'done') {
-      main.appendChild(el('div', 'sec-done-line', sectionSummary.product));
+      titleEl = el('div', 'sec-done-line', sectionSummary.product);
+      main.appendChild(titleEl);
       head.appendChild(main);
       var editBtn = el('button', 'sec-edit', '변경'); editBtn.type = 'button';
       editBtn.addEventListener('click', function (e) { e.stopPropagation(); reopenSection('product'); });
       head.appendChild(editBtn);
       head.addEventListener('click', function () { reopenSection('product'); });
     } else {
-      main.appendChild(el('span', 'sec-title', '제품'));
+      titleEl = el('span', 'sec-title', '제품');
+      main.appendChild(titleEl);
       head.appendChild(main);
     }
+    headA11y(head, titleEl, 'product');   // [S4] heading 시맨틱 + aria-expanded
     host.appendChild(head);
 
     /* 바디(완료 시 CSS가 숨김) */
@@ -385,6 +389,7 @@
       if (typeof renderSymptomSection === 'function') renderSymptomSection(); // [S4]
       if (typeof renderPhotoSection === 'function') renderPhotoSection();     // [S4]
       if (typeof renderContactSection === 'function') renderContactSection(); // [S4]
+      if (typeof renderSubmit === 'function') renderSubmit();                 // [S4]
       renderAside();
     }).catch(function () { showToast('제품 목록을 불러오지 못했어요. 새로고침해 주세요.'); });
   }
@@ -828,6 +833,460 @@
     methods.appendChild(buildMethod(ICON_RECEIPT, '주문번호로 찾기', buildOrderBody));
     card.appendChild(methods);
     host.appendChild(card);
+  }
+
+  /* ========================= [S4] 증상 → 사진 → 연락처 → 제출 → 완료 =========================
+     소비: state/completeSection/openSection/renderAside(S2), applyMatchedProduct·autofillContact(S3),
+           api(S1), window.ClapaAsMedia(as-media.js), window.asStore(S5, if 가드).
+     필수 4: 제품·증상(칩∨텍스트)·이름·휴대폰. 첨부는 비차단(asUpload). */
+
+  /* 개발자 상수 아이콘(innerHTML 허용 — 사용자·서버 데이터 아님) */
+  var ICON_CHECK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m5 13 4 4 10-11"/></svg>';
+  var ICON_VIDEO = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6.5A1.5 1.5 0 0 1 5.5 5h8A1.5 1.5 0 0 1 15 6.5v11A1.5 1.5 0 0 1 13.5 19h-8A1.5 1.5 0 0 1 4 17.5z"/><path d="m15 10 5-3v10l-5-3z"/></svg>';
+  var AS_TALK = 'https://talk.naver.com/ct/w44cu1?frm=psf';   // 네이버 톡톡 상담 채널(chat.js와 동일)
+  var AS_STEPS = ['접수', '확인중', '처리중', '완료'];         // as-status.js STEPS와 동일(발명 금지)
+
+  /* 아코디언 헤드 a11y: 제목에 heading 시맨틱 + 열림 상태 aria-expanded(구조 침습 없이) */
+  function headA11y(head, titleEl, key) {
+    if (titleEl) { titleEl.setAttribute('role', 'heading'); titleEl.setAttribute('aria-level', '3'); }
+    head.setAttribute('aria-expanded', sectionState[key] === 'open' ? 'true' : 'false');
+  }
+
+  /* 공용 섹션 헤드(증상·사진·연락처) — 완료 시 요약 줄 + 변경 버튼 */
+  function secHead(key, num, titleText) {
+    var head = el('div', 'sec-head');
+    head.appendChild(el('span', 'sec-num', num));
+    var main = el('span', 'sec-head-main');
+    var titleEl;
+    if (sectionState[key] === 'done') {
+      titleEl = el('div', 'sec-done-line', sectionSummary[key]);
+      main.appendChild(titleEl);
+      head.appendChild(main);
+      var editBtn = el('button', 'sec-edit', '변경'); editBtn.type = 'button';
+      editBtn.addEventListener('click', function (e) { e.stopPropagation(); reopenSection(key); });
+      head.appendChild(editBtn);
+      head.addEventListener('click', function () { reopenSection(key); });
+    } else {
+      titleEl = el('span', 'sec-title', titleText);
+      main.appendChild(titleEl);
+      head.appendChild(main);
+    }
+    headA11y(head, titleEl, key);
+    return head;
+  }
+
+  /* ---- 증상 섹션(카테고리별 칩 + textarea) ----
+     칩 근거: 기존 폼 v2 #as-chips 계승 + FAQ '상황' 라인 + 심층분석 실빈도.
+     발명 금지 — 근거 없는 증상 문구는 만들지 않고 공통칩만 유지. */
+  var SYM_COMMON = ['전원이 안 켜져요', '소음·진동', '파손·부품이 필요해요'];  // v2 #as-chips 계승(전 카테고리 공통)
+  var SYM_BY_CAT = {
+    wireless: ['충전이 안 돼요', '흡입력이 약해요', '사용 시간이 짧아요'],       // v2칩 + FAQ 충전불량/흡입력저하/사용시간단축
+    wetdry:   ['흡입력이 약해요'],                                             // v2 '흡입력 약함' + FAQ(유선=충전 제외)
+    fan:      ['충전이 안 돼요'],                                              // 무선선풍기 다수 + FAQ '완충 표시인데 작동 안 됨'
+    heat:     [],                                                             // 근거 불충분 → 공통칩만
+    dehum:    ['물이 넘쳐요'],                                                 // 심층분석 '만수 아닌데 넘침' + FAQ 만수센서 오작동
+    living:   []                                                              // 근거 불충분 → 공통칩만
+  };
+  function currentCat() {
+    if (state.product && state.product.code) {
+      var m = modelByCode(state.product.code);
+      if (m && m.cat) return m.cat;
+    }
+    return '';
+  }
+  function chipsForCategory() {
+    var cat = currentCat();
+    var extra = (cat && SYM_BY_CAT[cat]) ? SYM_BY_CAT[cat] : [];
+    var out = extra.concat(SYM_COMMON);
+    // 이미 선택된 칩이 현재 세트에 없으면(제품 변경 등) 그대로 노출해 해제 가능하게 유지
+    var picked = state.symptom.chips, i;
+    for (i = 0; i < picked.length; i++) { if (out.indexOf(picked[i]) === -1) out.push(picked[i]); }
+    out.push('기타');
+    return out;
+  }
+  function toggleChip(label, chipEl) {
+    var idx = state.symptom.chips.indexOf(label), on;
+    if (idx === -1) { state.symptom.chips.push(label); on = true; }
+    else { state.symptom.chips.splice(idx, 1); on = false; }
+    chipEl.className = 'chip' + (on ? ' on' : '');
+    chipEl.setAttribute('aria-pressed', on ? 'true' : 'false');
+    renderAside();
+  }
+  function symptomShort() {
+    var s = state.symptom;
+    if (s.chips.length) { var j = s.chips.join(', '); return j.length > 30 ? j.slice(0, 30) + '…' : j; }
+    var t = s.text.trim();
+    return t.length > 24 ? t.slice(0, 24) + '…' : t;
+  }
+  function submitSymptom() {
+    if (!state.symptom.chips.length && !state.symptom.text.trim()) { showToast('증상을 선택하거나 적어 주세요.'); return; }
+    completeSection('symptom', '✓ 증상 — ' + symptomShort());
+  }
+  function renderSymptomSection() {
+    var host = document.getElementById('sec-symptom');
+    if (!host) return;
+    host.className = 'sec-card ' + stateToClass(sectionState.symptom);
+    host.textContent = '';
+    host.appendChild(secHead('symptom', '2', '증상'));
+
+    var body = el('div', 'sec-body');
+    body.appendChild(el('p', 'sec-help', '어떤 증상인지 골라 주세요. 여러 개 선택할 수 있어요.'));
+    var chipWrap = el('div', 'sym-chips');
+    chipWrap.setAttribute('role', 'group'); chipWrap.setAttribute('aria-label', '증상 유형 선택');
+    var labels = chipsForCategory(), i;
+    for (i = 0; i < labels.length; i++) {
+      (function (label) {
+        var on = state.symptom.chips.indexOf(label) !== -1;
+        var chip = el('button', 'chip' + (on ? ' on' : ''), label); chip.type = 'button';
+        chip.setAttribute('aria-pressed', on ? 'true' : 'false');
+        chip.addEventListener('click', function () { toggleChip(label, chip); });
+        chipWrap.appendChild(chip);
+      })(labels[i]);
+    }
+    body.appendChild(chipWrap);
+
+    var ta = document.createElement('textarea');
+    ta.className = 'sym-text'; ta.rows = 3; ta.maxLength = 1000;
+    ta.placeholder = '더 자세히 적어주시면 처리가 빨라져요 (선택)';
+    ta.setAttribute('aria-label', '증상 자세히 적기');
+    ta.value = state.symptom.text;
+    ta.addEventListener('input', function () { state.symptom.text = ta.value; renderAside(); });
+    body.appendChild(ta);
+
+    var next = el('button', 'sec-next', '다음'); next.type = 'button';
+    next.addEventListener('click', submitSymptom);
+    body.appendChild(next);
+    host.appendChild(body);
+  }
+
+  /* symptom 전송 포맷 "칩1, 칩2 — 직접입력"(확정 계약) */
+  function buildSymptom() {
+    var joined = state.symptom.chips.join(', ');
+    var text = state.symptom.text.trim();
+    if (joined && text) return joined + ' — ' + text;
+    return joined || text;
+  }
+
+  /* ---- 사진·영상 섹션(선택·비차단) ---- */
+  var MAX_PHOTOS = 5, MAX_VIDEO_MB = 25, ORIGINAL_IMG_MAX_MB = 5;
+  function photoCount() { var n = 0, i; for (i = 0; i < state.photos.length; i++) { if (state.photos[i].kind === 'image') n++; } return n; }
+  function hasVideo() { var i; for (i = 0; i < state.photos.length; i++) { if (state.photos[i].kind === 'video') return true; } return false; }
+  function photoSummary() {
+    var n = state.photos.length;
+    return n ? ('✓ 사진·영상 ' + n + '개') : '사진 없이 진행';
+  }
+  function renderPhotoTiles(tiles) {
+    tiles.textContent = '';
+    var i;
+    for (i = 0; i < state.photos.length; i++) {
+      (function (item, idx) {
+        var tile = el('div', 'ph-tile');
+        if (item.kind === 'image' && item.url) {
+          var img = document.createElement('img');
+          img.src = item.url; img.alt = item.name || '';
+          tile.appendChild(img);
+        } else {
+          var vid = el('div', 'ph-tile-vid');
+          vid.appendChild(iconEl('', ICON_VIDEO));
+          vid.appendChild(el('span', null, '영상'));
+          tile.appendChild(vid);
+        }
+        tile.appendChild(el('span', 'ph-tile-name', item.name || ''));
+        var rm = el('button', 'ph-rm', '×'); rm.type = 'button';
+        rm.setAttribute('aria-label', (item.name || '첨부') + ' 삭제');
+        rm.addEventListener('click', function (e) {
+          e.stopPropagation();
+          try { if (item.url) URL.revokeObjectURL(item.url); } catch (er) {}
+          state.photos.splice(idx, 1);
+          renderPhotoTiles(tiles); renderAside();
+        });
+        tile.appendChild(rm);
+        tiles.appendChild(tile);
+      })(state.photos[i], i);
+    }
+  }
+  function addPhotoFiles(files, tiles, note) {
+    var added = 0, i;
+    for (i = 0; i < files.length; i++) {
+      var f = files[i];
+      var isImage = /^image\//.test(f.type);
+      var isVideo = f.type === 'video/mp4' || f.type === 'video/quicktime';
+      if (!isImage && !isVideo) { setNote(note, '사진 또는 영상(mp4·mov) 파일만 올릴 수 있어요.'); continue; }
+      if (isImage && photoCount() >= MAX_PHOTOS) { setNote(note, '사진은 최대 5장까지 올릴 수 있어요.'); continue; }
+      if (isVideo && hasVideo()) { setNote(note, '영상은 1개만 올릴 수 있어요.'); continue; }
+      if (isVideo && f.size > MAX_VIDEO_MB * 1024 * 1024) { setNote(note, '영상이 커요. 접수 후 대화창이나 톡톡으로 보내 주세요.'); continue; }
+      var url = ''; try { url = URL.createObjectURL(f); } catch (e) {}
+      state.photos.push({ file: f, kind: isImage ? 'image' : 'video', name: f.name, url: url });
+      added++;
+    }
+    if (added) setNote(note, '');
+    renderPhotoTiles(tiles); renderAside();
+  }
+  function bindPhotoDrop(drop, fileIn, tiles, note) {
+    drop.addEventListener('click', function () { fileIn.click(); });
+    drop.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ' || e.keyCode === 13 || e.keyCode === 32) { e.preventDefault(); fileIn.click(); }
+    });
+    drop.addEventListener('dragover', function (e) { e.preventDefault(); drop.className = 'ph-drop hot'; });
+    drop.addEventListener('dragleave', function () { drop.className = 'ph-drop'; });
+    drop.addEventListener('drop', function (e) {
+      e.preventDefault(); drop.className = 'ph-drop';
+      addPhotoFiles((e.dataTransfer && e.dataTransfer.files) || [], tiles, note);
+    });
+    fileIn.addEventListener('change', function () { addPhotoFiles(fileIn.files || [], tiles, note); fileIn.value = ''; });
+  }
+  function renderPhotoSection() {
+    var host = document.getElementById('sec-photo');
+    if (!host) return;
+    host.className = 'sec-card ' + stateToClass(sectionState.photo);
+    host.textContent = '';
+    host.appendChild(secHead('photo', '3', '사진·영상 (선택)'));
+
+    var body = el('div', 'sec-body');
+    body.appendChild(el('p', 'sec-help', '증상이 보이는 사진이나 짧은 영상을 올려주시면 접수 확인이 빨라져요. 없어도 접수할 수 있어요.'));
+
+    var drop = el('div', 'ph-drop');
+    drop.setAttribute('role', 'button'); drop.tabIndex = 0;
+    drop.setAttribute('aria-label', '사진·영상 첨부 선택');
+    drop.appendChild(iconEl('ph-drop-ic', ICON_UPLOAD));
+    drop.appendChild(el('div', 'ph-drop-t', '사진·영상을 여기에 올려 주세요'));
+    drop.appendChild(el('div', 'ph-drop-s', '눌러서 선택하거나 끌어다 놓으세요 · 사진 최대 5장, 영상 1개(25MB 이하)'));
+    var fileIn = document.createElement('input');
+    fileIn.type = 'file'; fileIn.multiple = true; fileIn.accept = 'image/*,video/*';
+    fileIn.className = 'ph-file-input'; fileIn.tabIndex = -1; fileIn.setAttribute('aria-hidden', 'true');
+    body.appendChild(drop); body.appendChild(fileIn);
+
+    var tiles = el('div', 'ph-tiles');
+    body.appendChild(tiles);
+    var note = el('div', 'up-note'); note.hidden = true;
+    body.appendChild(note);
+    body.appendChild(safeCopy('올려주신 사진은 A/S 확인에만 사용합니다.'));
+
+    var next = el('button', 'sec-next', '다음'); next.type = 'button';
+    next.addEventListener('click', function () { completeSection('photo', photoSummary()); });
+    body.appendChild(next);
+
+    bindPhotoDrop(drop, fileIn, tiles, note);
+    renderPhotoTiles(tiles);
+    host.appendChild(body);
+  }
+
+  /* 첨부 준비(이미지 압축, 실패 시 원본 상한) — 폼 v2 prepareUpload 계승 */
+  function preparePhoto(item) {
+    var media = window.ClapaAsMedia;
+    if (item.kind !== 'image') return Promise.resolve({ blob: item.file, name: item.name, mime: item.file.type });
+    if (media && media.compressImage) {
+      return media.compressImage(item.file, 1600, 0.8).catch(function () {
+        if (item.file.size <= ORIGINAL_IMG_MAX_MB * 1024 * 1024) return { blob: item.file, name: item.name, mime: item.file.type || 'image/jpeg' };
+        throw new Error('too-big');
+      });
+    }
+    return Promise.resolve({ blob: item.file, name: item.name, mime: item.file.type });
+  }
+  /* 순차 업로드(asUpload, 기존 계약) — 접수 성공 후 백그라운드, 실패해도 비차단 */
+  function uploadPhotos(id, phone4, sid) {
+    var media = window.ClapaAsMedia;
+    var items = state.photos.slice();
+    var seq = Promise.resolve();
+    items.forEach(function (item) {
+      seq = seq.then(function () {
+        return preparePhoto(item).then(function (p) {
+          if (!(media && media.fileToB64)) return null;
+          return media.fileToB64(p.blob).then(function (b64) {
+            return fetch(ENDPOINT, {
+              method: 'POST', headers: { 'Content-Type': 'text/plain' },
+              body: JSON.stringify({ action: 'asUpload', sessionId: sid, id: id, phone4: phone4, name: p.name, mime: p.mime, data: b64 })
+            });
+          });
+        }).catch(function () { /* 비차단 — 실패 무시 */ });
+      });
+    });
+    return seq;
+  }
+
+  /* ---- 연락처 섹션 ---- */
+  function formatPhone(v) {
+    var d = String(v || '').replace(/\D/g, '').slice(0, 11);
+    if (d.length < 4) return d;
+    if (d.length < 7) return d.slice(0, 3) + '-' + d.slice(3);
+    if (d.length < 11) return d.slice(0, 3) + '-' + d.slice(3, 6) + '-' + d.slice(6);
+    return d.slice(0, 3) + '-' + d.slice(3, 7) + '-' + d.slice(7);
+  }
+  function contactPrefilled() {
+    var c = state.contact;
+    return !!(c.name || c.phone || c.store || c.purchaseDate || c.address);
+  }
+  function ctField(labelText, key, opts) {
+    opts = opts || {};
+    var wrap = el('div', 'ct-field');
+    var id = 'ct-' + key;
+    var lab = el('label', 'ct-label', labelText); lab.setAttribute('for', id);
+    if (opts.required) lab.appendChild(el('span', 'ct-req', '필수'));
+    wrap.appendChild(lab);
+    var input = document.createElement('input');
+    input.id = id; input.className = 'ct-input'; input.type = opts.type || 'text';
+    if (opts.inputmode) input.setAttribute('inputmode', opts.inputmode);
+    if (opts.autocomplete) input.autocomplete = opts.autocomplete;
+    input.maxLength = opts.maxLength || 60;
+    if (opts.placeholder) input.placeholder = opts.placeholder;
+    input.value = state.contact[key] || '';
+    input.addEventListener('input', function () {
+      if (key === 'phone') input.value = formatPhone(input.value);
+      state.contact[key] = input.value;
+      renderAside();
+    });
+    wrap.appendChild(input);
+    return wrap;
+  }
+  function renderContactSection() {
+    var host = document.getElementById('sec-contact');
+    if (!host) return;
+    host.className = 'sec-card ' + stateToClass(sectionState.contact);
+    host.textContent = '';
+    host.appendChild(secHead('contact', '4', '연락처'));
+
+    var body = el('div', 'sec-body');
+    if (contactPrefilled()) body.appendChild(el('p', 'ct-prefill', '입력하신 정보로 미리 채웠어요. 다른 분 접수라면 고쳐 주세요.'));
+    else body.appendChild(el('p', 'sec-help', 'A/S 안내를 받으실 연락처를 남겨 주세요.'));
+
+    body.appendChild(ctField('이름', 'name', { required: true, maxLength: 40, autocomplete: 'name', placeholder: '받으실 분 이름' }));
+    body.appendChild(ctField('휴대폰', 'phone', { required: true, type: 'tel', inputmode: 'tel', maxLength: 20, autocomplete: 'tel', placeholder: '010-0000-0000' }));
+    body.appendChild(ctField('주소', 'address', { maxLength: 120, autocomplete: 'street-address', placeholder: '수리품 회수·발송 주소 (선택)' }));
+    var grid = el('div', 'ct-grid');
+    grid.appendChild(ctField('구매처', 'store', { maxLength: 40, placeholder: '예) 네이버 스토어 (선택)' }));
+    grid.appendChild(ctField('구매일', 'purchaseDate', { maxLength: 20, placeholder: '예) 2025-06 (선택)' }));
+    body.appendChild(grid);
+
+    var safe = el('p', 'ct-safe');
+    safe.appendChild(iconEl('', ICON_LOCK));
+    safe.appendChild(el('span', null, '남겨주신 연락처는 A/S 안내에만 사용합니다.'));
+    body.appendChild(safe);
+    host.appendChild(body);
+  }
+
+  /* ---- 제출 + 완료 화면 ---- */
+  function validateIntake() {
+    if (!state.product && !state.freeProduct) return { ok: false, msg: '제품을 선택하거나 이름을 입력해 주세요.' };
+    if (!state.symptom.chips.length && !state.symptom.text.trim()) return { ok: false, msg: '증상을 선택하거나 적어 주세요.' };
+    if (!state.contact.name.trim()) return { ok: false, msg: '이름을 입력해 주세요.' };
+    if (!/^[0-9\-]{9,20}$/.test(state.contact.phone)) return { ok: false, msg: '연락처를 확인해 주세요.' };
+    return { ok: true };
+  }
+  function submitIntake() {
+    var v = validateIntake();
+    if (!v.ok) { showToast(v.msg); return; }
+    var sid = sidValue();
+    var body = {
+      action: 'as', name: state.contact.name.trim(),
+      model: state.product ? state.product.code : state.freeProduct,
+      symptom: buildSymptom(), phone: state.contact.phone,
+      sessionId: sid, page: 'as'
+    };
+    if (state.order) body.order = state.order;                       // 주문조회로 확정된 구매정보
+    var extra = {};
+    if (state.contact.store) extra.store = state.contact.store;
+    if (state.contact.purchaseDate) extra.purchaseDate = state.contact.purchaseDate;
+    if (state.contact.address) extra.address = state.contact.address;
+    for (var k in extra) { body.extra = extra; break; }
+    try { if (document.activeElement && document.activeElement.blur) document.activeElement.blur(); } catch (e) {}  // 모바일 키보드 내리기
+    var btn = document.querySelector('#sec-submit .as-submit');
+    if (btn) { btn.disabled = true; btn.textContent = '접수하는 중…'; }
+    api(body).then(function (d) {
+      if (d && d.ok && d.id) { onIntakeDone(d.id, sid); }
+      else {
+        if (btn) { btn.disabled = false; btn.textContent = 'A/S 접수하기'; }
+        showToast((d && d.error) || '접수에 실패했어요. 잠시 후 다시 시도해 주세요.');
+      }
+    }).catch(function () {
+      if (btn) { btn.disabled = false; btn.textContent = 'A/S 접수하기'; }
+      showToast('연결이 원활하지 않아요. 잠시 후 다시 시도해 주세요.');
+    });
+  }
+  function onIntakeDone(id, sid) {
+    var phone4 = state.contact.phone.replace(/\D/g, '').slice(-4);
+    if (window.asStore) {   // S5 정의 전이면 무해, 후엔 자동 반영
+      try {
+        asStore.addTicket({
+          id: id, phone4: phone4,
+          model: (state.product ? state.product.code : ''),
+          modelName: (state.product ? state.product.name : state.freeProduct),
+          createdAt: new Date().toISOString(), lastStatus: '접수', lastStep: 0, closedAt: null
+        });
+        asStore.saveProfile({ name: state.contact.name.trim(), phone: state.contact.phone, savedAt: new Date().toISOString() });
+      } catch (e) {}
+    }
+    try { sessionStorage.setItem('asStatus.cred', JSON.stringify({ id: id, phone4: phone4 })); } catch (e) {}  // 조회 자동조회용(as-status 계승)
+    if (state.photos.length) { try { uploadPhotos(id, phone4, sid || sidValue()); } catch (e) {} }              // 백그라운드 첨부(비차단)
+    renderDone(id);
+  }
+  function buildStepper(activeIdx) {
+    var wrap = el('div', 'done-steps');
+    wrap.setAttribute('role', 'img');
+    wrap.setAttribute('aria-label', '진행 상태: ' + AS_STEPS[activeIdx] + ' (' + (activeIdx + 1) + '/' + AS_STEPS.length + ')');
+    var i;
+    for (i = 0; i < AS_STEPS.length; i++) {
+      if (i > 0) wrap.appendChild(el('span', 'done-bar' + (i <= activeIdx ? ' is-done' : '')));
+      var cls = 'done-step' + (i < activeIdx ? ' is-done' : (i === activeIdx ? ' is-now' : ''));
+      var step = el('div', cls);
+      step.appendChild(el('span', 'done-dot'));
+      step.appendChild(el('span', 'done-step-l', AS_STEPS[i]));
+      wrap.appendChild(step);
+    }
+    return wrap;
+  }
+  function renderDone(id) {
+    var live = document.getElementById('intake-live');
+    var done = document.getElementById('intake-done');
+    if (!done) return;
+    if (live) live.style.display = 'none';
+    var maint = document.getElementById('intake-maint'); if (maint) maint.hidden = true;
+    done.hidden = false; done.textContent = '';
+
+    var card = el('div', 'done-card');
+    card.appendChild(iconEl('done-check', ICON_CHECK));
+    var title = el('div', 'done-title', '접수가 완료됐어요');
+    title.setAttribute('role', 'heading'); title.setAttribute('aria-level', '2');
+    card.appendChild(title);
+    card.appendChild(el('p', 'done-sub', '담당자가 확인 후 순서대로 안내해 드릴게요.'));
+
+    var tno = el('div', 'done-ticket');
+    tno.appendChild(el('span', 'done-ticket-k', '접수번호'));
+    tno.appendChild(el('span', 'done-ticket-v', id));
+    card.appendChild(tno);
+
+    card.appendChild(buildStepper(0));   // '접수' 단계 활성
+
+    card.appendChild(el('p', 'done-save', '이 기기에 저장되어 다음부터는 ‘내 접수 조회’에서 바로 보입니다.'));
+
+    var acts = el('div', 'done-acts');
+    var goBtn = el('button', 'done-go', '내 접수 조회로'); goBtn.type = 'button';
+    goBtn.addEventListener('click', function () { setTab('status'); });
+    acts.appendChild(goBtn);
+    var tel = el('a', 'done-tel', '전화 1522-8508'); tel.href = 'tel:1522-8508';
+    acts.appendChild(tel);
+    card.appendChild(acts);
+
+    var talk = el('a', 'done-talk', '네이버 톡톡으로 문의'); talk.href = AS_TALK;
+    talk.target = '_blank'; talk.rel = 'noopener';
+    card.appendChild(talk);
+
+    var safe = el('p', 'done-safe');
+    safe.appendChild(iconEl('', ICON_LOCK));
+    safe.appendChild(el('span', null, '남겨주신 연락처는 A/S 안내에만 사용합니다.'));
+    card.appendChild(safe);
+
+    done.appendChild(card);
+    try { done.scrollIntoView({ block: 'start' }); } catch (e) {}
+    try { goBtn.focus(); } catch (e) {}
+  }
+  function renderSubmit() {
+    var host = document.getElementById('sec-submit');
+    if (!host) return;
+    host.textContent = '';
+    var btn = el('button', 'as-submit', 'A/S 접수하기'); btn.type = 'button';
+    btn.addEventListener('click', submitIntake);
+    host.appendChild(btn);
+    host.appendChild(el('p', 'as-submit-note', '접수 후 이 기기에서는 다음부터 입력 없이 진행 상태를 확인하실 수 있어요.'));
   }
 
   /* ---- 부팅 ---- */
