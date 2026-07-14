@@ -442,7 +442,28 @@
    "main": {
     "image": "assets/thumbs/BFB-VC170.jpg"
    },
-   "parts": []
+   "parts": [
+    {
+     "name": "클래파 BFB-VC170 전용 구성품",
+     "url": "https://smartstore.naver.com/skillfulbrother/products/10228033078",
+     "image": "https://shop-phinf.pstatic.net/20240517_62/1715912125456wIuRE_JPEG/117048021187147412_56381879.jpg",
+     "price": 15000
+    },
+    {
+     "name": "클래파 BFB-VC120, BFB-VC160, BFB-VC170 물걸레 키트",
+     "url": "https://smartstore.naver.com/skillfulbrother/products/10227817216",
+     "image": "https://shop-phinf.pstatic.net/20240419_227/1713508375871xr76u_JPEG/114644271583231126_1329641418.jpg",
+     "price": 55000,
+     "category": "디지털/가전>청소기>유선청소기>진공청소기"
+    },
+    {
+     "name": "클래파 BFB-VC120, BFB-VC160, BFB-VC170 배터리",
+     "url": "https://smartstore.naver.com/skillfulbrother/products/10226993687",
+     "image": "https://shop-phinf.pstatic.net/20240419_287/1713493002791YVJJG_JPEG/114628898523495154_1896378069.jpg",
+     "price": 55000,
+     "category": "디지털/가전>청소기>청소기부속품"
+    }
+   ]
   },
   "BMD-656": {
    "main": {
