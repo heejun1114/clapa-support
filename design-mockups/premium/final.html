@@ -164,9 +164,9 @@
 
   /* ---------- Quick menu hub (2026-07-11 — 기능 바로가기, 챗 실행 카드 아님) ---------- */
   .quickmenu{
-    display:grid;grid-template-columns:repeat(4,1fr);
+    display:grid;grid-template-columns:repeat(3,1fr);
     gap:8px;
-    margin-top:26px;max-width:720px;
+    margin-top:26px;max-width:600px;
   }
   .qm-item{
     display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:9px;
@@ -191,8 +191,11 @@
   .qm-item:hover .qm-ic{background:#fff;}
   .qm-item .ext{font-size:11px;color:var(--muted);font-weight:500;}
   @media(max-width:640px){
-    .quickmenu{grid-template-columns:repeat(2,1fr);gap:8px;margin-top:20px;max-width:100%;}
-    .qm-item{min-height:100px;font-size:13.5px;}
+    .quickmenu{grid-template-columns:repeat(3,1fr);gap:7px;margin-top:20px;max-width:100%;}
+    .qm-item{min-height:96px;padding:14px 5px;font-size:12.5px;gap:8px;}
+    .qm-item .qm-ic{width:36px;height:36px;border-radius:10px;}
+    .qm-item .qm-ic svg{width:20px;height:20px;}
+    .qm-item .ext{font-size:10.5px;}
   }
 
   /* 검색창 포커스 글로우(그림자 대신 teal 링) */
@@ -225,7 +228,22 @@
   .contact-card .cc-k{font-size:13px;font-weight:600;color:var(--teal-deep);}
   .contact-card .cc-v{font-size:19px;font-weight:700;letter-spacing:-0.01em;}
   .contact-card .cc-d{font-size:13px;color:var(--muted);line-height:1.5;}
-  @media (max-width:720px){.contact-band{grid-template-columns:1fr;}}
+  /* 모바일 — 카드 컴팩트: 좌측 텍스트 스택 · 우측 아이콘 칩 세로중앙, 높이 축소 */
+  @media (max-width:720px){
+    .contact-band{grid-template-columns:1fr;gap:10px;}
+    .contact-card{
+      display:grid;
+      grid-template-columns:1fr auto;
+      grid-template-areas:"k ic" "v ic" "d ic";
+      align-items:center;
+      column-gap:14px;row-gap:1px;
+      padding:13px 16px;
+    }
+    .contact-card .cc-ic{grid-area:ic;align-self:center;margin:0;}
+    .contact-card .cc-k{grid-area:k;}
+    .contact-card .cc-v{grid-area:v;font-size:18px;}
+    .contact-card .cc-d{grid-area:d;}
+  }
 
   /* ---------- Section shell ---------- */
   .section{padding-block:clamp(46px,6.5vw,78px);}
@@ -923,13 +941,9 @@
       </div>
 
       <nav class="quickmenu" aria-label="자주 쓰는 메뉴">
-        <a class="qm-item" href="../../assets/recipes/clapa-recipebook.pdf" target="_blank" rel="noopener">
+        <a class="qm-item" href="recipe-viewer.html">
           <span class="qm-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6.5C10.4 5.2 8.2 4.5 5.5 4.5H3v13h2.5c2.7 0 4.9.7 6.5 2 1.6-1.3 3.8-2 6.5-2H21v-13h-2.5c-2.7 0-4.9.7-6.5 2z"/><path d="M12 6.5v13"/><path d="M6 9h3.2M6 12h3.2"/></svg></span>
-          <span class="qm-label">레시피북<span class="ext">PDF 열기 ↗</span></span>
-        </a>
-        <a class="qm-item" href="https://smartstore.naver.com/skillfulbrother" target="_blank" rel="noopener">
-          <span class="qm-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.4 20 7v10l-8 3.6L4 17V7z"/><path d="M4 7l8 3.6L20 7"/><path d="M12 11v9.6"/></svg></span>
-          <span class="qm-label">부품·소모품 구매<span class="ext">스마트스토어 ↗</span></span>
+          <span class="qm-label">계란찜기 레시피북<span class="ext">바로 보기</span></span>
         </a>
         <a class="qm-item" href="https://www.youtube.com/@%EA%B9%80%EC%84%B1%EC%A4%80-n8i/videos" target="_blank" rel="noopener">
           <span class="qm-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="5.5" width="19" height="13" rx="3.6"/><path d="M10.2 9.3v5.4l4.7-2.7z" fill="currentColor" stroke="none"/></svg></span>
