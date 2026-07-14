@@ -55,7 +55,7 @@
 </head>
 <body>
   <header class="rv-bar">
-    <a class="rv-back" href="index.html" aria-label="고객지원센터 홈으로 돌아가기"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>뒤로</a>
+    <a class="rv-back" href="./" aria-label="고객지원센터 홈으로 돌아가기"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>뒤로</a>
     <span class="rv-title">계란찜기 레시피북</span>
     <span class="rv-count">전 14페이지</span>
   </header>
@@ -78,7 +78,7 @@
   </main>
   <script>
   /* '뒤로' — 같은 탭에서 홈에서 들어왔으면 history.back()(모바일 뒤로가기 제스처와 일관),
-     외부/직접 진입이면 홈으로 폴백. (href="index.html"는 JS 미동작 시 폴백) */
+     외부/직접 진입이면 홈으로 폴백. (href="./"는 JS 미동작 시 폴백) */
   (function () {
     var back = document.querySelector('.rv-back');
     if (!back) return;

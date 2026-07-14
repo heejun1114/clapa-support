@@ -348,8 +348,10 @@
   }
 
   function currentPageId() {
-    var m = location.pathname.match(/\/products\/([^\/]+\.html)$/i);
-    return m ? ('products/' + m[1]) : 'index';
+    // 확장자 없는 깔끔한 주소(/products/bvc-h10)·구주소(/products/bvc-h10.html) 모두
+    // 카탈로그 page(products/bvc-h10)와 대조되도록 .html 을 떼어 정규화한다.
+    var m = location.pathname.match(/\/products\/([^\/]+)$/i);
+    return m ? ('products/' + m[1].replace(/\.html$/i, '')) : 'index';
   }
 
   /* ------------------------------------------------------------------ *
