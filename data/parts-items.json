@@ -424,6 +424,52 @@
      "img": "assets/parts/10227959757/10.jpg"
     }
    ]
+  },
+  "10228033078": {
+   "model": "BFB-VC170",
+   "url": "https://smartstore.naver.com/skillfulbrother/products/10228033078",
+   "cards": [
+    {
+     "name": "헤파 필터",
+     "img": "assets/parts/10228033078/01.jpg"
+    },
+    {
+     "name": "스틸 필터",
+     "img": "assets/parts/10228033078/02.jpg"
+    },
+    {
+     "name": "바닥 브러쉬",
+     "img": "assets/parts/10228033078/03.jpg"
+    },
+    {
+     "name": "침구 브러쉬",
+     "img": "assets/parts/10228033078/04.jpg"
+    },
+    {
+     "name": "틈새 브러쉬",
+     "img": "assets/parts/10228033078/05.jpg"
+    },
+    {
+     "name": "틈새 노즐",
+     "img": "assets/parts/10228033078/06.jpg"
+    },
+    {
+     "name": "먼지통",
+     "img": "assets/parts/10228033078/07.jpg"
+    },
+    {
+     "name": "물걸레 패드 4장",
+     "img": "assets/parts/10228033078/08.jpg"
+    },
+    {
+     "name": "연결봉",
+     "img": "assets/parts/10228033078/09.jpg"
+    },
+    {
+     "name": "충전 어댑터",
+     "img": "assets/parts/10228033078/10.jpg"
+    }
+   ]
   }
  }
 }
