@@ -741,7 +741,7 @@
       pushMenu(
         '지금은 A/S 접수 기능을 점검하고 있어요.\n온라인·전화·톡톡 접수를 잠시 중단 중이며, 점검이 끝나는 대로 정상적으로 접수를 받겠습니다.\n이미 접수하신 건은 아래에서 진행 상태를 확인하실 수 있어요.',
         [
-          { label: '접수 조회', url: 'as-status.html' }
+          { label: '접수 조회', url: 'as.html#status' }
         ]
       );
       return;
@@ -749,8 +749,8 @@
     pushMenu(
       'A/S 접수를 도와드릴게요.\n증상과 모델명을 함께 알려주시면 접수가 훨씬 빨라요.\n전화 ' + PHONE + ' · ' + HOURS + ' (주말·공휴일 휴무)',
       [
-        { label: 'A/S 접수 폼 바로가기', url: 'index.html#as-title' },
-        { label: '접수 조회', url: 'as-status.html' },
+        { label: 'A/S 접수 창 열기', url: 'as.html#intake' },
+        { label: '접수 조회', url: 'as.html#status' },
         { label: '전화 걸기', url: 'tel:' + PHONE },
         { label: '네이버 톡톡 문의', url: TALK}
       ]
@@ -928,7 +928,7 @@
             '답변 준비가 오래 걸리고 있어요. 잠시 후 다시 시도해 주시겠어요?\n급하시면 아래에서 바로 접수·문의하실 수 있어요.',
             [
               { label: '다시 시도', cmd: 'retry', arg: text.slice(0, 1000) },
-              { label: 'A/S 접수 폼 바로가기', url: 'index.html#as-title' },
+              { label: 'A/S 접수 창 열기', url: 'as.html#intake' },
               { label: '네이버 톡톡 문의', url: TALK}
             ], { local: 1 });
         } else if (typeof navigator !== 'undefined' && navigator.onLine === false) {
