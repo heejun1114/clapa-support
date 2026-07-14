@@ -1083,25 +1083,30 @@
     }
     return Promise.resolve({ blob: item.file, name: item.name, mime: item.file.type });
   }
-  /* 순차 업로드(asUpload, 기존 계약) — 접수 성공 후 백그라운드, 실패해도 비차단 */
+  /* 순차 업로드(asUpload, 기존 계약) — 접수 성공 후 백그라운드, 실패해도 비차단.
+     전부 settle 후 실패분이 있으면 자동소멸 토스트 1회(완료 화면은 그대로 유지). */
   function uploadPhotos(id, phone4, sid) {
     var media = window.ClapaAsMedia;
     var items = state.photos.slice();
+    var fails = 0;
     var seq = Promise.resolve();
     items.forEach(function (item) {
       seq = seq.then(function () {
         return preparePhoto(item).then(function (p) {
-          if (!(media && media.fileToB64)) return null;
+          if (!(media && media.fileToB64)) { fails++; return null; }
           return media.fileToB64(p.blob).then(function (b64) {
             return fetch(ENDPOINT, {
               method: 'POST', headers: { 'Content-Type': 'text/plain' },
               body: JSON.stringify({ action: 'asUpload', sessionId: sid, id: id, phone4: phone4, name: p.name, mime: p.mime, data: b64 })
-            });
+            }).then(function (r) { return r.json(); })
+              .then(function (d) { if (!(d && d.ok)) fails++; });
           });
-        }).catch(function () { /* 비차단 — 실패 무시 */ });
+        }).catch(function () { fails++; });   // 개별 실패는 삼키되 카운트
       });
     });
-    return seq;
+    return seq.then(function () {
+      if (fails > 0) showToast('사진 일부가 전송되지 않았어요. 네이버 톡톡으로 보내주시면 확인해 드릴게요.');
+    });
   }
 
   /* ---- 연락처 섹션 ---- */
