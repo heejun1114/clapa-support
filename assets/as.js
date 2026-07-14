@@ -536,6 +536,7 @@
       if (wrap && wrap.parentNode) wrap.parentNode.removeChild(wrap);
     }
     function run() {
+      if (go.disabled) return;                                     // 조회 중 연타 무시(동시 발사·tries 과증가 방지)
       var nm = nameIn.value.replace(/\s+/g, ' ').trim();
       var ph = phoneIn.value.trim();
       cands.textContent = '';
@@ -710,6 +711,7 @@
       }
     }
     function lookup(raw) {
+      if (go.disabled) return;                                     // 조회 중 중복 lookup 무시(연속 paste·연타)
       var digits = String(raw || '').replace(/\D/g, '');
       out.textContent = ''; setNote(note, '');
       go.disabled = true; go.textContent = '확인 중…';
