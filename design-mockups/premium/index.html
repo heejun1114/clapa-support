@@ -47,9 +47,16 @@
   .card-top .id{font-weight:700; font-size:15px; display:inline-flex; align-items:center; gap:8px; flex-wrap:wrap}
   .card-top .id small{color:var(--muted); font-weight:500}
   .badge{color:#fff; background:var(--teal); font-size:11px; font-weight:700; letter-spacing:0.02em; padding:2px 8px; border-radius:999px; white-space:nowrap}
+  .badge--fable{color:var(--teal-deep); background:var(--teal-wash); border:1px solid var(--teal); font-weight:700}
   .card-top a{font-size:13px; font-weight:600; color:var(--teal-deep); text-decoration:none; white-space:nowrap}
   .card-top a:hover{text-decoration:underline}
   .card-desc{padding:14px 18px; color:var(--muted); font-size:13.5px; line-height:1.65}
+  section.list{max-width:1280px; margin:0 auto; padding:8px 40px}
+  section.list.section-fable{margin-top:20px; padding-top:36px; border-top:1px solid var(--line)}
+  .section-head{margin-bottom:24px}
+  .section-head h2{font-size:22px; font-weight:700; letter-spacing:-0.02em; display:inline-flex; align-items:center; gap:10px}
+  .section-head .tag{color:var(--teal-deep); background:var(--teal-wash); border:1px solid var(--teal); font-size:12px; font-weight:700; padding:3px 10px; border-radius:999px; letter-spacing:0.02em}
+  .section-head p{color:var(--muted); margin-top:8px; font-size:14px; line-height:1.6}
   .base-note{
     max-width:1280px; margin:28px auto 0; padding:0 40px;
     color:var(--muted); font-size:13px; line-height:1.6;
@@ -59,7 +66,7 @@
   a:focus-visible{outline:2px solid var(--teal); outline-offset:2px}
   @media (max-width:960px){
     .grid{grid-template-columns:1fr}
-    header.site,.notice,nav.jump,main.list,.base-note,footer.site{padding-left:20px; padding-right:20px}
+    header.site,.notice,nav.jump,main.list,section.list,.base-note,footer.site{padding-left:20px; padding-right:20px}
   }
 </style>
 </head>
@@ -124,6 +131,50 @@
     </article>
   </div>
 </main>
+
+<section class="list section-fable" id="fable" aria-labelledby="fable-h">
+  <div class="section-head">
+    <h2 id="fable-h">같은 컨셉, Fable 해석 <span class="tag">Fable</span></h2>
+    <p>같은 컨셉을 다른 모델이 해석한 버전입니다 — 비교해서 골라보세요.</p>
+  </div>
+  <div class="grid">
+    <article class="card" id="p1-fable">
+      <a class="thumb" href="p1-fable.html" target="_blank" rel="noopener"><img src="thumbs/p1-fable.jpg" alt="P1 앰비언트 글로우 Fable 버전 미리보기" width="1280" height="800" loading="lazy"></a>
+      <div class="card-top"><span class="id">P1 <small>앰비언트 글로우</small> <span class="badge badge--fable">Fable</span></span><a href="p1-fable.html" target="_blank" rel="noopener">열기 ↗</a></div>
+      <p class="card-desc">틸 빛이 은은히 흐르는 유리 헤더 — Fable의 해석.</p>
+    </article>
+    <article class="card" id="p2-fable">
+      <a class="thumb" href="p2-fable.html" target="_blank" rel="noopener"><img src="thumbs/p2-fable.jpg" alt="P2 3D 쇼케이스 Fable 버전 미리보기" width="1280" height="800" loading="lazy"></a>
+      <div class="card-top"><span class="id">P2 <small>3D 쇼케이스</small> <span class="badge badge--fable">Fable</span></span><a href="p2-fable.html" target="_blank" rel="noopener">열기 ↗</a></div>
+      <p class="card-desc">제품이 무대 위에 떠 있는 히어로 — Fable의 해석.</p>
+    </article>
+    <article class="card" id="p3-fable">
+      <a class="thumb" href="p3-fable.html" target="_blank" rel="noopener"><img src="thumbs/p3-fable.jpg" alt="P3 딥틸 다크 히어로 Fable 버전 미리보기" width="1280" height="800" loading="lazy"></a>
+      <div class="card-top"><span class="id">P3 <small>딥틸 다크 히어로</small> <span class="badge badge--fable">Fable</span></span><a href="p3-fable.html" target="_blank" rel="noopener">열기 ↗</a></div>
+      <p class="card-desc">밤의 라운지 데스크 같은 다크 히어로 — Fable의 해석.</p>
+    </article>
+    <article class="card" id="p4-fable">
+      <a class="thumb" href="p4-fable.html" target="_blank" rel="noopener"><img src="thumbs/p4-fable.jpg" alt="P4 에디토리얼 Fable 버전 미리보기" width="1280" height="800" loading="lazy"></a>
+      <div class="card-top"><span class="id">P4 <small>에디토리얼</small> <span class="badge badge--fable">Fable</span></span><a href="p4-fable.html" target="_blank" rel="noopener">열기 ↗</a></div>
+      <p class="card-desc">큰 타이포와 여백으로 인쇄물의 격조 — Fable의 해석.</p>
+    </article>
+    <article class="card" id="p5-fable">
+      <a class="thumb" href="p5-fable.html" target="_blank" rel="noopener"><img src="thumbs/p5-fable.jpg" alt="P5 글래스 카드 Fable 버전 미리보기" width="1280" height="800" loading="lazy"></a>
+      <div class="card-top"><span class="id">P5 <small>글래스 카드</small> <span class="badge badge--fable">Fable</span></span><a href="p5-fable.html" target="_blank" rel="noopener">열기 ↗</a></div>
+      <p class="card-desc">반투명 유리 레이어드 — Fable의 해석.</p>
+    </article>
+    <article class="card" id="p6-fable">
+      <a class="thumb" href="p6-fable.html" target="_blank" rel="noopener"><img src="thumbs/p6-fable.jpg" alt="P6 모션 컨시어지 Fable 버전 미리보기" width="1280" height="800" loading="lazy"></a>
+      <div class="card-top"><span class="id">P6 <small>모션 컨시어지</small> <span class="badge badge--fable">Fable</span></span><a href="p6-fable.html" target="_blank" rel="noopener">열기 ↗</a></div>
+      <p class="card-desc">순차 등장·스크롤 반응 — Fable의 해석. 직접 눌러보세요.</p>
+    </article>
+    <article class="card" id="p7-fable">
+      <a class="thumb" href="p7-fable.html" target="_blank" rel="noopener"><img src="thumbs/p7-fable.jpg" alt="P7 메시+3D 오브제 Fable 버전 미리보기" width="1280" height="800" loading="lazy"></a>
+      <div class="card-top"><span class="id">P7 <small>메시+3D 오브제</small> <span class="badge badge--fable">Fable</span></span><a href="p7-fable.html" target="_blank" rel="noopener">열기 ↗</a></div>
+      <p class="card-desc">그라데이션 메시 배경 위에 유리 오브제 — Fable의 해석.</p>
+    </article>
+  </div>
+</section>
 
 <p class="base-note">
   모든 시안의 공통 출발점: <a href="_base.html" target="_blank" rel="noopener">_base.html</a> (현재 라이브 홈과 동일한 사본)
