@@ -365,6 +365,7 @@
     card.appendChild(asideRow('연락처', contactSummary()));
     card.appendChild(el('p', 'aside-safe', '남겨주신 연락처는 A/S 안내에만 사용합니다.'));
     host.appendChild(card);
+    if (typeof renderIntakeTop === 'function') renderIntakeTop();   // [S5] 재방문 인사·같은 제품 진행 중 안내 갱신
   }
 
   /* ---- 진입 쿼리 자동 선택 + 접수 탭 부팅 훅 ---- */
@@ -1292,6 +1293,610 @@
     btn.addEventListener('click', submitIntake);
     host.appendChild(btn);
     host.appendChild(el('p', 'as-submit-note', '접수 후 이 기기에서는 다음부터 입력 없이 진행 상태를 확인하실 수 있어요.'));
+  }
+
+  /* ========================= [S5] 기기 기억(asStore) + 조회 탭 =========================
+     소비: el/api/showToast/setTab(S1), ID_QUERY(S1), state·modelByCode·thumbFor·renderAside(S2),
+           safeCopy·setNote·ICON_LOCK(S3), state.contact·renderContactSection·AS_STEPS(S4),
+           window.ClapaAsMedia(as-media.js), sessionStorage 'asStatus.cred'(S4가 저장).
+     이식 원본: as-status.html/as-status.js(스테퍼·말풍선 대화·15초 폴링·asFile 썸네일·관대한 접수번호 파싱).
+     원칙: 렌더는 textContent 전용(XSS). 비차단(모달 없음). 폴링은 상세 열람 중 + 조회 탭 표시 + 페이지 visible 일 때만(GAS 쿼터 보호). */
+
+  /* ---- asStore 모듈(기기 기억) — 확정 계약 스키마·키 그대로. S3·S4가 window.asStore 가드로 소비 ---- */
+  var STORE_KEYS = { profile: 'clapaAs.v1.profile', tickets: 'clapaAs.v1.tickets' };
+  window.asStore = {
+    profile: function () { try { return JSON.parse(localStorage.getItem(STORE_KEYS.profile) || 'null'); } catch (e) { return null; } },
+    saveProfile: function (p) { try { localStorage.setItem(STORE_KEYS.profile, JSON.stringify({ name: p.name, phone: p.phone, savedAt: Date.now() })); } catch (e) {} },
+    tickets: function () { try { var t = JSON.parse(localStorage.getItem(STORE_KEYS.tickets) || '[]'); return Array.isArray(t) ? t : []; } catch (e) { return []; } },
+    addTicket: function (t) {
+      try {
+        var list = this.tickets();
+        list = list.filter(function (x) { return x.id !== t.id; });
+        list.unshift(t);
+        if (list.length > 20) {
+          // 최대 20 — 완료(closedAt) 오래된 것부터 정리. 진행 중은 유지, 완료는 최신만 남긴다.
+          list.sort(function (a, b) {
+            var ac = a.closedAt ? 1 : 0, bc = b.closedAt ? 1 : 0;
+            if (ac !== bc) return ac - bc;                         // 진행 중 먼저(완료를 뒤로)
+            var av = String(a.createdAt || ''), bv = String(b.createdAt || '');
+            return av < bv ? 1 : (av > bv ? -1 : 0);              // 최신 먼저 → 오래된 완료가 맨 뒤에 잘림
+          });
+          list = list.slice(0, 20);
+        }
+        localStorage.setItem(STORE_KEYS.tickets, JSON.stringify(list));
+      } catch (e) {}
+    },
+    updateTicket: function (id, patch) {
+      try {
+        var list = this.tickets();
+        for (var i = 0; i < list.length; i++) if (list[i].id === id) { for (var k in patch) list[i][k] = patch[k]; }
+        localStorage.setItem(STORE_KEYS.tickets, JSON.stringify(list));
+      } catch (e) {}
+    },
+    clearAll: function () { try { localStorage.removeItem(STORE_KEYS.profile); localStorage.removeItem(STORE_KEYS.tickets); } catch (e) {} }
+  };
+
+  /* ---- 조회 탭 상수·상태 ---- */
+  var STX_PHONE = '1522-8508';
+  var STX_HOURS = '평일 09:00~15:00';
+  var STX_LOOKUP_FAIL = '접수 내역을 확인하지 못했어요. 접수번호와 연락처 뒷 4자리를 다시 확인해 주세요.';   // 불일치·미존재 동일 문구(열거 방지)
+  var CRED_KEY = 'asStatus.cred';
+
+  var statusBuilt = false;   // 조회 탭 골격 1회 빌드 가드
+  var idFocusDone = false;   // ?id= 자동 포커스 1회만
+  var detailOpen = false;    // 상세 열람 중(폴링 게이트)
+  var detailCred = null;     // 현재 상세의 {id, phone4}
+  var topSig = null;         // 재방문 인사·중복 안내 재렌더 서명(키 입력마다 깜빡임 방지)
+  var profilePrefilled = false;
+
+  /* 대화 스레드 폴링 상태(as-status.js 이식) */
+  var pollTimer = null, msgsSeq = 0, lastTs = '', renderedSig = '', firstLoad = true;
+  var fileCache = {};        // fileId → dataURI(세션 내 불변 캐시)
+  var baseTitle = (document.title || ''), titleFlagged = false;
+  var THREAD = null;         // 현재 상세의 대화 노드 참조 {sec,list,form,input,send,attach,file}
+
+  function nowIso() { try { return new Date().toISOString(); } catch (e) { return ''; } }
+
+  /* 관대한 접수번호 파싱 — 'as 260710 160225'·'AS-260710-160225'·'260710160225' 모두 허용(as-status 이식) */
+  function normalizeAsId(raw) {
+    var d = String(raw == null ? '' : raw).replace(/\D/g, '');
+    if (d.length !== 12) return '';
+    return 'AS-' + d.slice(0, 6) + '-' + d.slice(6);
+  }
+  function loadCred() {
+    try {
+      var raw = sessionStorage.getItem(CRED_KEY);
+      if (!raw) return null;
+      var c = JSON.parse(raw);
+      if (c && typeof c.id === 'string' && typeof c.phone4 === 'string') return c;
+    } catch (e) {}
+    return null;
+  }
+  function saveCredSession(id, phone4) { try { sessionStorage.setItem(CRED_KEY, JSON.stringify({ id: id, phone4: phone4 })); } catch (e) {} }
+  function ticketKnown(id) {
+    if (!window.asStore) return false;
+    var list = asStore.tickets(), i;
+    for (i = 0; i < list.length; i++) { if (list[i] && list[i].id === id) return true; }
+    return false;
+  }
+  function sameProductInProgress(code) {
+    if (!window.asStore || !code) return null;
+    var list = asStore.tickets(), i, c = String(code).toUpperCase();
+    for (i = 0; i < list.length; i++) {
+      if (list[i] && !list[i].closedAt && String(list[i].model || '').toUpperCase() === c) return list[i];
+    }
+    return null;
+  }
+  function formatTs(ts) {
+    var s = String(ts == null ? '' : ts);
+    var m = s.match(/^\d{4}-(\d{2}-\d{2})[T ](\d{2}:\d{2})/);   // 'yyyy-MM-dd HH:mm:ss'·ISO → 'MM-dd HH:mm'
+    return m ? (m[1] + ' ' + m[2]) : s;
+  }
+
+  /* ---- 자동 목록(기기 기억) ---- */
+  function miniSteps(step) {
+    var w = el('div', 'tk-steps'), i;
+    for (i = 0; i < 4; i++) {
+      if (i > 0) w.appendChild(el('span', 'tk-bar' + (i <= step ? ' on' : '')));
+      w.appendChild(el('span', 'tk-dot' + (i <= step ? ' on' : '')));
+    }
+    return w;
+  }
+  function ticketCard(t) {
+    var card = el('button', 'tk-card'); card.type = 'button';
+    var name = t.modelName || t.model || t.id;
+    card.setAttribute('aria-label', name + ' 접수 상세 보기');
+    var thumb = el('span', 'tk-thumb');
+    var url = thumbFor(t.model);
+    if (url) {
+      var img = document.createElement('img');
+      img.src = url; img.alt = ''; img.loading = 'lazy'; img.decoding = 'async';
+      img.onerror = function () { if (img.parentNode) img.parentNode.removeChild(img); };
+      thumb.appendChild(img);
+    }
+    card.appendChild(thumb);
+    var body = el('div', 'tk-body');
+    body.appendChild(el('div', 'tk-title', name));
+    body.appendChild(el('div', 'tk-id', t.id));
+    if (t.lastStatus === '취소' || t.lastStatus === '보류') {
+      body.appendChild(el('span', 'tk-badge ' + (t.lastStatus === '취소' ? 'is-cancel' : 'is-hold'),
+        t.lastStatus === '취소' ? '접수 취소' : '처리 보류'));
+    } else {
+      var step = (typeof t.lastStep === 'number' && t.lastStep >= 0) ? Math.min(t.lastStep, 3) : 0;
+      var row = el('div', 'tk-statusrow');
+      row.appendChild(miniSteps(step));
+      row.appendChild(el('span', 'tk-stlabel', t.lastStatus || AS_STEPS[step]));
+      body.appendChild(row);
+    }
+    card.appendChild(body);
+    card.appendChild(el('span', 'tk-go', '보기'));
+    card.addEventListener('click', function () { openTicketDetail(t.id, t.phone4); });
+    return card;
+  }
+  function renderTicketList() {
+    var host = document.getElementById('ticket-list');
+    if (!host) return;
+    host.textContent = '';
+    var tickets = (window.asStore ? asStore.tickets() : []);
+    var active = [], past = [], i;
+    for (i = 0; i < tickets.length; i++) { if (!tickets[i]) continue; (tickets[i].closedAt ? past : active).push(tickets[i]); }
+    if (!tickets.length) {
+      var empty = el('div', 'tk-empty');
+      empty.appendChild(el('p', 'tk-empty-t', '이 기기로 접수한 내역이 없습니다.'));
+      empty.appendChild(el('p', 'tk-empty-s', '접수하시면 이 기기에서 다음부터 입력 없이 진행 상태를 확인할 수 있어요.'));
+      var go = el('button', 'tk-empty-go', '접수하러 가기'); go.type = 'button';
+      go.addEventListener('click', function () { setTab('intake'); });
+      empty.appendChild(go);
+      host.appendChild(empty);
+      renderClear();
+      return;
+    }
+    if (active.length) {
+      var g = el('div', 'tk-group');
+      g.appendChild(el('div', 'tk-group-h', '진행 중인 접수'));
+      var al = el('div', 'tk-cards');
+      for (i = 0; i < active.length; i++) al.appendChild(ticketCard(active[i]));
+      g.appendChild(al);
+      host.appendChild(g);
+    }
+    if (past.length) {
+      var pg = el('details', 'tk-past');
+      pg.appendChild(el('summary', 'tk-past-h', '지난 접수 ' + past.length + '건'));
+      var pl = el('div', 'tk-cards');
+      for (i = 0; i < past.length; i++) pl.appendChild(ticketCard(past[i]));
+      pg.appendChild(pl);
+      host.appendChild(pg);
+    }
+    renderClear();
+  }
+
+  /* ---- 기억 지우기(비모달 인라인 확인) ---- */
+  function renderClear() {
+    var host = document.getElementById('status-clear');
+    if (!host) return;
+    host.textContent = '';
+    var has = window.asStore && (asStore.profile() || asStore.tickets().length);
+    if (!has) return;
+    var btn = el('button', 'stx-clear', '이 기기의 기억 지우기'); btn.type = 'button';
+    btn.addEventListener('click', function () { confirmClear(host); });
+    host.appendChild(btn);
+  }
+  function confirmClear(host) {
+    host.textContent = '';
+    var box = el('div', 'stx-confirm');
+    box.appendChild(el('p', 'stx-confirm-t', '이 기기에 저장된 접수 목록과 연락처를 지울까요? 접수 자체는 사라지지 않고, 이 기기에서 자동으로 보이지 않게 됩니다.'));
+    var row = el('div', 'stx-confirm-row');
+    var yes = el('button', 'stx-confirm-yes', '지우기'); yes.type = 'button';
+    var no = el('button', 'stx-confirm-no', '그대로 두기'); no.type = 'button';
+    yes.addEventListener('click', function () {
+      if (window.asStore) asStore.clearAll();
+      topSig = null;
+      renderTicketList();
+      showToast('이 기기의 기억을 지웠어요.');
+    });
+    no.addEventListener('click', function () { renderClear(); });
+    row.appendChild(yes); row.appendChild(no);
+    box.appendChild(row);
+    host.appendChild(box);
+  }
+
+  /* ---- 수동 조회 폼 ---- */
+  function renderManualLookup() {
+    var host = document.getElementById('manual-lookup');
+    if (!host) return;
+    host.textContent = '';
+    var card = el('div', 'ml-card');
+    card.appendChild(el('div', 'ml-title', '접수번호로 조회하기'));
+    card.appendChild(el('p', 'ml-sub', '다른 기기에서 접수하셨거나 목록에 없으면, 접수번호와 연락처 뒷 4자리로 확인할 수 있어요.'));
+    var f1 = el('div', 'up-field');
+    var idIn = document.createElement('input');
+    idIn.type = 'text'; idIn.className = 'up-input'; idIn.id = 'ml-id'; idIn.maxLength = 40;
+    idIn.placeholder = '예) AS-260710-160225'; idIn.autocomplete = 'off';
+    idIn.setAttribute('autocapitalize', 'characters'); idIn.setAttribute('autocorrect', 'off');
+    idIn.setAttribute('aria-label', '접수번호');
+    f1.appendChild(idIn);
+    var f2 = el('div', 'up-field');
+    var p4 = document.createElement('input');
+    p4.type = 'text'; p4.className = 'up-input'; p4.id = 'ml-p4'; p4.maxLength = 4;
+    p4.placeholder = '연락처 뒷 4자리'; p4.autocomplete = 'off';
+    p4.setAttribute('inputmode', 'numeric'); p4.setAttribute('pattern', '[0-9]*'); p4.setAttribute('aria-label', '연락처 뒷 4자리');
+    var go = el('button', 'up-go', '조회하기'); go.type = 'button';
+    f2.appendChild(p4); f2.appendChild(go);
+    var note = el('div', 'up-note'); note.hidden = true;
+    card.appendChild(f1); card.appendChild(f2); card.appendChild(note);
+    card.appendChild(safeCopy('입력하신 정보는 조회 확인에만 사용하고 저장하지 않아요.'));
+    host.appendChild(card);
+
+    var cred = loadCred();   // 같은 세션에서 접수 직후 편의(S4가 저장한 asStatus.cred)
+    if (cred) { if (cred.id) idIn.value = cred.id; if (cred.phone4) p4.value = cred.phone4; }
+
+    function run() {
+      if (go.disabled) return;
+      var id = normalizeAsId(idIn.value);
+      var pin = String(p4.value || '').replace(/\D/g, '');
+      if (!id) { setNote(note, '접수번호를 다시 확인해 주세요. 예) AS-260710-160225'); return; }
+      if (pin.length !== 4) { setNote(note, '연락처 뒷 4자리를 숫자로 입력해 주세요.'); return; }
+      idIn.value = id; setNote(note, '');
+      go.disabled = true; go.textContent = '조회 중…';
+      try { if (document.activeElement && document.activeElement.blur) document.activeElement.blur(); } catch (e) {}  // 모바일 키보드 내리기
+      api({ action: 'asStatus', id: id, phone4: pin }).then(function (d) {
+        go.disabled = false; go.textContent = '조회하기';
+        if (d && d.ok) { showDetailView(id, pin, d); }
+        else { setNote(note, STX_LOOKUP_FAIL); }
+      }, function () {
+        go.disabled = false; go.textContent = '조회하기';
+        setNote(note, '연결이 원활하지 않아요. 잠시 후 다시 시도하시거나 전화(' + STX_PHONE + ', ' + STX_HOURS + ')로 확인해 주세요.', true);
+      });
+    }
+    go.addEventListener('click', run);
+    p4.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.keyCode === 13) { e.preventDefault(); run(); } });
+    idIn.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.keyCode === 13) { e.preventDefault(); p4.focus(); } });
+  }
+
+  /* ---- 상세(스테퍼 + 대화) ---- */
+  function showListPane() { var l = document.getElementById('status-list'), d = document.getElementById('ticket-detail'); if (l) l.hidden = false; if (d) d.hidden = true; }
+  function showDetailPane() { var l = document.getElementById('status-list'), d = document.getElementById('ticket-detail'); if (l) l.hidden = true; if (d) d.hidden = false; }
+  function detailHeader() {
+    var back = el('button', 'stx-back', '← 목록으로'); back.type = 'button';
+    back.addEventListener('click', closeDetail);
+    return back;
+  }
+  function closeDetail() {
+    detailOpen = false; stopPoll(); detailCred = null; THREAD = null;
+    clearTitleFlag();
+    showListPane();
+    renderTicketList();   // 상세에서 갱신한 캐시(lastStatus) 반영
+    try { window.scrollTo({ top: 0 }); } catch (e) {}
+  }
+  function renderStepper(host, step) {
+    host.textContent = ''; host.hidden = false;
+    host.setAttribute('aria-label', '진행 상태: ' + AS_STEPS[step] + ' (' + (step + 1) + '/' + AS_STEPS.length + ')');
+    for (var i = 0; i < AS_STEPS.length; i++) {
+      if (i > 0) host.appendChild(el('span', 'stp-bar' + (i <= step ? ' is-done' : '')));
+      host.appendChild(el('span', 'stp' + (i < step ? ' is-done' : (i === step ? ' is-now' : '')), AS_STEPS[i]));
+    }
+  }
+  function renderDetailLoading(id) {
+    var host = document.getElementById('ticket-detail'); if (!host) return;
+    host.textContent = '';
+    host.appendChild(detailHeader());
+    var card = el('div', 'status-card');
+    card.appendChild(el('div', 'st-load', '상태를 확인하고 있어요…'));
+    host.appendChild(card);
+  }
+  function renderDetailError(id, phone4, network) {
+    var host = document.getElementById('ticket-detail'); if (!host) return;
+    host.textContent = '';
+    host.appendChild(detailHeader());
+    var card = el('div', 'status-card');
+    card.appendChild(el('span', 'st-id', id));
+    card.appendChild(el('p', 'st-flag-note', network ? '연결이 원활하지 않아요. 잠시 후 다시 시도해 주세요.' : STX_LOOKUP_FAIL));
+    var retry = el('button', 'up-go', '다시 시도'); retry.type = 'button';
+    retry.addEventListener('click', function () { openTicketDetail(id, phone4); });
+    card.appendChild(retry);
+    host.appendChild(card);
+  }
+  function openTicketDetail(id, phone4) {
+    id = normalizeAsId(id) || String(id || '').toUpperCase();
+    phone4 = String(phone4 || '').replace(/\D/g, '').slice(-4);
+    if (phone4.length !== 4) {                                  // 로컬에 phone4 없으면 세션 cred 로 보완
+      var cred = loadCred();
+      if (cred && cred.id === id && cred.phone4) phone4 = cred.phone4;
+    }
+    showDetailPane();
+    renderDetailLoading(id);
+    if (phone4.length !== 4) { renderDetailError(id, phone4, false); return; }
+    api({ action: 'asStatus', id: id, phone4: phone4 }).then(function (d) {
+      if (d && d.ok) showDetailView(id, phone4, d);
+      else renderDetailError(id, phone4, false);
+    }, function () { renderDetailError(id, phone4, true); });
+  }
+  function showDetailView(id, phone4, d) {
+    detailCred = { id: id, phone4: phone4 };
+    detailOpen = true;
+    saveCredSession(id, phone4);
+    showDetailPane();
+    var host = document.getElementById('ticket-detail'); if (!host) return;
+    host.textContent = '';
+    host.appendChild(detailHeader());
+
+    var step = (typeof d.step === 'number' && d.step >= 0 && d.step <= 3) ? d.step : 0;
+    var known = ticketKnown(id);
+    if (known && window.asStore) {   // 알고 있는 티켓이면 캐시 갱신(목록 스테퍼·완료 이동)
+      try {
+        asStore.updateTicket(id, {
+          lastStatus: d.status || AS_STEPS[step],
+          lastStep: (typeof d.step === 'number' ? d.step : 0),
+          closedAt: (d.step === 3 ? nowIso() : null)
+        });
+      } catch (e) {}
+    }
+
+    var card = el('div', 'status-card');
+    var head = el('div', 'st-head');
+    head.appendChild(el('span', 'st-id', id));
+    var badge = el('span', 'st-badge'); badge.hidden = true; head.appendChild(badge);
+    card.appendChild(head);
+    var stepper = el('div', 'stepper'); stepper.setAttribute('role', 'img');
+    card.appendChild(stepper);
+    var flagNote = el('p', 'st-flag-note'); flagNote.hidden = true; card.appendChild(flagNote);
+
+    if (d.flag === 'cancelled' || d.flag === 'held') {
+      stepper.hidden = true;
+      badge.hidden = false;
+      badge.textContent = d.flag === 'cancelled' ? '접수 취소' : '처리 보류';
+      badge.className = 'st-badge ' + (d.flag === 'cancelled' ? 'is-cancel' : 'is-hold');
+      flagNote.hidden = false;
+      flagNote.textContent = d.flag === 'cancelled'
+        ? '이 접수는 취소 처리되었습니다. 궁금하신 점은 전화(' + STX_PHONE + ', ' + STX_HOURS + ') 또는 아래 대화로 문의해 주세요.'
+        : '이 접수는 잠시 보류 중입니다. 확인이 끝나는 대로 순서대로 연락드리겠습니다.';
+    } else {
+      renderStepper(stepper, step);
+    }
+
+    var meta = el('dl', 'st-meta');
+    var m1 = el('div'); m1.appendChild(el('dt', null, '접수일')); m1.appendChild(el('dd', null, d.date ? String(d.date) : '-')); meta.appendChild(m1);
+    var m2 = el('div'); m2.appendChild(el('dt', null, '마지막 업데이트')); m2.appendChild(el('dd', null, d.updatedAt ? formatTs(d.updatedAt) : '-')); meta.appendChild(m2);
+    card.appendChild(meta);
+    host.appendChild(card);
+
+    if (!known) host.appendChild(buildSaveProposal(id, phone4, d, step));   // 수동/?id 조회 → 저장 제안
+
+    host.appendChild(buildThreadSection());   // 상담 대화
+    initThread();
+  }
+  function buildSaveProposal(id, phone4, d, step) {
+    var box = el('div', 'stx-save');
+    box.appendChild(el('p', 'stx-save-t', '이 기기에 저장할까요? 다음부터 입력 없이 바로 확인할 수 있어요.'));
+    var row = el('div', 'stx-save-row');
+    var yes = el('button', 'stx-save-yes', '이 기기에 저장'); yes.type = 'button';
+    var no = el('button', 'stx-save-no', '아니요'); no.type = 'button';
+    yes.addEventListener('click', function () {
+      if (window.asStore) {
+        try {
+          asStore.addTicket({
+            id: id, phone4: phone4, model: '', modelName: '',
+            createdAt: nowIso(), lastStatus: (d.status || AS_STEPS[step]),
+            lastStep: (typeof d.step === 'number' ? d.step : 0), closedAt: (d.step === 3 ? nowIso() : null)
+          });
+        } catch (e) {}
+      }
+      if (box.parentNode) box.parentNode.removeChild(box);
+      showToast('이 기기에 저장했어요.');
+    });
+    no.addEventListener('click', function () { if (box.parentNode) box.parentNode.removeChild(box); });
+    row.appendChild(yes); row.appendChild(no);
+    box.appendChild(row);
+    box.appendChild(safeCopy('다음에 더 편하게 오시도록 이 기기에만 살짝 기억해 둘게요. 언제든 지울 수 있어요.'));
+    return box;
+  }
+
+  /* ---- 상담 대화(as-status.js 이식: 15초 폴링·멱등 렌더·asFile 썸네일) ---- */
+  function buildThreadSection() {
+    var sec = el('section', 'thread-sec'); sec.setAttribute('aria-label', '접수 상담 대화');
+    sec.appendChild(el('h3', 'thread-title', '상담 대화'));
+    sec.appendChild(el('p', 'thread-desc', '남겨주신 메시지는 상담 시간(' + STX_HOURS + ')에 순서대로 답변드립니다.'));
+    var list = el('div', 'th-list'); list.setAttribute('role', 'log'); list.setAttribute('aria-live', 'polite');
+    sec.appendChild(list);
+    var form = el('form', 'th-composer');
+    var file = document.createElement('input'); file.type = 'file'; file.accept = 'image/*'; file.hidden = true;
+    var attach = el('button', 'th-attach', '사진 첨부'); attach.type = 'button';
+    var input = document.createElement('textarea'); input.className = 'th-input'; input.rows = 1; input.maxLength = 1000;
+    input.placeholder = '메시지를 입력하세요'; input.setAttribute('aria-label', '메시지 입력');
+    var send = el('button', 'th-send', '보내기'); send.type = 'submit';
+    form.appendChild(file); form.appendChild(attach); form.appendChild(input); form.appendChild(send);
+    sec.appendChild(form);
+    THREAD = { sec: sec, list: list, form: form, input: input, send: send, attach: attach, file: file };
+    form.addEventListener('submit', onThreadSend);
+    attach.addEventListener('click', function () { file.click(); });
+    file.addEventListener('change', onThreadAttach);
+    return sec;
+  }
+  function initThread() {
+    if (!THREAD) return;
+    lastTs = ''; renderedSig = ''; firstLoad = true; msgsSeq++;   // 이전 티켓 스레드 무효화
+    THREAD.list.textContent = '';
+    fetchMsgs();
+    if (!document.hidden) startPoll();   // 백그라운드 탭이면 복귀 때 시작(onVisChange)
+  }
+  function startPoll() { if (!pollTimer && detailOpen && !document.hidden) pollTimer = setInterval(fetchMsgs, 15000); }
+  function stopPoll() { if (pollTimer) { clearInterval(pollTimer); pollTimer = null; } }
+  function onVisChange() {
+    if (!detailOpen) return;
+    if (document.hidden) stopPoll();
+    else { clearTitleFlag(); fetchMsgs(); startPoll(); }
+  }
+  function clearTitleFlag() { if (titleFlagged) { titleFlagged = false; try { document.title = baseTitle; } catch (e) {} } }
+  function threadSig(msgs) {
+    var last = msgs.length ? msgs[msgs.length - 1] : null;
+    return msgs.length + '|' + (last ? String(last.ts) : '') + '|' + (last ? String(last.text == null ? '' : last.text) : '');
+  }
+  function fetchMsgs(toBottom) {
+    if (!detailCred || !THREAD) return;
+    var seq = ++msgsSeq, reqId = detailCred.id;
+    api({ action: 'asMsgs', id: detailCred.id, phone4: detailCred.phone4 }).then(function (d) {
+      if (seq !== msgsSeq || !detailCred || detailCred.id !== reqId || !THREAD) return;   // 늦은/타 접수 응답 무시
+      if (!d || !d.ok || !Array.isArray(d.msgs)) return;
+      var sig = threadSig(d.msgs);
+      if (sig === renderedSig) return;
+      renderedSig = sig;
+      var csTs = '', i;
+      for (i = 0; i < d.msgs.length; i++) { var m = d.msgs[i]; if (m && m.dir === 'cs' && String(m.ts) > csTs) csTs = String(m.ts); }
+      var newCs = !firstLoad && csTs !== '' && csTs > lastTs;
+      if (csTs > lastTs) lastTs = csTs;
+      var listEl = THREAD.list;
+      var nearBottom = listEl.scrollHeight - listEl.scrollTop - listEl.clientHeight < 48;
+      var prevScroll = listEl.scrollTop;
+      listEl.textContent = '';
+      for (i = 0; i < d.msgs.length; i++) { if (d.msgs[i]) renderMsg(d.msgs[i]); }
+      listEl.scrollTop = prevScroll;
+      if (newCs) {
+        try { listEl.scrollTo({ top: listEl.scrollHeight, behavior: 'smooth' }); } catch (e) { listEl.scrollTop = listEl.scrollHeight; }
+        if (!document.hasFocus()) { titleFlagged = true; try { document.title = '(새 답변) ' + baseTitle; } catch (e) {} }
+      } else if (firstLoad || toBottom === true || nearBottom) {
+        listEl.scrollTop = listEl.scrollHeight;
+      }
+      firstLoad = false;
+    }, function () { /* 폴링 실패는 조용히 — 다음 주기 재시도 */ });
+  }
+  function renderMsg(m) {
+    var mine = m.dir === 'customer';
+    var row = el('div', 'th-row ' + (mine ? 'is-me' : 'is-cs'));
+    var bubble = el('div', 'th-bubble');
+    var parts = String(m.text == null ? '' : m.text).split('\n');
+    for (var i = 0; i < parts.length; i++) {
+      if (i > 0) bubble.appendChild(document.createElement('br'));
+      bubble.appendChild(document.createTextNode(parts[i]));
+    }
+    row.appendChild(bubble);
+    var att = [];
+    if (Array.isArray(m.att)) att = m.att;
+    else if (typeof m.att === 'string' && m.att) { try { att = JSON.parse(m.att) || []; } catch (e) { att = []; } }
+    for (var j = 0; j < att.length; j++) {
+      if (att[j] && att[j].id && /^image\//.test(String(att[j].mime || ''))) row.appendChild(buildThumb(att[j]));
+    }
+    row.appendChild(el('span', 'th-time', formatTs(m.ts)));
+    THREAD.list.appendChild(row);
+  }
+  function buildThumb(f) {
+    var img = document.createElement('img');
+    img.className = 'th-thumb'; img.alt = String(f.name || '첨부 사진');
+    if (fileCache[f.id]) { img.src = fileCache[f.id]; return img; }
+    function fallback() { if (img.parentNode) img.parentNode.replaceChild(el('span', 'th-time', String(f.name || '첨부 사진')), img); }
+    api({ action: 'asFile', fileId: f.id, id: detailCred.id, phone4: detailCred.phone4 }).then(function (d) {
+      if (d && d.ok && d.data) { var src = 'data:' + String(d.mime || 'image/jpeg') + ';base64,' + String(d.data); fileCache[f.id] = src; img.src = src; }
+      else fallback();
+    }, fallback);
+    return img;
+  }
+  function onThreadSend(e) {
+    e.preventDefault();
+    if (!detailCred || !THREAD || THREAD.send.disabled) return;
+    var text = String(THREAD.input.value || '').trim().slice(0, 1000);
+    if (!text) return;
+    THREAD.send.disabled = true;
+    api({ action: 'asMsgSend', id: detailCred.id, phone4: detailCred.phone4, text: text }).then(function (d) {
+      if (d && d.ok) { if (THREAD) THREAD.input.value = ''; fetchMsgs(true); }
+      else showToast('메시지를 보내지 못했어요. 잠시 후 다시 시도해 주세요.');
+    }, function () { showToast('연결이 원활하지 않아요. 잠시 후 다시 시도해 주세요.'); })
+      .then(function () { if (THREAD) THREAD.send.disabled = false; });
+  }
+  function onThreadAttach() {
+    if (!detailCred || !THREAD) return;
+    var f = THREAD.file.files && THREAD.file.files[0];
+    THREAD.file.value = '';
+    if (!f || !/^image\//.test(f.type || '')) return;
+    var media = window.ClapaAsMedia;
+    if (!media || !media.compressImage || !media.fileToB64) { showToast('사진을 올릴 수 없어요. 네이버 톡톡으로 보내주시면 확인해 드릴게요.'); return; }
+    THREAD.attach.disabled = true; THREAD.attach.textContent = '올리는 중…';
+    media.compressImage(f, 1600, 0.8).catch(function () {
+      if (f.size <= 5 * 1024 * 1024) return { blob: f, name: f.name, mime: f.type || 'image/jpeg' };
+      throw new Error('too-big');
+    }).then(function (pk) {
+      return media.fileToB64(pk.blob).then(function (b64) {
+        return api({ action: 'asUpload', id: detailCred.id, phone4: detailCred.phone4, name: pk.name, mime: pk.mime, data: b64 });
+      }).then(function (d) {
+        if (!d || !d.ok) throw new Error('upload');
+        return api({ action: 'asMsgSend', id: detailCred.id, phone4: detailCred.phone4, text: '[사진] ' + pk.name + ' 을(를) 보냈습니다.' });
+      });
+    }).then(function () { fetchMsgs(true); }).catch(function () {
+      showToast('사진을 올리지 못했어요. 크기를 줄여 다시 시도해 주세요.');
+    }).then(function () { if (THREAD) { THREAD.attach.disabled = false; THREAD.attach.textContent = '사진 첨부'; } });
+  }
+
+  /* ---- ?id= 진입 포커스 ---- */
+  function focusTicket(rawId) {
+    var id = normalizeAsId(rawId) || String(rawId || '').toUpperCase();
+    var list = (window.asStore ? asStore.tickets() : []), i, hit = null;
+    for (i = 0; i < list.length; i++) { if (list[i] && list[i].id === id) { hit = list[i]; break; } }
+    if (hit && hit.phone4) { openTicketDetail(hit.id, hit.phone4); return; }
+    showListPane();
+    renderTicketList();
+    var idIn = document.getElementById('ml-id'), p4 = document.getElementById('ml-p4');
+    if (idIn) idIn.value = id;
+    try { if (p4) p4.focus(); } catch (e) {}
+    showToast('접수번호를 확인했어요. 연락처 뒷 4자리를 입력해 주세요.');
+  }
+
+  /* ---- 재방문 인사 + 같은 제품 진행 중 안내(접수 탭 상단, 비차단 — 스펙 §6-2) ---- */
+  function renderIntakeTop() {
+    var main = document.querySelector('#intake-live .as-main');
+    if (!main) return;
+    var host = document.getElementById('intake-top');
+    if (!host) { host = el('div'); host.id = 'intake-top'; main.insertBefore(host, main.firstChild); }
+    var profile = (window.asStore ? asStore.profile() : null);
+    var code = (state.product && state.product.code) ? state.product.code : '';
+    var dup = code ? sameProductInProgress(code) : null;
+    var sig = (profile && profile.name ? profile.name : '') + '|' + code + '|' + (dup ? dup.id : '');
+    if (sig === topSig) return;   // 변화 없으면 재구성 생략(연락처 키 입력마다 깜빡임 방지)
+    topSig = sig;
+    host.textContent = '';
+    if (profile && profile.name) {
+      host.appendChild(el('p', 'intake-greet', profile.name + '님, 다시 오셨네요. 이어서 접수를 도와드릴게요.'));
+    }
+    if (dup) {
+      var card = el('div', 'dup-note');
+      var tx = el('div', 'dup-note-tx');
+      tx.appendChild(el('div', 'dup-note-t', '이 제품으로 진행 중인 접수가 있어요'));
+      tx.appendChild(el('div', 'dup-note-s', '접수번호 ' + dup.id + ' — 새 접수도 그대로 진행할 수 있어요.'));
+      card.appendChild(tx);
+      var go = el('button', 'dup-go', '진행 상황 보기'); go.type = 'button';
+      go.addEventListener('click', function () { setTab('status'); openTicketDetail(dup.id, dup.phone4); });
+      card.appendChild(go);
+      host.appendChild(card);
+    }
+  }
+  function prefillFromProfile() {
+    if (profilePrefilled) return;
+    profilePrefilled = true;
+    var p = (window.asStore ? asStore.profile() : null);
+    if (p && !state.contact.name && !state.contact.phone) {
+      if (p.name) state.contact.name = p.name;
+      if (p.phone) state.contact.phone = p.phone;
+      if (typeof renderContactSection === 'function') renderContactSection();
+    }
+  }
+
+  /* ---- 조회 탭 골격 빌드 + 진입/이탈 훅 ---- */
+  function buildStatusUI() {
+    if (statusBuilt) return;
+    if (!document.getElementById('panel-status')) return;
+    renderManualLookup();
+    renderClear();
+    document.addEventListener('visibilitychange', onVisChange);
+    statusBuilt = true;
+  }
+  function initStatus() { buildStatusUI(); prefillFromProfile(); }
+  function onEnterStatus() {
+    buildStatusUI();
+    if (!idFocusDone && ID_QUERY) { idFocusDone = true; focusTicket(ID_QUERY); return; }
+    if (detailOpen && detailCred) { showDetailPane(); if (!document.hidden) { fetchMsgs(); startPoll(); } return; }
+    showListPane();
+    renderTicketList();
+  }
+  function onEnterIntake() {
+    stopPoll();               // 조회 탭을 떠남 — 폴링 중지(GAS 쿼터 보호)
+    renderIntakeTop();
   }
 
   /* ---- 부팅 ---- */
