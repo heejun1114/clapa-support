@@ -104,11 +104,12 @@
   /* ---------- Hero ---------- */
   .hero{padding-block:clamp(38px,6vw,66px) clamp(30px,4vw,44px);}
   .eyebrow{
-    display:inline-block;
+    display:inline-flex;align-items:center;gap:7px;
     color:var(--teal-deep);font-size:12.5px;font-weight:600;
     letter-spacing:0.12em;text-transform:uppercase;
     margin-bottom:14px;
   }
+  .eyebrow .eyebrow-logo{height:12.5px;width:auto;display:block;color:currentColor;}
   .hero-title{
     margin:0;
     font-size:clamp(27px,4.6vw,40px);
@@ -792,82 +793,70 @@
     to{transform:translate3d(7%,-4%,0) scale(1.1);}
   }
 
-  /* 쇼룸 오브제 — 3D 유리 큐브 */
-  .showroom{
-    position:absolute;top:50%;right:1.5%;
-    width:300px;height:300px;
-    transform:translateY(-50%);transform-origin:center;
-    perspective:1000px;
+  /* 3D 오브제 — 유리 슬랫 12장이 천천히 도는 링(캐러셀) + 중앙 오브·바닥 글로우 (p7-fable 이식).
+     transform만 애니메이션(42s). 콘텐츠 뒤 장식층, pointer-events 없음. */
+  .hero-orn{
+    --orn:330px;
+    position:absolute;
+    top:calc(50% - var(--orn)/2);
+    right:clamp(24px,7vw,110px);
+    width:var(--orn);height:var(--orn);
+    perspective:1050px;
   }
-  .showroom .ground{
-    position:absolute;left:50%;bottom:12%;width:58%;height:8%;
-    transform:translateX(-50%);
-    background:radial-gradient(closest-side, rgba(35,32,27,.15), transparent 72%);
-    filter:blur(3px);
-  }
-  .cube-float{
+  .orn-tilt{
     position:absolute;inset:0;
-    animation:p7Float 9.5s ease-in-out infinite alternate;
-    will-change:transform;
-  }
-  @keyframes p7Float{
-    from{transform:translateY(-3.5%);}
-    to{transform:translateY(3.5%);}
-  }
-  .cube{
-    position:absolute;top:50%;left:50%;
-    width:160px;height:160px;margin:-80px 0 0 -80px;
+    transform:rotateX(-13deg) rotateZ(-7deg);
     transform-style:preserve-3d;
-    animation:p7Spin 36s linear infinite;
+  }
+  .orn-ring{
+    position:absolute;inset:0;
+    transform-style:preserve-3d;
+    animation:orn-spin 42s linear infinite;
     will-change:transform;
   }
-  @keyframes p7Spin{
-    from{transform:rotateX(-24deg) rotateY(0);}
-    to{transform:rotateX(-24deg) rotateY(360deg);}
+  @keyframes orn-spin{
+    from{transform:rotateY(0deg);}
+    to{transform:rotateY(360deg);}
   }
-  .face{
-    position:absolute;width:160px;height:160px;border-radius:15px;
-    background:linear-gradient(135deg, rgba(224,240,236,.60), rgba(14,111,102,.15) 60%, rgba(10,87,80,.22));
-    border:1px solid rgba(255,255,255,.55);
-    box-shadow:
-      inset 0 1px 0 rgba(255,255,255,.72),
-      inset 0 0 32px rgba(255,255,255,.26),
-      inset 0 0 0 1px rgba(14,111,102,.10);
+  .orn-ring i{
+    position:absolute;left:50%;top:50%;
+    width:16%;height:42%;
+    margin:-21% 0 0 -8%;
+    border-radius:14px;
+    transform:rotateY(var(--a)) translateZ(calc(var(--orn) * .40));
+    background:linear-gradient(180deg, rgba(234,242,239,.55), rgba(14,111,102,.17) 55%, rgba(234,242,239,.38));
+    border:1px solid rgba(255,255,255,.75);
+    box-shadow:inset 0 0 0 1px rgba(14,111,102,.05);
   }
-  /* 유리 하이라이트 */
-  .face::after{
-    content:"";position:absolute;inset:15% 18% 48% 15%;border-radius:11px;
-    background:linear-gradient(150deg, rgba(255,255,255,.5), transparent 62%);
-    opacity:.7;
+  .orn-core{
+    position:absolute;left:50%;top:50%;
+    width:24%;height:24%;margin:-12% 0 0 -12%;
+    border-radius:50%;
+    background:radial-gradient(circle at 32% 28%, rgba(255,255,255,.92), rgba(228,240,237,.6) 42%, rgba(14,111,102,.16) 78%, rgba(14,111,102,.05));
+    border:1px solid rgba(255,255,255,.7);
   }
-  .f-front {transform:translateZ(80px);}
-  .f-back  {transform:rotateY(180deg) translateZ(80px);}
-  .f-right {transform:rotateY(90deg)  translateZ(80px);}
-  .f-left  {transform:rotateY(-90deg) translateZ(80px);}
-  .f-top   {transform:rotateX(90deg)  translateZ(80px);}
-  .f-bottom{transform:rotateX(-90deg) translateZ(80px);}
-  /* 면별 미세한 명암차 — 유리 큐브의 입체감(빛 방향은 좌상단 가정) */
-  .f-top   {background:linear-gradient(135deg, rgba(238,247,244,.72), rgba(20,120,110,.13));}
-  .f-bottom{background:linear-gradient(135deg, rgba(198,224,218,.5), rgba(8,74,68,.30));}
-  .f-right {background:linear-gradient(135deg, rgba(206,230,224,.5), rgba(9,80,73,.28));}
-  .f-left  {background:linear-gradient(135deg, rgba(214,234,229,.55), rgba(11,88,80,.24));}
+  .orn-floor{
+    position:absolute;left:50%;bottom:-6%;
+    width:72%;height:12%;
+    transform:translateX(-50%);
+    background:radial-gradient(50% 50% at 50% 50%, rgba(10,87,80,.11), transparent 68%);
+    filter:blur(7px);
+  }
 
+  /* 중간 폭 — 검색바(640px)와 겹치지 않게 축소·은은하게 (현행 오브제 자리 기준) */
   @media(max-width:1080px){
-    .showroom{width:264px;height:264px;right:0.5%;}
-    .cube{transform:scale(.9);}
+    .hero-orn{--orn:250px;top:auto;bottom:6%;right:-24px;opacity:.6;}
   }
   @media(max-width:900px){
-    .showroom{width:190px;height:190px;top:34px;right:-4%;transform:none;opacity:.62;}
-    .cube{transform:scale(.62);}
-    .showroom .ground{display:none;}
+    .hero-orn{--orn:220px;top:24px;bottom:auto;right:-42px;opacity:.55;}
   }
+  /* 모바일 — 타이틀 우측 상단에 은은한 배경 오브제로 */
   @media(max-width:640px){
-    .showroom{width:150px;height:150px;top:18px;right:-10%;opacity:.5;}
-    .cube{transform:scale(.5);}
+    .hero-orn{--orn:200px;top:-14px;bottom:auto;right:-62px;opacity:.6;}
   }
 
   @media(prefers-reduced-motion:reduce){
-    .hero-fx::after,.cube-float,.cube{animation:none !important;}
+    .hero-fx::after,.orn-ring{animation:none !important;}
   }
 </style>
 <link rel="stylesheet" href="../../assets/chat.css">
@@ -893,22 +882,18 @@
   <!-- HERO: category-centric -->
   <section class="hero" aria-labelledby="hero-title">
     <div class="hero-fx" aria-hidden="true">
-      <div class="showroom">
-        <div class="ground"></div>
-        <div class="cube-float">
-          <div class="cube">
-            <span class="face f-front"></span>
-            <span class="face f-back"></span>
-            <span class="face f-right"></span>
-            <span class="face f-left"></span>
-            <span class="face f-top"></span>
-            <span class="face f-bottom"></span>
+      <div class="hero-orn">
+        <div class="orn-tilt">
+          <div class="orn-ring">
+            <i style="--a:0deg"></i><i style="--a:30deg"></i><i style="--a:60deg"></i><i style="--a:90deg"></i><i style="--a:120deg"></i><i style="--a:150deg"></i><i style="--a:180deg"></i><i style="--a:210deg"></i><i style="--a:240deg"></i><i style="--a:270deg"></i><i style="--a:300deg"></i><i style="--a:330deg"></i>
           </div>
+          <div class="orn-core"></div>
         </div>
+        <div class="orn-floor"></div>
       </div>
     </div>
     <div class="wrap">
-      <span class="eyebrow">CLAPA 고객지원센터</span>
+      <span class="eyebrow"><svg class="eyebrow-logo" viewBox="0 0 828 110" role="img" focusable="false"><title>CLAPA</title><path fill="currentColor" d="M25.5 0H123V16H31C32.9 17.2 24.6 15.4 20 24V86C24.6 94.6 32.9 92.8 31 94H123V110H25.5C15.3 106.9 5.8 106.8 0 91.5V18.5C5.8 3.2 15.3 3.1 25.5 0ZM166 0H187V94H277V110H166ZM388.3 0H403.7L476.3 110H453.3L396 20L337.7 110H315.7ZM382.3 86a12.2 12.2 0 1 0 24.4 0 12.2 12.2 0 1 0-24.4 0ZM519 0H619C638 6.8 639.5 6.4 644 20.5V49.5C639.5 63.6 638 63.2 619 70H540V110H519ZM540 16V53H612C611.6 51.5 624 54 623 44.5V25C624 15.4 611.6 17.9 612 16H540ZM740.3 0H755.7L828 110H806L748 20L690 110H668.3ZM734.3 86a12.2 12.2 0 1 0 24.4 0 12.2 12.2 0 1 0-24.4 0Z"/></svg>고객지원센터</span>
       <h1 class="hero-title" id="hero-title">무엇을 도와드릴까요?</h1>
       <p class="hero-sub">모델명이나 증상으로 검색하면 설명서·부품·자주 묻는 질문을 한 번에 찾아드립니다.</p>
 
