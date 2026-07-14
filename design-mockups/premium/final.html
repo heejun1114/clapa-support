@@ -163,13 +163,13 @@
 
   /* ---------- Quick menu hub (2026-07-11 — 기능 바로가기, 챗 실행 카드 아님) ---------- */
   .quickmenu{
-    display:grid;grid-template-columns:repeat(3,1fr);
+    display:grid;grid-template-columns:repeat(4,1fr);
     gap:8px;
-    margin-top:26px;max-width:680px;
+    margin-top:26px;max-width:720px;
   }
   .qm-item{
-    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;
-    min-height:76px;padding:12px 6px;
+    display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:9px;
+    min-height:104px;padding:16px 8px;
     background:var(--paper);
     border:1px solid var(--line);
     border-radius:12px;
@@ -177,12 +177,21 @@
     text-align:center;word-break:keep-all;
     transition:border-color .16s var(--ease),background .16s var(--ease),color .16s var(--ease),transform .16s var(--ease);
   }
-  .qm-item svg{color:var(--teal);flex:none;}
+  /* 통일된 아이콘 칩 — 4장 동일 */
+  .qm-item .qm-ic{
+    width:40px;height:40px;flex:none;border-radius:11px;
+    display:flex;align-items:center;justify-content:center;
+    background:var(--teal-wash);color:var(--teal-deep);
+    transition:background .16s var(--ease);
+  }
+  .qm-item .qm-ic svg{width:22px;height:22px;color:inherit;flex:none;}
+  .qm-item .qm-label{display:flex;flex-direction:column;gap:3px;justify-content:center;flex:1;}
   .qm-item:hover{border-color:var(--teal);background:var(--teal-wash);color:var(--teal-deep);transform:translateY(-1px);}
+  .qm-item:hover .qm-ic{background:#fff;}
   .qm-item .ext{font-size:11px;color:var(--muted);font-weight:500;}
   @media(max-width:640px){
-    .quickmenu{grid-template-columns:repeat(3,1fr);gap:7px;margin-top:20px;}
-    .qm-item{min-height:72px;font-size:13.5px;}
+    .quickmenu{grid-template-columns:repeat(2,1fr);gap:8px;margin-top:20px;max-width:100%;}
+    .qm-item{min-height:100px;font-size:13.5px;}
   }
 
   /* 검색창 포커스 글로우(그림자 대신 teal 링) */
@@ -208,11 +217,10 @@
   .contact-band{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
   .contact-card{display:flex;flex-direction:column;gap:6px;padding:22px 24px;border:1px solid var(--line);border-radius:14px;background:var(--paper);transition:border-color .16s var(--ease),background .16s var(--ease);}
   .contact-card:hover{border-color:var(--teal);background:#fff;}
-  .cc-ic{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:5px;}
-  .cc-ic svg{width:22px;height:22px;display:block;}
-  .cc-ic.is-phone{background:var(--teal-wash);color:var(--teal-deep);}
-  .cc-ic.is-naver{background:#E7F6EC;color:#06BE53;}
-  .cc-ic.is-kakao{background:#FEE500;color:#391B1B;}
+  /* 3장 완전 통일된 아이콘 칩 (크기·라운드·정렬 동일, 브랜드색은 마크가 보유) */
+  .cc-ic{width:40px;height:40px;border-radius:11px;display:flex;align-items:center;justify-content:center;margin-bottom:6px;background:#fff;border:1px solid var(--line);}
+  .cc-ic svg{width:22px;height:22px;display:block;color:var(--teal-deep);}
+  .cc-ic img{width:26px;height:26px;display:block;}
   .contact-card .cc-k{font-size:13px;font-weight:600;color:var(--teal-deep);}
   .contact-card .cc-v{font-size:19px;font-weight:700;letter-spacing:-0.01em;}
   .contact-card .cc-d{font-size:13px;color:var(--muted);line-height:1.5;}
@@ -784,7 +792,7 @@
     to{transform:translate3d(7%,-4%,0) scale(1.1);}
   }
 
-  /* 쇼룸 오브제 — CLAPA 'A' 마크 3D 유리 프리즘 (삼각 프리즘 + 하단 중앙 도트) */
+  /* 쇼룸 오브제 — 3D 유리 큐브 */
   .showroom{
     position:absolute;top:50%;right:1.5%;
     width:300px;height:300px;
@@ -792,7 +800,7 @@
     perspective:1000px;
   }
   .showroom .ground{
-    position:absolute;left:50%;bottom:13%;width:50%;height:7.5%;
+    position:absolute;left:50%;bottom:12%;width:58%;height:8%;
     transform:translateX(-50%);
     background:radial-gradient(closest-side, rgba(35,32,27,.15), transparent 72%);
     filter:blur(3px);
@@ -806,13 +814,9 @@
     from{transform:translateY(-3.5%);}
     to{transform:translateY(3.5%);}
   }
-  /* 모바일 축소용 무애니 스케일 래퍼(스핀 애니와 transform 충돌 방지) */
-  .prism-stage{
+  .cube{
     position:absolute;top:50%;left:50%;
-    transform-style:preserve-3d;
-  }
-  .prism{
-    position:absolute;top:0;left:0;
+    width:160px;height:160px;margin:-80px 0 0 -80px;
     transform-style:preserve-3d;
     animation:p7Spin 36s linear infinite;
     will-change:transform;
@@ -821,78 +825,49 @@
     from{transform:rotateX(-24deg) rotateY(0);}
     to{transform:rotateX(-24deg) rotateY(360deg);}
   }
-  /* 프리즘 유리면 공통 — 프로스티드 유리 질감·테두리 하이라이트 */
-  .pface{
-    position:absolute;top:0;left:0;
-    background:linear-gradient(135deg, rgba(224,240,236,.58), rgba(14,111,102,.15) 60%, rgba(10,87,80,.22));
+  .face{
+    position:absolute;width:160px;height:160px;border-radius:15px;
+    background:linear-gradient(135deg, rgba(224,240,236,.60), rgba(14,111,102,.15) 60%, rgba(10,87,80,.22));
+    border:1px solid rgba(255,255,255,.55);
     box-shadow:
-      inset 0 1px 0 rgba(255,255,255,.6),
-      inset 0 0 30px rgba(255,255,255,.24),
-      inset 0 0 0 1px rgba(14,111,102,.12);
+      inset 0 1px 0 rgba(255,255,255,.72),
+      inset 0 0 32px rgba(255,255,255,.26),
+      inset 0 0 0 1px rgba(14,111,102,.10);
   }
-  /* 삼각 앞/뒤 면 (크로스바 없는 이등변 삼각) */
-  .pface.tri{
-    width:150px;height:140px;margin:-70px 0 0 -75px;
-    clip-path:polygon(50% 0, 100% 100%, 0 100%);
+  /* 유리 하이라이트 */
+  .face::after{
+    content:"";position:absolute;inset:15% 18% 48% 15%;border-radius:11px;
+    background:linear-gradient(150deg, rgba(255,255,255,.5), transparent 62%);
+    opacity:.7;
   }
-  .pface.tri::after{
-    content:"";position:absolute;inset:0;
-    clip-path:polygon(50% 0, 100% 100%, 0 100%);
-    background:
-      radial-gradient(58% 40% at 38% 26%, rgba(255,255,255,.5), transparent 62%),
-      linear-gradient(152deg, rgba(255,255,255,.42), transparent 48%);
-    opacity:.72;
-  }
-  .p-front{transform:translateZ(29px);}
-  .p-back{transform:translateZ(-29px);}
-  /* 옆면 3장 (좌·우 빗면 + 밑면) */
-  .p-bottom{
-    width:150px;height:58px;margin:-29px 0 0 -75px;
-    transform:translateY(70px) rotateX(90deg);
-    background:linear-gradient(135deg, rgba(198,224,218,.5), rgba(8,74,68,.32));
-  }
-  .p-left{
-    width:158.83px;height:58px;margin:-29px 0 0 -79.4px;
-    transform:translate(-37.5px,0) rotateZ(118.18deg) rotateX(90deg);
-    background:linear-gradient(135deg, rgba(220,238,232,.56), rgba(11,88,80,.22));
-  }
-  .p-right{
-    width:158.83px;height:58px;margin:-29px 0 0 -79.4px;
-    transform:translate(37.5px,0) rotateZ(61.82deg) rotateX(90deg);
-    background:linear-gradient(135deg, rgba(206,230,224,.5), rgba(9,80,73,.28));
-  }
-  /* A 마크 내부 하단 중앙 유리 도트 구슬 — 별도 부유 주기 */
-  .prism-dot{
-    position:absolute;top:0;left:0;
-    width:26px;height:26px;margin:-13px 0 0 -13px;
-    border-radius:50%;
-    background:radial-gradient(circle at 33% 28%, rgba(255,255,255,.98), rgba(228,242,238,.78) 30%, rgba(14,111,102,.52) 72%, rgba(10,87,80,.66));
-    box-shadow:inset 0 0 8px rgba(255,255,255,.75), inset -1px -2px 5px rgba(10,87,80,.28), 0 3px 8px rgba(10,87,80,.3);
-    transform:translate3d(0,40px,11px);
-    animation:prismDot 5.5s ease-in-out infinite alternate;
-    will-change:transform;
-  }
-  @keyframes prismDot{
-    from{transform:translate3d(0,34px,11px);}
-    to{transform:translate3d(0,46px,11px);}
-  }
+  .f-front {transform:translateZ(80px);}
+  .f-back  {transform:rotateY(180deg) translateZ(80px);}
+  .f-right {transform:rotateY(90deg)  translateZ(80px);}
+  .f-left  {transform:rotateY(-90deg) translateZ(80px);}
+  .f-top   {transform:rotateX(90deg)  translateZ(80px);}
+  .f-bottom{transform:rotateX(-90deg) translateZ(80px);}
+  /* 면별 미세한 명암차 — 유리 큐브의 입체감(빛 방향은 좌상단 가정) */
+  .f-top   {background:linear-gradient(135deg, rgba(238,247,244,.72), rgba(20,120,110,.13));}
+  .f-bottom{background:linear-gradient(135deg, rgba(198,224,218,.5), rgba(8,74,68,.30));}
+  .f-right {background:linear-gradient(135deg, rgba(206,230,224,.5), rgba(9,80,73,.28));}
+  .f-left  {background:linear-gradient(135deg, rgba(214,234,229,.55), rgba(11,88,80,.24));}
 
   @media(max-width:1080px){
     .showroom{width:264px;height:264px;right:0.5%;}
-    .prism-stage{transform:scale(.9);}
+    .cube{transform:scale(.9);}
   }
   @media(max-width:900px){
     .showroom{width:190px;height:190px;top:34px;right:-4%;transform:none;opacity:.62;}
-    .prism-stage{transform:scale(.62);}
+    .cube{transform:scale(.62);}
     .showroom .ground{display:none;}
   }
   @media(max-width:640px){
     .showroom{width:150px;height:150px;top:18px;right:-10%;opacity:.5;}
-    .prism-stage{transform:scale(.5);}
+    .cube{transform:scale(.5);}
   }
 
   @media(prefers-reduced-motion:reduce){
-    .hero-fx::after,.cube-float,.prism,.prism-dot{animation:none !important;}
+    .hero-fx::after,.cube-float,.cube{animation:none !important;}
   }
 </style>
 <link rel="stylesheet" href="../../assets/chat.css">
@@ -921,15 +896,13 @@
       <div class="showroom">
         <div class="ground"></div>
         <div class="cube-float">
-          <div class="prism-stage">
-            <div class="prism">
-              <span class="pface tri p-front"></span>
-              <span class="pface tri p-back"></span>
-              <span class="pface side p-left"></span>
-              <span class="pface side p-right"></span>
-              <span class="pface side p-bottom"></span>
-              <span class="prism-dot"></span>
-            </div>
+          <div class="cube">
+            <span class="face f-front"></span>
+            <span class="face f-back"></span>
+            <span class="face f-right"></span>
+            <span class="face f-left"></span>
+            <span class="face f-top"></span>
+            <span class="face f-bottom"></span>
           </div>
         </div>
       </div>
@@ -966,18 +939,20 @@
 
       <nav class="quickmenu" aria-label="자주 쓰는 메뉴">
         <a class="qm-item" href="../../assets/recipes/clapa-recipebook.pdf" target="_blank" rel="noopener">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 6.5C10.4 5.2 8.2 4.5 5.5 4.5H3v13h2.5c2.7 0 4.9.7 6.5 2 1.6-1.3 3.8-2 6.5-2H21v-13h-2.5c-2.7 0-4.9.7-6.5 2z"/><path d="M12 6.5v13"/><path d="M6 9h3.2M6 12h3.2"/></svg>
-          레시피북
-          <span class="ext">PDF 열기 ↗</span>
+          <span class="qm-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6.5C10.4 5.2 8.2 4.5 5.5 4.5H3v13h2.5c2.7 0 4.9.7 6.5 2 1.6-1.3 3.8-2 6.5-2H21v-13h-2.5c-2.7 0-4.9.7-6.5 2z"/><path d="M12 6.5v13"/><path d="M6 9h3.2M6 12h3.2"/></svg></span>
+          <span class="qm-label">레시피북<span class="ext">PDF 열기 ↗</span></span>
         </a>
         <a class="qm-item" href="https://smartstore.naver.com/skillfulbrother" target="_blank" rel="noopener">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.4 20 7v10l-8 3.6L4 17V7z"/><path d="M4 7l8 3.6L20 7"/><path d="M12 11v9.6"/></svg>
-          부품·소모품 구매
-          <span class="ext">스마트스토어 ↗</span>
+          <span class="qm-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.4 20 7v10l-8 3.6L4 17V7z"/><path d="M4 7l8 3.6L20 7"/><path d="M12 11v9.6"/></svg></span>
+          <span class="qm-label">부품·소모품 구매<span class="ext">스마트스토어 ↗</span></span>
+        </a>
+        <a class="qm-item" href="https://www.youtube.com/@%EA%B9%80%EC%84%B1%EC%A4%80-n8i/videos" target="_blank" rel="noopener">
+          <span class="qm-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="5.5" width="19" height="13" rx="3.6"/><path d="M10.2 9.3v5.4l4.7-2.7z" fill="currentColor" stroke="none"/></svg></span>
+          <span class="qm-label">클래파 유튜브<span class="ext">사용·FAQ 영상 ↗</span></span>
         </a>
         <a class="qm-item" href="tel:1522-8508" data-clapa-chat-action="ask">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12a8 8 0 1 0-3.2 6.4L20 20l-.6-3A8 8 0 0 0 20 12z"/><path d="M8.5 12h.01M12 12h.01M15.5 12h.01"/></svg>
-          AI 상담
+          <span class="qm-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12a8 8 0 1 0-3.2 6.4L20 20l-.6-3A8 8 0 0 0 20 12z"/><path d="M8.5 12h.01M12 12h.01M15.5 12h.01"/></svg></span>
+          <span class="qm-label">AI 상담<span class="ext">바로 질문하기</span></span>
         </a>
       </nav>
     </div>
@@ -1599,19 +1574,19 @@
       </div>
       <div class="contact-band">
         <a class="contact-card" href="tel:1522-8508">
-          <span class="cc-ic is-phone" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 4h3l1.5 4-2 1.2a11 11 0 0 0 4.8 4.8l1.2-2 4 1.5v3a2 2 0 0 1-2.2 2A16 16 0 0 1 4.5 6.2 2 2 0 0 1 6.5 4z"/></svg></span>
+          <span class="cc-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 4h3l1.5 4-2 1.2a11 11 0 0 0 4.8 4.8l1.2-2 4 1.5v3a2 2 0 0 1-2.2 2A16 16 0 0 1 4.5 6.2 2 2 0 0 1 6.5 4z"/></svg></span>
           <span class="cc-k">전화 상담</span>
           <strong class="cc-v">1522-8508</strong>
           <span class="cc-d">평일 09:00–15:00 · 주말·공휴일 휴무</span>
         </a>
         <a class="contact-card" href="https://talk.naver.com/ct/w44cu1?frm=psf" target="_blank" rel="noopener">
-          <span class="cc-ic is-naver" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4.6c-4.4 0-8 2.7-8 6.1 0 2 1.3 3.8 3.2 5-.2 1-.7 2.2-1.1 3 0 .3.2.4.5.3 1.4-.6 2.6-1.3 3.4-1.9.6.1 1.3.2 2 .2 4.4 0 8-2.7 8-6.6S16.4 4.6 12 4.6z"/></svg></span>
+          <span class="cc-ic" aria-hidden="true"><img src="data:image/png;base64,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" alt="" width="26" height="26" decoding="async"></span>
           <span class="cc-k">네이버 톡톡</span>
           <strong class="cc-v">1:1 채팅 문의</strong>
           <span class="cc-d">앱 설치 없이 바로 문의하실 수 있습니다</span>
         </a>
         <a class="contact-card" href="https://pf.kakao.com/_jaBhs" target="_blank" rel="noopener">
-          <span class="cc-ic is-kakao" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4.8C7.2 4.8 3.5 7.7 3.5 11.2c0 2.2 1.5 4.2 3.7 5.3-.2.7-.7 2.4-.9 2.9-.1.3.2.5.4.4.3-.1 2.7-1.8 3.6-2.4.7.1 1.4.2 2.2.2 4.8 0 8.5-2.9 8.5-6.4S16.8 4.8 12 4.8z"/></svg></span>
+          <span class="cc-ic" aria-hidden="true"><img src="data:image/png;base64,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" alt="" width="26" height="26" decoding="async"></span>
           <span class="cc-k">카카오톡 채널</span>
           <strong class="cc-v">채널 채팅 문의</strong>
           <span class="cc-d">카카오톡으로 편하게 문의하실 수 있습니다</span>
