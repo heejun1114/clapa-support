@@ -269,6 +269,152 @@
     .prod-grid{grid-template-columns:repeat(auto-fill,minmax(96px,1fr));}
   }
 
+  /* ---------- [S3] 스마트 위층(빠른 시작 — 내 제품·전화 매칭·사진·주문번호) ---------- */
+  .up-card{
+    background:linear-gradient(180deg,var(--teal-wash),var(--paper) 62%);
+    border:1px solid #CFE4DF;border-radius:var(--radius);
+    padding:16px 16px 15px;margin-bottom:16px;
+  }
+  .up-head{margin-bottom:13px;}
+  .up-eyebrow{
+    display:inline-block;font-size:11.5px;font-weight:700;letter-spacing:0.1em;
+    text-transform:uppercase;color:var(--teal-deep);margin-bottom:5px;
+  }
+  .up-title{font-size:16.5px;font-weight:700;letter-spacing:-0.02em;color:var(--ink);line-height:1.3;}
+  .up-sub{margin:4px 0 0;font-size:13.5px;line-height:1.5;color:var(--muted);}
+
+  /* ① 내 제품 — 가로 스크롤 칩(기기 기억) */
+  .up-known{margin-bottom:13px;padding-bottom:13px;border-bottom:1px solid var(--line-soft);}
+  .up-known-label{font-size:12.5px;font-weight:650;color:var(--teal-deep);margin-bottom:8px;}
+  .up-known-list{display:flex;gap:9px;overflow-x:auto;padding-bottom:3px;-webkit-overflow-scrolling:touch;}
+  .up-known-chip{
+    flex:none;display:flex;align-items:center;gap:9px;min-height:52px;
+    padding:8px 13px 8px 8px;background:var(--paper);
+    border:1px solid var(--line);border-radius:999px;
+    font:inherit;text-align:left;cursor:pointer;
+    transition:border-color .15s var(--ease),box-shadow .15s var(--ease);
+  }
+  .up-known-chip:hover{border-color:var(--teal);box-shadow:0 3px 12px -8px rgba(14,111,102,.32);}
+  .up-known-thumb{
+    flex:none;width:36px;height:36px;border-radius:50%;overflow:hidden;
+    background:var(--surface);border:1px solid var(--line-soft);
+    display:flex;align-items:center;justify-content:center;
+  }
+  .up-known-thumb img{width:100%;height:100%;object-fit:cover;display:block;}
+  .up-known-tx{display:flex;flex-direction:column;line-height:1.25;min-width:0;}
+  .up-known-name{font-size:13px;font-weight:650;color:var(--ink);white-space:nowrap;}
+  .up-known-date{font-size:11.5px;color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap;}
+
+  /* 찾기 방법 disclosure 3종 */
+  .up-methods{display:flex;flex-direction:column;gap:8px;}
+  .up-method{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius-sm);overflow:hidden;}
+  .up-method.is-open{border-color:var(--teal);}
+  .up-method-head{
+    width:100%;display:flex;align-items:center;gap:11px;min-height:48px;
+    padding:11px 14px;background:transparent;border:0;font:inherit;
+    text-align:left;cursor:pointer;color:var(--ink);
+  }
+  .up-method-ic{
+    flex:none;width:30px;height:30px;border-radius:8px;
+    background:var(--teal-wash);color:var(--teal-deep);
+    display:flex;align-items:center;justify-content:center;
+  }
+  .up-method-ic svg{width:17px;height:17px;}
+  .up-method-label{flex:1;min-width:0;font-size:14.5px;font-weight:650;letter-spacing:-0.01em;}
+  .up-chev{flex:none;color:var(--sil-d);transition:transform .18s var(--ease);display:flex;}
+  .up-chev svg{width:16px;height:16px;display:block;}
+  .up-method.is-open .up-chev{transform:rotate(180deg);color:var(--teal);}
+  .up-method-body{display:none;padding:2px 14px 14px;}
+  .up-method.is-open .up-method-body{display:block;}
+
+  .up-field{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px;}
+  .up-field:last-of-type{margin-bottom:0;}
+  .up-input{
+    flex:1;min-width:120px;min-height:44px;padding:11px 14px;
+    font-family:inherit;font-size:16px;color:var(--ink);
+    background:var(--paper);border:1px solid var(--line);border-radius:var(--radius-sm);
+    transition:border-color .15s var(--ease),box-shadow .15s var(--ease);
+  }
+  .up-input:focus{outline:none;border-color:var(--teal);box-shadow:0 0 0 3px var(--teal-wash);}
+  .up-go{
+    flex:none;min-height:44px;padding:11px 16px;
+    border:1.5px solid var(--teal);background:var(--teal);color:#fff;border-radius:var(--radius-sm);
+    font:inherit;font-size:14px;font-weight:650;cursor:pointer;
+    transition:background .15s var(--ease),border-color .15s var(--ease);
+  }
+  .up-go:hover{background:var(--teal-deep);border-color:var(--teal-deep);}
+  .up-go[disabled]{opacity:.6;cursor:default;}
+
+  /* 사진 선택(라벨로 감싼 숨김 input) */
+  .up-file{
+    display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:11px 16px;
+    border:1.5px solid var(--teal);background:var(--paper);color:var(--teal-deep);
+    border-radius:var(--radius-sm);font:inherit;font-size:14px;font-weight:650;cursor:pointer;
+    transition:background .15s var(--ease);
+  }
+  .up-file:hover{background:var(--teal-wash);}
+  .up-file:focus-within{outline:2px solid var(--teal);outline-offset:2px;}
+  .up-file svg{width:17px;height:17px;}
+  .up-file input{position:absolute;width:1px;height:1px;opacity:0;pointer-events:none;}
+
+  /* 후보 카드(전화·사진·주문 공용) */
+  .up-cands{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:8px;margin-top:10px;}
+  .up-cand{
+    display:flex;align-items:center;gap:11px;padding:9px 11px;
+    background:var(--paper);border:1px solid var(--line);border-radius:var(--radius-sm);
+    font:inherit;text-align:left;cursor:pointer;width:100%;
+    transition:border-color .15s var(--ease),box-shadow .15s var(--ease);
+  }
+  .up-cand:hover{border-color:var(--teal);box-shadow:0 3px 12px -8px rgba(14,111,102,.3);}
+  .up-cand-thumb{
+    flex:none;width:44px;height:44px;border-radius:8px;overflow:hidden;
+    background:var(--surface);border:1px solid var(--line-soft);
+    display:flex;align-items:center;justify-content:center;
+  }
+  .up-cand-thumb img{width:100%;height:100%;object-fit:cover;display:block;}
+  .up-cand-meta{flex:1;min-width:0;}
+  .up-cand-code{font-size:13.5px;font-weight:700;color:var(--ink);font-variant-numeric:tabular-nums;word-break:break-all;}
+  .up-cand-name{font-size:12.5px;line-height:1.4;color:var(--muted);}
+  .up-cand-sub{font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums;margin-top:1px;}
+  .up-cand-go{flex:none;font-size:12.5px;font-weight:650;color:var(--teal-deep);align-self:center;}
+
+  /* 신뢰도 막대(사진 후보) */
+  .up-conf{display:flex;align-items:center;gap:8px;margin-top:5px;}
+  .up-conf-track{flex:1;height:5px;border-radius:999px;background:var(--sand);overflow:hidden;}
+  .up-conf-fill{height:100%;border-radius:999px;background:var(--teal);}
+  .up-conf-num{flex:none;font-size:11.5px;font-weight:650;color:var(--muted);font-variant-numeric:tabular-nums;}
+
+  /* 구매정보 카드(주문 확정 — 읽기 전용) */
+  .up-orderinfo{
+    margin-top:10px;padding:12px 13px;background:var(--paper);
+    border:1px solid var(--line);border-radius:var(--radius-sm);
+  }
+  .up-oi-row{display:flex;justify-content:space-between;gap:12px;padding:3px 0;}
+  .up-oi-k{font-size:12.5px;color:var(--muted);flex:none;}
+  .up-oi-v{font-size:13px;font-weight:600;color:var(--ink);text-align:right;word-break:break-all;}
+  .up-oi-clear{
+    margin-top:9px;min-height:34px;padding:6px 13px;border-radius:999px;
+    border:1px solid var(--line);background:var(--paper);color:var(--muted);
+    font:inherit;font-size:12.5px;font-weight:600;cursor:pointer;
+    transition:border-color .15s var(--ease),color .15s var(--ease);
+  }
+  .up-oi-clear:hover{border-color:var(--teal);color:var(--teal-deep);}
+
+  /* 소프트 인라인 메시지(비차단) */
+  .up-note{margin-top:9px;font-size:13px;line-height:1.5;color:var(--muted);}
+  .up-note.is-retry{color:var(--teal-deep);}
+
+  /* 안심 카피(§5-4) */
+  .up-safe{
+    display:flex;align-items:flex-start;gap:6px;margin-top:11px;
+    font-size:12px;line-height:1.5;color:var(--muted);
+  }
+  .up-safe svg{flex:none;width:13px;height:13px;margin-top:2px;color:var(--sil-d);}
+
+  @media(max-width:520px){
+    .up-input{min-width:0;flex-basis:100%;}
+  }
+
   /* 점검 카드 — index.html .as-notice.as-maint 연노랑 팔레트 재사용 */
   .as-maint-card{
     background:#FBF3E2;border:1px solid #EBDCB9;border-radius:var(--radius);
@@ -327,7 +473,8 @@
       <div id="intake-maint" hidden></div>
       <div class="as-layout" id="intake-live">
         <div class="as-main">
-          <!-- [S3] 스마트 위층: <div id="upstairs"></div> -->
+          <!-- [S3] 스마트 위층 -->
+          <div id="upstairs"></div>
           <!-- [S2] 섹션1 제품 -->
           <div id="sec-product" class="sec-card is-open"></div>
           <!-- [S4] 섹션2 증상:  <div id="sec-symptom" class="sec-card is-dim"></div> -->

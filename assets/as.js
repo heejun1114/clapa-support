@@ -389,6 +389,445 @@
     }).catch(function () { showToast('제품 목록을 불러오지 못했어요. 새로고침해 주세요.'); });
   }
 
+  /* ========================= [S3] 스마트 위층(빠른 시작) =========================
+     제품 아코디언 위에 얹는 선택형 도우미 4행:
+       ① 내 제품(기기 기억 — asStore, S5 정의 전엔 조용히 비표시)
+       ② 네이버 구매 매칭(이름+전화 → orderMatch)
+       ③ 사진으로 찾기(리사이즈→modelIdent, 탭해야 확정)
+       ④ 주문번호(paste 즉시 자동 조회 → orderLookup)
+     어떤 실패도 접수 진행을 막지 않는다(비차단). 주문번호·이미지 localStorage 저장 없음. */
+
+  var orderMatchTries = 0;   // 전화 매칭 세션 실패 카운터(3회 후 ② 행 조용히 접기)
+  var phoneCollapsed = false;
+
+  /* 개발자 상수 아이콘 SVG(innerHTML 허용 — 사용자·서버 데이터 아님) */
+  var ICON_BAG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 8h11l-1 11.5H7.5z"/><path d="M9 8V6.2a3 3 0 0 1 6 0V8"/></svg>';
+  var ICON_CAMERA = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8.5h3L8.4 6h7.2L17 8.5h3a1 1 0 0 1 1 1V18a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9.5a1 1 0 0 1 1-1z"/><circle cx="12" cy="13" r="3.1"/></svg>';
+  var ICON_RECEIPT = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 3h11v18l-2.2-1.4-2.2 1.4L11 20.6 8.8 22 6.5 20.6z"/><path d="M9.5 8h5M9.5 12h5"/></svg>';
+  var ICON_CHEV = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>';
+  var ICON_LOCK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>';
+  var ICON_UPLOAD = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V4"/><path d="m8 8 4-4 4 4"/><path d="M5 15v3a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-3"/></svg>';
+
+  function iconEl(cls, svg) {
+    var s = el('span', cls); s.setAttribute('aria-hidden', 'true'); s.innerHTML = svg; return s;
+  }
+  function safeCopy(text) {   // §5-4 안심 카피 한 줄
+    var w = el('p', 'up-safe');
+    w.appendChild(iconEl('', ICON_LOCK));
+    w.appendChild(el('span', null, text));
+    return w;
+  }
+  function setNote(noteEl, text, retry) {
+    noteEl.textContent = text || '';
+    noteEl.hidden = !text;
+    if (retry) noteEl.className = 'up-note is-retry'; else noteEl.className = 'up-note';
+  }
+
+  /* ---- 공용 헬퍼: 카탈로그 코드 매핑 ---- */
+  function resolveModel(productName, productOption) {
+    // (productName+' '+productOption)에서 카탈로그 code·aliases를 긴 코드 우선 포함매칭.
+    // 실패 시 '' (제품 수동 선택 유도). 부품 상품이면 옵션/이름에 박힌 본품 코드가 잡힌다.
+    if (!CATALOG || !CATALOG.models) return '';
+    var hay = String((productName || '') + ' ' + (productOption || '')).toUpperCase();
+    if (!hay.replace(/\s+/g, '')) return '';
+    var pairs = [], models = CATALOG.models, i, j, al, code, parts, p;
+    for (i = 0; i < models.length; i++) {
+      if (!models[i] || models[i].cat === 'shinil') continue;       // 신일 OEM 제외
+      code = String(models[i].code || '');
+      parts = code.split('/');                                       // 결합 코드(BES-131W/CES-232W) 분해
+      for (p = 0; p < parts.length; p++) {
+        if (parts[p]) pairs.push({ token: parts[p].toUpperCase(), code: models[i].code });
+      }
+      al = models[i].aliases || [];
+      for (j = 0; j < al.length; j++) {
+        if (al[j]) pairs.push({ token: String(al[j]).toUpperCase(), code: models[i].code });
+      }
+    }
+    pairs.sort(function (a, b) { return b.token.length - a.token.length; });  // 긴 코드 우선
+    for (i = 0; i < pairs.length; i++) {
+      if (pairs[i].token.length >= 4 && boundedIn(hay, pairs[i].token)) return pairs[i].code;
+    }
+    return '';
+  }
+
+  /* 후보 탭 시 제품 확정(브리프 계약 시그니처 그대로) */
+  function applyMatchedProduct(sel) {
+    if (sel.code) {
+      var m = modelByCode(sel.code);
+      state.product = m ? { code: m.code, name: m.name } : { code: sel.code, name: sel.name || '' };
+      if (m) { state.freeProduct = ''; selectedCat = m.cat; }
+    } else {
+      state.freeProduct = sel.name || ''; state.product = null;
+    }
+    completeSection('product', '✓ 제품 — ' + (state.product ? (state.product.code + ' ' + state.product.name) : state.freeProduct));
+    renderAside();
+  }
+
+  /* 전화 매칭·주문조회에서 얻은 연락처/구매정보를 state.contact에 채움 */
+  function autofillContact(patch) {
+    if (!patch) return;
+    for (var k in patch) { if (patch.hasOwnProperty(k) && patch[k] != null && patch[k] !== '') state.contact[k] = patch[k]; }
+    if (typeof renderContactSection === 'function') renderContactSection();  // S4 있으면 갱신
+    renderAside();
+  }
+
+  /* ---- 후보 카드 빌더 ---- */
+  function candCard(code, nameText, subText, confidence, onTap) {
+    var card = el('button', 'up-cand'); card.type = 'button';
+    card.setAttribute('aria-label', (code || nameText || '제품') + ' 담기');
+    var thumb = el('span', 'up-cand-thumb');
+    var url = thumbFor(code);
+    if (url) {
+      var img = document.createElement('img');
+      img.src = url; img.alt = ''; img.loading = 'lazy'; img.decoding = 'async';
+      img.onerror = function () { if (img.parentNode) img.parentNode.removeChild(img); };
+      thumb.appendChild(img);
+    }
+    card.appendChild(thumb);
+    var meta = el('div', 'up-cand-meta');
+    if (code) meta.appendChild(el('div', 'up-cand-code', code));
+    if (nameText) meta.appendChild(el('div', 'up-cand-name', nameText));
+    if (subText) meta.appendChild(el('div', 'up-cand-sub', subText));
+    if (typeof confidence === 'number') {
+      var pct = Math.max(0, Math.min(100, Math.round(confidence * 100)));
+      var conf = el('div', 'up-conf');
+      var track = el('div', 'up-conf-track');
+      var fill = el('div', 'up-conf-fill'); fill.style.width = pct + '%';
+      track.appendChild(fill);
+      conf.appendChild(track);
+      conf.appendChild(el('span', 'up-conf-num', pct + '%'));
+      meta.appendChild(conf);
+    }
+    card.appendChild(meta);
+    card.appendChild(el('span', 'up-cand-go', '담기'));
+    card.addEventListener('click', onTap);
+    return card;
+  }
+
+  /* ② 네이버 구매 매칭 바디 */
+  function buildPhoneBody(body) {
+    var f1 = el('div', 'up-field');
+    var nameIn = document.createElement('input');
+    nameIn.type = 'text'; nameIn.className = 'up-input'; nameIn.maxLength = 40;
+    nameIn.placeholder = '주문자 이름'; nameIn.autocomplete = 'name';
+    nameIn.setAttribute('aria-label', '주문자 이름');
+    var phoneIn = document.createElement('input');
+    phoneIn.type = 'tel'; phoneIn.className = 'up-input'; phoneIn.maxLength = 20;
+    phoneIn.placeholder = '전화번호'; phoneIn.autocomplete = 'tel';
+    phoneIn.setAttribute('inputmode', 'tel'); phoneIn.setAttribute('aria-label', '전화번호');
+    try {   // 기기 프로필 프리필(S5 정의 후, 있으면 편의)
+      if (window.asStore && asStore.profile) {
+        var pf = asStore.profile();
+        if (pf) { if (pf.name) nameIn.value = pf.name; if (pf.phone) phoneIn.value = pf.phone; }
+      }
+    } catch (e) {}
+    f1.appendChild(nameIn); f1.appendChild(phoneIn);
+    var f2 = el('div', 'up-field');
+    var go = el('button', 'up-go', '구매 제품 찾기'); go.type = 'button';
+    f2.appendChild(go);
+    var cands = el('div', 'up-cands');
+    var note = el('div', 'up-note'); note.hidden = true;
+    body.appendChild(f1); body.appendChild(f2); body.appendChild(cands); body.appendChild(note);
+    body.appendChild(safeCopy('입력하신 이름과 전화번호는 구매 확인에만 잠깐 사용해요.'));
+
+    function collapsePhone() {   // 3회 실패 후 조용히 제거(토스트 없음)
+      phoneCollapsed = true;
+      var wrap = body.parentNode;
+      if (wrap && wrap.parentNode) wrap.parentNode.removeChild(wrap);
+    }
+    function run() {
+      var nm = nameIn.value.replace(/\s+/g, ' ').trim();
+      var ph = phoneIn.value.trim();
+      cands.textContent = '';
+      if (!nm || ph.replace(/\D/g, '').length < 9) { setNote(note, '이름과 전화번호를 모두 입력해 주세요.'); return; }
+      setNote(note, '');
+      go.disabled = true; go.textContent = '찾는 중…';
+      api({ action: 'orderMatch', name: nm, phone: ph }).then(function (d) {
+        go.disabled = false; go.textContent = '구매 제품 찾기';
+        var purchases = (d && d.ok && d.purchases) ? d.purchases : [];
+        if (purchases.length) {
+          renderPhoneCands(purchases, nm, ph);
+        } else {
+          orderMatchTries++;
+          setNote(note, '입력하신 정보로는 구매 이력을 찾지 못했어요. 아래에서 제품을 골라 주셔도 됩니다.');
+          if (orderMatchTries >= 3) collapsePhone();
+        }
+      }, function () {
+        go.disabled = false; go.textContent = '구매 제품 찾기';
+        setNote(note, '입력하신 정보로는 구매 이력을 찾지 못했어요. 아래에서 제품을 골라 주셔도 됩니다.');
+      });
+    }
+    function renderPhoneCands(purchases, nm, ph) {
+      cands.textContent = '';
+      for (var i = 0; i < purchases.length; i++) {
+        (function (p) {
+          var code = '';
+          if (p.model && modelByCode(p.model)) code = modelByCode(p.model).code;
+          else code = resolveModel(p.productName || '', '');
+          var shownCode = code || (p.model || '');
+          var sub = p.purchaseMonth ? ('구매 ' + p.purchaseMonth) : '';
+          cands.appendChild(candCard(shownCode, p.productName || '', sub, null, function () {
+            if (code) applyMatchedProduct({ code: code });
+            else applyMatchedProduct({ name: p.productName || '' });
+            autofillContact({ name: nm, phone: ph });
+            cands.textContent = '';
+            setNote(note, '제품과 연락처를 담았어요. 아래에서 이어서 진행해 주세요.');
+          }));
+        })(purchases[i]);
+      }
+    }
+    go.addEventListener('click', run);
+    phoneIn.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.keyCode === 13) { e.preventDefault(); run(); } });
+  }
+
+  /* ③ 사진으로 찾기 바디 */
+  function buildPhotoBody(body) {
+    var label = el('label', 'up-file');
+    label.appendChild(iconEl('', ICON_UPLOAD));
+    label.appendChild(el('span', null, '사진 선택 또는 촬영'));
+    var fileIn = document.createElement('input');
+    fileIn.type = 'file'; fileIn.accept = 'image/*';   // 모바일에서 카메라 촬영도 선택 가능
+    fileIn.setAttribute('aria-label', '제품 사진 올리기');
+    label.appendChild(fileIn);
+    var cands = el('div', 'up-cands');
+    var note = el('div', 'up-note'); note.hidden = true;
+    body.appendChild(label); body.appendChild(cands); body.appendChild(note);
+    body.appendChild(safeCopy('올려주신 사진은 제품을 찾는 데만 쓰고 남겨두지 않아요.'));
+
+    var FALLBACK = '사진만으로는 제품을 확정하기 어려워요. 아래에서 종류를 골라 주세요.';
+    function send(b64, mime) {
+      api({ action: 'modelIdent', image: { data: b64, mime: mime } }).then(function (d) {
+        if (d && d.ok && d.candidates && d.candidates.length && (d.candidates[0].confidence == null || d.candidates[0].confidence >= 0.4)) {
+          renderPhotoCands(d.candidates);
+        } else if (d && d.ok) {
+          setNote(note, FALLBACK);                                   // 0건·저신뢰
+        } else if (d && d.code === 'quota') {
+          setNote(note, '사진 찾기를 잠시 후 다시 시도해 주세요.', true);
+        } else if (d && d.code === 'input') {
+          setNote(note, d.error || FALLBACK);
+        } else {
+          setNote(note, FALLBACK);                                   // gemini·기타
+        }
+      }, function () { setNote(note, FALLBACK); });                  // 네트워크
+    }
+    function renderPhotoCands(cs) {
+      cands.textContent = '';
+      setNote(note, '');                                           // "확인 중" 안내 정리
+      for (var i = 0; i < cs.length; i++) {
+        (function (c) {
+          cands.appendChild(candCard(c.code || '', c.name || '', '', c.confidence, function () {
+            applyMatchedProduct({ code: c.code, name: c.name });     // 탭해야 확정
+            cands.textContent = '';
+            setNote(note, '제품을 담았어요. 아래에서 이어서 진행해 주세요.');
+          }));
+        })(cs[i]);
+      }
+    }
+    fileIn.addEventListener('change', function () {
+      var file = fileIn.files && fileIn.files[0];
+      fileIn.value = '';                                             // 같은 파일 재선택 허용
+      if (!file) return;
+      cands.textContent = '';
+      setNote(note, '사진을 확인하고 있어요…');
+      var media = window.ClapaAsMedia;
+      if (media && media.compressImage && media.fileToB64) {
+        media.compressImage(file, 1280, 0.85).then(function (res) {
+          return media.fileToB64(res.blob).then(function (b64) { send(b64, 'image/jpeg'); });
+        }).catch(function () { fallbackOriginal(file, media); });
+      } else {
+        fallbackOriginal(file, media);
+      }
+    });
+    function fallbackOriginal(file, media) {
+      // 리사이즈 불가 시 원본 4MB 이하만 그대로 전송
+      if (!/^image\//.test(file.type || '') || file.size > 4 * 1024 * 1024) { setNote(note, FALLBACK); return; }
+      if (media && media.fileToB64) {
+        media.fileToB64(file).then(function (b64) { send(b64, file.type); }).catch(function () { setNote(note, FALLBACK); });
+      } else {
+        var fr = new FileReader();
+        fr.onload = function () { var s = String(fr.result || ''); var i = s.indexOf(','); send(i >= 0 ? s.slice(i + 1) : s, file.type); };
+        fr.onerror = function () { setNote(note, FALLBACK); };
+        fr.readAsDataURL(file);
+      }
+    }
+  }
+
+  /* ④ 주문번호 바디 */
+  function buildOrderBody(body) {
+    var f = el('div', 'up-field');
+    var numIn = document.createElement('input');
+    numIn.type = 'text'; numIn.className = 'up-input'; numIn.maxLength = 24;
+    numIn.placeholder = '주문번호 (숫자)'; numIn.autocomplete = 'off';
+    numIn.setAttribute('inputmode', 'numeric'); numIn.setAttribute('pattern', '[0-9]*');
+    numIn.setAttribute('aria-label', '주문번호');
+    var go = el('button', 'up-go', '찾기'); go.type = 'button';
+    f.appendChild(numIn); f.appendChild(go);
+    var out = el('div', 'up-cands');
+    var note = el('div', 'up-note'); note.hidden = true;
+    body.appendChild(f); body.appendChild(out); body.appendChild(note);
+    body.appendChild(safeCopy('주문번호는 확인 후 저장하지 않아요.'));
+
+    function buildOrderInfo(o) {
+      var box = el('div', 'up-orderinfo');
+      function row(k, v) { var r = el('div', 'up-oi-row'); r.appendChild(el('span', 'up-oi-k', k)); r.appendChild(el('span', 'up-oi-v', v || '—')); return r; }
+      box.appendChild(row('제품', o.productName || '—'));
+      if (o.productOption) box.appendChild(row('옵션', o.productOption));
+      box.appendChild(row('구매처', '네이버 스토어'));
+      if (o.paymentDate) box.appendChild(row('구매일', o.paymentDate));
+      var clr = el('button', 'up-oi-clear', '지우기'); clr.type = 'button';
+      clr.addEventListener('click', function () {
+        state.order = null; state.contact.store = ''; state.contact.purchaseDate = '';
+        if (typeof renderContactSection === 'function') renderContactSection();
+        renderAside();
+        out.textContent = ''; setNote(note, '');
+      });
+      box.appendChild(clr);
+      return box;
+    }
+    function confirmOrder(o) {
+      state.order = { orderId: o.orderId, productName: o.productName, productOption: o.productOption, paymentDate: o.paymentDate };
+      autofillContact({ store: '네이버 스토어', purchaseDate: o.paymentDate || '' });
+      out.textContent = '';
+      var code = resolveModel(o.productName || '', o.productOption || '');
+      if (code) { applyMatchedProduct({ code: code }); setNote(note, ''); }
+      else { setNote(note, '주문은 확인했어요. 어떤 제품인지 아래에서 골라 주세요.'); }
+      out.appendChild(buildOrderInfo(o));                            // 구매정보 카드(읽기 전용)
+    }
+    function handleOrders(orders) {
+      out.textContent = '';
+      if (orders.length >= 2) {                                      // 상품 선택 UI
+        for (var i = 0; i < orders.length; i++) {
+          (function (o) {
+            var code = resolveModel(o.productName || '', o.productOption || '');
+            var sub = [];
+            if (o.productOption) sub.push(o.productOption);
+            if (o.paymentDate) sub.push(o.paymentDate);
+            out.appendChild(candCard(code, o.productName || '', sub.join(' · '), null, function () { confirmOrder(o); }));
+          })(orders[i]);
+        }
+      } else {
+        confirmOrder(orders[0]);                                     // 단일 바로 확정
+      }
+    }
+    function lookup(raw) {
+      var digits = String(raw || '').replace(/\D/g, '');
+      out.textContent = ''; setNote(note, '');
+      go.disabled = true; go.textContent = '확인 중…';
+      api({ action: 'orderLookup', orderId: digits }).then(function (d) {
+        go.disabled = false; go.textContent = '찾기';
+        numIn.value = '';                                            // 프라이버시: 조회 후 비움
+        if (d && d.ok && d.orders && d.orders.length) {
+          handleOrders(d.orders);
+        } else if (d && d.retryable) {
+          setNote(note, d.error || '잠시 후 다시 시도해 주세요.', true);
+        } else {
+          setNote(note, '주문을 확인하지 못했습니다. 주문번호를 다시 확인해 주세요. 그냥 아래에서 제품을 골라도 됩니다.');
+        }
+      }, function () {
+        go.disabled = false; go.textContent = '찾기';
+        numIn.value = '';
+        setNote(note, '잠시 후 다시 시도해 주세요.', true);
+      });
+    }
+    go.addEventListener('click', function () { lookup(numIn.value); });
+    numIn.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.keyCode === 13) { e.preventDefault(); lookup(numIn.value); } });
+    numIn.addEventListener('paste', function () {                    // paste 즉시 자동 조회
+      setTimeout(function () {
+        var v = numIn.value.replace(/\D/g, '');
+        if (/^\d{8,24}$/.test(v)) lookup(numIn.value);
+      }, 0);
+    });
+  }
+
+  /* ① 내 제품(기기 기억) — asStore 있고 티켓 있을 때만 */
+  function buildKnown(card) {
+    if (!window.asStore) return;
+    var tickets = [];
+    try { tickets = (asStore.tickets && asStore.tickets()) || []; } catch (e) { tickets = []; }
+    if (!tickets.length) return;
+    var seen = {}, items = [], i, t, key;
+    for (i = 0; i < tickets.length; i++) {   // 모델 기준 중복 제거(최신순 가정 — 첫 등장 유지)
+      t = tickets[i]; if (!t) continue;
+      key = String(t.model || t.modelName || '').toUpperCase();
+      if (!key || seen[key]) continue;
+      seen[key] = 1; items.push(t);
+    }
+    if (!items.length) return;
+    var box = el('div', 'up-known');
+    box.appendChild(el('div', 'up-known-label', '최근 맡기신 제품'));
+    var list = el('div', 'up-known-list');
+    for (i = 0; i < items.length; i++) {
+      (function (tk) {
+        var nameText = tk.modelName || tk.model || '';
+        var chip = el('button', 'up-known-chip'); chip.type = 'button';
+        chip.setAttribute('aria-label', nameText + ' 다시 접수');
+        var thumb = el('span', 'up-known-thumb');
+        var url = thumbFor(tk.model);
+        if (url) {
+          var img = document.createElement('img');
+          img.src = url; img.alt = ''; img.loading = 'lazy';
+          img.onerror = function () { if (img.parentNode) img.parentNode.removeChild(img); };
+          thumb.appendChild(img);
+        }
+        chip.appendChild(thumb);
+        var tx = el('span', 'up-known-tx');
+        tx.appendChild(el('span', 'up-known-name', nameText));
+        if (tk.createdAt) tx.appendChild(el('span', 'up-known-date', '마지막 접수 ' + String(tk.createdAt).slice(0, 10)));
+        chip.appendChild(tx);
+        chip.addEventListener('click', function () {
+          if (tk.model && modelByCode(tk.model)) applyMatchedProduct({ code: tk.model });
+          else applyMatchedProduct({ name: nameText });
+        });
+        list.appendChild(chip);
+      })(items[i]);
+    }
+    box.appendChild(list);
+    box.appendChild(safeCopy('다음에 더 편하게 오시도록 이 기기에만 살짝 기억해 둘게요. 언제든 지울 수 있어요.'));
+    card.appendChild(box);
+  }
+
+  /* 방법 disclosure(아코디언 — 한 번에 하나만 열림) */
+  function buildMethod(iconSvg, labelText, bodyBuildFn) {
+    var wrap = el('div', 'up-method');
+    var head = el('button', 'up-method-head'); head.type = 'button';
+    head.setAttribute('aria-expanded', 'false');
+    head.appendChild(iconEl('up-method-ic', iconSvg));
+    head.appendChild(el('span', 'up-method-label', labelText));
+    head.appendChild(iconEl('up-chev', ICON_CHEV));
+    var body = el('div', 'up-method-body');
+    bodyBuildFn(body);
+    head.addEventListener('click', function () {
+      var willOpen = wrap.className.indexOf('is-open') === -1;
+      var sibs = wrap.parentNode ? wrap.parentNode.querySelectorAll('.up-method') : [];
+      for (var i = 0; i < sibs.length; i++) {
+        sibs[i].className = 'up-method';
+        var h = sibs[i].querySelector('.up-method-head'); if (h) h.setAttribute('aria-expanded', 'false');
+      }
+      if (willOpen) { wrap.className = 'up-method is-open'; head.setAttribute('aria-expanded', 'true'); }
+    });
+    wrap.appendChild(head); wrap.appendChild(body);
+    return wrap;
+  }
+
+  function renderUpstairs() {
+    var host = document.getElementById('upstairs');
+    if (!host) return;
+    host.textContent = '';
+    var card = el('div', 'up-card');
+    var head = el('div', 'up-head');
+    head.appendChild(el('span', 'up-eyebrow', '빠른 시작'));
+    head.appendChild(el('div', 'up-title', '어떤 제품인지 빠르게 찾아드릴게요'));
+    head.appendChild(el('p', 'up-sub', '아래 방법이 편하면 이용해 보세요. 바로 아래 목록에서 골라도 됩니다.'));
+    card.appendChild(head);
+    buildKnown(card);
+    var methods = el('div', 'up-methods');
+    if (!phoneCollapsed) methods.appendChild(buildMethod(ICON_BAG, '네이버로 구매하셨어요?', buildPhoneBody));
+    methods.appendChild(buildMethod(ICON_CAMERA, '사진으로 찾기', buildPhotoBody));
+    methods.appendChild(buildMethod(ICON_RECEIPT, '주문번호로 찾기', buildOrderBody));
+    card.appendChild(methods);
+    host.appendChild(card);
+  }
+
   /* ---- 부팅 ---- */
   function boot() {
     parseQuery();
