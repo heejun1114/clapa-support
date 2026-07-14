@@ -76,5 +76,19 @@
     <img src="assets/recipes/pages/p14.jpg" alt="계란찜기 레시피북 14페이지" width="1080" height="1528" loading="lazy" decoding="async">
     <p class="rv-foot">계란찜기 레시피북 · 전 14페이지</p>
   </main>
+  <script>
+  /* '뒤로' — 같은 탭에서 홈에서 들어왔으면 history.back()(모바일 뒤로가기 제스처와 일관),
+     외부/직접 진입이면 홈으로 폴백. (href="index.html"는 JS 미동작 시 폴백) */
+  (function () {
+    var back = document.querySelector('.rv-back');
+    if (!back) return;
+    back.addEventListener('click', function (e) {
+      e.preventDefault();
+      var sameOrigin = document.referrer && document.referrer.indexOf(location.origin) === 0;
+      if (history.length > 1 && sameOrigin) { history.back(); }
+      else { location.href = './'; }
+    });
+  })();
+  </script>
 </body>
 </html>

@@ -74,6 +74,7 @@
   var log = [];                // [{ role:'user'|'model', text, chips?, local?, meta? }]
   var sid = '';
   var isOpen = false;
+  var histPushed = false;      // 우리가 history.pushState 한 상태가 살아있는지(모바일 뒤로가기 → 챗만 닫기)
   var sending = false;
   var reqGen = 0;              // 요청 세대 — 초기화/재전송 시 증가시켜 이전 요청 응답을 버린다
   var activeController = null; // 진행 중 fetch의 AbortController(초기화 시 abort)
@@ -1060,6 +1061,10 @@
   function open() {
     if (disabled || isOpen || !panelEl) return;
     isOpen = true;
+    // 모바일 뒤로가기(제스처/버튼)로 페이지를 이탈하는 대신 챗만 닫히도록 히스토리 상태 1회 push
+    if (!histPushed) {
+      try { history.pushState({ clapaChat: 1 }, ''); histPushed = true; } catch (e) {}
+    }
     lastFocus = document.activeElement;
     scrimEl.hidden = false;
     panelEl.hidden = false;
@@ -1080,9 +1085,16 @@
     dispatchEvt('clapachat:open');
   }
 
-  function close() {
+  function close(fromPop) {
     if (!isOpen || !panelEl) return;
     isOpen = false;
+    // 히스토리 정리: 사용자가 직접 닫으면(X·배경·Esc·토글) 우리가 push한 상태를 pop한다.
+    // 뒤로가기(popstate)로 닫힌 경우엔 이미 브라우저가 pop했으므로 back() 금지(이중 pop·루프 방지).
+    // close 는 이벤트 핸들러로도 쓰여 fromPop 에 Event 가 올 수 있어 === true 로 엄격 비교.
+    if (histPushed) {
+      histPushed = false;
+      if (fromPop !== true) { try { history.back(); } catch (e) {} }
+    }
     scrimEl.classList.remove('is-open');
     panelEl.classList.remove('is-open');
     scrimEl.hidden = true;
@@ -1261,6 +1273,11 @@
     if (window.visualViewport) {
       try { window.visualViewport.addEventListener('resize', onVvResize); } catch (e) {}
     }
+
+    // 모바일 뒤로가기: 챗이 열려 있으면 페이지 이탈 대신 챗만 닫는다(닫혀 있으면 관여 안 함).
+    window.addEventListener('popstate', function () {
+      if (isOpen) close(true);
+    });
 
     loadConfig()
       .then(loadCatalog)
