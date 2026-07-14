@@ -1719,10 +1719,13 @@
     fetchMsgs();
     if (!document.hidden) startPoll();   // 백그라운드 탭이면 복귀 때 시작(onVisChange)
   }
-  function startPoll() { if (!pollTimer && detailOpen && !document.hidden) pollTimer = setInterval(fetchMsgs, 15000); }
+  function statusPanelVisible() { var p = document.getElementById('panel-status'); return !!p && !p.hidden; }
+  function startPoll() { if (!pollTimer && detailOpen && statusPanelVisible() && !document.hidden) pollTimer = setInterval(fetchMsgs, 15000); }
   function stopPoll() { if (pollTimer) { clearInterval(pollTimer); pollTimer = null; } }
   function onVisChange() {
-    if (!detailOpen) return;
+    // 조회 패널이 화면에 있을 때만 관여 — 접수 탭으로 이동한 상태에서 탭 숨김→복귀 시 폴링이 되살아나지 않도록.
+    // (detailOpen 은 유지 — 조회 탭 재진입 시 상세 복원을 위해. 화면-밖 재개는 패널 가시 체크로 차단.)
+    if (!detailOpen || !statusPanelVisible()) return;
     if (document.hidden) stopPoll();
     else { clearTitleFlag(); fetchMsgs(); startPoll(); }
   }
