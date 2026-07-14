@@ -38,10 +38,15 @@
   nav.jump a:hover{border-color:var(--teal)}
   main.list{max-width:1280px; margin:0 auto; padding:36px 40px 8px}
   .grid{display:grid; grid-template-columns:1fr 1fr; gap:24px}
-  .card{background:#fff; border:1px solid var(--line); border-radius:10px; overflow:hidden}
+  .card{background:#fff; border:1px solid var(--line); border-radius:10px; overflow:hidden; display:flex; flex-direction:column}
+  .card--rec{border-color:var(--teal); box-shadow:0 0 0 1px var(--teal), 0 10px 30px -18px rgba(14,111,102,.5)}
+  .thumb{display:block; aspect-ratio:1280/800; overflow:hidden; background:var(--sand); border-bottom:1px solid var(--line)}
+  .thumb img{display:block; width:100%; height:100%; object-fit:cover; object-position:top center; transition:transform .45s ease}
+  .thumb:hover img{transform:scale(1.025)}
   .card-top{display:flex; justify-content:space-between; align-items:center; gap:12px; padding:14px 18px; border-bottom:1px solid var(--line)}
-  .card-top .id{font-weight:700; font-size:15px}
-  .card-top .id small{color:var(--muted); font-weight:500; margin-left:8px}
+  .card-top .id{font-weight:700; font-size:15px; display:inline-flex; align-items:center; gap:8px; flex-wrap:wrap}
+  .card-top .id small{color:var(--muted); font-weight:500}
+  .badge{color:#fff; background:var(--teal); font-size:11px; font-weight:700; letter-spacing:0.02em; padding:2px 8px; border-radius:999px; white-space:nowrap}
   .card-top a{font-size:13px; font-weight:600; color:var(--teal-deep); text-decoration:none; white-space:nowrap}
   .card-top a:hover{text-decoration:underline}
   .card-desc{padding:14px 18px; color:var(--muted); font-size:13.5px; line-height:1.65}
@@ -78,36 +83,44 @@
 <main class="list">
   <div class="grid">
     <article class="card" id="p1">
+      <a class="thumb" href="p1.html" target="_blank" rel="noopener"><img src="thumbs/p1.jpg" alt="P1 앰비언트 글로우 히어로 미리보기" width="1280" height="800" loading="lazy"></a>
       <div class="card-top"><span class="id">P1 <small>앰비언트 글로우</small></span><a href="p1.html" target="_blank" rel="noopener">열기 ↗</a></div>
-      <p class="card-desc">히어로 뒤에서 은은하게 번지는 틸 광원 — 밝고 부드러운 프리미엄 무드.</p>
+      <p class="card-desc">틸 빛이 은은히 흐르는 유리 헤더 — 밝고 부드러운 프리미엄 무드.</p>
     </article>
     <article class="card" id="p2">
+      <a class="thumb" href="p2.html" target="_blank" rel="noopener"><img src="thumbs/p2.jpg" alt="P2 3D 쇼케이스 히어로 미리보기" width="1280" height="800" loading="lazy"></a>
       <div class="card-top"><span class="id">P2 <small>3D 쇼케이스</small></span><a href="p2.html" target="_blank" rel="noopener">열기 ↗</a></div>
-      <p class="card-desc">제품을 입체 무대 위에 올린 쇼케이스 연출 — 원근감과 그림자가 중심.</p>
+      <p class="card-desc">제품이 무대 위에 떠 있는 히어로 — 원근감과 그림자가 중심.</p>
     </article>
     <article class="card" id="p3">
+      <a class="thumb" href="p3.html" target="_blank" rel="noopener"><img src="thumbs/p3.jpg" alt="P3 딥틸 다크 히어로 미리보기" width="1280" height="800" loading="lazy"></a>
       <div class="card-top"><span class="id">P3 <small>딥틸 다크 히어로</small></span><a href="p3.html" target="_blank" rel="noopener">열기 ↗</a></div>
-      <p class="card-desc">딥틸 다크 배경의 히어로로 대비를 극대화한 고급감 — 본문은 밝게 유지.</p>
+      <p class="card-desc">밤의 라운지 데스크 같은 다크 히어로 — 강한 대비의 고급감, 본문은 밝게 유지.</p>
     </article>
     <article class="card" id="p4">
+      <a class="thumb" href="p4.html" target="_blank" rel="noopener"><img src="thumbs/p4.jpg" alt="P4 에디토리얼 히어로 미리보기" width="1280" height="800" loading="lazy"></a>
       <div class="card-top"><span class="id">P4 <small>에디토리얼</small></span><a href="p4.html" target="_blank" rel="noopener">열기 ↗</a></div>
-      <p class="card-desc">매거진처럼 읽히는 타이포그래피·여백 중심 레이아웃.</p>
+      <p class="card-desc">큰 타이포와 여백으로 인쇄물의 격조를 낸 매거진형 레이아웃.</p>
     </article>
     <article class="card" id="p5">
+      <a class="thumb" href="p5.html" target="_blank" rel="noopener"><img src="thumbs/p5.jpg" alt="P5 글래스 카드 히어로 미리보기" width="1280" height="800" loading="lazy"></a>
       <div class="card-top"><span class="id">P5 <small>글래스 카드</small></span><a href="p5.html" target="_blank" rel="noopener">열기 ↗</a></div>
       <p class="card-desc">반투명 유리 질감 카드를 겹쳐 쌓은 레이어드 구성.</p>
     </article>
     <article class="card" id="p6">
+      <a class="thumb" href="p6.html" target="_blank" rel="noopener"><img src="thumbs/p6.jpg" alt="P6 모션 컨시어지 히어로 미리보기" width="1280" height="800" loading="lazy"></a>
       <div class="card-top"><span class="id">P6 <small>모션 컨시어지</small></span><a href="p6.html" target="_blank" rel="noopener">열기 ↗</a></div>
-      <p class="card-desc">섬세한 마이크로 인터랙션이 시선을 안내하는 컨시어지 경험.</p>
+      <p class="card-desc">요소가 순차로 등장하고 스크롤에 반응하는 컨시어지 경험 — 직접 눌러보세요.</p>
     </article>
     <article class="card" id="p7">
-      <div class="card-top"><span class="id">P7 <small>그라데이션 메시+3D 오브젝트</small></span><a href="p7.html" target="_blank" rel="noopener">열기 ↗</a></div>
-      <p class="card-desc">메시 그라데이션 배경 위에 3D 오브젝트로 포인트를 준 구성.</p>
+      <a class="thumb" href="p7.html" target="_blank" rel="noopener"><img src="thumbs/p7.jpg" alt="P7 메시+3D 오브제 히어로 미리보기" width="1280" height="800" loading="lazy"></a>
+      <div class="card-top"><span class="id">P7 <small>메시+3D 오브제</small></span><a href="p7.html" target="_blank" rel="noopener">열기 ↗</a></div>
+      <p class="card-desc">그라데이션 메시 배경 위에 유리 큐브로 포인트를 준 구성.</p>
     </article>
-    <article class="card" id="p8">
-      <div class="card-top"><span class="id">P8 <small>베스트 조합</small></span><a href="p8.html" target="_blank" rel="noopener">열기 ↗</a></div>
-      <p class="card-desc">P1~P7에서 반응이 좋은 요소만 모아 정리한 최종 조합안.</p>
+    <article class="card card--rec" id="p8">
+      <a class="thumb" href="p8.html" target="_blank" rel="noopener"><img src="thumbs/p8.jpg" alt="P8 베스트 조합 히어로 미리보기" width="1280" height="800" loading="lazy"></a>
+      <div class="card-top"><span class="id">P8 <small>베스트 조합</small> <span class="badge">★ 추천</span></span><a href="p8.html" target="_blank" rel="noopener">열기 ↗</a></div>
+      <p class="card-desc">P3 다크 히어로 + P7 유리 큐브 + P6 모션 + P4 에디토리얼 액센트를 모은 종합 후보.</p>
     </article>
   </div>
 </main>
