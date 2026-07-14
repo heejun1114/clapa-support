@@ -183,6 +183,92 @@
   .sec-body{padding:0 16px 16px;}
   .sec-done-line{font-weight:700;color:var(--teal-deep);letter-spacing:-0.015em;}
 
+  /* ---- [S2] 섹션 헤드(번호·제목·변경)·제품 그리드·요약 aside ---- */
+  .sec-card.is-open .sec-head{cursor:default;}
+  .sec-num{
+    flex:none;width:26px;height:26px;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    font-size:13px;font-weight:700;font-variant-numeric:tabular-nums;
+    background:var(--teal-wash);color:var(--teal-deep);
+  }
+  .sec-card.is-open .sec-num{background:var(--teal);color:#fff;}
+  .sec-head-main{flex:1;min-width:0;display:flex;align-items:center;gap:10px;}
+  .sec-title{font-size:16px;font-weight:700;letter-spacing:-0.015em;color:var(--ink);}
+  .sec-edit{
+    flex:none;min-height:32px;padding:5px 12px;border-radius:999px;
+    border:1px solid var(--line);background:var(--paper);color:var(--muted);
+    font:inherit;font-size:13px;font-weight:600;cursor:pointer;
+    transition:border-color .15s var(--ease),color .15s var(--ease);
+  }
+  .sec-edit:hover{border-color:var(--teal);color:var(--teal-deep);}
+
+  .prod-help{margin:0 0 14px;color:var(--muted);font-size:15.5px;line-height:1.55;}
+  .prod-cats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
+  .cat-card{
+    display:flex;flex-direction:column;gap:2px;align-items:flex-start;
+    min-height:58px;padding:11px 13px;
+    background:var(--paper);border:1px solid var(--line);border-radius:var(--radius-sm);
+    font:inherit;text-align:left;cursor:pointer;
+    transition:border-color .15s var(--ease),background .15s var(--ease);
+  }
+  .cat-card:hover{border-color:var(--teal);background:var(--teal-wash);}
+  .cat-card.is-active{border-color:var(--teal);background:var(--teal-wash);}
+  .cat-name{font-size:15px;font-weight:650;letter-spacing:-0.015em;color:var(--ink);}
+  .cat-card.is-active .cat-name{color:var(--teal-deep);}
+  .cat-count{font-size:12.5px;color:var(--muted);font-variant-numeric:tabular-nums;}
+
+  .prod-grid{
+    display:grid;grid-template-columns:repeat(auto-fill,minmax(112px,1fr));gap:10px;
+    margin-top:14px;
+  }
+  .prod-tile{
+    display:flex;flex-direction:column;gap:7px;padding:8px;
+    background:var(--paper);border:1px solid var(--line);border-radius:var(--radius-sm);
+    font:inherit;text-align:left;cursor:pointer;
+    transition:border-color .15s var(--ease),box-shadow .15s var(--ease);
+  }
+  .prod-tile:hover{border-color:var(--teal);box-shadow:0 3px 12px -8px rgba(14,111,102,.3);}
+  .prod-thumb{
+    aspect-ratio:1/1;width:100%;overflow:hidden;
+    display:flex;align-items:center;justify-content:center;
+    background:var(--surface);border:1px solid var(--line-soft);border-radius:8px;
+  }
+  .prod-thumb img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .22s var(--ease);}
+  .prod-tile:hover .prod-thumb img{transform:scale(1.04);}
+  .prod-code{font-size:14px;font-weight:700;letter-spacing:-0.01em;color:var(--ink);font-variant-numeric:tabular-nums;word-break:break-all;}
+  .prod-name{font-size:12.5px;line-height:1.4;color:var(--muted);}
+
+  .prod-free{margin-top:16px;padding-top:14px;border-top:1px solid var(--line-soft);}
+  .prod-free-label{font-size:15.5px;font-weight:600;color:var(--ink);margin-bottom:9px;}
+  .prod-free-row{display:flex;gap:8px;flex-wrap:wrap;}
+  .prod-free-input{
+    flex:1;min-width:0;min-height:44px;padding:11px 14px;
+    font-family:inherit;font-size:16px;color:var(--ink);
+    background:var(--paper);border:1px solid var(--line);border-radius:var(--radius-sm);
+    transition:border-color .15s var(--ease),box-shadow .15s var(--ease);
+  }
+  .prod-free-input:focus{outline:none;border-color:var(--teal);box-shadow:0 0 0 3px var(--teal-wash);}
+  .prod-free-go{
+    flex:none;min-height:44px;padding:11px 18px;
+    border:1.5px solid var(--teal);background:var(--teal);color:#fff;border-radius:var(--radius-sm);
+    font:inherit;font-size:14.5px;font-weight:650;cursor:pointer;
+    transition:background .15s var(--ease),border-color .15s var(--ease);
+  }
+  .prod-free-go:hover{background:var(--teal-deep);border-color:var(--teal-deep);}
+
+  .aside-card{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);padding:16px 18px;}
+  .aside-title{font-size:12px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;}
+  .aside-row{display:flex;justify-content:space-between;gap:12px;padding:9px 0;border-top:1px solid var(--line-soft);}
+  .aside-row:first-of-type{border-top:0;}
+  .aside-k{font-size:13px;color:var(--muted);flex:none;}
+  .aside-v{font-size:13.5px;font-weight:600;color:var(--ink);text-align:right;word-break:break-all;}
+  .aside-safe{margin:12px 0 0;padding-top:12px;border-top:1px solid var(--line-soft);font-size:12.5px;line-height:1.55;color:var(--muted);}
+
+  @media(max-width:520px){
+    .prod-cats{grid-template-columns:repeat(2,1fr);}
+    .prod-grid{grid-template-columns:repeat(auto-fill,minmax(96px,1fr));}
+  }
+
   /* 점검 카드 — index.html .as-notice.as-maint 연노랑 팔레트 재사용 */
   .as-maint-card{
     background:#FBF3E2;border:1px solid #EBDCB9;border-radius:var(--radius);
@@ -242,7 +328,8 @@
       <div class="as-layout" id="intake-live">
         <div class="as-main">
           <!-- [S3] 스마트 위층: <div id="upstairs"></div> -->
-          <!-- [S2] 섹션1 제품:  <div id="sec-product" class="sec-card"></div> -->
+          <!-- [S2] 섹션1 제품 -->
+          <div id="sec-product" class="sec-card is-open"></div>
           <!-- [S4] 섹션2 증상:  <div id="sec-symptom" class="sec-card is-dim"></div> -->
           <!-- [S4] 섹션3 사진:  <div id="sec-photo"   class="sec-card is-dim"></div> -->
           <!-- [S4] 섹션4 연락처:<div id="sec-contact" class="sec-card is-dim"></div> -->

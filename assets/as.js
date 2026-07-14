@@ -108,6 +108,287 @@
      [S5] asStore·조회 탭         → 여기에 구현
      ========================================================= */
 
+  /* ========================= [S2] 아코디언 엔진 + 제품 섹션 ========================= */
+  var CATALOG = null;      // chat-catalog.json
+  var SEARCH_IDX = null;   // search-index.json (썸네일 img 소스)
+  var state = {
+    product: null,          // {code, name} — 카탈로그에서 확정
+    freeProduct: '',        // 자유 입력 제품명(코드 없음)
+    symptom: { chips: [], text: '' },
+    photos: [],
+    contact: { name: '', phone: '', store: '', purchaseDate: '', address: '' },
+    order: null             // orderLookup로 확정된 {orderId,productName,productOption,paymentDate}
+  };
+  var sectionState = { product: 'open', symptom: 'dim', photo: 'dim', contact: 'dim' };
+  var sectionSummary = { product: '', symptom: '', photo: '', contact: '' };
+  var selectedCat = '';     // 제품 섹션에서 펼친 카테고리(UI 상태)
+  var SECTION_ORDER = ['product', 'symptom', 'photo', 'contact'];
+
+  /* ---- 카탈로그·썸네일 ---- */
+  function catalogModels() {
+    if (!CATALOG || !CATALOG.models) return [];
+    var out = [], models = CATALOG.models, i;
+    for (i = 0; i < models.length; i++) {
+      if (models[i] && models[i].cat !== 'shinil') out.push(models[i]);   // 신일 OEM 제외
+    }
+    return out;
+  }
+  function modelByCode(code) {
+    if (!code || !CATALOG || !CATALOG.models) return null;
+    var target = String(code).toUpperCase(), models = CATALOG.models, i, j, al;
+    for (i = 0; i < models.length; i++) {                 // 코드 완전일치 우선
+      if (String(models[i].code).toUpperCase() === target) return models[i];
+    }
+    for (i = 0; i < models.length; i++) {                 // 없으면 aliases 포함
+      al = models[i].aliases || [];
+      for (j = 0; j < al.length; j++) {
+        if (String(al[j]).toUpperCase() === target) return models[i];
+      }
+    }
+    return null;
+  }
+  function boundedIn(hay, needle) {
+    // code 뒤 문자가 영숫자가 아닐 때만 매치(BFB-SF500 vs BFB-SF500E 구분)
+    if (!hay) return false;
+    var idx = hay.indexOf(needle);
+    while (idx !== -1) {
+      if (!/[A-Za-z0-9]/.test(hay.charAt(idx + needle.length))) return true;
+      idx = hay.indexOf(needle, idx + 1);
+    }
+    return false;
+  }
+  function thumbFor(code) {
+    // search-index.json의 product 항목 img 재사용(정적 매핑·빌드 금지)
+    if (!code || !SEARCH_IDX || !SEARCH_IDX.length) return '';
+    var target = String(code), i, it;
+    for (i = 0; i < SEARCH_IDX.length; i++) {             // 1차: 코드 경계 매치
+      it = SEARCH_IDX[i];
+      if (!it || it.t !== 'product' || !it.img) continue;
+      if (boundedIn(it.title, target) || boundedIn(it.k, target)) return it.img;
+    }
+    for (i = 0; i < SEARCH_IDX.length; i++) {             // 2차: 단순 포함 폴백
+      it = SEARCH_IDX[i];
+      if (!it || it.t !== 'product' || !it.img) continue;
+      if ((it.title && it.title.indexOf(target) !== -1) || (it.k && it.k.indexOf(target) !== -1)) return it.img;
+    }
+    return '';
+  }
+
+  /* ---- 아코디언 상태기계 ---- */
+  function stateToClass(s) { return s === 'open' ? 'is-open' : (s === 'done' ? 'is-done' : 'is-dim'); }
+  function applySectionClasses() {
+    for (var i = 0; i < SECTION_ORDER.length; i++) {
+      var key = SECTION_ORDER[i], host = document.getElementById('sec-' + key);
+      if (host) host.className = 'sec-card ' + stateToClass(sectionState[key]);
+    }
+  }
+  function renderSectionByKey(key) {   // 각 섹션 렌더는 해당 태스크가 정의(가드)
+    if (key === 'product') { renderProductSection(); return; }
+    if (key === 'symptom' && typeof renderSymptomSection === 'function') { renderSymptomSection(); return; }
+    if (key === 'photo' && typeof renderPhotoSection === 'function') { renderPhotoSection(); return; }
+    if (key === 'contact' && typeof renderContactSection === 'function') { renderContactSection(); return; }
+  }
+  function openSection(key) {
+    sectionState[key] = 'open';
+    renderSectionByKey(key);
+    applySectionClasses();
+  }
+  function completeSection(key, summary) {
+    sectionState[key] = 'done';
+    sectionSummary[key] = summary || '';
+    renderSectionByKey(key);
+    for (var i = SECTION_ORDER.indexOf(key) + 1; i < SECTION_ORDER.length; i++) {  // 다음 미완료 자동 open
+      if (sectionState[SECTION_ORDER[i]] !== 'done') { openSection(SECTION_ORDER[i]); break; }
+    }
+    applySectionClasses();
+  }
+  function reopenSection(key) {         // 요약 줄 클릭 시(다른 열린 섹션은 접지 않음 — 자유 이동)
+    if (sectionState[key] !== 'done') return;
+    sectionState[key] = 'open';
+    renderSectionByKey(key);
+    applySectionClasses();
+  }
+
+  /* ---- 제품 섹션(카테고리 6종 → 썸네일 그리드) ---- */
+  function catOrder() { return (CATALOG && CATALOG.cats) ? Object.keys(CATALOG.cats) : []; }  // cats 삽입 순서
+  function catCount(catKey) {
+    var models = catalogModels(), n = 0, i;
+    for (i = 0; i < models.length; i++) { if (models[i].cat === catKey) n++; }
+    return n;
+  }
+  function modelsInCat(catKey) {
+    var models = catalogModels(), out = [], i;
+    for (i = 0; i < models.length; i++) { if (models[i].cat === catKey) out.push(models[i]); }
+    return out;
+  }
+  function chooseProduct(m) {
+    state.product = { code: m.code, name: m.name };
+    state.freeProduct = '';
+    selectedCat = m.cat;
+    completeSection('product', '✓ 제품 — ' + m.code + ' ' + m.name);
+    renderAside();
+  }
+  function chooseFreeProduct(nameStr) {
+    var v = String(nameStr || '').replace(/\s+/g, ' ').trim();
+    if (!v) { showToast('제품 이름을 입력해 주세요.'); return; }
+    state.freeProduct = v;
+    state.product = null;
+    completeSection('product', '✓ 제품 — ' + v);   // 코드 없음
+    renderAside();
+  }
+  function renderProductSection() {
+    var host = document.getElementById('sec-product');
+    if (!host) return;
+    host.className = 'sec-card ' + stateToClass(sectionState.product);
+    host.textContent = '';
+
+    /* 헤드: "1 제품" + 완료 시 요약 줄 */
+    var head = el('div', 'sec-head');
+    head.appendChild(el('span', 'sec-num', '1'));
+    var main = el('span', 'sec-head-main');
+    if (sectionState.product === 'done') {
+      main.appendChild(el('div', 'sec-done-line', sectionSummary.product));
+      head.appendChild(main);
+      var editBtn = el('button', 'sec-edit', '변경'); editBtn.type = 'button';
+      editBtn.addEventListener('click', function (e) { e.stopPropagation(); reopenSection('product'); });
+      head.appendChild(editBtn);
+      head.addEventListener('click', function () { reopenSection('product'); });
+    } else {
+      main.appendChild(el('span', 'sec-title', '제품'));
+      head.appendChild(main);
+    }
+    host.appendChild(head);
+
+    /* 바디(완료 시 CSS가 숨김) */
+    var body = el('div', 'sec-body');
+    body.appendChild(el('p', 'prod-help', '수리가 필요한 제품을 선택해 주세요. 종류를 고르면 사진으로 찾을 수 있어요.'));
+
+    var cats = el('div', 'prod-cats');
+    var order = catOrder();
+    for (var c = 0; c < order.length; c++) {
+      (function (catKey) {
+        var active = (selectedCat === catKey);
+        var card = el('button', 'cat-card' + (active ? ' is-active' : '')); card.type = 'button';
+        card.setAttribute('aria-pressed', active ? 'true' : 'false');
+        card.appendChild(el('span', 'cat-name', CATALOG.cats[catKey]));
+        card.appendChild(el('span', 'cat-count', catCount(catKey) + '종'));
+        card.addEventListener('click', function () {
+          selectedCat = (selectedCat === catKey) ? '' : catKey;   // 다시 누르면 접힘
+          renderProductSection();
+        });
+        cats.appendChild(card);
+      })(order[c]);
+    }
+    body.appendChild(cats);
+
+    if (selectedCat) {
+      var grid = el('div', 'prod-grid');
+      var list = modelsInCat(selectedCat), i;
+      for (i = 0; i < list.length; i++) {
+        (function (m) {
+          var tile = el('button', 'prod-tile'); tile.type = 'button';
+          tile.setAttribute('aria-label', m.code + ' ' + m.name);
+          var thumb = el('span', 'prod-thumb');
+          var url = thumbFor(m.code);
+          if (url) {
+            var img = document.createElement('img');
+            img.src = url; img.alt = ''; img.loading = 'lazy'; img.decoding = 'async';
+            img.onerror = function () { if (img.parentNode) img.parentNode.removeChild(img); };  // 실패 시 회색 placeholder
+            thumb.appendChild(img);
+          }
+          tile.appendChild(thumb);
+          tile.appendChild(el('span', 'prod-code', m.code));   // 모델코드 대표(상단)
+          tile.appendChild(el('span', 'prod-name', m.name));   // 이름 보조(하단)
+          tile.addEventListener('click', function () { chooseProduct(m); });
+          grid.appendChild(tile);
+        })(list[i]);
+      }
+      body.appendChild(grid);
+    }
+
+    /* 자유 입력 폴백 — "찾는 제품이 없어요" */
+    var free = el('div', 'prod-free');
+    free.appendChild(el('div', 'prod-free-label', '찾는 제품이 없어요'));
+    var frow = el('div', 'prod-free-row');
+    var input = document.createElement('input');
+    input.type = 'text'; input.maxLength = 80; input.className = 'prod-free-input';
+    input.placeholder = '제품 이름을 입력해 주세요';
+    input.setAttribute('aria-label', '제품 이름 직접 입력');
+    if (state.freeProduct) input.value = state.freeProduct;
+    var go = el('button', 'prod-free-go', '이 이름으로 접수'); go.type = 'button';
+    go.addEventListener('click', function () { chooseFreeProduct(input.value); });
+    input.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.keyCode === 13) { e.preventDefault(); chooseFreeProduct(input.value); }
+    });
+    frow.appendChild(input); frow.appendChild(go);
+    free.appendChild(frow);
+    body.appendChild(free);
+
+    host.appendChild(body);
+  }
+
+  /* ---- 요약 aside(≥900px, 실시간 갱신 — S3·S4가 확장) ---- */
+  function asideRow(label, value) {
+    var row = el('div', 'aside-row');
+    row.appendChild(el('span', 'aside-k', label));
+    row.appendChild(el('span', 'aside-v', value || '—'));   // 미입력은 "—"
+    return row;
+  }
+  function productSummary() {
+    if (state.product) return state.product.code + ' ' + state.product.name;
+    if (state.freeProduct) return state.freeProduct;
+    return '';
+  }
+  function symptomSummary() {
+    var s = state.symptom || {}, parts = [];
+    if (s.chips && s.chips.length) parts.push(s.chips.join(', '));
+    if (s.text) parts.push(s.text);
+    return parts.join(' — ');   // "칩1, 칩2 — 직접입력" 포맷
+  }
+  function contactSummary() {
+    var c = state.contact || {};
+    if (c.name && c.phone) return c.name + ' · ' + c.phone;
+    return c.name || c.phone || '';
+  }
+  function renderAside() {
+    var host = document.getElementById('intake-aside');
+    if (!host) return;
+    host.textContent = '';
+    var card = el('div', 'aside-card');
+    card.appendChild(el('div', 'aside-title', '접수 요약'));
+    card.appendChild(asideRow('제품', productSummary()));
+    card.appendChild(asideRow('증상', symptomSummary()));
+    card.appendChild(asideRow('연락처', contactSummary()));
+    card.appendChild(el('p', 'aside-safe', '남겨주신 연락처는 A/S 안내에만 사용합니다.'));
+    host.appendChild(card);
+  }
+
+  /* ---- 진입 쿼리 자동 선택 + 접수 탭 부팅 훅 ---- */
+  function applyModelQuery() {
+    if (!MODEL_QUERY) return;
+    var m = modelByCode(MODEL_QUERY);
+    if (!m) return;
+    state.product = { code: m.code, name: m.name };
+    selectedCat = m.cat;
+    completeSection('product', '✓ 제품 — ' + m.code + ' ' + m.name);   // 카테고리 UI 접힌 채 시작
+  }
+  function initIntake() {
+    if (!document.getElementById('sec-product')) return;   // 접수 UI 미탑재 가드
+    Promise.all([
+      fetch(ROOT + 'data/chat-catalog.json?t=' + Date.now(), { cache: 'no-store' }).then(function (r) { return r.json(); }),
+      fetch(ROOT + 'data/search-index.json?t=' + Date.now(), { cache: 'no-store' }).then(function (r) { return r.json(); })
+    ]).then(function (arr) {
+      CATALOG = arr[0]; SEARCH_IDX = arr[1];
+      renderProductSection();
+      applyModelQuery();
+      if (typeof renderUpstairs === 'function') renderUpstairs();            // [S3]
+      if (typeof renderSymptomSection === 'function') renderSymptomSection(); // [S4]
+      if (typeof renderPhotoSection === 'function') renderPhotoSection();     // [S4]
+      if (typeof renderContactSection === 'function') renderContactSection(); // [S4]
+      renderAside();
+    }).catch(function () { showToast('제품 목록을 불러오지 못했어요. 새로고침해 주세요.'); });
+  }
+
   /* ---- 부팅 ---- */
   function boot() {
     parseQuery();
