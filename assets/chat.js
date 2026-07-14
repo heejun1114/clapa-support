@@ -78,7 +78,6 @@
   var reqGen = 0;              // 요청 세대 — 초기화/재전송 시 증가시켜 이전 요청 응답을 버린다
   var activeController = null; // 진행 중 fetch의 AbortController(초기화 시 abort)
   var lastUserMessage = '';
-  var lastMatchedCode = '';    // 서버 응답 matched의 마지막 값(A/S 폼 프리필용)
   var disabled = false;        // config.enabled === false
   var lastFocus = null;
   var savedScrollY = 0;        // 모바일 배경 스크롤 잠금 복원용
@@ -260,30 +259,6 @@
         }
       })
       .catch(function () { /* 기본값 유지 — configLoaded=false 로 남아 전송 시 1회 재시도 */ });
-  }
-
-  /* A/S 점검 모드: notices.json 의 place='as' + stopAs 활성 공지 1건이면 접수 흐름을 막는다(전 페이지 유효) */
-  var asStopByNotice = false;
-  function kstToday() {
-    return new Date(Date.now() + 9 * 3600 * 1000).toISOString().slice(0, 10);
-  }
-  function loadAsStatus() {
-    return fetch(ROOT + 'data/notices.json?t=' + Date.now(), { cache: 'no-store' })
-      .then(function (r) { return r.ok ? r.json() : null; })
-      .then(function (j) {
-        var list = (j && Array.isArray(j.notices)) ? j.notices : [];
-        var today = kstToday();
-        asStopByNotice = list.some(function (n) {
-          if (!n || n.active === false || n.stopAs !== true) return false;
-          var place = (n.place === 'banner' || n.place === 'list' || n.place === 'as')
-            ? n.place : (n.banner === true ? 'banner' : 'list');
-          if (place !== 'as') return false;
-          if (typeof n.startsAt === 'string' && today < n.startsAt) return false;
-          if (typeof n.endsAt === 'string' && today > n.endsAt) return false;
-          return true;
-        });
-      })
-      .catch(function () { /* 실패 시 false 유지(fail-open) */ });
   }
 
   function loadCatalog() {
@@ -729,17 +704,10 @@
     }
   }
 
-  /* A/S 접수 점검 중 여부 — 공지(notices.json stopAs) 우선, 설정 플래그·홈 DOM(.as-band.is-paused) 폴백 */
-  function asPaused() {
-    if (asStopByNotice) return true;
-    if (config && config.asPaused === true) return true;
-    try { return !!document.querySelector('.as-band.is-paused'); } catch (e) { return false; }
-  }
-
   function botAS() {
     pushMenu('A/S 문의는 전화와 네이버 톡톡으로 도와드리고 있습니다.\n전화 1522-8508 (평일 09:00–15:00, 주말·공휴일 휴무)', [
-      { label: '전화 걸기', url: 'tel:1522-8508' },
-      { label: '네이버 톡톡 문의', url: 'https://talk.naver.com/ct/w44cu1?frm=psf' }
+      { label: '전화 걸기', url: 'tel:' + PHONE },
+      { label: '네이버 톡톡 문의', url: TALK }
     ]);
   }
 
@@ -893,9 +861,6 @@
         if (myGen !== reqGen) { removeNode(typing); return; }  // 초기화/재전송으로 폐기된 응답은 버림
         removeNode(typing);
         if (data && data.ok) {
-          if (data.matched && data.matched.length) {
-            lastMatchedCode = String(data.matched[data.matched.length - 1]);
-          }
           var meta = { msgId: (typeof data.msgId === 'string' ? data.msgId : ''), q: text };
           // 출처 캡션은 되묻기(ambiguous) 답변에는 붙이지 않는다 — 확인 질문에 '자료 참고' 표기는 오인
           if (data.grounded && data.groundedCodes && data.groundedCodes.length && !data.ambiguous) {
@@ -1039,7 +1004,6 @@
     persistSession();
     msgEl.textContent = '';
     lastUserMessage = '';
-    lastMatchedCode = '';
     seedWelcome();
     renderRootBar();
     focusInput();
@@ -1298,7 +1262,6 @@
       try { window.visualViewport.addEventListener('resize', onVvResize); } catch (e) {}
     }
 
-    loadAsStatus();   // A/S 점검 상태(비차단) — 사용자가 A/S 메뉴를 누르는 시점엔 반영돼 있음
     loadConfig()
       .then(loadCatalog)
       .then(finishInit)

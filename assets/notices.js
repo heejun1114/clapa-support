@@ -131,42 +131,9 @@
     document.body.insertBefore(fresh, document.body.firstChild);
   }
 
-  /* ---------- A/S 영역 안내(place='as') ---------- */
-  function renderAs(n) {
-    var slot = document.getElementById('notice-as-slot');
-    if (!slot) return;
-    var pill = document.createElement('span');
-    pill.className = 'an-pill';
-    pill.textContent = (typeof n.type === 'string' && n.type.trim()) ? n.type.trim() : '안내';
-
-    var tx = document.createElement('div');
-    tx.className = 'an-tx';
-    var t = document.createElement('div');
-    t.className = 'an-t';
-    t.textContent = String(n.title || '');
-    tx.appendChild(t);
-    if (n.body) {
-      var b = document.createElement('div');
-      b.className = 'an-b';
-      b.textContent = String(n.body || '');
-      tx.appendChild(b);
-    }
-    var href = safeHref(n.link);
-    if (href) {
-      var a = document.createElement('a');
-      a.href = href;
-      if (href.indexOf('https://') === 0) { a.target = '_blank'; a.rel = 'noopener'; }
-      a.textContent = (typeof n.linkLabel === 'string' && n.linkLabel.trim()) ? n.linkLabel.trim() : '자세히 보기 →';
-      tx.appendChild(a);
-    }
-    slot.appendChild(pill);
-    slot.appendChild(tx);
-    slot.hidden = false;
-  }
-
   /* 표시 위치: place 필드 우선, 없으면 예전 banner 필드로 판별 */
   function placeOf(n) {
-    if (n.place === 'banner' || n.place === 'list' || n.place === 'as') return n.place;
+    if (n.place === 'banner' || n.place === 'list') return n.place;
     return n.banner === true ? 'banner' : 'list';
   }
 
@@ -244,10 +211,6 @@
         });
         var banner = visible.filter(function (n) { return placeOf(n) === 'banner'; })[0];
         reconcileBanner(banner);
-        // stopAs(점검) 공지는 render_notices.py 가 #as-maintenance 에 직접 구워두므로 런타임 렌더 제외(중복 카드 방지).
-        // 일반 A/S 안내(비-stopAs)만 #notice-as-slot 에 그린다.
-        var asNotice = visible.filter(function (n) { return placeOf(n) === 'as' && n.stopAs !== true; })[0];
-        if (asNotice) renderAs(asNotice);
         renderList(visible.filter(function (n) { return placeOf(n) === 'list'; }));
       })
       .catch(function () {

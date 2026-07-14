@@ -29,7 +29,7 @@
    "banner": false,
    "stopAs": true,
    "bannerColor": "",
-   "active": true,
+   "active": false,
    "startsAt": null,
    "endsAt": null,
    "createdAt": "2026-07-13T02:40:00+09:00"
