@@ -19,10 +19,9 @@
   var LOG_KEY = 'clapaChat.log';
   var MAX_TURNS = 12;         // 서버로 보내는 history 최대 턴 수
   var MAX_LOG = 80;           // sessionStorage에 보관할 최대 로그 항목 수
-  var PHONE = '1522-8508';
-  var HOURS = '평일 09:00~15:00';
   var STORE = 'https://smartstore.naver.com/skillfulbrother';
   var TALK = 'https://talk.naver.com/ct/w44cu1?frm=psf';   // 네이버 톡톡 상담 채널
+  var KAKAO = 'https://pf.kakao.com/_jaBhs';               // 카카오톡 채널
   var SVGNS = 'http://www.w3.org/2000/svg';
 
   var DEFAULT_CONFIG = {
@@ -190,14 +189,16 @@
 
   /* ------------------------------------------------------------------ *
    * URL 허용 목록 검증
-   *  - 상대경로(사이트 동일 오리진), https://smartstore.naver.com/, https://talk.naver.com/, https://clapa.kr, tel: 만 허용
+   *  - 상대경로(사이트 동일 오리진), https://smartstore.naver.com/, https://talk.naver.com/,
+   *    https://pf.kakao.com/, https://clapa.kr 만 허용
+   *  - tel: 은 허용하지 않음 — 챗봇 전화 연결 루트 제거(문의는 톡톡·카카오·AI 상담으로)
    *  - 그 외는 null → 링크 버튼을 아예 만들지 않음
    * ------------------------------------------------------------------ */
   function safeHref(raw) {
     if (typeof raw !== 'string') return null;
     var s = raw.trim();
     if (!s) return null;
-    if (/^tel:/i.test(s)) return /^tel:[0-9+\-() ]+$/i.test(s) ? s : null;
+    if (/^tel:/i.test(s)) return null;   // 전화 링크는 챗봇에서 제공하지 않음
 
     var u;
     try { u = new URL(s, ROOT); } catch (e) { return null; }
@@ -210,6 +211,7 @@
     if (proto === 'https:') {
       if (host === 'smartstore.naver.com') return u.href;
       if (host === 'talk.naver.com') return u.href;      // 네이버 톡톡 상담 채널
+      if (host === 'pf.kakao.com') return u.href;        // 카카오톡 채널
       if (host === 'clapa.kr' || host === 'www.clapa.kr') return u.href;
     }
     return null;
@@ -633,7 +635,7 @@
     if (!catalogReady()) {
       pushMenu('제품 목록을 불러오지 못했어요.\n잠시 후 다시 시도하시거나 아래에서 이어서 문의해 주세요.', [
         { label: 'AI 상담에 물어보기', cmd: 'ask' },
-        { label: '전화 걸기', url: 'tel:' + PHONE }
+        { label: '네이버 톡톡 문의', url: TALK }
       ]);
       return;
     }
@@ -686,9 +688,9 @@
     var mode = p[0], code = p[1];
     var m = findModel(code);
     if (!m || !m[mode]) {
-      pushMenu('해당 자료를 찾지 못했어요.\nAI 상담에게 물어보시거나 고객센터(' + PHONE + ')로 문의해 주세요.', [
+      pushMenu('해당 자료를 찾지 못했어요.\nAI 상담에게 물어보시거나 네이버 톡톡으로 문의해 주세요.', [
         { label: 'AI 상담에 물어보기', cmd: 'ask' },
-        { label: '전화 걸기', url: 'tel:' + PHONE }
+        { label: '네이버 톡톡 문의', url: TALK }
       ]);
       return;
     }
@@ -708,9 +710,9 @@
   }
 
   function botAS() {
-    pushMenu('A/S 문의는 전화와 네이버 톡톡으로 도와드리고 있습니다.\n전화 1522-8508 (평일 09:00–15:00, 주말·공휴일 휴무)', [
-      { label: '전화 걸기', url: 'tel:' + PHONE },
-      { label: '네이버 톡톡 문의', url: TALK }
+    pushMenu('A/S 문의는 네이버 톡톡과 카카오톡 채널로 도와드리고 있습니다.\n편하신 채널로 남겨 주시면 순서대로 확인해 드릴게요.', [
+      { label: '네이버 톡톡 문의', url: TALK },
+      { label: '카카오톡 채널', url: KAKAO }
     ]);
   }
 
@@ -731,7 +733,7 @@
     } else if (config.endpoint) {
       sendUserMessage((code || '이 제품') + ' 설명서를 알려주세요');
     } else {
-      pushMenu('해당 제품 설명서를 찾지 못했어요.\n고객센터(' + PHONE + ')로 문의해 주시면 확인해 드릴게요.', [{ label: '전화 걸기', url: 'tel:' + PHONE }]);
+      pushMenu('해당 제품 설명서를 찾지 못했어요.\n네이버 톡톡으로 문의해 주시면 확인해 드릴게요.', [{ label: '네이버 톡톡 문의', url: TALK }]);
     }
   }
 
@@ -791,9 +793,9 @@
           if (config.endpoint) {
             callApi(text);
           } else {
-            pushMenu('연결이 원활하지 않아요.\n잠시 후 다시 시도하시거나 고객센터(' + PHONE + ', ' + HOURS + ')로 문의해 주세요.', [
-              { label: '전화 걸기', url: 'tel:' + PHONE },
-              { label: '네이버 톡톡 문의', url: TALK}
+            pushMenu('연결이 원활하지 않아요.\n잠시 후 다시 시도하시거나 네이버 톡톡으로 문의해 주세요.', [
+              { label: '네이버 톡톡 문의', url: TALK },
+              { label: '카카오톡 채널', url: KAKAO }
             ]);
           }
         });
@@ -882,11 +884,11 @@
         if (timedOut || (err && err.name === 'AbortError')) {
           // 30초 타임아웃 — 오래 기다린 고객에게 정직한 설명 + 대안 경로
           pushMessage('model',
-            '답변 준비가 오래 걸리고 있어요. 잠시 후 다시 시도해 주시겠어요?\n급하시면 아래에서 바로 전화·톡톡으로 문의하실 수 있어요.',
+            '답변 준비가 오래 걸리고 있어요. 잠시 후 다시 시도해 주시겠어요?\n급하시면 아래에서 바로 네이버 톡톡·카카오톡으로 문의하실 수 있어요.',
             [
               { label: '다시 시도', cmd: 'retry', arg: text.slice(0, 1000) },
-              { label: '전화 걸기', url: 'tel:' + PHONE },
-              { label: '네이버 톡톡 문의', url: TALK}
+              { label: '네이버 톡톡 문의', url: TALK },
+              { label: '카카오톡 채널', url: KAKAO }
             ], { local: 1 });
         } else if (typeof navigator !== 'undefined' && navigator.onLine === false) {
           pushMessage('model',
@@ -894,10 +896,10 @@
             [{ label: '다시 시도', cmd: 'retry', arg: text.slice(0, 1000) }], { local: 1 });
         } else {
           pushMessage('model',
-            '연결이 원활하지 않아요.\n잠시 후 다시 시도하시거나 고객센터(' + PHONE + ', ' + HOURS + ')로 문의해 주세요.',
+            '연결이 원활하지 않아요.\n잠시 후 다시 시도하시거나 네이버 톡톡으로 문의해 주세요.',
             [
               { label: '다시 시도', cmd: 'retry', arg: text.slice(0, 1000) },
-              { label: '전화 걸기', url: 'tel:' + PHONE }
+              { label: '네이버 톡톡 문의', url: TALK }
             ], { local: 1 });
         }
       })
@@ -912,11 +914,11 @@
       });
   }
 
-  /* 서버 ok:false 응답의 대안 칩 — 전화·톡톡 상시, retryable일 때만 '다시 시도' */
+  /* 서버 ok:false 응답의 대안 칩 — 톡톡·카카오 상시, retryable일 때만 '다시 시도' */
   function errorChips(data, text) {
     var chips = [
-      { label: '전화 걸기', url: 'tel:' + PHONE },
-      { label: '네이버 톡톡 문의', url: TALK}
+      { label: '네이버 톡톡 문의', url: TALK },
+      { label: '카카오톡 채널', url: KAKAO }
     ];
     var retryable = !(data && data.retryable === false);
     if (retryable && text) chips.push({ label: '다시 시도', cmd: 'retry', arg: text.slice(0, 1000) });
