@@ -266,6 +266,15 @@
   }
   .contact-chat:hover{border-color:var(--teal);background:var(--teal-wash);}
   .cc-dot{width:6px;height:6px;border-radius:50%;background:var(--teal);flex:none;}
+  .contact-talk{
+    margin:0;font-size:13px;font-weight:600;letter-spacing:-0.01em;color:var(--teal-deep);
+    display:inline-flex;align-items:center;gap:5px;text-decoration:none;
+    background:var(--paper);border:1px solid var(--line);border-radius:999px;
+    padding:9px 15px;min-height:40px;
+    transition:border-color .14s var(--ease),background .14s var(--ease);
+  }
+  .contact-talk:hover{border-color:var(--teal);background:var(--teal-wash);}
+  .contact-talk .ext{font-size:12px;}
 
   /* ---------- Chat FAB (inherited from home) ---------- */
   .chat-fab{
@@ -456,7 +465,7 @@
     </a>
     <nav class="header-nav" aria-label="주요 메뉴">
       <a class="nav-link" href="../#finder-title">전체 제품</a>
-      <a class="nav-link is-inquiry" href="tel:1522-8508">전화 1522-8508</a>
+      <a class="nav-link is-inquiry" href="#contact-title">문의하기</a>
       <a class="nav-link is-store" href="https://clapa.kr" target="_blank" rel="noopener">공식몰<span class="ext" aria-hidden="true">↗</span></a>
     </nav>
   </div>
@@ -763,14 +772,11 @@
       <div class="contact-card">
         <div class="contact-lead">
           <h2 class="section-title" id="contact-title">더 궁금한 점이 있으신가요?</h2>
-          <p class="contact-desc">원하는 답을 찾지 못하셨다면 전화나 AI 상담으로 편하게 문의해 주세요.</p>
+          <p class="contact-desc">원하는 답을 찾지 못하셨다면 AI 상담이나 네이버 톡톡으로 편하게 문의해 주세요.</p>
         </div>
         <div class="contact-side">
-          <a class="contact-tel" href="tel:1522-8508" aria-label="고객센터 전화 1522-8508, 평일 09시부터 15시">
-            <span class="ct-num">1522-8508</span>
-            <span class="ct-hours">평일 09:00–15:00 · 주말·공휴일 휴무</span>
-          </a>
           <button class="contact-chat" type="button" data-clapa-chat-trigger><span class="cc-dot" aria-hidden="true"></span>AI 상담 시작하기 · AI가 먼저 답해드려요</button>
+          <a class="contact-talk" href="https://talk.naver.com/ct/w44cu1?frm=psf" target="_blank" rel="noopener">네이버 톡톡으로 문의하기 <span class="ext" aria-hidden="true">↗</span></a>
         </div>
       </div>
     </div>
@@ -801,7 +807,6 @@
         <p class="foot-h">바로가기</p>
         <div class="foot-brandrow">
           <a class="foot-brand" href="https://clapa.kr" target="_blank" rel="noopener">클래파 공식몰 <span class="lat" aria-hidden="true">↗</span></a>
-          <a class="foot-brand" href="tel:1522-8508">A/S 문의 1522-8508</a>
           <a class="foot-brand" href="../#finder-title">설명서 다운로드</a>
           <a class="foot-brand" href="../warranty">보증·교환/반품 안내</a>
         </div>
