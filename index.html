@@ -174,21 +174,27 @@
     background:var(--paper);
     border:1px solid var(--line);
     border-radius:12px;
+    box-shadow:0 2px 10px rgba(35,32,27,.07);
     font-size:13px;font-weight:600;letter-spacing:-0.015em;color:var(--ink);
     text-align:center;word-break:keep-all;
-    transition:border-color .16s var(--ease),background .16s var(--ease),color .16s var(--ease),transform .16s var(--ease);
+    transition:border-color .16s var(--ease),transform .16s var(--ease),box-shadow .16s var(--ease);
   }
-  /* 통일된 아이콘 칩 — 4장 동일 */
+  /* 카드별 색 아이콘(A안) — 레시피북 앰버 · 유튜브 레드 · AI 상담 청록 */
   .qm-item .qm-ic{
     width:40px;height:40px;flex:none;border-radius:11px;
     display:flex;align-items:center;justify-content:center;
     background:var(--teal-wash);color:var(--teal-deep);
-    transition:background .16s var(--ease);
+    transition:background .16s var(--ease),color .16s var(--ease);
   }
+  .qm-item:nth-child(1) .qm-ic{background:#F8EEDD;color:#C77A1E;}
+  .qm-item:nth-child(2) .qm-ic{background:#FBECEA;color:#D63A32;}
+  .qm-item:nth-child(3) .qm-ic{background:var(--teal-wash);color:var(--teal-deep);}
   .qm-item .qm-ic svg{width:22px;height:22px;color:inherit;flex:none;}
   .qm-item .qm-label{display:flex;flex-direction:column;gap:3px;justify-content:center;flex:1;}
-  .qm-item:hover{border-color:var(--teal);background:var(--teal-wash);color:var(--teal-deep);transform:translateY(-1px);}
-  .qm-item:hover .qm-ic{background:#fff;}
+  .qm-item:hover{transform:translateY(-2px);box-shadow:0 7px 18px rgba(35,32,27,.11);}
+  .qm-item:nth-child(1):hover{border-color:#C77A1E;}
+  .qm-item:nth-child(2):hover{border-color:#D63A32;}
+  .qm-item:nth-child(3):hover{border-color:var(--teal);}
   .qm-item .ext{font-size:11px;color:var(--muted);font-weight:500;}
   @media(max-width:640px){
     .quickmenu{grid-template-columns:repeat(3,1fr);gap:7px;margin-top:20px;max-width:100%;}
