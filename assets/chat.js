@@ -869,11 +869,25 @@
         if (data && data.ok) {
           var meta = { msgId: (typeof data.msgId === 'string' ? data.msgId : ''), q: text };
           // 출처 캡션은 되묻기(ambiguous) 답변에는 붙이지 않는다 — 확인 질문에 '자료 참고' 표기는 오인
+          var outChips = sanitizeChips(data.chips);
           if (data.grounded && data.groundedCodes && data.groundedCodes.length && !data.ambiguous) {
             meta.grounded = true;
             meta.codes = data.groundedCodes.slice(0, 2).map(function (c) { return String(c); });
+            // 답변이 특정 모델에 근거했으면 '제품 페이지 보기' 칩을 결정적으로 보강한다
+            // (AI가 빠뜨려도 모델이 인식되면 항상 제품 페이지로 이동할 수 있게).
+            var gm = findModel(data.groundedCodes[0]);
+            if (gm && gm.page) {
+              var hasPage = false;
+              for (var ci = 0; ci < outChips.length; ci++) {
+                if (outChips[ci].url && String(outChips[ci].url).indexOf(gm.page) !== -1) { hasPage = true; break; }
+              }
+              if (!hasPage) {
+                if (outChips.length >= 3) outChips = outChips.slice(0, 2);
+                outChips.push({ label: '제품 페이지 보기', url: gm.page });
+              }
+            }
           }
-          pushMessage('model', data.reply || '답변을 준비했어요.', sanitizeChips(data.chips), { meta: meta });
+          pushMessage('model', data.reply || '답변을 준비했어요.', outChips, { meta: meta });
         } else {
           var msg = (data && data.error) ? data.error : '답변을 가져오지 못했어요. 잠시 후 다시 시도해 주세요.';
           pushMessage('model', msg, errorChips(data, text), { local: 1 });

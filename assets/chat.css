@@ -349,11 +349,13 @@
 /* 버블 아래 후속 버튼: 세로 한 줄씩 — 정돈된 목록형 */
 .cchat-chips-inline{
   display:flex;
-  flex-direction:column;
+  flex-wrap:wrap;
   align-items:flex-start;
   gap:6px;
   margin-top:8px;
 }
+/* 칩이 자연스럽게 흐르도록 — 짧은 건 나란히, 긴 건 줄바꿈. 너무 좁게 눌리지 않게 최소폭만. */
+.cchat-chips-inline .cchat-chip{ flex:0 1 auto; }
 .cchat-chip{
   display:inline-flex;
   align-items:center;
