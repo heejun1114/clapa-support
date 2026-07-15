@@ -634,19 +634,20 @@
   function botCategories(mode) {
     if (!catalogReady()) {
       pushMenu('제품 목록을 불러오지 못했어요.\n잠시 후 다시 시도하시거나 아래에서 이어서 문의해 주세요.', [
-        { label: 'AI 상담에 물어보기', cmd: 'ask' },
+        { label: '직접 질문하기', cmd: 'ask' },
         { label: '네이버 톡톡 문의', url: TALK }
       ]);
       return;
     }
-    // 자료(설명서/부품) 없는 카테고리도 숨기지 않고 노출 — 선택 시 botModels가 대안을 안내
+    // 해당 모드(설명서/부품) 자료가 실제로 있는 카테고리만 노출 — 부품 0개 카테고리(히터·제습기)를
+    // '부품 구매'에 띄워 100% 데드엔드로 떨어뜨리던 문제 차단(설명서 모드는 전 카테고리 유지).
     var cats = catalog.categories.filter(function (c) {
-      return catalog.models.some(function (m) { return m.category === c.id; });
+      return catalog.models.some(function (m) { return m.category === c.id && m[mode]; });
     });
     if (!cats.length) {
-      pushMenu((mode === 'parts' ? '부품' : '설명서') + ' 정보를 찾지 못했어요.\n네이버 톡톡으로 문의하시거나 AI 상담에게 물어봐 주세요.', [
+      pushMenu((mode === 'parts' ? '부품' : '설명서') + ' 정보를 찾지 못했어요.\n궁금한 점을 아래 입력창에 바로 적어 주세요.', [
         { label: '네이버 톡톡 문의', url: TALK},
-        { label: 'AI 상담에 물어보기', cmd: 'ask' }
+        { label: '직접 질문하기', cmd: 'ask' }
       ]);
       return;
     }
@@ -669,10 +670,10 @@
     if (!items.length) {
       // 막다른 길이 아니라 대안 제시 — 톡톡·AI 상담으로 잇는다
       pushMenu('죄송해요, ' + catLabel + ' 종류는 아직 ' +
-        (mode === 'parts' ? '등록된 부품 상품이 없어요' : '등록된 설명서가 없어요') +
-        '.\n네이버 톡톡으로 문의하시거나 AI 상담에게 편하게 물어봐 주세요.', [
+        (mode === 'parts' ? '등록된 부품이 없어요' : '등록된 설명서가 없어요') +
+        '.\n필요하신 내용을 아래 입력창에 바로 적어 주시면 확인해 드릴게요.', [
         { label: '네이버 톡톡 문의', url: TALK},
-        { label: 'AI 상담에 물어보기', cmd: 'ask' }
+        { label: '직접 질문하기', cmd: 'ask' }
       ]);
       return;
     }
@@ -688,8 +689,8 @@
     var mode = p[0], code = p[1];
     var m = findModel(code);
     if (!m || !m[mode]) {
-      pushMenu('해당 자료를 찾지 못했어요.\nAI 상담에게 물어보시거나 네이버 톡톡으로 문의해 주세요.', [
-        { label: 'AI 상담에 물어보기', cmd: 'ask' },
+      pushMenu('해당 자료를 찾지 못했어요.\n아래 입력창에 바로 물어봐 주시거나 네이버 톡톡으로 문의해 주세요.', [
+        { label: '직접 질문하기', cmd: 'ask' },
         { label: '네이버 톡톡 문의', url: TALK }
       ]);
       return;
@@ -710,7 +711,7 @@
   }
 
   function botAS() {
-    pushMenu('A/S 문의는 네이버 톡톡과 카카오톡 채널로 도와드리고 있습니다.\n편하신 채널로 남겨 주시면 순서대로 확인해 드릴게요.', [
+    pushMenu('A/S 문의는 네이버 톡톡과 카카오톡 채널로 도와드리고 있어요.\n편하신 채널로 남겨 주시면 순서대로 확인해 드릴게요.', [
       { label: '네이버 톡톡 문의', url: TALK },
       { label: '카카오톡 채널', url: KAKAO }
     ]);
