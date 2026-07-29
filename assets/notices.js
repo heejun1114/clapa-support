@@ -9,6 +9,7 @@
 
   var MAX_SHOWN = 4;
   var ALLOWED_HOSTS = [
+    'cs.clapa.kr',
     'clapa.kr', 'www.clapa.kr',
     'smartstore.naver.com', 'brand.naver.com',
     'heejun1114.github.io'

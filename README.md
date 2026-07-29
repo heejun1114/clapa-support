@@ -4,7 +4,7 @@ CLAPA·신일 소형가전 D2C 고객지원센터의 **고객 홈 화면 정적 
 
 ## 미리보기
 
-- **라이브 갤러리 (GitHub Pages):** https://heejun1114.github.io/clapa-support/design-mockups/
+- **라이브 갤러리 (GitHub Pages):** https://cs.clapa.kr/design-mockups/
 - **로컬:** 저장소 루트에서 `python -m http.server 8000` → http://localhost:8000/design-mockups/
 
 ## 시안 매트릭스
