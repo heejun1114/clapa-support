@@ -353,6 +353,9 @@ html{scroll-padding-top:92px;}
 .chat-fab .chat-ic svg{width:27px;height:27px;}
 .cchat-fab{background:var(--rd-acc);}
 
+/* ---------- 휴대폰 아래 고정 메뉴 (PC 에서는 숨김) ---------- */
+.rd-tabbar{display:none;}
+
 /* =========================================================================
    휴대폰·좁은 화면 — PC 와 같은 구성·색, 비율만
    ========================================================================= */
@@ -376,6 +379,24 @@ html{scroll-padding-top:92px;}
   html{scroll-padding-top:66px;}
 }
 @media (max-width:900px){
+  /* 공식몰 모바일과 같은 방식: 화면 아래 고정 메뉴 5칸 + 그 위 주황 상담 버튼 */
+  .rd-tabbar{
+    position:fixed;left:0;right:0;bottom:0;z-index:45;
+    display:grid;grid-template-columns:repeat(5,1fr);
+    height:calc(62px + env(safe-area-inset-bottom,0px));padding-bottom:env(safe-area-inset-bottom,0px);
+    background:#fff;border-top:1px solid #EBEBEB;
+  }
+  .rd-tabbar a{
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;min-width:0;
+    font-size:12px;font-weight:500;letter-spacing:-0.5px;line-height:1.2;color:#757575;white-space:nowrap;
+    -webkit-tap-highlight-color:transparent;
+  }
+  .rd-tabbar svg{width:24px;height:24px;}
+  .rd-tabbar a[aria-current="page"],
+  .rd-tabbar a:active{color:#111;font-weight:700;}
+  body{padding-bottom:calc(62px + env(safe-area-inset-bottom,0px));}
+  .site-header{position:static;}                     /* 아래 메뉴가 늘 보이므로 위 메뉴는 따라오지 않는다 */
+  html{scroll-padding-top:16px;}
   .site-banner{font-size:13px;}
   .hero > .wrap{display:block;padding-top:34px;}
   .hero .hero-title{font-size:29px;letter-spacing:-0.9px;}
@@ -457,7 +478,7 @@ html{scroll-padding-top:92px;}
   }
   .rd-ask::before{display:none;}
 
-  .site-footer{padding-block:44px 96px;}
+  .site-footer{padding-block:44px 56px;}
   .site-footer .wrap{display:flex;flex-direction:column;}
   .site-footer .foot-brands{order:1;}
   .site-footer .foot-legal{order:2;}
@@ -466,7 +487,7 @@ html{scroll-padding-top:92px;}
   .site-footer .foot-contact{order:5;margin-top:34px;}
 
   /* 상담 버튼: 휴대폰에서는 주황 네모만 */
-  .chat-fab{right:16px;bottom:16px;}
+  .chat-fab{right:16px;bottom:calc(62px + 16px + env(safe-area-inset-bottom,0px));}
   .chat-fab .chat-tx{display:none;}
 }
 @media (min-width:600px) and (max-width:900px){
