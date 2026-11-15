@@ -649,3 +649,60 @@ section[aria-labelledby="warranty-title"] .tbl-wrap td:nth-child(2){font-weight:
   /* 6칸 한 줄: 좁은 태블릿(600px)에서 '히터·온풍기'가 버튼에 꽉 차지 않게 칸 사이를 폭에 맞춰 8→12px */
   .finder .brand-tabs{grid-template-columns:repeat(6,minmax(0,1fr));column-gap:clamp(8px,calc(2.2vw - 5px),12px);}
 }
+
+/* =========================================================================
+   휴대폰·태블릿(≤900px) 손질 3차 (2026-11-15) — PC(901px~)는 그대로
+   ① 제품 화면 보조 버튼 '사양 N개 더 보기'·'AI 상담 시작하기'·'네이버 톡톡으로 문의하기': 13px → 15px, 높이 44px
+   ② '← 고객지원센터 홈'·'보증·소모품 안내 보기 →': 누르는 높이 44px. 글자 자리는 그대로(늘린 만큼 바깥 여백을 줄임)
+   ③ 바닥 바로가기 3개(모든 화면): 누르는 높이 44px — 위아래 안쪽 여백만. 글자 크기·자리 그대로
+   ④ 보증·소모품 화면: 구역 위아래 26 → 40px, 맨 위 30 → 36px (카드는 그대로)
+   ⑤ 첫 화면 [부품] 펼침: 카드 5장 이상이면 2줄 가로 띠(옆으로 밀어 더 보기) — 아래 따로
+   ========================================================================= */
+@media (max-width:900px){
+  /* ① */
+  .spec-toggle,
+  .contact-chat,
+  .contact-talk{min-height:44px;padding-block:0;font-size:15px;}
+  .spec-toggle{padding-inline:18px;gap:7px;}
+  .contact-chat,
+  .contact-talk{padding-inline:18px;}
+  .contact-talk .ext{font-size:13px;}
+
+  /* ② 글자 위아래로 11px 씩 누르는 자리를 늘리고, 같은 만큼 바깥 여백을 빼서 화면은 움직이지 않게 */
+  .backlink{min-height:44px;margin-top:9px;margin-bottom:-11px;}
+  .care-notes .care-more{padding-block:12px;margin-block:-2px -12px;border-bottom:0;}
+  .care-notes .care-more:hover{text-decoration:underline;text-underline-offset:3px;}
+
+  /* ③ */
+  .site-footer .foot-brandrow{row-gap:0;margin-block:-11px;}
+  .site-footer .foot-brand{padding-block:11px;}
+
+  /* ④ 보증·소모품(.page-hero 가 있는 화면은 이 화면뿐) */
+  .page-hero{padding-top:clamp(36px,5vw,52px);}
+  .page-hero ~ .section{padding-block:40px;}
+}
+
+/* ⑤ 첫 화면 [부품] 펼침(≤900px): 제품 화면의 '부품·소모품' 띠와 같은 2줄 가로 띠
+   - 카드 5장 이상: 2줄로 놓고 옆으로 밀어 더 본다(스크롤 맞춤). 휴대폰은 두 칸 + 다음 칸이 살짝 보여 '더 있음'을 알린다.
+   - 4장 이하: 지금처럼 2칸 격자(1~2장 한 줄, 3~4장 2×2) — 밀 필요 없음.
+   - 카드 수는 :has() 로 센다. 이를 모르는 옛 브라우저에서는 지금 모습(세로 격자) 그대로.
+   - 휴대폰(≤640px)에서는 제품 화면 띠(.parts-grid.is-carousel)도 같은 칸 폭으로 맞춘다(그 전에는 두 칸이 꽉 차 다음 칸이 안 보였다). */
+@media (max-width:900px){
+  .finder .row-parts{min-width:0;}
+  .finder .row-parts .parts-grid:has(> .part-card:nth-child(5)){
+    grid-template-columns:none;grid-auto-flow:column;grid-template-rows:repeat(2,auto);grid-auto-columns:190px;
+    min-width:0;overflow-x:auto;overscroll-behavior-x:contain;scroll-snap-type:x proximity;
+    -webkit-overflow-scrolling:touch;padding-bottom:4px;
+  }
+  .finder .row-parts .parts-grid:has(> .part-card:nth-child(5)) > .part-card{scroll-snap-align:start;}
+  .finder .row-parts .parts-grid:has(> .part-card:nth-child(5))::-webkit-scrollbar{height:6px;}
+  .finder .row-parts .parts-grid:has(> .part-card:nth-child(5))::-webkit-scrollbar-thumb{background:var(--line);border-radius:999px;}
+  .finder .row-parts .parts-grid:has(> .part-card:nth-child(5))::-webkit-scrollbar-track{background:transparent;}
+}
+@media (max-width:640px){
+  .parts-grid.is-carousel,
+  .finder .row-parts .parts-grid:has(> .part-card:nth-child(5)){grid-auto-columns:calc(43% - 6px);scroll-snap-type:x mandatory;}
+  /* 칸이 좁아져 '네이버 스토어에서 구매 ↗' 가 두 줄이 될 때 화살표만 홀로 내려가지 않게 */
+  .parts-grid.is-carousel .part-go,
+  .finder .row-parts .parts-grid:has(> .part-card:nth-child(5)) .part-go{text-wrap:balance;}
+}
