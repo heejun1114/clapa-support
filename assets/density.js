@@ -1,6 +1,6 @@
 /* CLAPA 제품 상세 — 정보 밀도 완화 로직.
  * ① 문항 많은 FAQ에 카테고리 필터 칩(항목 6개+ · 카테고리 2종+ 일 때만)
- * ② 사양 많은 표는 6행만 노출 + '전체 사양 보기'(9행+ 일 때만)
+ * ② 사양 많은 표는 6행만 노출 + '사양 N개 더 보기'(9행+ 일 때만)
  * 비차단 원칙: 콘텐츠를 영구 숨기지 않고 '전체'로 항상 복원. 모달·강제응답 없음. */
 (function () {
   'use strict';
@@ -42,7 +42,7 @@
     });
 
     function setLabel(expanded) {
-      btn.textContent = expanded ? '사양 접기' : ('전체 사양 보기 (+' + hidden.length + ')');
+      btn.textContent = expanded ? '추가 사양 접기' : ('사양 ' + hidden.length + '개 더 보기');
       var svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
       svg.setAttribute('viewBox', '0 0 24 24'); svg.setAttribute('fill', 'none');
       svg.setAttribute('stroke', 'currentColor'); svg.setAttribute('stroke-width', '1.8');

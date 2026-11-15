@@ -986,6 +986,7 @@
         <div>
           <span class="section-eyebrow">Find your product</span>
           <h2 class="section-title" id="finder-title">제품 찾기</h2>
+          <button class="rd-all" type="button" aria-pressed="false" hidden><span class="rd-all-t">전체 보기</span> <span class="rd-all-n">(31)</span></button>
           <p class="section-desc">제품 옆에서 설명서·부품·자주 묻는 질문을 볼 수 있습니다.</p>
         </div>
       </div>
@@ -2163,12 +2164,14 @@
 <!--RD:JS-->
 <script>
 /* 2026-11-13 개편: 사진 카드 ↔ 왼쪽 종류 메뉴(.brand-tab) 잇기.
-   고르기·숫자 세기는 위쪽 'Category filter' 가 그대로 하고, 여기서는 카드 표시와 종류 제목 줄만 맞춘다. */
+   고르기·숫자 세기는 위쪽 'Category filter' 가 그대로 하고, 여기서는 카드 표시와 종류 제목 줄만 맞춘다.
+   2026-11-15: 휴대폰 '제품 찾기' 제목 줄의 '전체 보기 (31)'(.rd-all)도 여기서 잇는다 — '전체' 메뉴를 대신 누른다. */
 (function(){
   var tabs = Array.prototype.slice.call(document.querySelectorAll('.brand-tab'));
   var cards = Array.prototype.slice.call(document.querySelectorAll('.rd-ph'));
   var groups = Array.prototype.slice.call(document.querySelectorAll('.group-row'));
   var rows = document.querySelectorAll('.product-row');
+  var allBtn = document.querySelector('.rd-all');
   if (!tabs.length) return;
   // 고른 결과("선풍기 9개를 보고 있습니다.")를 화면 읽기 프로그램도 알려 주게
   var count = document.getElementById('finder-count');
@@ -2185,6 +2188,12 @@
     var i = card.querySelector('.lb i');
     if (i) i.textContent = (n[card.getAttribute('data-pick')] || 0) + '개 제품';
   });
+  // '전체 보기 (31)': 개수도 실제 줄 수로
+  if (allBtn) {
+    var an = allBtn.querySelector('.rd-all-n');
+    if (an) an.textContent = '(' + rows.length + ')';
+    allBtn.addEventListener('click', function(){ var t = tabOf('all'); if (t) t.click(); });
+  }
 
   function sync(cat){
     cards.forEach(function(card){
@@ -2192,6 +2201,7 @@
       card.classList.toggle('is-on', on);
       card.setAttribute('aria-pressed', on ? 'true' : 'false');
     });
+    if (allBtn) allBtn.setAttribute('aria-pressed', cat === 'all' ? 'true' : 'false');
     // 고른 종류의 제목 줄을 목록 맨 위에 보여 준다('전체'는 종류마다 제목)
     var first = null;
     groups.forEach(function(g){
