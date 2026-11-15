@@ -602,7 +602,7 @@ section[aria-labelledby="warranty-title"] .tbl-wrap td:nth-child(2){font-weight:
   /* 제목 줄: '제품 찾기' 왼쪽 · '전체 보기' 오른쪽, 안내 문장은 그 아래 한 줄을 다 쓴다 */
   .finder .section-head > div{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;column-gap:12px;}
   .finder .section-head .section-title{margin:0;}
-  .finder .section-head .section-desc{flex:1 0 100%;}
+  .finder .section-head .section-desc{flex:1 0 100%;margin-top:10px;}
   .finder .rd-all{                                   /* hidden 속성보다 이 규칙이 앞선다 → 휴대폰에서만 보임 */
     flex:none;display:inline-flex;align-items:center;gap:5px;
     min-height:44px;margin:-7px -4px -7px 0;padding:0 4px 0 10px;   /* 누르는 자리 44px, 줄 높이는 제목만큼 */
@@ -622,7 +622,7 @@ section[aria-labelledby="warranty-title"] .tbl-wrap td:nth-child(2){font-weight:
   .finder .rd-all:focus-visible{outline:2.5px solid #111;outline-offset:2px;}
 
   /* 종류 버튼: 같은 폭 3칸 × 2줄. 고른 것 = 옅은 주황 바탕 + 주황 테두리 + 굵게 */
-  .finder .brand-tabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;}
+  .finder .brand-tabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:18px 0 38px;}
   .finder .brand-tab{
     width:auto;min-width:0;height:52px;padding:0 4px;gap:0;justify-content:center;
     border:1px solid #D2D2D2;border-radius:12px;background:#fff;box-shadow:none;
@@ -637,7 +637,15 @@ section[aria-labelledby="warranty-title"] .tbl-wrap td:nth-child(2){font-weight:
     background:#FFF7F0;color:var(--rd-acc-d);font-weight:800;
   }
   .finder .brand-tab:focus-visible{outline:2.5px solid #111;outline-offset:2px;}
+
+  /* 여백(2026-11-15 2차): 휴대폰이 PC 보다 빽빽하다는 의견 → 적당히 넓힌다
+     사진 카드 → '제품 찾기' 64 · 제목 → 안내 10 · 안내 → 버튼 18 · 버튼 사이 12 · 버튼 → 목록 제목 38 (위 규칙들)
+     제품 줄: 이름 → 버튼 16, 버튼 사이 8, 줄 위아래 18 */
+  .finder{padding-top:64px;}
+  .finder .product-row{row-gap:16px;padding-block:18px;}
+  .finder .quicklinks{gap:8px;}
 }
 @media (min-width:600px) and (max-width:900px){
-  .finder .brand-tabs{grid-template-columns:repeat(6,minmax(0,1fr));}
+  /* 6칸 한 줄: 좁은 태블릿(600px)에서 '히터·온풍기'가 버튼에 꽉 차지 않게 칸 사이를 폭에 맞춰 8→12px */
+  .finder .brand-tabs{grid-template-columns:repeat(6,minmax(0,1fr));column-gap:clamp(8px,calc(2.2vw - 5px),12px);}
 }
